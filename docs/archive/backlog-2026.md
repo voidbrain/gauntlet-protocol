@@ -33,3 +33,7 @@
 </details>
 
 ---
+
+## Reconciliation addendum, 2026-11-09
+
+F-001 was archived by [PR #2](https://github.com/voidbrain/gauntlet-protocol/pull/2), CI 42534060898 validate passed. The original record remains unchanged. Subsequent cancellation repair is separately owned by B-001.
