@@ -1,0 +1,42 @@
+{
+  "name": "@voidbrain/gauntlet-protocol",
+  "version": "0.1.0",
+  "description": "Capability-scoped evaluation contracts, bounded adapters and reviewed model evidence",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "gauntlet": "bin/gauntlet.mjs"
+  },
+  "files": [
+    "dist",
+    "src",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/*.test.ts",
+    "prepack": "npm run build",
+    "check:freshness": "node tools/check-freshness.mjs",
+    "check:backlog": "node tools/check-backlog.mjs",
+    "check:harness": "node tools/check-harness.mjs",
+    "check:rules": "node tools/check-rules.mjs",
+    "check:maintenance": "node tools/maintenance.mjs check",
+    "check:audits": "node tools/check-audits.mjs",
+    "check:integrations": "node tools/mcp.mjs check",
+    "ci:status": "node tools/ci-status.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "typescript": "6.0.3"
+  }
+}

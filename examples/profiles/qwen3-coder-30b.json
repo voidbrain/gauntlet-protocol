@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "qwen3-coder-30b-q4-16384",
+  "model": "qwen3-coder:30b",
+  "quantization": "Q4_K_M",
+  "endpoint": "http://127.0.0.1:11434",
+  "context": 16384,
+  "maxOutputTokens": 2048,
+  "temperature": null,
+  "topP": null,
+  "topK": null,
+  "seed": 42,
+  "think": null,
+  "parallel": 1,
+  "hardware": "apple-m3-pro-36g-shared-ram",
+  "cache": "server-default-unverified"
+}

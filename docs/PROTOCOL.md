@@ -1,0 +1,49 @@
+# Protocol version 1
+
+## Ownership and evaluation layers
+
+The library defines contracts, validates packs/profiles, supervises bounded execution and writes evidence. Consumers supply domain scenarios, registered runners, trusted graders and approval policies. NERV is one consumer; no NERV source import, deployment or acceptance gates a Gauntlet release.
+
+`system` evaluates deterministic system behavior. `model` evaluates judgment or structured answers. `coding` evaluates coding-agent tasks through a registered runner. `end-to-end` evaluates complete scenarios through a registered runner. Reports keep these layers distinct; system passes cannot qualify model capabilities. No opaque overall intelligence score is generated.
+
+The direct local provider supports Ollama's loopback API, exact installed quantization/digest checks, explicit context/output/sampling/thinking requests and independent text/JSON equality grading. Endpoint registration is trusted: a loopback URL is not proof that an administrator has not configured a proxy. Remote-backed Ollama model metadata is rejected. Generic API compatibility is not a claim that every runtime parameter is independently observable.
+
+## Inputs and execution
+
+Pack: `schemaVersion`, `id`, semantic `version`, `cases`. Each case has stable `id`, `layer`, `split` (regression or holdout), named `capabilities`, `critical`, `expensive`; either `runner`, or model `messages` plus independent `expected: {kind: "text"|"json", value}`. No shell commands in packs. Expectations are never sent to the direct model.
+
+Profile: exact model tag/quantization, loopback endpoint, context, maximum output, nullable temperature/topP/topK/seed/think, concurrency, hardware and cache description. Null sampling settings inherit runtime defaults, so runtime version/default changes require reevaluation. Candidate profiles are configuration proposals, not qualification. The baseline executor is serial; a profile requesting parallel execution fails closed until a suitable scheduling adapter is supplied.
+
+Limits: per-case milliseconds, whole-suite milliseconds, maximum selected cases, repeats, aggregate output-token ceiling and per-response/log bytes. Each direct call reserves its maximum output before execution; unmeasured or over-budget model execution stops later model calls. Timeouts cancel HTTP requests or kill external process groups. A client cancellation cannot independently prove an uncooperative server stopped compute. No automatic retries. Truncation is an error; skipped or omitted work is not a pass. Separate expensive/model opt-ins are required, in addition to explicit execution.
+
+Direct calls currently unload after each response (`keep_alive: 0`). Durations therefore include cold-loading effects and are not steady-state throughput measurements. Input tokens, peak memory, energy and human repair/review time are not measured by this release; do not report them as zero or infer them from output tokens. No server-wide configuration is changed.
+
+## Registered external runners
+
+A separately reviewed registry has `schemaVersion: 1` and a `runners` object. Entries have fixed `command`, `args`, `cwd`, accepted `layers` and `allowModels`. Relative cwd resolves from the registry's directory. There is no shell interpolation; supported argument placeholders are `{report}`, `{profile}` (ID), `{configuration}` (private JSON profile path), and `{budget}` (private remaining-budget JSON path). Model/agent adapters must receive configuration and remaining budget. Owner-trusted adapters enforce token limits before starting their work; the protocol verifies reported usage afterward and stops subsequent work on missing/excess usage.
+
+Processes receive PATH, HOME and TMPDIR only. Model credentials are not inherited. Commands are **trusted executable code**, not candidate-controlled input. POSIX process-group supervision bounds runtime/output and cleans descendants; it is not a security sandbox. Windows external execution is unavailable until a Job Object adapter is implemented. Direct local-provider and schema operations remain portable.
+
+Coding runners must supply an independently enforced sandbox/worktree, candidate/test separation and trusted acceptance tests. This release provides the bridge, not a built-in coding sandbox or Inspect installation. Inspect AI and other established runners can normalize their results into this contract; compatibility is not claimed until a particular adapter is implemented and tested.
+
+The adapter writes a new report at `{report}`:
+
+```json
+{"schemaVersion":1,"layer":"system","sourceStable":true,"complete":true,"results":[{"id":"policy","status":"passed","checks":3}]}
+```
+
+Statuses: passed, failed, error, not-run. Empty/zero-check/incomplete evidence cannot pass. Non-system reports also need `configurationHash` (SHA256 of `JSON.stringify(profile)`), `modelDigest` and measured `outputTokens`. A nonzero runner exit is an error even if its output claims success. Evidence hashes identify bytes/configuration; they are not cryptographic attestations of truthful measurement or authenticated authorship. The registered runner/grader remains part of the trusted computing base.
+
+## Evidence and qualification
+
+Reports include pack/profile/registry hashes, model digest, runtime identity, selection results, iterations, layer/capability tags, timing, response or adapter hashes, token measurements, complete/pass/source-stability flags and `promotion: false`. Source/profile mutation invalidates acceptance. Responses/prompts and raw process logs are not copied into reports. Existing evidence is never overwritten.
+
+`compare --reports=a.json,b.json` preserves errors/not-run counts and unknown usage. Different pack/registry/budget contracts are marked noncomparable. Configuration changes remain visible; comparison alone chooses no winner.
+
+`qualify --report=report.json --review=receipt.json --requirements=examples/requirements.json --out=results/reviewed-profile.json` exports a harness-compatible profile only when stable complete model evidence meets each capability's minimum unique cases, minimum unique holdouts and pass rate, with all critical cases passed and known usage. Repeats do not inflate unique-case coverage. Capability minima are owner-authored and task-specific; meeting a small smoke threshold does not establish broader fitness.
+
+A receipt has `schemaVersion: 1`, `reportHash`, nonempty `reviewer`, `accepted: true`, reviewed `capabilities`, ISO `reviewed` timestamp after report completion, and a nonempty `evidence` reference. It is an explicit owner attestation, not an authenticated independent identity. A qualified export is reviewable data; it never edits a consumer's profile registry, changes permissions, runs a task or approves a production promotion.
+
+## Improvement cycle
+
+Capture a failure, add a regression and separately maintained holdout, prepare an isolated candidate configuration, compare under the same acceptance contract, independently review, then let the consumer's existing owner process decide promotion. Preserve the prior configuration and rollback/monitoring evidence. This supports measured self-improvement without automatic weight training, evaluator rewriting or self-granted permissions.

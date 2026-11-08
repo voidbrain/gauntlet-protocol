@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "devstral-small2-24b-q4-8192",
+  "model": "devstral-small-2:24b-instruct-2512-q4_K_M",
+  "quantization": "Q4_K_M",
+  "endpoint": "http://127.0.0.1:11434",
+  "context": 8192,
+  "maxOutputTokens": 2048,
+  "temperature": null,
+  "topP": null,
+  "topK": null,
+  "seed": 42,
+  "think": null,
+  "parallel": 1,
+  "hardware": "apple-m3-pro-36g-shared-ram",
+  "cache": "server-default-unverified"
+}
