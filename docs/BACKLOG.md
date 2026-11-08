@@ -1,45 +1,14 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 9 November 2026 against main `67797e1`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 9 November 2026 against main `3daa244`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Features and improvements
 
-### F-001
-
-**Independent evaluation protocol and bounded CLI**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔺 P1 | Implemented | 🟡 Medium |
-
-💻 **→ Human action required: No**<br />Implement and independently review the protocol, CLI, examples and deterministic acceptance.
-
-| | |
-|---|---|
-| **Issue** | Capability qualification needs bounded, comparable and reviewable evidence distinct from system regressions. |
-| **Reproduce** | Validate and plan neutral packs, run trusted fixtures and compare frozen results. |
-| **Check** | Strict inputs; explicit execution and cost opt-ins; bounded process/provider calls; unknown and skipped evidence preserved; reviewed exports; no consumer dependency. |
-
-<details>
-<summary>Next action, estimates and PR history</summary>
-
-**Next action / closure evidence:** Source/CLI and sixteen deterministic tests pass locally. Core harness 4.2.1 adopted with project settings only. First independent report-only review identified four issues; committed regressions 34371e7 failed before fixes and pass after. Follow-up review found cross-capability holdout reuse; committed reproduction precedes its global fixture-exclusion fix. Final review and own-repository CI remain pending. NERV integration is consumer-owned and never a release gate. No live campaign is required for protocol acceptance.
-
-**Estimates:** Medium remaining effort, 2–3 days including adapter and evidence edge cases; estimated 2026-11-09. Not measured runtime or acceptance.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #1](https://github.com/voidbrain/gauntlet-protocol/pull/1); failing review regressions 34371e7; local 16-test acceptance |
-| Opened | 2026-11-09 |
-| Verification | Pending deterministic checks and independent review |
-| Reviewed | 2026-11-09 |
-
-</details>
-
----
 
 
 ## Other changes
+
+PR #1 implemented the independent protocol; CI 42533767427 and fresh-context review accepted it. F-001 archived in [2026](archive/backlog-2026.md). This documentation reconciliation does not qualify any model.
 
 ## How to use this file
 
