@@ -29,7 +29,7 @@ Current work ledger, reviewed 9 November 2026 against main `2d004de`. [Rules](BA
 
 | Field | Value |
 |---|---|
-| PR / evidence | Test: test/cancellation.test.ts; f062c28 committed both failing signal regressions before fix. |
+| PR / evidence | [PR #3](https://github.com/voidbrain/gauntlet-protocol/pull/3); Test: test/cancellation.test.ts; f062c28 committed both failing signal regressions before fix. |
 | Opened | 2026-11-09 |
 | Verification | Unit/integration: both immutable signal regressions pass locally after fix; Review: independent report-only review passed; own CI pending. |
 | Reviewed | 2026-11-09 |
