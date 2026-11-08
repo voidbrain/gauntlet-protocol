@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "reviewed": "2026-11-08T23:06:43.862Z",
+  "policy": "23f75ffe1926c7ca81c22b432e9b662c9f52d0cd7a3a9a36cf6ef6f1e2095694",
+  "inputs": {
+    "AGENTS.md": "05831f04fa72d2f468a1053e48c496433a001355d8caa1fd5d50fca8e71ebf8a",
+    "docs/BACKLOG-RULES.md": "f568f6193751a98d54062f3bd99e88f813b32378f1c843a21d50b8ad2ccac845",
+    "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
+    "docs/agents/areas.md": "171636323e1cd991b33d5b723329d14dd51919a24fd78778b33d8a2a17dde539",
+    "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
+    "docs/agents/change-impact.md": "dc1c473e274f76bd70a87ff57bbc53fc75dc75a35d121cf67baf163a2fd2e975",
+    "docs/agents/coverage-guide.md": "3d539eb8beedfa101a5e47d9973cdf85dce197436fab2ab096f760e12d208106",
+    "docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
+    "docs/agents/mcp.md": "d813daeb38628e3f0613131ccb4e09fa1b98f82a1ad5cc647e9b27c26821a524",
+    "docs/agents/parallel-work.md": "1b5f50c8f3afd1a222871fd3b7a8e23f987eb83ec2bd4593af343fe70df0f892",
+    "docs/agents/procedures.md": "3737cbbfabdb51d23b73c11ad2cf4b25e3dd8c8eef8e681f2688aea168e499e3",
+    "docs/agents/skills.md": "5d60223eccfaad88c7153f57316da5ca10bfdd9d58d3a8cebc1eef25b9f0d5f5",
+    "docs/agents/solution-profile.md": "857fc0e5f5c36d1d139d2507f1f97460edfdcde4d5cd5d590a922d88c4459862",
+    "tools/task-claims.mjs": "05d40141b354db19e958d1f191f9a2e1b75c46126527ce3aba67f7b902ba16d2",
+    "tools/work-items.mjs": "ac02388da462c72e60dbcbd86bc9b9af0dd63376689f75ce80901be789e6b4dd"
+  },
+  "measurements": {
+    "samples": 1,
+    "latestAt": "2026-11-08T23:01:02.189Z",
+    "operations": {
+      "adoption": {
+        "samples": 1,
+        "durationMs": {
+          "observed": 1,
+          "missing": 0,
+          "median": 20128
+        },
+        "conflicts": {
+          "observed": 0,
+          "missing": 1,
+          "median": null
+        },
+        "unnecessaryPrompts": {
+          "observed": 0,
+          "missing": 1,
+          "median": null
+        },
+        "repeatedContextLoads": {
+          "observed": 0,
+          "missing": 1,
+          "median": null
+        }
+      },
+      "reconciliation": {
+        "samples": 0,
+        "durationMs": {
+          "observed": 0,
+          "missing": 0,
+          "median": null
+        },
+        "conflicts": {
+          "observed": 0,
+          "missing": 0,
+          "median": null
+        },
+        "unnecessaryPrompts": {
+          "observed": 0,
+          "missing": 0,
+          "median": null
+        },
+        "repeatedContextLoads": {
+          "observed": 0,
+          "missing": 0,
+          "median": null
+        }
+      }
+    }
+  },
+  "outcomes": [
+    {
+      "kind": "none",
+      "disposition": "no-change",
+      "target": "AGENTS.md",
+      "evidence": "Initial core 4.2.1 adoption reviewed: shared safeguards preserved, consumer ownership explicit, no model runner configured for behavior checks. Protocol implementation acceptance remains F-001, not maintenance evidence."
+    }
+  ]
+}

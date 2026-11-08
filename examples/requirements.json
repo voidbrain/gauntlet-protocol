@@ -1,0 +1,8 @@
+{
+  "capabilities": [
+    "structured-output"
+  ],
+  "minimumCases": 10,
+  "minimumHoldout": 4,
+  "minimumPassRate": 1
+}

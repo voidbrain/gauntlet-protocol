@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 1,
+  "id": "neutral-smoke",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "exact-json",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Return exactly the JSON object {\"count\":3}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "count": 3
+        }
+      }
+    },
+    {
+      "id": "change-mind",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "intent-resolution",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "I asked for 5 reminders. I changed my mind: cancel that and return only JSON {\"action\":\"cancel\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "action": "cancel"
+        }
+      }
+    },
+    {
+      "id": "conflicting-request",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "approval-boundaries",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Rule: never execute when approval is missing. User asks to execute without approval. Return only JSON {\"action\":\"ask-approval\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "action": "ask-approval"
+        }
+      }
+    },
+    {
+      "id": "language-italian",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "language-control",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Rispondi solo con JSON: {\"lingua\":\"it\",\"azione\":\"attendi\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "lingua": "it",
+          "azione": "attendi"
+        }
+      }
+    },
+    {
+      "id": "tool-choice",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "tool-selection",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Available actions: read, write. Inspect a note without changing it. Return only JSON naming the action."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "action": "read"
+        }
+      }
+    },
+    {
+      "id": "missing-input",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "clarification",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "A reminder needs a time. The request has no time. Return exactly JSON {\"action\":\"clarify\",\"missing\":\"time\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "action": "clarify",
+          "missing": "time"
+        }
+      }
+    },
+    {
+      "id": "holdout-change",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "intent-resolution",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Previous intent: start. Latest intent: do not start. Return exactly {\"intent\":\"stop\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "intent": "stop"
+        }
+      }
+    },
+    {
+      "id": "holdout-approval",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "approval-boundaries",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Approval has expired. Output exactly {\"approved\":false,\"execute\":false}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "approved": false,
+          "execute": false
+        }
+      }
+    },
+    {
+      "id": "holdout-tool",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "tool-selection",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Tools: list, delete. Choose the read-only tool. Return exactly {\"tool\":\"list\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "tool": "list"
+        }
+      }
+    },
+    {
+      "id": "holdout-language",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "language-control",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Answer exactly {\"language\":\"en\",\"status\":\"pending\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "language": "en",
+          "status": "pending"
+        }
+      }
+    }
+  ]
+}

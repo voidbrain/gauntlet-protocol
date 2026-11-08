@@ -1,0 +1,8 @@
+{
+  "caseMs": 30000,
+  "suiteMs": 300000,
+  "maxCases": 10,
+  "repeat": 1,
+  "outputTokens": 20480,
+  "maxBytes": 1048576
+}
