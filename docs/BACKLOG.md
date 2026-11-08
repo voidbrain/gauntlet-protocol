@@ -1,48 +1,17 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 9 November 2026 against main `2d004de`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 9 November 2026 against main `62d8072`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
-### B-001
-
-**Owner cancellation leaves detached evaluation runners alive**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔺 P1 | Implemented | 🟢 Small |
-
-💻 **→ Human action required: No**<br />Independently review the cancellation fix and verify its own release CI.
-
-| | |
-|---|---|
-| **Issue** | SIGINT/SIGTERM of the outer CLI bypassed detached runner cleanup and its deadline timer. |
-| **Reproduce** | Launch a sleeping registered runner, signal its owner and probe the runner PID. |
-| **Check** | Both signals terminate and reap the active owned process group, leave later cases not-run, preserve incomplete evidence and remove signal handlers; no model calls. |
-
-<details>
-<summary>Next action, estimates and PR history</summary>
-
-**Next action / closure evidence:** Catch suite SIGINT/SIGTERM with an abort controller, combine HTTP cancellation signals, kill/reap owned external groups, stop subsequent work and remove listeners in finally. Upstream 0.1.1; no consumer adoption gate. SIGKILL/machine-loss and independently detached descendants remain explicit platform limits. Review: fresh-context report-only review found no remaining issues; both signal regressions and independent fake-provider abort/listener probe pass. [Review](reviews/2026-11-09-cancellation.md). Own CI pending.
-
-**Estimates:** Small remaining effort, under one day for review/CI; estimated 2026-11-09. Not a measured campaign duration.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #3](https://github.com/voidbrain/gauntlet-protocol/pull/3); Test: test/cancellation.test.ts; f062c28 committed both failing signal regressions before fix. |
-| Opened | 2026-11-09 |
-| Verification | Unit/integration: both immutable signal regressions pass locally after fix; Review: independent report-only review passed; own CI pending. |
-| Reviewed | 2026-11-09 |
-
-</details>
-
----
 
 ## Features and improvements
 
 
 
 ## Other changes
+
+B-001 closed against PR #3, CI 42534614317 and independent report-only review; release v0.1.1. This documentation reconciliation adds no runtime work.
 
 PR #1 implemented the independent protocol; CI 42533767427 and fresh-context review accepted it. F-001 archived in [2026](archive/backlog-2026.md). PR #2 reconciled and archived F-001 with CI 42534060898 passed; no model qualified.
 
