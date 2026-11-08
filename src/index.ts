@@ -259,7 +259,7 @@ export function validateExternal(input: unknown, layer: Layer): ExternalEvidence
             throw Error('Invalid external provenance');
     return x as unknown as ExternalEvidence;
 }
-async function external(runner: Runner, profile: Profile | null, layer: Layer, timeout: number, maxBytes: number, tokenBudget: number, currentCase: Case): Promise<ExternalEvidence> {
+async function external(runner: Runner, profile: Profile | null, layer: Layer, timeout: number, maxBytes: number, tokenBudget: number, currentCase: Case, signal:AbortSignal): Promise<ExternalEvidence> {
     if (process.platform === 'win32')
         throw Error('External execution needs POSIX process groups; Windows adapter supervision unavailable');
     const root = mkdtempSync(join(realpathSync(tmpdir()), 'gauntlet-')), out = join(root, 'evidence.json'), configuration = join(root, 'configuration.json'), budget = join(root, 'budget.json'),caseFile=join(root,'case.json');
@@ -272,21 +272,24 @@ async function external(runner: Runner, profile: Profile | null, layer: Layer, t
         throw Error('Model adapter needs explicit configuration and remaining budget inputs');
     }
     try {
-        await new Promise<void>((done, fail) => { const env: NodeJS.ProcessEnv = { PATH: process.env.PATH, HOME: process.env.HOME, TMPDIR: process.env.TMPDIR }; const p = spawn(runner.command === 'node' ? process.execPath : runner.command, args, { cwd: runner.cwd, env, detached: true, stdio: ['ignore', 'pipe', 'pipe'] }); let bytes = 0, finished = false; const kill = () => { try {
-            if (p.pid)
-                process.kill(-p.pid, 'SIGKILL');
-        }
-        catch (e) {
-            if ((e as NodeJS.ErrnoException).code !== 'ESRCH')
-                fail(Error('Runner cleanup failed'));
-        } }; const timer = setTimeout(() => { kill(); fail(Error('Runner time budget exceeded')); }, timeout); const capture = (part: Buffer) => { bytes += part.length; if (bytes > maxBytes) {
-            kill();
-            fail(Error('Runner log budget exceeded'));
-        } }; p.stdout.on('data', capture); p.stderr.on('data', capture); p.on('error', () => { clearTimeout(timer); fail(Error('Registered runner could not start')); }); p.on('close', (code) => { clearTimeout(timer); kill(); if (finished)
-            return; finished = true; if (code !== 0)
-            fail(Error('Runner failed'));
-        else
-            done(); }); });
+        if(signal.aborted)throw Error('Campaign cancelled');
+        await new Promise<void>((done,fail)=>{
+            const env:NodeJS.ProcessEnv={PATH:process.env.PATH,HOME:process.env.HOME,TMPDIR:process.env.TMPDIR};
+            const child=spawn(runner.command==='node'?process.execPath:runner.command,args,{cwd:runner.cwd,env,detached:true,stdio:['ignore','pipe','pipe']});
+            let bytes=0,failure:Error|null=null;
+            const kill=()=>{try{if(child.pid)process.kill(-child.pid,'SIGKILL');}catch(error){if((error as NodeJS.ErrnoException).code!=='ESRCH')failure=Error('Runner cleanup failed');}};
+            // Wait for close after killing: the owned child is reaped before returning evidence.
+            const stop=(message:string)=>{failure??=Error(message);kill();};
+            const abort=()=>stop('Campaign cancelled');
+            const timer=setTimeout(()=>stop('Runner time budget exceeded'),timeout);
+            signal.addEventListener('abort',abort,{once:true});
+            if(signal.aborted)abort();
+            const cleanup=()=>{clearTimeout(timer);signal.removeEventListener('abort',abort);};
+            const capture=(part:Buffer)=>{bytes+=part.length;if(bytes>maxBytes)stop('Runner log budget exceeded');};
+            child.stdout.on('data',capture);child.stderr.on('data',capture);
+            child.once('error',()=>{cleanup();fail(Error('Registered runner could not start'));});
+            child.once('close',code=>{cleanup();kill();if(failure)fail(failure);else if(code!==0)fail(Error('Runner failed'));else done();});
+        });
         if(lstatSync(out).size>maxBytes)throw Error('Evidence byte budget exceeded');
         const e = validateExternal(readJSON(out), layer);
         if(layer!=='system'&&(e.caseHash!==hash(currentCase)||!e.fixtureHash||!e.runtimeIdentity))throw Error('Evidence lacks case and fixture identity');
@@ -311,16 +314,21 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
     validateLimits(limits);
     if (!options.execute)
         throw Error('Run requires explicit execution');
+    const cancellation=new AbortController();
+    const cancel=()=>cancellation.abort();
+    process.on('SIGINT',cancel);process.on('SIGTERM',cancel);
+    try {
     const before = hash(pack), profileBefore = profile ? hash(profile) : null, started = new Date().toISOString(), deadline = Date.now() + limits.suiteMs, results: Result[] = [];
     let tokens = 0, known = true, digest: string | null = null, modelReady = false,providerIdentity:string|null=null;
     let caseDeadline = 0;
-    const remaining = () => { const ms = Math.min(caseDeadline, deadline) - Date.now(); if (ms <= 0)
+    const remaining = () => { if(cancellation.signal.aborted)throw Error('Campaign cancelled');const ms = Math.min(caseDeadline, deadline) - Date.now(); if (ms <= 0)
         throw Error('Execution deadline exhausted'); return ms; };
-    const request = async (path: string, body: unknown, timeout: number) => boundedJSON(await (options.fetch ?? fetch)(new URL(path, profile!.endpoint), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), redirect: 'error', signal: AbortSignal.timeout(Math.max(1, Math.min(timeout, remaining()))) }), limits.maxBytes);
+    const request = async (path: string, body: unknown, timeout: number) => boundedJSON(await (options.fetch ?? fetch)(new URL(path, profile!.endpoint), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), redirect: 'error', signal: AbortSignal.any([cancellation.signal,AbortSignal.timeout(Math.max(1, Math.min(timeout, remaining())))]) }), limits.maxBytes);
     for (let iteration = 1; iteration <= limits.repeat; iteration++)
         for (const c of pack.cases.slice(0, limits.maxCases)) {
             const begin = performance.now(), r: Result = { id: c.id, iteration, layer: c.layer, split: c.split, capabilities: [...c.capabilities], critical: c.critical, status: 'not-run', durationMs: 0, tokens: null, reason: null };
             results.push(r);
+            if(cancellation.signal.aborted){r.reason='Campaign cancelled';continue;}
             caseDeadline = Date.now() + limits.caseMs;
             const timeout = Math.min(limits.caseMs, deadline - Date.now());
             if (c.layer !== 'system' && !known) {
@@ -348,7 +356,7 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
                         throw Error('Runner model execution not authorized');
                     if (c.layer !== 'system' && tokens >= limits.outputTokens)
                         throw Error('Suite token budget exhausted');
-                    const e = await external(runner, profile, c.layer, timeout, limits.maxBytes, limits.outputTokens - tokens,c);
+                    const e = await external(runner, profile, c.layer, timeout, limits.maxBytes, limits.outputTokens - tokens,c,cancellation.signal);
                     r.adapterHash = hash(e);r.fixtureHash=e.fixtureHash;
                     r.checks = e.results.reduce((n, x) => n + x.checks, 0);
                     r.status = e.sourceStable && e.complete && r.checks > 0 && e.results.every(x => x.status === 'passed') ? 'passed' : 'failed';
@@ -383,7 +391,7 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
                         continue;
                     }
                     if (!modelReady) {
-                        const version=record(await boundedJSON(await (options.fetch??fetch)(new URL('/api/version',profile.endpoint),{redirect:'error',signal:AbortSignal.timeout(Math.max(1,Math.min(remaining(),5000)))}),limits.maxBytes));if(typeof version.version!=='string'||!version.version||version.version.length>100)throw Error('Provider version missing');providerIdentity='ollama:'+version.version;
+                        const version=record(await boundedJSON(await (options.fetch??fetch)(new URL('/api/version',profile.endpoint),{redirect:'error',signal:AbortSignal.any([cancellation.signal,AbortSignal.timeout(Math.max(1,Math.min(remaining(),5000)))])}),limits.maxBytes));if(typeof version.version!=='string'||!version.version||version.version.length>100)throw Error('Provider version missing');providerIdentity='ollama:'+version.version;
                         const show = record(await request('/api/show', { model: profile.model }, timeout));
                         if (show.remote_host || show.remote_model)
                             throw Error('Remote-backed models are not local qualification');
@@ -395,7 +403,7 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
                             throw Error('Installed quantization differs from profile');
                         if (profile.think !== null && (!Array.isArray(show.capabilities) || !show.capabilities.includes('thinking')))
                             throw Error('Requested thinking is unsupported');
-                        const tags = record(await boundedJSON(await (options.fetch ?? fetch)(new URL('/api/tags', profile.endpoint), { redirect: 'error', signal: AbortSignal.timeout(Math.max(1, Math.min(remaining(), 5000))) }), limits.maxBytes));
+                        const tags = record(await boundedJSON(await (options.fetch ?? fetch)(new URL('/api/tags', profile.endpoint), { redirect: 'error', signal: AbortSignal.any([cancellation.signal,AbortSignal.timeout(Math.max(1, Math.min(remaining(), 5000)))]) }), limits.maxBytes));
                         const model = (tags.models as unknown[] | undefined)?.map(record).find(x => x.name === profile.model);
                         if (!model || typeof model.digest !== 'string' || !/^sha256:[a-f0-9]{64}$|^[a-f0-9]{64}$/.test(model.digest) || typeof model.size !== 'number' || model.size <= 0 || model.remote_host)
                             throw Error('Installed local model digest unavailable');
@@ -409,7 +417,7 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
                     r.fixtureHash=hash(c.messages);
                     const response = record(await request('/api/chat', { model: profile.model, messages: c.messages, stream: false, keep_alive: 0, ...(profile.think !== null ? { think: profile.think } : {}), options: optionsBody }, Math.min(limits.caseMs, deadline - Date.now())));
                     if(response.model!==profile.model)throw Error('Generation model identity differs');
-                    const finalTags=record(await boundedJSON(await (options.fetch??fetch)(new URL('/api/tags',profile.endpoint),{redirect:'error',signal:AbortSignal.timeout(Math.max(1,Math.min(remaining(),5000)))}),limits.maxBytes));
+                    const finalTags=record(await boundedJSON(await (options.fetch??fetch)(new URL('/api/tags',profile.endpoint),{redirect:'error',signal:AbortSignal.any([cancellation.signal,AbortSignal.timeout(Math.max(1,Math.min(remaining(),5000)))])}),limits.maxBytes));
                     const finalModel=(finalTags.models as unknown[]|undefined)?.map(record).find(x=>x.name===profile.model);
                     if(!finalModel||finalModel.digest!==digest||finalModel.remote_host)throw Error('Model identity changed during execution');
                     const message = record(response.message);
@@ -449,6 +457,7 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
         }
     const sourceStable = before === hash(pack) && profileBefore === (profile ? hash(profile) : null), complete = results.length === pack.cases.length * limits.repeat && results.every(x => x.status !== 'not-run' && x.status !== 'error');
     return { schemaVersion: 1, id: randomUUID(), pack: pack.id, packVersion: pack.version,caseCount:pack.cases.length, packHash: before, registryHash: options.registry ? hash(options.registry) : null, profile, profileHash: profileBefore, modelDigest: digest, started, finished: new Date().toISOString(), sourceStable, limits, results, passed: sourceStable && complete && results.every(x => x.status === 'passed'), complete, promotion: false, usage: { outputTokens: known ? tokens : null }, runtime: { provider:providerIdentity,node: process.version, platform: process.platform, arch: process.arch } };
+    } finally {process.removeListener('SIGINT',cancel);process.removeListener('SIGTERM',cancel);}
 }
 export interface Requirements {
     capabilities: string[];
