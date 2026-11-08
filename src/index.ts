@@ -65,6 +65,7 @@ export interface Result {
     durationMs: number;
     tokens: number | null;
     reason: string | null;
+    fixtureHash?: string;
     responseHash?: string;
     adapterHash?: string;
     checks?: number;
@@ -74,6 +75,7 @@ export interface Report {
     id: string;
     pack: string;
     packVersion: string;
+    caseCount:number;
     packHash: string;
     registryHash: string | null;
     profile: Profile | null;
@@ -91,6 +93,7 @@ export interface Report {
         outputTokens: number | null;
     };
     runtime: {
+        provider: string|null;
         node: string;
         platform: string;
         arch: string;
@@ -189,7 +192,7 @@ export function validateRegistry(input: unknown, at: string): Registry {
     for (const [name, value] of Object.entries(runners)) {
         const x = record(value);
         fields(x, ['command', 'args', 'cwd', 'layers', 'allowModels']);
-        if (!id.test(name) || typeof x.command !== 'string' || !x.command || !Array.isArray(x.args) || x.args.length > 64 || x.args.some(a => typeof a !== 'string' || a.length > 4096 || /[{}]/.test(a.replaceAll('{report}', '').replaceAll('{profile}', '').replaceAll('{configuration}', '').replaceAll('{budget}', ''))) || typeof x.cwd !== 'string' || !Array.isArray(x.layers) || !x.layers.length || x.layers.some(l => !['system', 'model', 'coding', 'end-to-end'].includes(String(l))) || typeof x.allowModels !== 'boolean')
+        if (!id.test(name) || typeof x.command !== 'string' || !x.command || !Array.isArray(x.args) || x.args.length > 64 || x.args.some(a => typeof a !== 'string' || a.length > 4096 || /[{}]/.test(a.replaceAll('{report}', '').replaceAll('{profile}', '').replaceAll('{configuration}', '').replaceAll('{budget}', '').replaceAll('{case}', ''))) || typeof x.cwd !== 'string' || !Array.isArray(x.layers) || !x.layers.length || x.layers.some(l => !['system', 'model', 'coding', 'end-to-end'].includes(String(l))) || typeof x.allowModels !== 'boolean')
             throw Error('Invalid trusted runner');
         const cwd = realpathSync(resolve(at, x.cwd));
         out[name] = { command: x.command, args: x.args as string[], cwd, layers: x.layers as Layer[], allowModels: x.allowModels };
@@ -219,6 +222,9 @@ finally {
     await reader.cancel().catch(() => { });
 } return JSON.parse(Buffer.concat(chunks).toString('utf8')) as unknown; }
 export interface ExternalEvidence {
+    runtimeIdentity?: string;
+    caseHash?: string;
+    fixtureHash?: string;
     schemaVersion: 1;
     layer: Layer;
     sourceStable: boolean;
@@ -234,9 +240,10 @@ export interface ExternalEvidence {
 }
 export function validateExternal(input: unknown, layer: Layer): ExternalEvidence {
     const x = record(input);
-    fields(x, ['schemaVersion', 'layer', 'sourceStable', 'complete', 'results', 'configurationHash', 'modelDigest', 'outputTokens']);
+    fields(x, ['schemaVersion', 'layer', 'sourceStable', 'complete', 'results', 'configurationHash', 'modelDigest', 'outputTokens', 'caseHash', 'fixtureHash','runtimeIdentity']);
     if (x.schemaVersion !== 1 || x.layer !== layer || typeof x.sourceStable !== 'boolean' || typeof x.complete !== 'boolean' || !Array.isArray(x.results) || !x.results.length || x.results.length > 10000)
         throw Error('Invalid external evidence');
+    if(x.runtimeIdentity!==undefined&&(typeof x.runtimeIdentity!=='string'||!x.runtimeIdentity||x.runtimeIdentity.length>256))throw Error('Invalid adapter runtime identity');
     const seen = new Set();
     for (const y of x.results) {
         const r = record(y);
@@ -247,19 +254,20 @@ export function validateExternal(input: unknown, layer: Layer): ExternalEvidence
     }
     if (x.outputTokens !== undefined && !integer(x.outputTokens, 0, 1000000))
         throw Error('Invalid token measurement');
-    for (const k of ['configurationHash', 'modelDigest'])
+    for (const k of ['configurationHash', 'modelDigest', 'caseHash', 'fixtureHash'])
         if (x[k] !== undefined && (typeof x[k] !== 'string' || !/^([a-f0-9]{64}|sha256:[a-f0-9]{64})$/.test(String(x[k]))))
             throw Error('Invalid external provenance');
     return x as unknown as ExternalEvidence;
 }
-async function external(runner: Runner, profile: Profile | null, layer: Layer, timeout: number, maxBytes: number, tokenBudget: number): Promise<ExternalEvidence> {
+async function external(runner: Runner, profile: Profile | null, layer: Layer, timeout: number, maxBytes: number, tokenBudget: number, currentCase: Case): Promise<ExternalEvidence> {
     if (process.platform === 'win32')
         throw Error('External execution needs POSIX process groups; Windows adapter supervision unavailable');
-    const root = mkdtempSync(join(realpathSync(tmpdir()), 'gauntlet-')), out = join(root, 'evidence.json'), configuration = join(root, 'configuration.json'), budget = join(root, 'budget.json');
+    const root = mkdtempSync(join(realpathSync(tmpdir()), 'gauntlet-')), out = join(root, 'evidence.json'), configuration = join(root, 'configuration.json'), budget = join(root, 'budget.json'),caseFile=join(root,'case.json');
+    writeEvidence(caseFile,currentCase);
     writeEvidence(configuration, profile);
     writeEvidence(budget, { timeoutMs: timeout, outputTokens: tokenBudget, maxBytes });
-    const args = runner.args.map(a => a.replaceAll('{report}', out).replaceAll('{profile}', profile?.id ?? '').replaceAll('{configuration}', configuration).replaceAll('{budget}', budget));
-    if (layer !== 'system' && (!runner.args.some(a => a.includes('{budget}')) || !runner.args.some(a => a.includes('{configuration}')))) {
+    const args = runner.args.map(a => a.replaceAll('{report}', out).replaceAll('{profile}', profile?.id ?? '').replaceAll('{configuration}', configuration).replaceAll('{budget}', budget).replaceAll('{case}',caseFile));
+    if (layer !== 'system' && (!runner.args.some(a => a.includes('{budget}')) || !runner.args.some(a => a.includes('{configuration}')) || !runner.args.some(a => a.includes('{case}')))) {
         rmSync(root, { recursive: true, force: true });
         throw Error('Model adapter needs explicit configuration and remaining budget inputs');
     }
@@ -279,7 +287,9 @@ async function external(runner: Runner, profile: Profile | null, layer: Layer, t
             fail(Error('Runner failed'));
         else
             done(); }); });
+        if(lstatSync(out).size>maxBytes)throw Error('Evidence byte budget exceeded');
         const e = validateExternal(readJSON(out), layer);
+        if(layer!=='system'&&(e.caseHash!==hash(currentCase)||!e.fixtureHash||!e.runtimeIdentity))throw Error('Evidence lacks case and fixture identity');
         if (layer !== 'system' && (!profile || e.configurationHash !== hash(profile) || !e.modelDigest))
             throw Error('Model/agent evidence lacks exact configuration identity');
         return e;
@@ -302,7 +312,7 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
     if (!options.execute)
         throw Error('Run requires explicit execution');
     const before = hash(pack), profileBefore = profile ? hash(profile) : null, started = new Date().toISOString(), deadline = Date.now() + limits.suiteMs, results: Result[] = [];
-    let tokens = 0, known = true, digest: string | null = null, modelReady = false;
+    let tokens = 0, known = true, digest: string | null = null, modelReady = false,providerIdentity:string|null=null;
     let caseDeadline = 0;
     const remaining = () => { const ms = Math.min(caseDeadline, deadline) - Date.now(); if (ms <= 0)
         throw Error('Execution deadline exhausted'); return ms; };
@@ -338,8 +348,8 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
                         throw Error('Runner model execution not authorized');
                     if (c.layer !== 'system' && tokens >= limits.outputTokens)
                         throw Error('Suite token budget exhausted');
-                    const e = await external(runner, profile, c.layer, timeout, limits.maxBytes, limits.outputTokens - tokens);
-                    r.adapterHash = hash(e);
+                    const e = await external(runner, profile, c.layer, timeout, limits.maxBytes, limits.outputTokens - tokens,c);
+                    r.adapterHash = hash(e);r.fixtureHash=e.fixtureHash;
                     r.checks = e.results.reduce((n, x) => n + x.checks, 0);
                     r.status = e.sourceStable && e.complete && r.checks > 0 && e.results.every(x => x.status === 'passed') ? 'passed' : 'failed';
                     r.reason = r.status === 'passed' ? null : 'Adapter incomplete, changed source or failing checks';
@@ -360,7 +370,7 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
                         }
                         if (digest && e.modelDigest !== digest)
                             throw Error('Model identity changed');
-                        digest = e.modelDigest ?? digest;
+                        digest = e.modelDigest ?? digest;if(providerIdentity&&providerIdentity!==e.runtimeIdentity)throw Error('Adapter runtime changed');providerIdentity=e.runtimeIdentity??providerIdentity;
                     }
                 }
                 else {
@@ -373,6 +383,7 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
                         continue;
                     }
                     if (!modelReady) {
+                        const version=record(await boundedJSON(await (options.fetch??fetch)(new URL('/api/version',profile.endpoint),{redirect:'error',signal:AbortSignal.timeout(Math.max(1,Math.min(remaining(),5000)))}),limits.maxBytes));if(typeof version.version!=='string'||!version.version||version.version.length>100)throw Error('Provider version missing');providerIdentity='ollama:'+version.version;
                         const show = record(await request('/api/show', { model: profile.model }, timeout));
                         if (show.remote_host || show.remote_model)
                             throw Error('Remote-backed models are not local qualification');
@@ -395,7 +406,12 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
                     for (const [k, v] of [['temperature', profile.temperature], ['top_p', profile.topP], ['top_k', profile.topK], ['seed', profile.seed]] as const)
                         if (v !== null)
                             optionsBody[k] = v;
+                    r.fixtureHash=hash(c.messages);
                     const response = record(await request('/api/chat', { model: profile.model, messages: c.messages, stream: false, keep_alive: 0, ...(profile.think !== null ? { think: profile.think } : {}), options: optionsBody }, Math.min(limits.caseMs, deadline - Date.now())));
+                    if(response.model!==profile.model)throw Error('Generation model identity differs');
+                    const finalTags=record(await boundedJSON(await (options.fetch??fetch)(new URL('/api/tags',profile.endpoint),{redirect:'error',signal:AbortSignal.timeout(Math.max(1,Math.min(remaining(),5000)))}),limits.maxBytes));
+                    const finalModel=(finalTags.models as unknown[]|undefined)?.map(record).find(x=>x.name===profile.model);
+                    if(!finalModel||finalModel.digest!==digest||finalModel.remote_host)throw Error('Model identity changed during execution');
                     const message = record(response.message);
                     if (typeof message.content !== 'string' || response.done !== true || !integer(response.eval_count, 0, 1000000))
                         throw Error('Incomplete or unmeasured model response');
@@ -432,7 +448,7 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
             }
         }
     const sourceStable = before === hash(pack) && profileBefore === (profile ? hash(profile) : null), complete = results.length === pack.cases.length * limits.repeat && results.every(x => x.status !== 'not-run' && x.status !== 'error');
-    return { schemaVersion: 1, id: randomUUID(), pack: pack.id, packVersion: pack.version, packHash: before, registryHash: options.registry ? hash(options.registry) : null, profile, profileHash: profileBefore, modelDigest: digest, started, finished: new Date().toISOString(), sourceStable, limits, results, passed: sourceStable && complete && results.every(x => x.status === 'passed'), complete, promotion: false, usage: { outputTokens: known ? tokens : null }, runtime: { node: process.version, platform: process.platform, arch: process.arch } };
+    return { schemaVersion: 1, id: randomUUID(), pack: pack.id, packVersion: pack.version,caseCount:pack.cases.length, packHash: before, registryHash: options.registry ? hash(options.registry) : null, profile, profileHash: profileBefore, modelDigest: digest, started, finished: new Date().toISOString(), sourceStable, limits, results, passed: sourceStable && complete && results.every(x => x.status === 'passed'), complete, promotion: false, usage: { outputTokens: known ? tokens : null }, runtime: { provider:providerIdentity,node: process.version, platform: process.platform, arch: process.arch } };
 }
 export interface Requirements {
     capabilities: string[];
@@ -446,24 +462,24 @@ export function assess(report: Report, requirements: Requirements) {
     if (!strings(requirements.capabilities) || !integer(requirements.minimumCases, 1, 1000) || !integer(requirements.minimumHoldout, 1, 1000) || !Number.isFinite(requirements.minimumPassRate) || requirements.minimumPassRate < 0 || requirements.minimumPassRate > 1)
         throw Error('Invalid qualification requirements');
     const reasons: string[] = [];
-    if (!report.profile || report.profileHash !== hash(report.profile) || !report.modelDigest || !report.sourceStable || !report.complete || report.promotion !== false || report.results.some(r => r.critical && r.status !== 'passed') || report.usage.outputTokens === null)
+    if (!report.profile || report.profileHash !== hash(report.profile) || !report.modelDigest || !report.runtime.provider|| !report.sourceStable || !report.complete || report.promotion !== false || report.results.some(r => r.critical && r.status !== 'passed') || report.usage.outputTokens === null)
         reasons.push('Missing stable configuration, identity, complete evidence or critical pass');
     for (const cap of requirements.capabilities) {
-        const rows = report.results.filter(r => r.layer !== 'system' && r.capabilities.includes(cap)), unique = new Set(rows.map(r => r.id)), holdout = new Set(rows.filter(r => r.split === 'holdout').map(r => r.id));
-        if (unique.size < requirements.minimumCases || holdout.size < requirements.minimumHoldout || !rows.length || rows.filter(r => r.status === 'passed').length / rows.length < requirements.minimumPassRate || rows.some(r => r.status === 'error' || r.status === 'not-run'))
+        const rows = report.results.filter(r => r.layer !== 'system' && r.capabilities.includes(cap)), unique = new Set(rows.map(r => r.fixtureHash)), regression = new Set(rows.filter(r=>r.split==='regression').map(r=>r.fixtureHash)),holdout = new Set(rows.filter(r => r.split === 'holdout'&&!regression.has(r.fixtureHash)).map(r => r.fixtureHash));
+        if (unique.size < requirements.minimumCases || holdout.size < requirements.minimumHoldout || !rows.length || rows.filter(r => r.status === 'passed').length / rows.length < requirements.minimumPassRate || rows.some(r => !r.fixtureHash||r.status === 'error' || r.status === 'not-run'))
             reasons.push('Insufficient evidence: ' + cap);
     }
     return { eligible: reasons.length === 0, reasons, automaticPromotion: false };
 }
 export function exportProfile(report: Report, review: unknown, requirements: Requirements) { const r = record(review); fields(r, ['schemaVersion', 'reportHash', 'reviewer', 'accepted', 'capabilities', 'reviewed', 'evidence']); const reviewed = Date.parse(String(r.reviewed)); if (r.schemaVersion !== 1 || r.reportHash !== hash(report) || typeof r.reviewer !== 'string' || !r.reviewer.trim() || r.accepted !== true || !strings(r.capabilities) || requirements.capabilities.some(c => !(r.capabilities as string[]).includes(c)) || !Number.isFinite(reviewed) || reviewed < Date.parse(report.finished) || reviewed > Date.now() + 60000 || typeof r.evidence !== 'string' || !r.evidence.trim())
     throw Error('Independent review receipt does not match evidence'); const result = assess(report, requirements); if (!result.eligible)
-    throw Error(result.reasons.join('; ')); return { version: 1, profiles: [{ id: report.profile!.id, model: `${report.profile!.model} ${report.profile!.quantization} ${report.modelDigest}`, status: 'qualified', capabilities: requirements.capabilities, evidence: [`Gauntlet report ${hash(report)}; configuration ${report.profileHash}; pack ${report.pack}@${report.packVersion}; reviewed ${r.reviewed}`, r.evidence] }] }; }
+    throw Error(result.reasons.join('; ')); return { version: 1, profiles: [{ id: report.profile!.id, model: `${report.profile!.model} ${report.profile!.quantization} ${report.modelDigest}`, status: 'qualified', capabilities: requirements.capabilities, evidence: [`Runtime ${report.runtime.provider}; configuration ${JSON.stringify(report.profile)}; registry ${report.registryHash??'direct'}`,`Gauntlet report ${hash(report)}; configuration ${report.profileHash}; pack ${report.pack}@${report.packVersion}; reviewed ${r.reviewed}`, r.evidence] }] }; }
 export function compare(reports: Report[]) { if (!Array.isArray(reports) || reports.length < 1 || reports.length > 100)
     throw Error('Provide 1–100 reports'); reports.forEach(validateReport); return reports.map(r => ({ id: r.id, profile: r.profile?.id ?? null, configuration: r.profileHash, pack: r.pack, version: r.packVersion, packHash: r.packHash, complete: r.complete, passed: r.passed, counts: Object.fromEntries(['passed', 'failed', 'error', 'not-run'].map(s => [s, r.results.filter(x => x.status === s).length])), tokens: r.usage.outputTokens, durationMs: Date.parse(r.finished) - Date.parse(r.started), comparableToFirst: reports.length > 0 && r.packHash === reports[0].packHash && r.registryHash === reports[0].registryHash && hash(r.limits) === hash(reports[0].limits), automaticPromotion: false })); }
 /** Structural checks detect malformed or internally inconsistent evidence; they do not authenticate its author. */
 export function validateReport(input: unknown): Report {
     const v = record(input);
-    fields(v, ['schemaVersion', 'id', 'pack', 'packVersion', 'packHash', 'registryHash', 'profile', 'profileHash', 'modelDigest', 'started', 'finished', 'sourceStable', 'limits', 'results', 'passed', 'complete', 'promotion', 'usage', 'runtime']);
+    fields(v, ['schemaVersion', 'id', 'pack', 'packVersion', 'caseCount','packHash', 'registryHash', 'profile', 'profileHash', 'modelDigest', 'started', 'finished', 'sourceStable', 'limits', 'results', 'passed', 'complete', 'promotion', 'usage', 'runtime']);
     const digest = (x: unknown) => typeof x === 'string' && /^(sha256:)?[a-f0-9]{64}$/.test(x);
     if (v.schemaVersion !== 1 || typeof v.id !== 'string' || !v.id || typeof v.pack !== 'string' || !id.test(v.pack) || typeof v.packVersion !== 'string' || !/^\d+\.\d+\.\d+$/.test(v.packVersion) || !digest(v.packHash) || typeof v.sourceStable !== 'boolean' || typeof v.complete !== 'boolean' || typeof v.passed !== 'boolean' || v.promotion !== false)
         throw Error('Invalid report identity');
@@ -472,7 +488,7 @@ export function validateReport(input: unknown): Report {
         throw Error('Invalid report dates');
     if (v.registryHash !== null && !digest(v.registryHash))
         throw Error('Invalid runner registry hash');
-    const limits = validateLimits(v.limits);
+    if(!integer(v.caseCount,1,1000))throw Error('Invalid case count');const limits = validateLimits(v.limits);
     if (v.profile !== null) {
         const p = validateProfile(v.profile);
         if (v.profileHash !== hash(p))
@@ -488,7 +504,7 @@ export function validateReport(input: unknown): Report {
     let tokens = 0, unknown = false;
     for (const value of v.results) {
         const r = record(value);
-        fields(r, ['id', 'iteration', 'layer', 'split', 'capabilities', 'critical', 'status', 'durationMs', 'tokens', 'reason', 'responseHash', 'adapterHash', 'checks']);
+        fields(r, ['id', 'iteration', 'layer', 'split', 'capabilities', 'critical', 'status', 'durationMs', 'tokens', 'reason', 'fixtureHash', 'responseHash', 'adapterHash', 'checks']);
         if (typeof r.id !== 'string' || !id.test(r.id) || !integer(r.iteration, 1, limits.repeat) || !['system', 'model', 'coding', 'end-to-end'].includes(String(r.layer)) || !['regression', 'holdout'].includes(String(r.split)) || !strings(r.capabilities) || typeof r.critical !== 'boolean' || !['passed', 'failed', 'error', 'not-run'].includes(String(r.status)) || !integer(r.durationMs, 0, 3600000) || r.reason !== null && typeof r.reason !== 'string')
             throw Error('Invalid result');
         const key = r.id + ':' + r.iteration;
@@ -503,7 +519,7 @@ export function validateReport(input: unknown): Report {
             else
                 tokens += r.tokens as number;
         }
-        for (const k of ['responseHash', 'adapterHash'])
+        for (const k of ['fixtureHash', 'responseHash', 'adapterHash'])
             if (r[k] !== undefined && !digest(r[k]))
                 throw Error('Invalid result hash');
         if (r.checks !== undefined && !integer(r.checks, 0, 1000000))
@@ -517,12 +533,14 @@ export function validateReport(input: unknown): Report {
         throw Error('Invalid report usage');
     if (unknown && usage.outputTokens !== null || usage.outputTokens !== null && usage.outputTokens !== tokens)
         throw Error('Inconsistent token totals');
+    if(v.complete&&usage.outputTokens!==null&&(usage.outputTokens as number)>limits.outputTokens)throw Error('Complete evidence exceeds token budget');
+    if(v.complete&&v.results.length!==v.caseCount*limits.repeat)throw Error('Missing declared cases');
     if (v.complete && v.results.some(x => ['error', 'not-run'].includes(String(record(x).status))))
         throw Error('Incomplete evidence marked complete');
     if (v.passed !== !!(v.sourceStable && v.complete && v.results.every(x => record(x).status === 'passed')))
         throw Error('Inconsistent pass flag');
     const runtime = record(v.runtime);
-    fields(runtime, ['node', 'platform', 'arch']);
+    fields(runtime, ['provider','node', 'platform', 'arch']);if(runtime.provider!==null&&(typeof runtime.provider!=='string'||!runtime.provider||runtime.provider.length>256))throw Error('Invalid provider runtime');
     if (['node', 'platform', 'arch'].some(k => typeof runtime[k] !== 'string' || !runtime[k]))
         throw Error('Invalid runtime identity');
     return v as unknown as Report;

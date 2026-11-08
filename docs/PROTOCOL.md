@@ -20,7 +20,7 @@ Direct calls currently unload after each response (`keep_alive: 0`). Durations t
 
 ## Registered external runners
 
-A separately reviewed registry has `schemaVersion: 1` and a `runners` object. Entries have fixed `command`, `args`, `cwd`, accepted `layers` and `allowModels`. Relative cwd resolves from the registry's directory. There is no shell interpolation; supported argument placeholders are `{report}`, `{profile}` (ID), `{configuration}` (private JSON profile path), and `{budget}` (private remaining-budget JSON path). Model/agent adapters must receive configuration and remaining budget. Owner-trusted adapters enforce token limits before starting their work; the protocol verifies reported usage afterward and stops subsequent work on missing/excess usage.
+A separately reviewed registry has `schemaVersion: 1` and a `runners` object. Entries have fixed `command`, `args`, `cwd`, accepted `layers` and `allowModels`. Relative cwd resolves from the registry's directory. There is no shell interpolation; supported argument placeholders are `{report}`, `{profile}` (ID), `{configuration}` (private JSON profile path), `{budget}` (private remaining-budget JSON path), and `{case}` (private current-case JSON path). Model/agent adapters must receive configuration, current case and remaining budget. Owner-trusted adapters enforce token limits before starting their work; the protocol verifies reported usage afterward and stops subsequent work on missing/excess usage.
 
 Processes receive PATH, HOME and TMPDIR only. Model credentials are not inherited. Commands are **trusted executable code**, not candidate-controlled input. POSIX process-group supervision bounds runtime/output and cleans descendants; it is not a security sandbox. Windows external execution is unavailable until a Job Object adapter is implemented. Direct local-provider and schema operations remain portable.
 
@@ -32,11 +32,11 @@ The adapter writes a new report at `{report}`:
 {"schemaVersion":1,"layer":"system","sourceStable":true,"complete":true,"results":[{"id":"policy","status":"passed","checks":3}]}
 ```
 
-Statuses: passed, failed, error, not-run. Empty/zero-check/incomplete evidence cannot pass. Non-system reports also need `configurationHash` (SHA256 of `JSON.stringify(profile)`), `modelDigest` and measured `outputTokens`. A nonzero runner exit is an error even if its output claims success. Evidence hashes identify bytes/configuration; they are not cryptographic attestations of truthful measurement or authenticated authorship. The registered runner/grader remains part of the trusted computing base.
+Statuses: passed, failed, error, not-run. Empty/zero-check/incomplete evidence cannot pass. Non-system reports also need `configurationHash` (SHA256 of `JSON.stringify(profile)`), `modelDigest` measured `outputTokens`, `runtimeIdentity`, `caseHash` (hash of the current case), and `fixtureHash` (the independently evaluated input/fixture identity). Distinct case IDs or regression/holdout labels do not create independent coverage when fixture hashes repeat. A holdout fingerprint also used for regression does not count as heldout. A nonzero runner exit is an error even if its output claims success. Evidence hashes identify bytes/configuration; they are not cryptographic attestations of truthful measurement or authenticated authorship. The registered runner/grader remains part of the trusted computing base.
 
 ## Evidence and qualification
 
-Reports include pack/profile/registry hashes, model digest, runtime identity, selection results, iterations, layer/capability tags, timing, response or adapter hashes, token measurements, complete/pass/source-stability flags and `promotion: false`. Source/profile mutation invalidates acceptance. Responses/prompts and raw process logs are not copied into reports. Existing evidence is never overwritten.
+Reports include pack/profile/registry hashes, declared case count, model digest, runtime identity, selection results, iterations, layer/capability tags, timing, response or adapter hashes, token measurements, complete/pass/source-stability flags and `promotion: false`. Source/profile mutation invalidates acceptance. Responses/prompts and raw process logs are not copied into reports. Existing evidence is never overwritten.
 
 `compare --reports=a.json,b.json` preserves errors/not-run counts and unknown usage. Different pack/registry/budget contracts are marked noncomparable. Configuration changes remain visible; comparison alone chooses no winner.
 

@@ -1,0 +1,40 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: voidbrain/project-harness
+          ref: v4.2.1
+          path: .harness/template
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run typecheck && npm run build && npm test
+      - name: Harness and record checks
+        env:
+          HARNESS_HOME: ${{ github.workspace }}/.harness/template
+        run: |
+          npm run check:harness
+          npm run check:rules
+          npm run check:backlog
+          npm run check:maintenance
+          npm run check:audits
+          npm run check:integrations
+      - name: Packaged CLI smoke
+        run: |
+          node bin/gauntlet.mjs validate --pack=examples/smoke-v1.json --profile=examples/profiles/gemma4-12b.json
+          node bin/gauntlet.mjs plan --pack=examples/smoke-v1.json --profile=examples/profiles/gemma4-12b.json --limits=examples/limits-day.json
+          npm pack --ignore-scripts --pack-destination /tmp

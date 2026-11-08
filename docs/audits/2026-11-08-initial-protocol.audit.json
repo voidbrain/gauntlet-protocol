@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "kind": "full",
+  "reviewed": "2026-11-08T23:06:43.798Z",
+  "baseline": "34371e79fae77233f93f461fb2c5a7ef278a142b",
+  "report": "docs/audits/2026-11-08-initial-protocol.md",
+  "areas": {
+    "code": {
+      "result": "checked",
+      "evidence": "Strict validators, explicit run gates, provider and process cleanup inspected; typecheck/build pass.",
+      "limits": "Initial release; review findings addressed under F-001, no exhaustive correctness claim."
+    },
+    "logic": {
+      "result": "checked",
+      "evidence": "Traced plan to execution to report, comparison, capability assessment and reviewed profile export. Four review repros committed before fixes.",
+      "limits": "Trusted external runner and review receipt remain attestations; no authenticated execution proof."
+    },
+    "tests": {
+      "result": "checked",
+      "evidence": "Thirteen deterministic tests cover no-call planning, grading, exact settings, holdouts, budget/identity errors, process failures, byte limits and append-only evidence.",
+      "limits": "Fake providers and neutral subprocesses; no live models, coding sandbox, GPU stress or device acceptance."
+    },
+    "documentation": {
+      "result": "checked",
+      "evidence": "README, PROTOCOL, Mac profiles, example JSON, CLI flags and area notes checked against implementation.",
+      "limits": "Model profiles are proposals; smoke cases do not establish general or coding fitness."
+    },
+    "harness": {
+      "result": "checked",
+      "evidence": "Core 4.2.1 copied/adapted mapping, check:rules/backlog/maintenance and template parity reviewed. Project settings only.",
+      "limits": "Initial adoption timing sample covers copy/check receipt slice, not earlier policy reading or product implementation; behavior runner unconfigured."
+    },
+    "security": {
+      "result": "checked",
+      "evidence": "Loopback/remote metadata checks, strict command registry, no shell, bounded bytes/time, private append-only files and neutral data inspected.",
+      "limits": "Registered code trusted; process supervision is not security isolation; no live security assessment."
+    },
+    "delivery": {
+      "result": "checked",
+      "evidence": "Locked TypeScript 6.0.3 and Node types 24.10.1; Node >=24; pinned Actions copied from current harness; own CI and npm artifact plan reviewed.",
+      "limits": "Local host Node26; Node24 Linux acceptance awaits CI; no public npm publication or hosted service."
+    },
+    "backlog": {
+      "result": "checked",
+      "evidence": "F-001 owns release implementation and independent review; foreign NERV integration excluded from release acceptance.",
+      "limits": "Pending own CI and final fresh review; no record closed from local tests."
+    }
+  }
+}

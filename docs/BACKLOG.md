@@ -10,7 +10,7 @@ Current work ledger, reviewed 9 November 2026 against main `67797e1`. [Rules](BA
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🔴 | 🔺 P1 | Open | 🟡 Medium |
+| 🟡 | 🔺 P1 | Implemented | 🟡 Medium |
 
 💻 **→ Human action required: No**<br />Implement and independently review the protocol, CLI, examples and deterministic acceptance.
 
@@ -23,7 +23,7 @@ Current work ledger, reviewed 9 November 2026 against main `67797e1`. [Rules](BA
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Finish source/CLI tests and documentation, adopt core harness 4.2.1 without shared rule changes, independent report-only review and green own-repository CI. NERV integration is consumer-owned and never a release gate. No live campaign is required for protocol acceptance.
+**Next action / closure evidence:** Source/CLI and fifteen deterministic tests pass locally. Core harness 4.2.1 adopted with project settings only. First independent report-only review identified four issues; committed regressions 34371e7 failed before fixes and pass after. Final review and own-repository CI remain pending. NERV integration is consumer-owned and never a release gate. No live campaign is required for protocol acceptance.
 
 **Estimates:** Medium remaining effort, 2–3 days including adapter and evidence edge cases; estimated 2026-11-09. Not measured runtime or acceptance.
 

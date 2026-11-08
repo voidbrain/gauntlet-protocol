@@ -19,7 +19,10 @@
     "src",
     "bin",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "examples",
+    "docs/PROTOCOL.md",
+    "docs/MAC-PROFILES.md"
   ],
   "scripts": {
     "build": "tsc",

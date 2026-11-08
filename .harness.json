@@ -111,14 +111,7 @@
   },
   "audit": {
     "days": 7,
-    "enforce": false,
-    "areas": [
-      "protocol",
-      "adapters",
-      "documentation",
-      "privacy",
-      "dependencies"
-    ]
+    "enforce": false
   },
   "rules": {
     "agents": "AGENTS.md",
