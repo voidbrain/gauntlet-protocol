@@ -29,7 +29,7 @@ Current work ledger, reviewed 9 November 2026 against main `67797e1`. [Rules](BA
 
 | Field | Value |
 |---|---|
-| PR / evidence | Pending |
+| PR / evidence | [PR #1](https://github.com/voidbrain/gauntlet-protocol/pull/1); failing review regressions 34371e7; local 15-test acceptance |
 | Opened | 2026-11-09 |
 | Verification | Pending deterministic checks and independent review |
 | Reviewed | 2026-11-09 |
