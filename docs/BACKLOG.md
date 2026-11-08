@@ -23,13 +23,13 @@ Current work ledger, reviewed 9 November 2026 against main `67797e1`. [Rules](BA
 <details>
 <summary>Next action, estimates and PR history</summary>
 
-**Next action / closure evidence:** Source/CLI and fifteen deterministic tests pass locally. Core harness 4.2.1 adopted with project settings only. First independent report-only review identified four issues; committed regressions 34371e7 failed before fixes and pass after. Final review and own-repository CI remain pending. NERV integration is consumer-owned and never a release gate. No live campaign is required for protocol acceptance.
+**Next action / closure evidence:** Source/CLI and sixteen deterministic tests pass locally. Core harness 4.2.1 adopted with project settings only. First independent report-only review identified four issues; committed regressions 34371e7 failed before fixes and pass after. Follow-up review found cross-capability holdout reuse; committed reproduction precedes its global fixture-exclusion fix. Final review and own-repository CI remain pending. NERV integration is consumer-owned and never a release gate. No live campaign is required for protocol acceptance.
 
 **Estimates:** Medium remaining effort, 2–3 days including adapter and evidence edge cases; estimated 2026-11-09. Not measured runtime or acceptance.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #1](https://github.com/voidbrain/gauntlet-protocol/pull/1); failing review regressions 34371e7; local 15-test acceptance |
+| PR / evidence | [PR #1](https://github.com/voidbrain/gauntlet-protocol/pull/1); failing review regressions 34371e7; local 16-test acceptance |
 | Opened | 2026-11-09 |
 | Verification | Pending deterministic checks and independent review |
 | Reviewed | 2026-11-09 |

@@ -465,7 +465,7 @@ export function assess(report: Report, requirements: Requirements) {
     if (!report.profile || report.profileHash !== hash(report.profile) || !report.modelDigest || !report.runtime.provider|| !report.sourceStable || !report.complete || report.promotion !== false || report.results.some(r => r.critical && r.status !== 'passed') || report.usage.outputTokens === null)
         reasons.push('Missing stable configuration, identity, complete evidence or critical pass');
     for (const cap of requirements.capabilities) {
-        const rows = report.results.filter(r => r.layer !== 'system' && r.capabilities.includes(cap)), unique = new Set(rows.map(r => r.fixtureHash)), regression = new Set(rows.filter(r=>r.split==='regression').map(r=>r.fixtureHash)),holdout = new Set(rows.filter(r => r.split === 'holdout'&&!regression.has(r.fixtureHash)).map(r => r.fixtureHash));
+        const rows = report.results.filter(r => r.layer !== 'system' && r.capabilities.includes(cap)), unique = new Set(rows.map(r => r.fixtureHash)), regression = new Set(report.results.filter(r=>r.split==='regression').map(r=>r.fixtureHash)),holdout = new Set(rows.filter(r => r.split === 'holdout'&&!regression.has(r.fixtureHash)).map(r => r.fixtureHash));
         if (unique.size < requirements.minimumCases || holdout.size < requirements.minimumHoldout || !rows.length || rows.filter(r => r.status === 'passed').length / rows.length < requirements.minimumPassRate || rows.some(r => !r.fixtureHash||r.status === 'error' || r.status === 'not-run'))
             reasons.push('Insufficient evidence: ' + cap);
     }
