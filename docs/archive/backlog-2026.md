@@ -72,3 +72,5 @@ F-001 was archived by [PR #2](https://github.com/voidbrain/gauntlet-protocol/pul
 </details>
 
 ---
+
+B-001 reconciliation: [PR #4](https://github.com/voidbrain/gauntlet-protocol/pull/4), documentation only; implementation acceptance remains PR #3 / CI 42534614317.
