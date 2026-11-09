@@ -55,6 +55,8 @@ export function reuseValid(report: Report, expected: {
 }
 export async function executeWithEvidence(pack: Pack, profile: Profile | null, limits: Limits, options: EvidenceOptions): Promise<EvidenceResult> {
     validatePack(pack);
+    if (pack.cases.some(c => c.responseFormat !== undefined) && profile?.backend && profile.backend !== 'ollama')
+        throw Error('Response format currently requires Ollama');
     if (profile)
         validateProfile(profile);
     validateLimits(limits);
