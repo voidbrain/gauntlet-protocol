@@ -13,9 +13,9 @@ Current work ledger, reviewed 9 November 2026 against main `62d8072`. [Rules](BA
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟡 Medium |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
 
-💻 **→ Human action required: No**<br />Implement and verify the owned reusable contracts with neutral fixtures.
+💻 **→ Human action required: No**<br />Verify final owned CI and release; deterministic implementation and independent review complete.
 
 | | |
 |---|---|
@@ -34,7 +34,7 @@ Current work ledger, reviewed 9 November 2026 against main `62d8072`. [Rules](BA
 |---|---|
 | PR / evidence | — |
 | Opened | 2026-11-09 |
-| Verification | Pending owned deterministic acceptance and review |
+| Verification | Local deterministic acceptance and fresh-context report-only review passed; final own CI pending. Review: docs/reviews/2026-11-09-evidence-tools.md; three findings fixed after immutable failing regressions068eb6f. |
 | Reviewed | 2026-11-09 |
 
 </details>
@@ -47,9 +47,9 @@ Current work ledger, reviewed 9 November 2026 against main `62d8072`. [Rules](BA
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟡 Medium |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
 
-💻 **→ Human action required: No**<br />Implement and verify the owned reusable contracts with neutral fixtures.
+💻 **→ Human action required: No**<br />Verify final owned CI and release; deterministic implementation and independent review complete.
 
 | | |
 |---|---|
@@ -68,7 +68,7 @@ Current work ledger, reviewed 9 November 2026 against main `62d8072`. [Rules](BA
 |---|---|
 | PR / evidence | — |
 | Opened | 2026-11-09 |
-| Verification | Pending owned deterministic acceptance and review |
+| Verification | Local deterministic acceptance and fresh-context report-only review passed; final own CI pending. Review: docs/reviews/2026-11-09-evidence-tools.md; three findings fixed after immutable failing regressions068eb6f. |
 | Reviewed | 2026-11-09 |
 
 </details>
@@ -81,9 +81,9 @@ Current work ledger, reviewed 9 November 2026 against main `62d8072`. [Rules](BA
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟡 Medium |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
 
-💻 **→ Human action required: No**<br />Implement and verify the owned reusable contracts with neutral fixtures.
+💻 **→ Human action required: No**<br />Verify final owned CI and release; deterministic implementation and independent review complete.
 
 | | |
 |---|---|
@@ -102,7 +102,7 @@ Current work ledger, reviewed 9 November 2026 against main `62d8072`. [Rules](BA
 |---|---|
 | PR / evidence | — |
 | Opened | 2026-11-09 |
-| Verification | Pending owned deterministic acceptance and review |
+| Verification | Local deterministic acceptance and fresh-context report-only review passed; final own CI pending. Review: docs/reviews/2026-11-09-evidence-tools.md; three findings fixed after immutable failing regressions068eb6f. |
 | Reviewed | 2026-11-09 |
 
 </details>
