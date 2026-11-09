@@ -32,9 +32,9 @@ Current work ledger, reviewed 9 November 2026 against main `67cb511`. [Rules](BA
 
 | Field | Value |
 |---|---|
-| PR / evidence | This PR; Test: test/environments.test.ts; Review: [fresh-context report](reviews/2026-11-09-environments-independent.md), strict-enum finding fixed after unchanged failing regressione7f7183; seven focused tests pass, no remaining findings. |
+| PR / evidence | [PR #7](https://github.com/voidbrain/gauntlet-protocol/pull/7); Test: test/environments.test.ts; Review: [fresh-context report](reviews/2026-11-09-environments-independent.md), strict-enum finding fixed after unchanged failing regressione7f7183; seven focused tests pass, no remaining findings. |
 | Opened | 2026-11-09 |
-| Verification | Unit/integration: seven machine/scenario/CLI/reuse fixtures pass, final complete deterministic suite/CI recorded before release. No real load/model qualification. |
+| Verification | Unit/integration: seven machine/scenario/CLI/reuse fixtures pass, all35 deterministic tests plus typecheck/build/index/backlog/rule checks passed locally; final CI recorded before release. No real load/model qualification. |
 | Reviewed | 2026-11-09 |
 
 </details>
