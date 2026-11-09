@@ -74,3 +74,110 @@ F-001 was archived by [PR #2](https://github.com/voidbrain/gauntlet-protocol/pul
 ---
 
 B-001 reconciliation: [PR #4](https://github.com/voidbrain/gauntlet-protocol/pull/4), documentation only; implementation acceptance remains PR #3 / CI 42534614317.
+
+
+### F-002
+
+**Generated capability index and conservative evidence reuse**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No remaining owned implementation action; released as v0.2.0.
+
+| | |
+|---|---|
+| **Issue** | Generated capability index and conservative evidence reuse. |
+| **Reproduce** | Exercise CLI/API with neutral packs and fake local runtimes. |
+| **Check** | Generate a stable case/area/capability index from packs. Reuse only complete passing evidence matching current pack/grader, exact profile/runtime/model identity, environment and explicit freshness; retain original report timestamps and provenance; never reuse system results across changed sources or grant qualification. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Generate a stable case/area/capability index from packs. Reuse only complete passing evidence matching current pack/grader, exact profile/runtime/model identity, environment and explicit freshness; retain original report timestamps and provenance; never reuse system results across changed sources or grant qualification. Owned strict checks, deterministic join tests, documentation, independent review and Node24 CI42572655186 passed. Closed 2026-11-09 on v0.2.0; no downstream acceptance gate.
+
+**Estimates:** Small remaining effort at closure: no work remains. Original 2–3 day estimate was not measured elapsed/token cost.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #5](https://github.com/voidbrain/gauntlet-protocol/pull/5); Review: fresh-context report-only review passed after three immutable regressions068eb6f; CI42572655186 passed, merged PR #5, tagged v0.2.0. |
+| Opened | 2026-11-09 |
+| Verification | 2026-11-09 Unit/integration: CI42572655186 validate passed Node24 typecheck/build and all28 deterministic tests. Review: fresh-context report-only recheck passed after three immutable failing regressions068eb6f. Released v0.2.0; no live-model or consumer acceptance claimed. |
+| Reviewed | 2026-11-09 |
+
+</details>
+
+---
+
+
+### F-003
+
+**Measured cold/warm inference and host telemetry**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No remaining owned implementation action; released as v0.2.0.
+
+| | |
+|---|---|
+| **Issue** | Measured cold/warm inference and host telemetry. |
+| **Reproduce** | Exercise CLI/API with neutral packs and fake local runtimes. |
+| **Check** | Retain provider load/prompt/generation timing and tokens, sample host/process/model allocation with declared interval/coverage/unknown GPU values, separate cold and warm calls, bound telemetry requests and cleanup. No model run is a release gate. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Retain provider load/prompt/generation timing and tokens, sample host/process/model allocation with declared interval/coverage/unknown GPU values, separate cold and warm calls, bound telemetry requests and cleanup. No model run is a release gate. Owned strict checks, deterministic join tests, documentation, independent review and Node24 CI42572655186 passed. Closed 2026-11-09 on v0.2.0; no downstream acceptance gate.
+
+**Estimates:** Small remaining effort at closure: no work remains. Original 2–3 day estimate was not measured elapsed/token cost.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #5](https://github.com/voidbrain/gauntlet-protocol/pull/5); Review: fresh-context report-only review passed after three immutable regressions068eb6f; CI42572655186 passed, merged PR #5, tagged v0.2.0. |
+| Opened | 2026-11-09 |
+| Verification | 2026-11-09 Unit/integration: CI42572655186 validate passed Node24 typecheck/build and all28 deterministic tests. Review: fresh-context report-only recheck passed after three immutable failing regressions068eb6f. Released v0.2.0; no live-model or consumer acceptance claimed. |
+| Reviewed | 2026-11-09 |
+
+</details>
+
+---
+
+
+### F-004
+
+**Explicit local alternative runtime adapters**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No remaining owned implementation action; released as v0.2.0.
+
+| | |
+|---|---|
+| **Issue** | Explicit local alternative runtime adapters. |
+| **Reproduce** | Exercise CLI/API with neutral packs and fake local runtimes. |
+| **Check** | Add tested local llama.cpp and MLX-LM adapters with independently checked model artifacts, explicit runtime identity/configuration and capability limits. No implicit installation/download or provider changes; native Ollama remains default. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Add tested local llama.cpp and MLX-LM adapters with independently checked model artifacts, explicit runtime identity/configuration and capability limits. No implicit installation/download or provider changes; native Ollama remains default. Owned strict checks, deterministic join tests, documentation, independent review and Node24 CI42572655186 passed. Closed 2026-11-09 on v0.2.0; no downstream acceptance gate.
+
+**Estimates:** Small remaining effort at closure: no work remains. Original 2–3 day estimate was not measured elapsed/token cost.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #5](https://github.com/voidbrain/gauntlet-protocol/pull/5); Review: fresh-context report-only review passed after three immutable regressions068eb6f; CI42572655186 passed, merged PR #5, tagged v0.2.0. |
+| Opened | 2026-11-09 |
+| Verification | 2026-11-09 Unit/integration: CI42572655186 validate passed Node24 typecheck/build and all28 deterministic tests. Review: fresh-context report-only recheck passed after three immutable failing regressions068eb6f. Released v0.2.0; no live-model or consumer acceptance claimed. |
+| Reviewed | 2026-11-09 |
+
+</details>
+
+---
+
+F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrain/gauntlet-protocol/pull/6), documentation only; implementation acceptance is PR #5 / CI42572655186.
