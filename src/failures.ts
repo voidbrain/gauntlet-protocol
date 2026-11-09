@@ -1,6 +1,5 @@
-import {mkdirSync,lstatSync,realpathSync,writeFileSync,readFileSync,readdirSync} from 'node:fs';
-import {resolve,dirname,relative,isAbsolute,sep,join} from 'node:path';
-import {execFileSync} from 'node:child_process';
+import {mkdirSync,lstatSync,writeFileSync,readFileSync,readdirSync} from 'node:fs';
+import {resolve,dirname,isAbsolute,join} from 'node:path';
 import type {Report} from './index.ts';
 import {createHash} from 'node:crypto';
 export const FAILURE_FILE_BYTES=16384, FAILURE_TOTAL_BYTES=131072, FAILURE_FILES=10;
@@ -13,8 +12,7 @@ export function failureDestination(value:unknown):string {
  const parent=dirname(path);
  for(let a=parent;;a=dirname(a)){if(lstatSync(a).isSymbolicLink())throw Error('Failure capture ancestors must not be symlinks');if(a===dirname(a))break;}
  if(!lstatSync(parent).isDirectory())throw Error('Failure capture parent must exist');
- let checkout:string|null=null;try{checkout=realpathSync(execFileSync('git',['-C',parent,'rev-parse','--show-toplevel'],{encoding:'utf8',stdio:['ignore','pipe','ignore']}).trim());}catch{}
- if(checkout){const rel=relative(checkout,path);if(rel===''||rel!=='..'&&!rel.startsWith('..'+sep)&&!isAbsolute(rel))throw Error('Failure captures must be outside a checkout');}
+ for(let a=parent;;a=dirname(a)){try{lstatSync(join(a,'.git'));throw Error('Failure captures must be outside a checkout');}catch(e){if((e as NodeJS.ErrnoException).code!=='ENOENT')throw e;}if(a===dirname(a))break;}
  return path;
 }
 interface Capture {reportId:string;caseId:string;iteration:number;fixtureHash:string;responseHash:string;reason:'invalid-json'|'acceptance-mismatch'|'truncated-output';response:string;finishReason:string|null}
