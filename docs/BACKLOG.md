@@ -1,11 +1,80 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 9 November 2026 against main `8d99d9f`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 10 November 2026 against main `90dc2b6`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
 
 ## Features and improvements
+
+### F-008
+
+**Expand the common evaluation pack beyond ten smoke cases**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔴 | 🔶 P2 | Open | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Prepare the reusable contracts and deterministic acceptance fixtures.
+
+| | |
+|---|---|
+| **Issue** | The ten-case neutral smoke pack is too narrow to support broad capability comparisons. |
+| **Reproduce** | Owner request 2026-11-10: expand reusable evaluation coverage and make candidate comparisons reproducible. |
+| **Check** | Versioned coverage includes paraphrases, ambiguity, multi-turn corrections, invalid tool arguments, refusal, prompt injection and harder held-out cases. Strict semantic grading remains separate from structural validity; deterministic grader fixtures prove both correct and deliberately incorrect answers. Held-out labels alone never imply confidentiality or isolation. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Design a coverage matrix and versioned expanded pack with stable case/capability/split identities; assess multi-turn runner support before choosing an explicit contract. Preserve existing smoke versions and historical evidence. Add positive/negative grader joins, regenerate the capability index and document coverage limits. Generic contracts, packs, graders, CLI and repository-owned fixtures belong here. Consumer role packs, runtime routing and production acceptance remain consumer-owned. Release acceptance never waits for NERV adoption. Live campaigns, model downloads and installations require separately reviewed scope and budgets; registration launches none.
+
+**Estimates:** 🟡 Medium, estimated 2026-11-10: contract design, deterministic fixtures and documentation remain unimplemented; live model availability and campaign cost are unknown.
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-10 |
+| Verification | Pending implementation; documentation registration only. |
+| Reviewed | 2026-11-10 |
+
+</details>
+
+---
+
+### F-009
+
+**Define repeatable candidate comparisons**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔴 | 🔶 P2 | Open | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Prepare the reusable contracts and deterministic acceptance fixtures.
+
+| | |
+|---|---|
+| **Issue** | Existing report comparison needs an explicit repeatable protocol for broader candidate evaluation rather than treating one smoke pass as competence. |
+| **Reproduce** | Owner request 2026-11-10: expand reusable evaluation coverage and make candidate comparisons reproducible. |
+| **Check** | Preserve exact requested/actual model, runtime, context, sampling, thinking, quantization and environment identities; repeated outcomes, failures/errors/not-run, cold/warm latency and measured input/output/cache tokens retain provenance and unknown coverage. Structural validity and semantic success are reported separately. Incompatible configurations are rejected or explicitly separated; no automatic promotion follows. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Assess existing compare/repeat/report behavior, then define a bounded candidate matrix, compatible comparison dimensions, repetition policy and failure-preserving summaries. Use repository-owned fake providers/reports to verify identity, aggregate budgets, interruption, repeat accounting and unknown telemetry; retain source event identities and avoid duplicate token totals. Expanded-pack campaigns can consume F-008 after release, but comparison contract implementation can proceed independently. Generic contracts, packs, graders, CLI and repository-owned fixtures belong here. Consumer role packs, runtime routing and production acceptance remain consumer-owned. Release acceptance never waits for NERV adoption. Live campaigns, model downloads and installations require separately reviewed scope and budgets; registration launches none.
+
+**Estimates:** 🟡 Medium, estimated 2026-11-10: contract design, deterministic fixtures and documentation remain unimplemented; live model availability and campaign cost are unknown.
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-10 |
+| Verification | Pending implementation; documentation registration only. |
+| Reviewed | 2026-11-10 |
+
+</details>
+
+---
+
 
 ## Other changes
 
