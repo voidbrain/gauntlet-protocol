@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "moderate-load",
+  "version": "1.0.0",
+  "load": "moderate",
+  "description": "Representative light interactive desktop use.",
+  "workloadCategories": [
+    "browser",
+    "editor",
+    "media"
+  ],
+  "power": "any"
+}

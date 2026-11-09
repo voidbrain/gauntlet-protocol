@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "baseline-load",
+  "version": "1.0.0",
+  "load": "baseline",
+  "description": "Normal dedicated evaluation host with no intentional competing workload.",
+  "workloadCategories": [],
+  "power": "any"
+}

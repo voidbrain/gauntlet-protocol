@@ -1,0 +1,5 @@
+# Environment ownership assessment
+
+9 November2026; baseline67cb511. Inspected profile/report/cache/compare/CLI, MAC-PROFILES and consumer source assessment. Reusable hardware/load definitions and identity belong in this library; time/location/role/device trust/acceptance remain consumer-owned. Retain existing budgets and private local cache rather than adding a service or permitting inference from scenario labels. Actual load remains owner-declared with separately measured telemetry; missing observation is never certified.
+
+F-005 owns implementation/release with owned neutral fixtures and independent review. Consumer adoption and real model/load campaigns are excluded from release acceptance. A declaration-only plan was insufficient to bind reuse;0.3 adds strict explicit context. Reconsider remote attestation/adaptive admission only with a concrete adapter/trust requirement and independently observed evidence. This is an architecture assessment, not a full/scoped audit or model qualification.

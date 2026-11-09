@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "heavy-load",
+  "version": "1.0.0",
+  "load": "heavy",
+  "description": "Representative demanding competing application workload.",
+  "workloadCategories": [
+    "browser",
+    "calls",
+    "vm"
+  ],
+  "power": "any"
+}

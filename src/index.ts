@@ -1,3 +1,4 @@
+import {validateExecutionEnvironment, admitEnvironment, type ExecutionEnvironment} from './environments.ts';
 import { engineIdentity } from './engine.ts';
 import { areas, type Area } from './catalog.ts';
 import { inspectRuntime, compatibleBody, validateManifest, ollamaStream, type RuntimeManifest, type RuntimeIdentity } from './runtimes.ts';
@@ -91,6 +92,7 @@ export interface Result {
     checks?: number;
 }
 export interface Report {
+    environment?: ExecutionEnvironment;
     schemaVersion: 1;
     id: string;
     protocolVersion?: string;
@@ -274,10 +276,12 @@ export function validateRegistry(input: unknown, at: string): Registry {
     return { schemaVersion: 1, runners: out };
 }
 export function plan(pack: Pack, profile: Profile | null, limits: Limits, options: {
+    environment?: ExecutionEnvironment;
     allowModels?: boolean;
     allowExpensive?: boolean;
 } = {}) {
-    return { pack: pack.id, profile: profile?.id ?? null, limits, modelCallsAuthorized: !!options.allowModels, cases: pack.cases.slice(0, limits.maxCases).map(c => ({ id: c.id, layer: c.layer, runner: c.runner ?? null, eligible: (!c.expensive || !!options.allowExpensive) && (c.layer === 'system' || !!options.allowModels), reason: c.expensive && !options.allowExpensive ? 'Expensive case requires explicit opt-in' : c.layer !== 'system' && !options.allowModels ? 'Model/agent execution requires explicit opt-in' : null })), notSelected: pack.cases.slice(limits.maxCases).map(c => c.id), promotion: false };
+    if(options.environment)validateExecutionEnvironment(options.environment);
+    return { ...(options.environment?{environment:options.environment,environmentVerified:false}:{}), pack: pack.id, profile: profile?.id ?? null, limits, modelCallsAuthorized: !!options.allowModels, cases: pack.cases.slice(0, limits.maxCases).map(c => ({ id: c.id, layer: c.layer, runner: c.runner ?? null, eligible: (!c.expensive || !!options.allowExpensive) && (c.layer === 'system' || !!options.allowModels), reason: c.expensive && !options.allowExpensive ? 'Expensive case requires explicit opt-in' : c.layer !== 'system' && !options.allowModels ? 'Model/agent execution requires explicit opt-in' : null })), notSelected: pack.cases.slice(limits.maxCases).map(c => c.id), promotion: false };
 }
 async function boundedJSON(response: Response, maxBytes: number): Promise<unknown> {
     if (!response.ok)
@@ -404,6 +408,8 @@ async function external(runner: Runner, profile: Profile | null, layer: Layer, t
 }
 export async function run(pack: Pack, profile: Profile | null, limits: Limits, options: {
     execute: boolean;
+    environment?: ExecutionEnvironment;
+    scenarioConfirmed?: boolean;
     allowModels?: boolean;
     allowExpensive?: boolean;
     registry?: Registry;
@@ -419,6 +425,8 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
     validateLimits(limits);
     if (options.execute !== true)
         throw Error('Run requires explicit execution');
+    admitEnvironment(options.environment,options.scenarioConfirmed);
+    const environment=options.environment?structuredClone(options.environment):undefined, environmentBefore=hash(environment??null);
     if (options.sampleMs !== undefined && !integer(options.sampleMs, 250, 10000))
         throw Error('Invalid telemetry interval');
     if (options.deadline !== undefined && (!Number.isSafeInteger(options.deadline) || options.deadline < 0))
@@ -661,8 +669,8 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
             resources = await monitor.stop();
             monitor = null;
         }
-        const sourceStable = evaluatorBefore === engineIdentity() && before === hash(pack) && profileBefore === (profile ? hash(profile) : null), complete = results.length === pack.cases.length * limits.repeat && results.every(x => x.status !== 'not-run' && x.status !== 'error');
-        return { schemaVersion: 1, id: randomUUID(), protocolVersion: '0.2.0', engineHash: evaluatorBefore, residencyCleanup, ...(resources ? { resources } : {}), ...(runtimeIdentity ? { identity: runtimeIdentity } : {}), pack: pack.id, packVersion: pack.version, caseCount: pack.cases.length, packHash: before, registryHash: options.registry ? hash(options.registry) : null, profile: profile ? evidenceProfile(profile) : null, profileHash: profile ? hash(evidenceProfile(profile)) : null, modelDigest: digest, started, finished: new Date().toISOString(), sourceStable, limits, results, passed: sourceStable && complete && results.every(x => x.status === 'passed'), complete, promotion: false, usage: { outputTokens: known ? tokens : null }, runtime: { provider: providerIdentity, node: process.version, platform: process.platform, arch: process.arch } };
+        const sourceStable = environmentBefore === hash(options.environment??null) && evaluatorBefore === engineIdentity() && before === hash(pack) && profileBefore === (profile ? hash(profile) : null), complete = results.length === pack.cases.length * limits.repeat && results.every(x => x.status !== 'not-run' && x.status !== 'error');
+        return { schemaVersion: 1, id: randomUUID(), protocolVersion: '0.3.0', engineHash: evaluatorBefore, ...(environment?{environment}:{}), residencyCleanup, ...(resources ? { resources } : {}), ...(runtimeIdentity ? { identity: runtimeIdentity } : {}), pack: pack.id, packVersion: pack.version, caseCount: pack.cases.length, packHash: before, registryHash: options.registry ? hash(options.registry) : null, profile: profile ? evidenceProfile(profile) : null, profileHash: profile ? hash(evidenceProfile(profile)) : null, modelDigest: digest, started, finished: new Date().toISOString(), sourceStable, limits, results, passed: sourceStable && complete && results.every(x => x.status === 'passed'), complete, promotion: false, usage: { outputTokens: known ? tokens : null }, runtime: { provider: providerIdentity, node: process.version, platform: process.platform, arch: process.arch } };
     }
     finally {
         await releaseOwnedModel();
@@ -685,7 +693,7 @@ export function assess(report: Report, requirements: Requirements) {
     if (!strings(requirements.capabilities) || !integer(requirements.minimumCases, 1, 1000) || !integer(requirements.minimumHoldout, 1, 1000) || !Number.isFinite(requirements.minimumPassRate) || requirements.minimumPassRate < 0 || requirements.minimumPassRate > 1)
         throw Error('Invalid qualification requirements');
     const reasons: string[] = [];
-    if (report.protocolVersion === '0.2.0' && report.engineHash !== engineIdentity())
+    if (['0.2.0','0.3.0'].includes(report.protocolVersion??'') && report.engineHash !== engineIdentity())
         reasons.push('Evaluator implementation changed; reevaluation required');
     if (!report.profile || report.profileHash !== hash(report.profile) || !report.modelDigest || !report.runtime.provider || !report.sourceStable || !report.complete || report.promotion !== false || report.results.some(r => r.critical && r.status !== 'passed') || report.usage.outputTokens === null)
         reasons.push('Missing stable configuration, identity, complete evidence or critical pass');
@@ -705,18 +713,18 @@ export function exportProfile(report: Report, review: unknown, requirements: Req
     const result = assess(report, requirements);
     if (!result.eligible)
         throw Error(result.reasons.join('; '));
-    return { version: 1, profiles: [{ id: report.profile!.id, model: `${report.profile!.model} ${report.profile!.quantization} ${report.modelDigest}`, status: 'qualified', capabilities: requirements.capabilities, evidence: [`Runtime ${report.runtime.provider}; configuration ${JSON.stringify(report.profile)}; registry ${report.registryHash ?? 'direct'}`, `Gauntlet report ${hash(report)}; configuration ${report.profileHash}; pack ${report.pack}@${report.packVersion}; reviewed ${r.reviewed}`, r.evidence] }] };
+    return { version: 1, profiles: [{ id: report.profile!.id, model: `${report.profile!.model} ${report.profile!.quantization} ${report.modelDigest}`, status: 'qualified', capabilities: requirements.capabilities, evidence: [`Runtime ${report.runtime.provider}; configuration ${JSON.stringify(report.profile)}; registry ${report.registryHash ?? 'direct'}`, `Gauntlet report ${hash(report)}; configuration ${report.profileHash}; pack ${report.pack}@${report.packVersion}; reviewed ${r.reviewed}`, ...(report.environment?[`Evaluation environment ${JSON.stringify(report.environment)}; owner-declared load/power, not independent attestation`]:[]),r.evidence] }] };
 }
 export function compare(reports: Report[]) {
     if (!Array.isArray(reports) || reports.length < 1 || reports.length > 100)
         throw Error('Provide 1–100 reports');
     reports.forEach(validateReport);
-    return reports.map(r => ({ id: r.id, profile: r.profile?.id ?? null, configuration: r.profileHash, pack: r.pack, version: r.packVersion, packHash: r.packHash, complete: r.complete, passed: r.passed, counts: Object.fromEntries(['passed', 'failed', 'error', 'not-run'].map(s => [s, r.results.filter(x => x.status === s).length])), tokens: r.usage.outputTokens, performance: performanceSummary(r), durationMs: Date.parse(r.finished) - Date.parse(r.started), comparableToFirst: reports.length > 0 && r.packHash === reports[0].packHash && r.registryHash === reports[0].registryHash && hash(r.limits) === hash(reports[0].limits) && r.engineHash === reports[0].engineHash, automaticPromotion: false }));
+    return reports.map(r => ({ id: r.id, profile: r.profile?.id ?? null, configuration: r.profileHash, environment:r.environment??null, environmentHash:hash(r.environment??null), taskContractMatchesFirst:r.packHash===reports[0].packHash&&r.registryHash===reports[0].registryHash&&hash(r.limits)===hash(reports[0].limits)&&r.engineHash===reports[0].engineHash, pack: r.pack, version: r.packVersion, packHash: r.packHash, complete: r.complete, passed: r.passed, counts: Object.fromEntries(['passed', 'failed', 'error', 'not-run'].map(s => [s, r.results.filter(x => x.status === s).length])), tokens: r.usage.outputTokens, performance: performanceSummary(r), durationMs: Date.parse(r.finished) - Date.parse(r.started), comparableToFirst: reports.length > 0 && r.packHash === reports[0].packHash && r.registryHash === reports[0].registryHash && hash(r.limits) === hash(reports[0].limits) && r.engineHash === reports[0].engineHash && hash(r.environment??null)===hash(reports[0].environment??null), automaticPromotion: false }));
 }
 /** Structural checks detect malformed or internally inconsistent evidence; they do not authenticate its author. */
 export function validateReport(input: unknown): Report {
     const v = record(input);
-    fields(v, ['schemaVersion', 'id', 'protocolVersion', 'engineHash', 'resources', 'identity', 'residencyCleanup', 'pack', 'packVersion', 'caseCount', 'packHash', 'registryHash', 'profile', 'profileHash', 'modelDigest', 'started', 'finished', 'sourceStable', 'limits', 'results', 'passed', 'complete', 'promotion', 'usage', 'runtime']);
+    fields(v, ['schemaVersion', 'id', 'protocolVersion', 'engineHash', 'environment', 'resources', 'identity', 'residencyCleanup', 'pack', 'packVersion', 'caseCount', 'packHash', 'registryHash', 'profile', 'profileHash', 'modelDigest', 'started', 'finished', 'sourceStable', 'limits', 'results', 'passed', 'complete', 'promotion', 'usage', 'runtime']);
     const digest = (x: unknown) => typeof x === 'string' && /^(sha256:)?[a-f0-9]{64}$/.test(x);
     if (v.schemaVersion !== 1 || typeof v.id !== 'string' || !v.id || typeof v.pack !== 'string' || !id.test(v.pack) || typeof v.packVersion !== 'string' || !/^\d+\.\d+\.\d+$/.test(v.packVersion) || !digest(v.packHash) || typeof v.sourceStable !== 'boolean' || typeof v.complete !== 'boolean' || typeof v.passed !== 'boolean' || v.promotion !== false)
         throw Error('Invalid report identity');
@@ -728,10 +736,11 @@ export function validateReport(input: unknown): Report {
     }
     if (v.engineHash !== undefined && !digest(v.engineHash))
         throw Error('Invalid engine hash');
-    if (v.protocolVersion === '0.2.0' && !digest(v.engineHash))
+    if ((v.protocolVersion === '0.2.0'||v.protocolVersion === '0.3.0') && !digest(v.engineHash))
         throw Error('Current evidence needs engine identity');
-    if (v.protocolVersion !== undefined && v.protocolVersion !== '0.2.0')
+    if (v.protocolVersion !== undefined && v.protocolVersion !== '0.2.0' && v.protocolVersion !== '0.3.0')
         throw Error('Unsupported protocol evidence version');
+    if(v.environment!==undefined){if(v.protocolVersion!=='0.3.0')throw Error('Environment evidence needs current protocol');validateExecutionEnvironment(v.environment);}
     if (v.identity !== undefined) {
         const identity = record(v.identity);
         fields(identity, ['provider', 'modelDigest', 'metadataHash', 'proof']);
@@ -846,3 +855,6 @@ export function performanceSummary(report: Report) {
         return null; const middle = Math.floor(sorted.length / 2); return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2; };
     return { coldCases: measured.filter(x => x.phase === 'cold-model').length, warmCases: measured.filter(x => x.phase === 'warm-model').length, unknownResidencyCases: measured.filter(x => x.phase === 'unknown').length, firstLoadMs: measured[0]?.loadMs ?? null, medianTimeToFirstTokenMs: median(measured.map(x => x.timeToFirstTokenMs)), medianGenerationTokensPerSecond: median(measured.map(x => x.tokensPerSecond)), peakProcessRssBytes: report.resources?.peakProcessRssBytes ?? null, peakGpuDevicePercent: report.resources?.peakGpuDevicePercent ?? null, peakGpuDeviceMemoryBytes: report.resources?.peakGpuDeviceMemoryBytes ?? null, peakModelAllocatedBytes: report.resources?.peakModelAllocatedBytes ?? null, samples: report.resources?.samples.length ?? 0, sampledPeaks: true };
 }
+
+export {inspectMachine,validateMachineProfile,validateLoadScenario,validateExecutionEnvironment} from './environments.ts';
+export type {MachineProfile,LoadScenario,ExecutionEnvironment} from './environments.ts';
