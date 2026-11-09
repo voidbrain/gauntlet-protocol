@@ -69,3 +69,9 @@ The adapter forwards this field as `/api/chat`'s `format` for streaming and non-
 `examples/smoke-schema-v1.json` is a separate ten-case structural variant of `smoke-v1.json`; only keys/types/required/additionalProperties are constrained. It preserves prompts and independent expected answers. Valid JSON can still be wrong: exact semantic grading and private failed-final capture remain unchanged. Historical unconstrained reports are not reclassified. Across modes, compare observations with configuration differences explicit; automatic equivalence is false.
 
 Ollama documents `format: "json"` and JSON schemas at https://docs.ollama.com/capabilities/structured-outputs. Native local Ollama is the supported boundary here; no cloud claim follows.
+
+## Coding isolation and holdout limits
+
+Gauntlet provides an external-runner contract, not coding isolation. A worktree separates files for coordination; it does not enforce access restrictions. The selected runner must implement an independently enforced execution boundary, protected workspaces, candidate/test separation and trusted grading outside candidate control. Process supervision, hashes and owner registration do not supply those safeguards.
+
+Holdout integrity is procedural in the protocol itself. Separate maintenance, fixture identities and configuration hashes identify declared inputs and prevent duplicate coverage from being counted as independent; they cannot prove that an agent never read hidden tests, expected answers or grader code. Claims of inaccessible holdouts require runner-specific evidence of an enforced boundary, including denied filesystem/network/tool access and a grader outside the agent's authority. Until such a runner is implemented and accepted, report coding isolation and hidden-test access prevention as unverified. A successful contract fixture or qualification export does not establish either property.
