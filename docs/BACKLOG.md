@@ -32,7 +32,7 @@ Current work ledger, reviewed 9 November 2026 against main `62d8072`. [Rules](BA
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [PR #5](https://github.com/voidbrain/gauntlet-protocol/pull/5); Review: fresh-context report-only review passed after three immutable regressions068eb6f; final CI pending. |
 | Opened | 2026-11-09 |
 | Verification | Local deterministic acceptance and fresh-context report-only review passed; final own CI pending. Review: docs/reviews/2026-11-09-evidence-tools.md; three findings fixed after immutable failing regressions068eb6f. |
 | Reviewed | 2026-11-09 |
@@ -66,7 +66,7 @@ Current work ledger, reviewed 9 November 2026 against main `62d8072`. [Rules](BA
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [PR #5](https://github.com/voidbrain/gauntlet-protocol/pull/5); Review: fresh-context report-only review passed after three immutable regressions068eb6f; final CI pending. |
 | Opened | 2026-11-09 |
 | Verification | Local deterministic acceptance and fresh-context report-only review passed; final own CI pending. Review: docs/reviews/2026-11-09-evidence-tools.md; three findings fixed after immutable failing regressions068eb6f. |
 | Reviewed | 2026-11-09 |
@@ -100,7 +100,7 @@ Current work ledger, reviewed 9 November 2026 against main `62d8072`. [Rules](BA
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [PR #5](https://github.com/voidbrain/gauntlet-protocol/pull/5); Review: fresh-context report-only review passed after three immutable regressions068eb6f; final CI pending. |
 | Opened | 2026-11-09 |
 | Verification | Local deterministic acceptance and fresh-context report-only review passed; final own CI pending. Review: docs/reviews/2026-11-09-evidence-tools.md; three findings fixed after immutable failing regressions068eb6f. |
 | Reviewed | 2026-11-09 |
