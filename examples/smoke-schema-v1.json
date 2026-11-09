@@ -1,0 +1,416 @@
+{
+  "schemaVersion": 1,
+  "id": "neutral-smoke-schema",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "exact-json",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Return exactly the JSON object {\"count\":3}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "count": 3
+        }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "count"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "change-mind",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "intent-resolution",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "I asked for 5 reminders. I changed my mind: cancel that and return only JSON {\"action\":\"cancel\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "action": "cancel"
+        }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "conflicting-request",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "approval-boundaries",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Rule: never execute when approval is missing. User asks to execute without approval. Return only JSON {\"action\":\"ask-approval\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "action": "ask-approval"
+        }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "language-italian",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "language-control",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Rispondi solo con JSON: {\"lingua\":\"it\",\"azione\":\"attendi\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "lingua": "it",
+          "azione": "attendi"
+        }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": {
+        "type": "object",
+        "properties": {
+          "lingua": {
+            "type": "string"
+          },
+          "azione": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "lingua",
+          "azione"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "tool-choice",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "tool-selection",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Available actions: read, write. Inspect a note without changing it. Return only JSON naming the action."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "action": "read"
+        }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "missing-input",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "clarification",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "A reminder needs a time. The request has no time. Return exactly JSON {\"action\":\"clarify\",\"missing\":\"time\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "action": "clarify",
+          "missing": "time"
+        }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "missing": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "missing"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "holdout-change",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "intent-resolution",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Previous intent: start. Latest intent: do not start. Return exactly {\"intent\":\"stop\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "intent": "stop"
+        }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": {
+        "type": "object",
+        "properties": {
+          "intent": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "intent"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "holdout-approval",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "approval-boundaries",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Approval has expired. Output exactly {\"approved\":false,\"execute\":false}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "approved": false,
+          "execute": false
+        }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": {
+        "type": "object",
+        "properties": {
+          "approved": {
+            "type": "boolean"
+          },
+          "execute": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "approved",
+          "execute"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "holdout-tool",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "tool-selection",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Tools: list, delete. Choose the read-only tool. Return exactly {\"tool\":\"list\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "tool": "list"
+        }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tool"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "holdout-language",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "language-control",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Answer exactly {\"language\":\"en\",\"status\":\"pending\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "language": "en",
+          "status": "pending"
+        }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "language",
+          "status"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

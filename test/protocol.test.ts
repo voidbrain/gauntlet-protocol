@@ -37,3 +37,19 @@ test('review: repeated identical prompts are not independent heldout cases',asyn
 test('model runner evidence is case-bound and identical fixtures cannot create holdout coverage',async()=>{const registry=(mode:string)=>validateRegistry({schemaVersion:1,runners:{fixture:{command:'node',args:[resolve('test/fixtures/model-runner.mjs'),'{report}','{configuration}','{budget}','{case}',mode],cwd:'.',layers:['model'],allowModels:true}}},process.cwd());const p:Pack={schemaVersion:1,id:'external-model',version:'1.0.0',cases:pack.cases.map(c=>({id:c.id,layer:c.layer,split:c.split,critical:c.critical,capabilities:c.capabilities,expensive:false,runner:'fixture'}))};const wrong=await run(p,profile,defaults,{...options,registry:registry('wrong-case')});assert.equal(wrong.results[0].status,'error');const same=await run(p,profile,defaults,{...options,registry:registry('same')});assert.equal(same.passed,true);validateReport(same);assert.equal(assess(same,{capabilities:['structured-output'],minimumCases:2,minimumHoldout:1,minimumPassRate:1}).eligible,false);});
 test('provider tag digest changes during generation invalidate evidence',async()=>{const p=provider();let tags=0;const fetcher=(async(...args:Parameters<typeof fetch>)=>{const response=await p.fetcher(...args);if(new URL(String(args[0])).pathname!=='/api/tags'||++tags===1)return response;return new Response(JSON.stringify({models:[{name:profile.model,size:1024,digest:'b'.repeat(64)}]}));}) as typeof fetch;const r=await run(pack,profile,defaults,{...options,fetch:fetcher});assert.equal(r.results[0].status,'error');assert.equal(r.passed,false);});
 test('review: regression fixture exclusion applies across capability labels',async()=>{const p=structuredClone(pack);p.cases[0].capabilities=['capability-a'];p.cases[1].capabilities=['capability-b'];p.cases[1].messages=p.cases[0].messages;p.cases[1].expected=p.cases[0].expected;const f=provider(['{"ok":true}','{"ok":true}']);const report=await run(p,profile,defaults,{...options,fetch:f.fetcher});assert.equal(assess(report,{capabilities:['capability-b'],minimumCases:1,minimumHoldout:1,minimumPassRate:1}).eligible,false);});
+
+test('Ollama formats are explicit, identity-bound and independently graded',async()=>{
+ const schema={type:'object',properties:{ok:{type:'boolean'}},required:['ok'],additionalProperties:false};
+ for(const format of ['json',schema] as const){
+  const p=structuredClone(pack);p.cases.forEach(c=>{c.responseFormat=format;});validatePack(p);
+  assert.notEqual(hash(p),hash(pack));assert.notEqual(hash(p.cases[0]),hash(pack.cases[0]));
+  const f=provider(['{"ok":false}','{"ok":false}']);const r=await run(p,profile,defaults,{...options,fetch:f.fetcher});
+  assert.deepEqual(f.bodies[0].format,format);assert.equal(r.results[0].status,'failed');assert.equal(r.results[1].status,'passed');validateReport(r);
+ }
+ const ordinary=provider();await run(pack,profile,defaults,{...options,fetch:ordinary.fetcher});assert.equal(Object.hasOwn(ordinary.bodies[0],'format'),false);
+ for(const bad of [null,true,[],{type:'string'},{type:'object',properties:{x:{$ref:'https://outside.invalid'}}}]){
+  const p=structuredClone(pack);Object.assign(p.cases[0],{responseFormat:bad});assert.throws(()=>validatePack(p));
+ }
+ const p=structuredClone(pack);p.cases[0].responseFormat='json';
+ await assert.rejects(run(p,{...profile,backend:'mlx-lm'},defaults,{...options,fetch:provider().fetcher}));
+});

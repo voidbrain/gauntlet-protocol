@@ -46,6 +46,7 @@ export interface Case {
         role: 'system' | 'user' | 'assistant';
         content: string;
     }[];
+    responseFormat?: "json" | Record<string, unknown>;
     expected?: {
         kind: 'text' | 'json';
         value: unknown;
@@ -222,14 +223,32 @@ export function validatePack(input: unknown): Pack {
     const seen = new Set<string>();
     for (const entry of v.cases) {
         const c = record(entry);
-        fields(c, ['id', 'layer', 'split', 'capabilities', 'critical', 'expensive', 'runner', 'messages', 'expected', 'area', 'requirements']);
+        fields(c, ['id', 'layer', 'split', 'capabilities', 'critical', 'expensive', 'runner', 'messages', 'expected', 'area', 'requirements', 'responseFormat']);
         if (typeof c.id !== 'string' || !id.test(c.id) || seen.has(c.id) || !['system', 'model', 'coding', 'end-to-end'].includes(String(c.layer)) || !['regression', 'holdout'].includes(String(c.split)) || !strings(c.capabilities) || typeof c.critical !== 'boolean' || typeof c.expensive !== 'boolean')
             throw Error('Invalid/duplicate case');
         if (c.area !== undefined && !(areas as readonly string[]).includes(String(c.area)) && !(typeof c.area === 'string' && /^x:[a-z0-9-]+:[a-z0-9-]+$/.test(c.area)) || c.requirements !== undefined && !strings(c.requirements))
             throw Error('Invalid case classification');
+        if (c.responseFormat !== undefined) {
+            if (c.responseFormat !== 'json') {
+                const schema = record(c.responseFormat);
+                if (schema.type !== 'object' || Buffer.byteLength(JSON.stringify(schema)) > 16384)
+                    throw Error('Response schema must be a bounded object schema');
+                const check = (value: unknown): void => {
+                    if (!value || typeof value !== 'object') return;
+                    if (Array.isArray(value)) { value.forEach(check); return; }
+                    for (const [key, child] of Object.entries(value)) {
+                        if (key === '$ref' || key === '$dynamicRef' || key === '$id' || key === '$schema')
+                            throw Error('Response schema references are unsupported');
+                        check(child);
+                    }
+                };
+                check(schema);
+            }
+            if (record(c.expected).kind !== 'json') throw Error('Response format requires JSON grading');
+        }
         seen.add(c.id);
         if (c.runner !== undefined) {
-            if (typeof c.runner !== 'string' || !id.test(c.runner) || c.messages !== undefined || c.expected !== undefined)
+            if (typeof c.runner !== 'string' || !id.test(c.runner) || c.messages !== undefined || c.expected !== undefined || c.responseFormat !== undefined)
                 throw Error('Runner cases cannot supply commands or model prompts');
         }
         else {
@@ -283,7 +302,7 @@ export function plan(pack: Pack, profile: Profile | null, limits: Limits, option
     allowExpensive?: boolean;
 } = {}) {
     if(options.environment)validateExecutionEnvironment(options.environment);
-    return { ...(options.environment?{environment:options.environment,environmentVerified:false}:{}), pack: pack.id, profile: profile?.id ?? null, limits, modelCallsAuthorized: !!options.allowModels, cases: pack.cases.slice(0, limits.maxCases).map(c => ({ id: c.id, layer: c.layer, runner: c.runner ?? null, eligible: (!c.expensive || !!options.allowExpensive) && (c.layer === 'system' || !!options.allowModels), reason: c.expensive && !options.allowExpensive ? 'Expensive case requires explicit opt-in' : c.layer !== 'system' && !options.allowModels ? 'Model/agent execution requires explicit opt-in' : null })), notSelected: pack.cases.slice(limits.maxCases).map(c => c.id), promotion: false };
+    return { ...(options.environment?{environment:options.environment,environmentVerified:false}:{}), pack: pack.id, profile: profile?.id ?? null, limits, modelCallsAuthorized: !!options.allowModels, cases: pack.cases.slice(0, limits.maxCases).map(c => ({ id: c.id, layer: c.layer, runner: c.runner ?? null, responseFormat: c.responseFormat === undefined ? 'unconstrained' : c.responseFormat === 'json' ? 'json' : 'schema', eligible: (!c.expensive || !!options.allowExpensive) && (c.layer === 'system' || !!options.allowModels), reason: c.expensive && !options.allowExpensive ? 'Expensive case requires explicit opt-in' : c.layer !== 'system' && !options.allowModels ? 'Model/agent execution requires explicit opt-in' : null })), notSelected: pack.cases.slice(limits.maxCases).map(c => c.id), promotion: false };
 }
 async function boundedJSON(response: Response, maxBytes: number): Promise<unknown> {
     if (!response.ok)
@@ -426,6 +445,8 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
     if (profile)
         validateProfile(profile);
     validateLimits(limits);
+    if (pack.cases.some(c => c.responseFormat !== undefined) && profile?.backend && profile.backend !== 'ollama')
+        throw Error('Response format currently requires Ollama');
     if (options.execute !== true)
         throw Error('Run requires explicit execution');
     admitEnvironment(options.environment,options.scenarioConfirmed);
@@ -602,7 +623,7 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
                         if (backend === 'ollama') {
                             if (profile.residency === 'suite')
                                 suiteModelRequested = true;
-                            const body = { model: profile.model, messages: c.messages, stream: !!options.telemetry, keep_alive: profile.residency === 'suite' ? '5m' : 0, ...(profile.think !== null ? { think: profile.think } : {}), options: optionsBody };
+                            const body = { model: profile.model, messages: c.messages, ...(c.responseFormat !== undefined ? { format: c.responseFormat } : {}), stream: !!options.telemetry, keep_alive: profile.residency === 'suite' ? '5m' : 0, ...(profile.think !== null ? { think: profile.think } : {}), options: optionsBody };
                             if (options.telemetry) {
                                 const begin = performance.now();
                                 const stream = await ollamaStream(await (options.fetch ?? fetch)(new URL('/api/chat', profile.endpoint), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), redirect: 'error', signal: AbortSignal.any([cancellation.signal, AbortSignal.timeout(remaining())]) }), limits.maxBytes, begin);

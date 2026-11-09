@@ -59,3 +59,13 @@ Optional area/requirements metadata, backend/residency/owner artifact manifests,
 ## Protocol0.4 diagnostic instrumentation
 
 Reports optionally carry `diagnostics:{failureCaptures:true}` for explicitly requested private final-reply capture. No raw response/path enters the report. Diagnostic runs are fresh, excluded from ordinary automatic reuse/cache and performance-comparable only with the same instrumentation marker. Selected cases have a distinct pack identity/hash; selected completeness never establishes omitted original cases. [Private capture and inspection](FAILURES.md) defines bounded sidecars and source matching;0.2/0.3 reports remain readable as historical evidence.
+
+## Ollama response formats
+
+Direct model cases may set `responseFormat` to `"json"` or a JSON object schema (`type: "object"`, at most16KiB). Omit it for unconstrained generation. Reference/resolution keywords are rejected; schemas are passed to local Ollama, never fetched. The schema's semantic validity is ultimately checked by Ollama; invalid provider requests remain errors. This release does not implement a general JSON Schema validator. JSON grading is required; runner cases cannot set this field. Other runtime backends reject it before provider work instead of silently dropping it.
+
+The adapter forwards this field as `/api/chat`'s `format` for streaming and non-streaming requests. Planning labels unconstrained/json/schema. Pack hashes include the exact format, separating cache/report identity. Prompt fixture hashes remain prompt-based so format changes cannot manufacture independent holdout coverage. Expected answers are never sent by the grader. Schemas are public test inputs: do not encode the expected answer through const/enum or other semantic constraints unless that is explicitly the task being evaluated.
+
+`examples/smoke-schema-v1.json` is a separate ten-case structural variant of `smoke-v1.json`; only keys/types/required/additionalProperties are constrained. It preserves prompts and independent expected answers. Valid JSON can still be wrong: exact semantic grading and private failed-final capture remain unchanged. Historical unconstrained reports are not reclassified. Across modes, compare observations with configuration differences explicit; automatic equivalence is false.
+
+Ollama documents `format: "json"` and JSON schemas at https://docs.ollama.com/capabilities/structured-outputs. Native local Ollama is the supported boundary here; no cloud claim follows.
