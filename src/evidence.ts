@@ -1,3 +1,4 @@
+import {failureDestination} from './failures.ts';
 import {admitEnvironment,type ExecutionEnvironment} from './environments.ts';
 import { engineIdentity } from './engine.ts';
 import { readdirSync, existsSync, mkdirSync, lstatSync } from 'node:fs';
@@ -20,6 +21,7 @@ export interface EvidenceOptions {
     cacheDirectory: string;
     maxAgeMs?: number;
     forceFresh?: boolean;
+    captureFailures?: string;
     sourceKey?: string;
     /** Trusted owner-supplied environment attestation; primarily for controlled adapters and fixtures. */
     environmentKey?: string;
@@ -49,7 +51,7 @@ export function reuseValid(report: Report, expected: {
     const age = now - Date.parse(report.finished);
     const cases = new Map(expected.pack.cases.map(c => [c.id, c]));
     const manifestMatches = report.caseCount === expected.pack.cases.length && report.results.length === expected.pack.cases.length * expected.limits.repeat && report.results.every(r => { const c = cases.get(r.id); return !!c && r.layer === c.layer && r.split === c.split && r.critical === c.critical && hash(r.capabilities) === hash(c.capabilities) && r.iteration >= 1 && r.iteration <= expected.limits.repeat && (!c.messages || r.fixtureHash === hash(c.messages)); });
-    return hash(report.environment??null)===hash(expected.environment??null) && manifestMatches && report.engineHash === engineIdentity() && report.protocolVersion === '0.3.0' && report.passed && report.complete && report.sourceStable && report.usage.outputTokens !== null && age >= 0 && age <= maxAgeMs && report.packHash === hash(expected.pack) && report.profileHash === (expected.profile ? hash(evidenceProfile(expected.profile)) : null) && hash(report.limits) === hash(expected.limits) && report.registryHash === (expected.registry ? hash(expected.registry) : null) && (!expected.profile || !!expected.identity && hash(report.identity) === hash(expected.identity));
+    return hash(report.environment??null)===hash(expected.environment??null) && manifestMatches && report.engineHash === engineIdentity() && report.protocolVersion === '0.4.0' && !report.diagnostics && report.passed && report.complete && report.sourceStable && report.usage.outputTokens !== null && age >= 0 && age <= maxAgeMs && report.packHash === hash(expected.pack) && report.profileHash === (expected.profile ? hash(evidenceProfile(expected.profile)) : null) && hash(report.limits) === hash(expected.limits) && report.registryHash === (expected.registry ? hash(expected.registry) : null) && (!expected.profile || !!expected.identity && hash(report.identity) === hash(expected.identity));
 }
 export async function executeWithEvidence(pack: Pack, profile: Profile | null, limits: Limits, options: EvidenceOptions): Promise<EvidenceResult> {
     validatePack(pack);
@@ -59,6 +61,7 @@ export async function executeWithEvidence(pack: Pack, profile: Profile | null, l
     if (options.execute !== true)
         throw Error('Execution must be explicit');
     admitEnvironment(options.environment,options.scenarioConfirmed);
+    if(options.captureFailures!==undefined){if(options.forceFresh!==true)throw Error('Failure capture requires an explicit fresh run');failureDestination(options.captureFailures);}
     const executionEnvironment=options.environment?structuredClone(options.environment):undefined, environmentBefore=hash(executionEnvironment??null);
     for (const flag of ['allowModels', 'allowExpensive', 'telemetry', 'forceFresh'] as const)
         if (options[flag] !== undefined && typeof options[flag] !== 'boolean')
@@ -126,7 +129,7 @@ export async function executeWithEvidence(pack: Pack, profile: Profile | null, l
         if(hash(options.environment??null)!==environmentBefore)throw Error('Environment changed during preflight');
         const canReuse = !profile || directModel;
         const environment = canReuse ? (options.environmentKey ?? (!profile || server ? hash({ host: hostname(), platform: platform(), arch: arch(), memory: totalmem(), cpu: cpus()[0]?.model ?? 'unknown', server, node: process.version }) : null)) : null;
-        const key = hash({ engineHash: engineIdentity(), protocol: '0.3.0', executionEnvironment:executionEnvironment??null, grader: 'exact-v1', pack, profile, limits, registry: options.registry ?? null, source: options.sourceKey ?? null, identity: identity ?? null, environment, telemetry: options.telemetry ?? false, sampleMs: options.sampleMs ?? 500 });
+        const key = hash({ engineHash: engineIdentity(), protocol: '0.4.0', executionEnvironment:executionEnvironment??null, grader: 'exact-v1', pack, profile, limits, registry: options.registry ?? null, source: options.sourceKey ?? null, identity: identity ?? null, environment, telemetry: options.telemetry ?? false, sampleMs: options.sampleMs ?? 500 });
         if (!options.forceFresh && environment && existsSync(directory)) {
             const files = readdirSync(directory).filter(n => /^evidence-[a-f0-9-]+\.json$/.test(n)).sort().reverse().slice(0, 200);
             for (const file of files)
@@ -164,7 +167,7 @@ export async function executeWithEvidence(pack: Pack, profile: Profile | null, l
         }
         report.finished = new Date().toISOString();
         writeEvidence(output, report);
-        if (report.passed && report.complete && environment) {
+        if (report.passed && report.complete && environment && !options.captureFailures) {
             mkdirSync(directory, { recursive: true, mode: 0o700 });
             writeEvidence(join(directory, 'evidence-' + Date.parse(report.finished) + '-' + report.id + '.json'), { schemaVersion: 1, key, reportHash: hash(report), report });
         }

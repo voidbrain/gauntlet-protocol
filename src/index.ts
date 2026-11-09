@@ -1,3 +1,4 @@
+import {FailureCapture, failureDestination, inspectFailures} from './failures.ts';
 import {validateExecutionEnvironment, admitEnvironment, type ExecutionEnvironment} from './environments.ts';
 import { engineIdentity } from './engine.ts';
 import { areas, type Area } from './catalog.ts';
@@ -93,6 +94,7 @@ export interface Result {
 }
 export interface Report {
     environment?: ExecutionEnvironment;
+    diagnostics?: {failureCaptures:true};
     schemaVersion: 1;
     id: string;
     protocolVersion?: string;
@@ -418,6 +420,7 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
     sampleMs?: number;
     deadline?: number;
     signal?: AbortSignal;
+    captureFailures?: string;
 }): Promise<Report> {
     validatePack(pack);
     if (profile)
@@ -431,6 +434,8 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
         throw Error('Invalid telemetry interval');
     if (options.deadline !== undefined && (!Number.isSafeInteger(options.deadline) || options.deadline < 0))
         throw Error('Invalid campaign deadline');
+    const captures=options.captureFailures===undefined?undefined:new FailureCapture(options.captureFailures);
+    const reportId=randomUUID();
     const cancellation = new AbortController();
     let monitor: Awaited<ReturnType<typeof monitorResources>> | null = null;
     let resources: Resources | undefined;
@@ -635,8 +640,10 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
                         r.responseHash = hash(message.content);
                         if (tokens > limits.outputTokens || response.eval_count > profile.maxOutputTokens)
                             throw Error('Generation exceeded output budget');
-                        if (response.done_reason === 'length')
+                        if (response.done_reason === 'length'){
+                            captures?.add({reportId,caseId:c.id,iteration,fixtureHash:r.fixtureHash!,responseHash:r.responseHash,reason:'truncated-output',response:message.content,finishReason:'length'});
                             throw Error('Output truncated');
+                        }
                         let observed: unknown = message.content.trim();
                         if (c.expected!.kind === 'json') {
                             try {
@@ -645,11 +652,13 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
                             catch {
                                 r.status = 'failed';
                                 r.reason = 'Invalid structured output';
+                                captures?.add({reportId,caseId:c.id,iteration,fixtureHash:r.fixtureHash!,responseHash:r.responseHash,reason:'invalid-json',response:message.content,finishReason:typeof response.done_reason==='string'?response.done_reason:null});
                                 continue;
                             }
                         }
                         r.status = isDeepStrictEqual(observed, c.expected!.value) ? 'passed' : 'failed';
                         r.reason = r.status === 'passed' ? null : 'Independent acceptance mismatch';
+                        if(r.status==='failed')captures?.add({reportId,caseId:c.id,iteration,fixtureHash:r.fixtureHash!,responseHash:r.responseHash,reason:'acceptance-mismatch',response:message.content,finishReason:typeof response.done_reason==='string'?response.done_reason:null});
                     }
                 }
                 catch {
@@ -670,7 +679,7 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
             monitor = null;
         }
         const sourceStable = environmentBefore === hash(options.environment??null) && evaluatorBefore === engineIdentity() && before === hash(pack) && profileBefore === (profile ? hash(profile) : null), complete = results.length === pack.cases.length * limits.repeat && results.every(x => x.status !== 'not-run' && x.status !== 'error');
-        return { schemaVersion: 1, id: randomUUID(), protocolVersion: '0.3.0', engineHash: evaluatorBefore, ...(environment?{environment}:{}), residencyCleanup, ...(resources ? { resources } : {}), ...(runtimeIdentity ? { identity: runtimeIdentity } : {}), pack: pack.id, packVersion: pack.version, caseCount: pack.cases.length, packHash: before, registryHash: options.registry ? hash(options.registry) : null, profile: profile ? evidenceProfile(profile) : null, profileHash: profile ? hash(evidenceProfile(profile)) : null, modelDigest: digest, started, finished: new Date().toISOString(), sourceStable, limits, results, passed: sourceStable && complete && results.every(x => x.status === 'passed'), complete, promotion: false, usage: { outputTokens: known ? tokens : null }, runtime: { provider: providerIdentity, node: process.version, platform: process.platform, arch: process.arch } };
+        return { schemaVersion: 1, id: reportId, protocolVersion: '0.4.0', engineHash: evaluatorBefore, ...(captures?{diagnostics:{failureCaptures:true as const}}:{}), ...(environment?{environment}:{}), residencyCleanup, ...(resources ? { resources } : {}), ...(runtimeIdentity ? { identity: runtimeIdentity } : {}), pack: pack.id, packVersion: pack.version, caseCount: pack.cases.length, packHash: before, registryHash: options.registry ? hash(options.registry) : null, profile: profile ? evidenceProfile(profile) : null, profileHash: profile ? hash(evidenceProfile(profile)) : null, modelDigest: digest, started, finished: new Date().toISOString(), sourceStable, limits, results, passed: sourceStable && complete && results.every(x => x.status === 'passed'), complete, promotion: false, usage: { outputTokens: known ? tokens : null }, runtime: { provider: providerIdentity, node: process.version, platform: process.platform, arch: process.arch } };
     }
     finally {
         await releaseOwnedModel();
@@ -678,6 +687,7 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
             await monitor.stop();
         process.removeListener('SIGINT', cancel);
         process.removeListener('SIGTERM', cancel);
+        captures?.finish();
         options.signal?.removeEventListener('abort', cancel);
     }
 }
@@ -693,7 +703,7 @@ export function assess(report: Report, requirements: Requirements) {
     if (!strings(requirements.capabilities) || !integer(requirements.minimumCases, 1, 1000) || !integer(requirements.minimumHoldout, 1, 1000) || !Number.isFinite(requirements.minimumPassRate) || requirements.minimumPassRate < 0 || requirements.minimumPassRate > 1)
         throw Error('Invalid qualification requirements');
     const reasons: string[] = [];
-    if (['0.2.0','0.3.0'].includes(report.protocolVersion??'') && report.engineHash !== engineIdentity())
+    if (['0.2.0','0.3.0','0.4.0'].includes(report.protocolVersion??'') && report.engineHash !== engineIdentity())
         reasons.push('Evaluator implementation changed; reevaluation required');
     if (!report.profile || report.profileHash !== hash(report.profile) || !report.modelDigest || !report.runtime.provider || !report.sourceStable || !report.complete || report.promotion !== false || report.results.some(r => r.critical && r.status !== 'passed') || report.usage.outputTokens === null)
         reasons.push('Missing stable configuration, identity, complete evidence or critical pass');
@@ -719,12 +729,12 @@ export function compare(reports: Report[]) {
     if (!Array.isArray(reports) || reports.length < 1 || reports.length > 100)
         throw Error('Provide 1–100 reports');
     reports.forEach(validateReport);
-    return reports.map(r => ({ id: r.id, profile: r.profile?.id ?? null, configuration: r.profileHash, environment:r.environment??null, environmentHash:hash(r.environment??null), taskContractMatchesFirst:r.packHash===reports[0].packHash&&r.registryHash===reports[0].registryHash&&hash(r.limits)===hash(reports[0].limits)&&r.engineHash===reports[0].engineHash, pack: r.pack, version: r.packVersion, packHash: r.packHash, complete: r.complete, passed: r.passed, counts: Object.fromEntries(['passed', 'failed', 'error', 'not-run'].map(s => [s, r.results.filter(x => x.status === s).length])), tokens: r.usage.outputTokens, performance: performanceSummary(r), durationMs: Date.parse(r.finished) - Date.parse(r.started), comparableToFirst: reports.length > 0 && r.packHash === reports[0].packHash && r.registryHash === reports[0].registryHash && hash(r.limits) === hash(reports[0].limits) && r.engineHash === reports[0].engineHash && hash(r.environment??null)===hash(reports[0].environment??null), automaticPromotion: false }));
+    return reports.map(r => ({ id: r.id, profile: r.profile?.id ?? null, configuration: r.profileHash, environment:r.environment??null, environmentHash:hash(r.environment??null), taskContractMatchesFirst:r.packHash===reports[0].packHash&&r.registryHash===reports[0].registryHash&&hash(r.limits)===hash(reports[0].limits)&&r.engineHash===reports[0].engineHash, pack: r.pack, version: r.packVersion, packHash: r.packHash, complete: r.complete, passed: r.passed, counts: Object.fromEntries(['passed', 'failed', 'error', 'not-run'].map(s => [s, r.results.filter(x => x.status === s).length])), tokens: r.usage.outputTokens, performance: performanceSummary(r), durationMs: Date.parse(r.finished) - Date.parse(r.started), comparableToFirst: hash(r.diagnostics??null)===hash(reports[0].diagnostics??null) && reports.length > 0 && r.packHash === reports[0].packHash && r.registryHash === reports[0].registryHash && hash(r.limits) === hash(reports[0].limits) && r.engineHash === reports[0].engineHash && hash(r.environment??null)===hash(reports[0].environment??null), automaticPromotion: false }));
 }
 /** Structural checks detect malformed or internally inconsistent evidence; they do not authenticate its author. */
 export function validateReport(input: unknown): Report {
     const v = record(input);
-    fields(v, ['schemaVersion', 'id', 'protocolVersion', 'engineHash', 'environment', 'resources', 'identity', 'residencyCleanup', 'pack', 'packVersion', 'caseCount', 'packHash', 'registryHash', 'profile', 'profileHash', 'modelDigest', 'started', 'finished', 'sourceStable', 'limits', 'results', 'passed', 'complete', 'promotion', 'usage', 'runtime']);
+    fields(v, ['diagnostics', 'schemaVersion', 'id', 'protocolVersion', 'engineHash', 'environment', 'resources', 'identity', 'residencyCleanup', 'pack', 'packVersion', 'caseCount', 'packHash', 'registryHash', 'profile', 'profileHash', 'modelDigest', 'started', 'finished', 'sourceStable', 'limits', 'results', 'passed', 'complete', 'promotion', 'usage', 'runtime']);
     const digest = (x: unknown) => typeof x === 'string' && /^(sha256:)?[a-f0-9]{64}$/.test(x);
     if (v.schemaVersion !== 1 || typeof v.id !== 'string' || !v.id || typeof v.pack !== 'string' || !id.test(v.pack) || typeof v.packVersion !== 'string' || !/^\d+\.\d+\.\d+$/.test(v.packVersion) || !digest(v.packHash) || typeof v.sourceStable !== 'boolean' || typeof v.complete !== 'boolean' || typeof v.passed !== 'boolean' || v.promotion !== false)
         throw Error('Invalid report identity');
@@ -736,11 +746,12 @@ export function validateReport(input: unknown): Report {
     }
     if (v.engineHash !== undefined && !digest(v.engineHash))
         throw Error('Invalid engine hash');
-    if ((v.protocolVersion === '0.2.0'||v.protocolVersion === '0.3.0') && !digest(v.engineHash))
+    if ((v.protocolVersion === '0.2.0'||v.protocolVersion === '0.3.0'||v.protocolVersion==='0.4.0') && !digest(v.engineHash))
         throw Error('Current evidence needs engine identity');
-    if (v.protocolVersion !== undefined && v.protocolVersion !== '0.2.0' && v.protocolVersion !== '0.3.0')
+    if (v.protocolVersion !== undefined && v.protocolVersion !== '0.2.0' && v.protocolVersion !== '0.3.0' && v.protocolVersion!=='0.4.0')
         throw Error('Unsupported protocol evidence version');
-    if(v.environment!==undefined){if(v.protocolVersion!=='0.3.0')throw Error('Environment evidence needs current protocol');validateExecutionEnvironment(v.environment);}
+    if(v.diagnostics!==undefined){const d=record(v.diagnostics);fields(d,['failureCaptures']);if(v.protocolVersion!=='0.4.0'||d.failureCaptures!==true)throw Error('Invalid diagnostic evidence');}
+    if(v.environment!==undefined){if(v.protocolVersion!=='0.3.0'&&v.protocolVersion!=='0.4.0')throw Error('Environment evidence needs current protocol');validateExecutionEnvironment(v.environment);}
     if (v.identity !== undefined) {
         const identity = record(v.identity);
         fields(identity, ['provider', 'modelDigest', 'metadataHash', 'proof']);
@@ -858,3 +869,5 @@ export function performanceSummary(report: Report) {
 
 export {inspectMachine,validateMachineProfile,validateLoadScenario,validateExecutionEnvironment} from './environments.ts';
 export type {MachineProfile,LoadScenario,ExecutionEnvironment} from './environments.ts';
+
+export {failureDestination,inspectFailures};
