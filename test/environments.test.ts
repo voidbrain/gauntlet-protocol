@@ -76,3 +76,8 @@ test('environment mutation during metadata preflight cannot reuse or relabel exi
   assert.equal(f.calls,0);
  }finally{rmSync(root,{recursive:true,force:true});}
 });
+
+test('review: JSON arrays cannot impersonate load and power enum strings',()=>{
+ assert.throws(()=>validateLoadScenario({...scenario,load:['minimal']}));
+ assert.throws(()=>validateLoadScenario({...scenario,power:['any']}));
+});
