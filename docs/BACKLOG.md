@@ -32,7 +32,7 @@ Current work ledger, reviewed 10 November 2026 against main `90dc2b6`. [Rules](B
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
 | Opened | 2026-11-10 |
 | Verification | Pending implementation; documentation registration only. |
 | Reviewed | 2026-11-10 |
@@ -66,7 +66,7 @@ Current work ledger, reviewed 10 November 2026 against main `90dc2b6`. [Rules](B
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
 | Opened | 2026-11-10 |
 | Verification | Pending implementation; documentation registration only. |
 | Reviewed | 2026-11-10 |
