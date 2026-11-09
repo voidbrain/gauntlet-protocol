@@ -32,7 +32,7 @@ Current work ledger, reviewed 9 November 2026 against main `b605107`. [Rules](BA
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [PR #9](https://github.com/voidbrain/gauntlet-protocol/pull/9); Review: independent fresh-context Git-discovery finding fixed after committed regression and rechecked without blocker; |
 | Opened | 2026-11-09 |
 | Verification | Unit/integration: 41 deterministic fixtures pass after build, including six capture/privacy/budget/CLI joins. Independent fresh-context Git-discovery finding fixed after committed regression and rechecked without blocker. Final CI/release pending. No live model or client-loading acceptance. |
 | Reviewed | 2026-11-09 |
