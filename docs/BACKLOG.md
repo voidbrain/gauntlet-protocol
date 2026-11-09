@@ -1,47 +1,16 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 9 November 2026 against main `b605107`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 9 November 2026 against main `77f766d`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
 
 ## Features and improvements
 
-### F-006
-
-**Private failed-reply diagnostics and selected reruns**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
-
-💻 **→ Human action required: No**<br />Verify bounded opt-in captures, private inspection and final CI before release.
-
-| | |
-|---|---|
-| **Issue** | A failed structured-output result stores only a response hash, so its final reply cannot be inspected or recovered from the report. |
-| **Reproduce** | Run an invented malformed-JSON reply; inspect its report and optional new private capture directory. |
-| **Check** | Explicit new external private directory, default off, final failed reply only, no prompts/expected answers/hidden reasoning; file/count/aggregate caps and no overwrite/link/checkout writes; hashes bind report/case/fixture/response; failure grades unchanged; source-qualified selected cases and fresh execution; no live model call or consumer adoption gate. |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Next action / closure evidence:** Implemented optional private sidecars and bounded inspector plus explicit case selection. Wire reports advance to0.4 with a diagnostic marker and retain older evidence reading; prepared package0.4.0 invalidates engine-mismatched reuse correctly. No old response can be recovered from its hash. Neutral tests, independent fresh-context review, final CI and publication remain required. Adopt released harness4.4.1 optional registration rule/metadata ledger, preserving project execution/privacy requirements and marking native counters unknown.
-
-**Estimates:** Small remaining effort, assessed2026-11-09: deterministic fixtures, review, final CI and release. No real campaign required.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #9](https://github.com/voidbrain/gauntlet-protocol/pull/9); Review: independent fresh-context Git-discovery finding fixed after committed regression and rechecked without blocker; |
-| Opened | 2026-11-09 |
-| Verification | Unit/integration: 41 deterministic fixtures pass after build, including six capture/privacy/budget/CLI joins. Independent fresh-context Git-discovery finding fixed after committed regression and rechecked without blocker. Final CI/release pending. No live model or client-loading acceptance. |
-| Reviewed | 2026-11-09 |
-
-</details>
-
----
-
 ## Other changes
+
+F-006 released in v0.4.0 after PR #9 / CI42679371024 and independent report-only review;41 deterministic fixtures and packaging/static checks passed. Private capture and selected diagnostics are accepted independently of consumer adoption. No live model campaign or native client source verification.
+
 
 F-005 released in [v0.3.0](https://github.com/voidbrain/gauntlet-protocol/tree/v0.3.0) after PR7 exacthead170611f / CI42607576561 passed all35 deterministic tests and owned packaging/contract checks. Fresh-context strict-enum finding fixed after committed failing regressione7f7183 and rechecked. No model/load campaign or consumer adoption gates the release.
 

@@ -218,3 +218,39 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 </details>
 
 ---
+
+## Closed 2026-11-09
+
+### F-006
+
+**Private failed-reply diagnostics and selected reruns**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed2026-11-09 on published0.4.0 and automated private-diagnostic acceptance.
+
+| | |
+|---|---|
+| **Issue** | A failed structured-output result stores only a response hash, so its final reply cannot be inspected or recovered from the report. |
+| **Reproduce** | Run an invented malformed-JSON reply; inspect its report and optional new private capture directory. |
+| **Check** | Explicit new external private directory, default off, final failed reply only, no prompts/expected answers/hidden reasoning; file/count/aggregate caps and no overwrite/link/checkout writes; hashes bind report/case/fixture/response; failure grades unchanged; source-qualified selected cases and fresh execution; no live model call or consumer adoption gate. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Implemented optional private sidecars and bounded inspector plus explicit case selection. Wire reports advance to0.4 with a diagnostic marker and retain older evidence reading; prepared package0.4.0 invalidates engine-mismatched reuse correctly. No old response can be recovered from its hash. Closed2026-11-09 after PR #9 exacthead886cf0c / CI42679371024 passed41 deterministic fixtures and packaging/static checks, mergedmain77f766d; v0.4.0 published. Independent fresh-context discovery gap was fixed after committed failing regression and rechecked6/6 without blocker. Adopt released harness4.4.1 optional registration rule/metadata ledger, preserving project execution/privacy requirements and marking native counters unknown.
+
+**Estimates:** Small at closure2026-11-09; no implementation or acceptance remains. No real campaign required.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Release acceptance: [PR #10](https://github.com/voidbrain/gauntlet-protocol/pull/10); [PR #9](https://github.com/voidbrain/gauntlet-protocol/pull/9); Review: independent fresh-context Git-discovery finding fixed after committed regression and rechecked without blocker; |
+| Opened | 2026-11-09 |
+| Verification | Unit/integration: 2026-11-09 Unit/integration: PR9 exacthead886cf0c / CI42679371024 passed41 fixtures/typecheck/build/packaging/static checks, mergedmain77f766d and publishedv0.4.0. Independent recheck6/6 found no blocker. No live model or client-loading acceptance. |
+| Reviewed | 2026-11-09 |
+
+</details>
+
+---
