@@ -1,5 +1,9 @@
 # Releases
 
+## 0.4.1
+
+Explicit per-case Ollama JSON/schema response formats, separate structural smoke pack, mode-visible plans and conservative pack/cache identity. Unconstrained defaults, semantic grading and failure captures remain unchanged. Other backends reject unsupported formats. No real-model run.
+
 ## 0.4.0
 
 Opt-in private final-reply failure sidecars, fixed file/count/byte caps, source-bound bounded inspection, explicit case selection and a three-case diagnostic budget. Grading unchanged; public reports mark diagnostic instrumentation and ordinary reuse excludes it. Protocol0.4 reads earlier0.2/0.3 evidence without claiming engine-equivalent reuse. Adopt released harness4.4.1 optional metadata accounting/entry bridges; no native client source verification or real-model run.
