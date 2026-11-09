@@ -254,3 +254,40 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 </details>
 
 ---
+
+## Closed 2026-11-09
+
+### F-007
+
+**Explicit Ollama structured-output contracts**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No remaining reusable release work.
+
+| | |
+|---|---|
+| **Issue** | Prompt-only JSON smoke failures do not establish schema-constrained Ollama behavior. |
+| **Reproduce** | Plan/run the original smoke pack and the separate schema smoke pack with the same model profile. |
+| **Check** | Explicit JSON/schema forwarding; bounded local schemas; no answer leakage; unsupported backends reject; mode changes pack/cache identity; independent grading and private captures unchanged; deterministic tests, CLI and release evidence. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed2026-11-09 after PR #11, CI42686856664 at4ea30d3, merged8d99d9f and releasedv0.4.1.43 deterministic tests/typecheck/build/package checks passed. Review: fresh-context report found preflight metadata admission ordering; unchanged committed regression316d28b fails before fix4ea30d3 and now passes; independent valid-manifest fetch spy confirmed zero probes. No remaining release action; consumer adoption is not a release gate. Optional per-case responseFormat selects JSON mode or a bounded object schema; omission preserves the original request. Separate neutral-smoke-schema pack supplies structural types without answer enums/constants. No real model call authorized or executed. Public reports retain pack identity and grades; no raw responses added. Existing identical-prompt holdout exclusions remain intact across format modes.
+
+**Estimates:** Small at closure2026-11-09: no remaining release effort; provider support checked against official Ollama documentation, live Gemma acceptance remains unknown.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #11](https://github.com/voidbrain/gauntlet-protocol/pull/11);42 deterministic fixtures |
+| Opened | 2026-11-09 |
+| Verification | Unit/integration:43 deterministic tests, typecheck/build and package checks passed CI42686856664 on2026-11-09. Review: independent report-only review, admission finding resolved. Documentation consistency reviewed against README, AGENTS, area notes, backlog rules and style guide. |
+| Reviewed | 2026-11-09 |
+
+</details>
+
+---
+
