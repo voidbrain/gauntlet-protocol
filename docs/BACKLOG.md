@@ -32,7 +32,7 @@ Current work ledger, reviewed 9 November 2026 against main `6f02768`. [Rules](BA
 
 | Field | Value |
 |---|---|
-| PR / evidence | — |
+| PR / evidence | [PR #11](https://github.com/voidbrain/gauntlet-protocol/pull/11);42 deterministic fixtures |
 | Opened | 2026-11-09 |
 | Verification | Unit/integration:42 deterministic tests and typecheck passed2026-11-09; final CI pending. Documentation consistency reviewed against README, AGENTS, area notes, backlog rules and style guide. |
 | Reviewed | 2026-11-09 |
