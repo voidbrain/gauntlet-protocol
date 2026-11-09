@@ -246,7 +246,7 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #9](https://github.com/voidbrain/gauntlet-protocol/pull/9); Review: independent fresh-context Git-discovery finding fixed after committed regression and rechecked without blocker; |
+| PR / evidence | Release acceptance: [PR #10](https://github.com/voidbrain/gauntlet-protocol/pull/10); [PR #9](https://github.com/voidbrain/gauntlet-protocol/pull/9); Review: independent fresh-context Git-discovery finding fixed after committed regression and rechecked without blocker; |
 | Opened | 2026-11-09 |
 | Verification | Unit/integration: 2026-11-09 Unit/integration: PR9 exacthead886cf0c / CI42679371024 passed41 fixtures/typecheck/build/packaging/static checks, mergedmain77f766d and publishedv0.4.0. Independent recheck6/6 found no blocker. No live model or client-loading acceptance. |
 | Reviewed | 2026-11-09 |
