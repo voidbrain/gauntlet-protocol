@@ -1,5 +1,7 @@
 # Gauntlet Protocol
 
+Version 0.2.0 adds a [generated capability index](docs/test-index.md), [conservative evidence reuse](docs/EVIDENCE.md), [performance telemetry](docs/PERFORMANCE.md) and [local runtime adapters](docs/RUNTIMES.md).
+
 An independent TypeScript library and CLI for capability-scoped AI evaluation. It records the tested configuration, bounded execution and independent acceptance evidence. It never grants production permission or promotes a model automatically.
 
 Requires Node 24. Install with `npm ci`, then `npm run build`. This project adopts [project-harness](https://github.com/voidbrain/project-harness) 4.2.1 for development. The harness does not depend on Gauntlet. Consumer projects own their domain packs and adapters.
@@ -12,7 +14,7 @@ node bin/gauntlet.mjs plan --pack=examples/smoke-v1.json --profile=examples/prof
 These commands validate and plan; they do not contact a model, download weights or execute registered runners. An explicit model run looks like this:
 
 ```sh
-node bin/gauntlet.mjs run --pack=examples/smoke-v1.json --profile=examples/profiles/gemma4-12b.json --limits=examples/limits-day.json --execute --allow-models --out=results/gemma-first.json
+node bin/gauntlet.mjs run --pack=examples/smoke-v1.json --profile=examples/profiles/gemma4-12b.json --limits=examples/limits-day.json --execute --allow-models --telemetry --fresh --out=results/gemma-first.json
 node bin/gauntlet.mjs compare --reports=results/gemma-first.json,results/qwen-first.json
 ```
 

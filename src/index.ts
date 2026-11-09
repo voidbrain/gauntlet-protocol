@@ -1,3 +1,7 @@
+import {engineIdentity} from './engine.ts';
+import {areas,type Area} from './catalog.ts';
+import {inspectRuntime,compatibleBody,validateManifest,ollamaStream,type RuntimeManifest,type RuntimeIdentity} from './runtimes.ts';
+import {monitorResources,type Resources} from './telemetry.ts';
 import { createHash, randomUUID } from 'node:crypto';
 import { readFileSync, writeFileSync, mkdirSync, lstatSync, realpathSync, existsSync, mkdtempSync, rmSync } from 'node:fs';
 import { resolve, dirname, relative, isAbsolute, join } from 'node:path';
@@ -22,8 +26,13 @@ export interface Profile {
     parallel: 1 | 2;
     hardware: string;
     cache: string;
+    backend?: "ollama"|"llama.cpp"|"mlx-lm";
+    residency?: "case"|"suite";
+    runtimeManifest?:RuntimeManifest;
 }
 export interface Case {
+    area?:Area;
+    requirements?:string[];
     id: string;
     layer: Layer;
     split: 'regression' | 'holdout';
@@ -63,6 +72,7 @@ export interface Result {
     critical: boolean;
     status: Status;
     durationMs: number;
+    performance?:{phase:"cold-model"|"warm-model"|"unknown";loadMs:number|null;promptMs:number|null;generationMs:number|null;providerTotalMs:number|null;inputTokens:number|null;outputTokens:number|null;tokensPerSecond:number|null;timeToFirstTokenMs:number|null;};
     tokens: number | null;
     reason: string | null;
     fixtureHash?: string;
@@ -73,6 +83,11 @@ export interface Result {
 export interface Report {
     schemaVersion: 1;
     id: string;
+    protocolVersion?:string;
+    engineHash?:string;
+    resources?:Resources;
+    identity?:RuntimeIdentity;
+    residencyCleanup?:{attempted:boolean;status:"not-needed"|"released"|"unknown"};
     pack: string;
     packVersion: string;
     caseCount:number;
@@ -122,15 +137,23 @@ function strings(v: unknown): v is string[] { return Array.isArray(v) && v.lengt
 export function hash(value: unknown): string { return createHash('sha256').update(JSON.stringify(value)).digest('hex'); }
 export function readJSON(path: string): unknown { const s = lstatSync(path); if (!s.isFile() || s.isSymbolicLink() || s.size > 8 * 1024 * 1024)
     throw Error('Expected bounded regular JSON file'); return JSON.parse(readFileSync(path, 'utf8')) as unknown; }
-export function writeEvidence(path: string, value: unknown) { path = resolve(path); if (!path.endsWith('.json') || path.split(/[\\/]/).includes('.git'))
-    throw Error('Evidence requires a new JSON path outside git metadata'); for (let p = dirname(path); p !== dirname(p); p = dirname(p))
-    if (existsSync(p) && lstatSync(p).isSymbolicLink())
-        throw Error('Symlink evidence parent'); mkdirSync(dirname(path), { recursive: true, mode: 0o700 }); writeFileSync(path, JSON.stringify(value, null, 2) + '\n', { flag: 'wx', mode: 0o600 }); }
+export function evidenceDestination(path:string):string {
+ path=resolve(path);if(!path.endsWith('.json')||path.split(/[\\/]/).includes('.git'))throw Error('Evidence requires new JSON outside git metadata');
+ try{lstatSync(path);throw Error('Evidence output already exists');}catch(error){if((error as NodeJS.ErrnoException).code!=='ENOENT')throw error;}
+ for(let parent=dirname(path);parent!==dirname(parent);parent=dirname(parent)){try{if(lstatSync(parent).isSymbolicLink())throw Error('Symlink evidence parent');}catch(error){if((error as NodeJS.ErrnoException).code!=='ENOENT')throw error;}}
+ return path;
+}
+export function writeEvidence(path:string,value:unknown){path=evidenceDestination(path);mkdirSync(dirname(path),{recursive:true,mode:0o700});writeFileSync(path,JSON.stringify(value,null,2)+'\n',{flag:'wx',mode:0o600});}
+export function evidenceProfile(profile:Profile):Profile {return profile.runtimeManifest?{...profile,runtimeManifest:{...profile.runtimeManifest,artifacts:profile.runtimeManifest.artifacts.map(a=>({path:'artifact:'+a.sha256,sha256:a.sha256}))}}:profile;}
 export function validateProfile(input: unknown): Profile {
     const v = record(input);
-    fields(v, ['schemaVersion', 'id', 'model', 'quantization', 'endpoint', 'context', 'maxOutputTokens', 'temperature', 'topP', 'topK', 'seed', 'think', 'parallel', 'hardware', 'cache']);
+    fields(v, ['schemaVersion', 'id', 'model', 'quantization', 'endpoint', 'context', 'maxOutputTokens', 'temperature', 'topP', 'topK', 'seed', 'think', 'parallel', 'hardware', 'cache','backend','residency','runtimeManifest']);
     if (v.schemaVersion !== 1 || typeof v.id !== 'string' || !id.test(v.id) || typeof v.model !== 'string' || !/^[a-zA-Z0-9][a-zA-Z0-9._/:+-]{0,199}$/.test(v.model) || /cloud/i.test(v.model) || typeof v.quantization !== 'string' || !v.quantization || typeof v.hardware !== 'string' || !v.hardware || typeof v.cache !== 'string' || !v.cache)
         throw Error('Invalid profile identity');
+    if(v.backend!==undefined&&!['ollama','llama.cpp','mlx-lm'].includes(String(v.backend))||v.residency!==undefined&&!['case','suite'].includes(String(v.residency)))throw Error('Invalid runtime/residency');
+    if(v.runtimeManifest!==undefined)validateManifest(v.runtimeManifest);
+    if(v.backend&&v.backend!=='ollama'&&!v.runtimeManifest)throw Error('Alternative runtime needs reviewed local-artifact manifest');
+    if(v.backend&&v.backend!=='ollama'&&v.residency==='case')throw Error('Alternative server residency is externally managed; case unload unsupported');
     const u = new URL(String(v.endpoint));
     if (!['http:', 'https:'].includes(u.protocol) || !['127.0.0.1', 'localhost', '[::1]'].includes(u.hostname) || u.username || u.password || u.search || u.hash || u.pathname !== '/')
         throw Error('Model endpoint must be credential-free loopback root');
@@ -151,9 +174,10 @@ export function validatePack(input: unknown): Pack {
     const seen = new Set<string>();
     for (const entry of v.cases) {
         const c = record(entry);
-        fields(c, ['id', 'layer', 'split', 'capabilities', 'critical', 'expensive', 'runner', 'messages', 'expected']);
+        fields(c, ['id', 'layer', 'split', 'capabilities', 'critical', 'expensive', 'runner', 'messages', 'expected','area','requirements']);
         if (typeof c.id !== 'string' || !id.test(c.id) || seen.has(c.id) || !['system', 'model', 'coding', 'end-to-end'].includes(String(c.layer)) || !['regression', 'holdout'].includes(String(c.split)) || !strings(c.capabilities) || typeof c.critical !== 'boolean' || typeof c.expensive !== 'boolean')
             throw Error('Invalid/duplicate case');
+        if(c.area!==undefined&&!(areas as readonly string[]).includes(String(c.area))&&!(typeof c.area==='string'&&/^x:[a-z0-9-]+:[a-z0-9-]+$/.test(c.area))||c.requirements!==undefined&&!strings(c.requirements))throw Error('Invalid case classification');
         seen.add(c.id);
         if (c.runner !== undefined) {
             if (typeof c.runner !== 'string' || !id.test(c.runner) || c.messages !== undefined || c.expected !== undefined)
@@ -307,6 +331,8 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
     allowExpensive?: boolean;
     registry?: Registry;
     fetch?: typeof fetch;
+    telemetry?:boolean;
+    sampleMs?:number;
 }): Promise<Report> {
     validatePack(pack);
     if (profile)
@@ -314,16 +340,33 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
     validateLimits(limits);
     if (!options.execute)
         throw Error('Run requires explicit execution');
+    if(options.sampleMs!==undefined&&!integer(options.sampleMs,250,10000))throw Error('Invalid telemetry interval');
     const cancellation=new AbortController();
+    let monitor:Awaited<ReturnType<typeof monitorResources>>|null=null;
+    let resources:Resources|undefined;
+    let runtimeIdentity:RuntimeIdentity|undefined;
+    let initiallyResident:boolean|null=null;
+    let warmed=false;
+    let suiteModelRequested=false;
+    const residencyCleanup:{attempted:boolean;status:"not-needed"|"released"|"unknown"}={attempted:false,status:"not-needed"};
     const cancel=()=>cancellation.abort();
     process.on('SIGINT',cancel);process.on('SIGTERM',cancel);
+    const releaseOwnedModel=async()=>{if(residencyCleanup.attempted||profile?.residency!=='suite'||(profile.backend??'ollama')!=='ollama'||initiallyResident!==false||!suiteModelRequested)return;residencyCleanup.attempted=true;residencyCleanup.status='unknown';try{const released=record(await boundedJSON(await (options.fetch??fetch)(new URL('/api/generate',profile.endpoint),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({model:profile.model,keep_alive:0}),redirect:'error',signal:AbortSignal.timeout(1000)}),65536));if(released.done===true&&released.done_reason==='unload')residencyCleanup.status='released';}catch{/* No forced service restart on cleanup uncertainty. */}};
     try {
+    const evaluatorBefore=engineIdentity();
     const before = hash(pack), profileBefore = profile ? hash(profile) : null, started = new Date().toISOString(), deadline = Date.now() + limits.suiteMs, results: Result[] = [];
     let tokens = 0, known = true, digest: string | null = null, modelReady = false,providerIdentity:string|null=null;
     let caseDeadline = 0;
     const remaining = () => { if(cancellation.signal.aborted)throw Error('Campaign cancelled');const ms = Math.min(caseDeadline, deadline) - Date.now(); if (ms <= 0)
         throw Error('Execution deadline exhausted'); return ms; };
     const request = async (path: string, body: unknown, timeout: number) => boundedJSON(await (options.fetch ?? fetch)(new URL(path, profile!.endpoint), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), redirect: 'error', signal: AbortSignal.any([cancellation.signal,AbortSignal.timeout(Math.max(1, Math.min(timeout, remaining())))]) }), limits.maxBytes);
+    const metadataRequest=async(path:string,body?:unknown)=>boundedJSON(await (options.fetch??fetch)(new URL(path,profile!.endpoint),{method:body?'POST':'GET',headers:body?{'content-type':'application/json'}:undefined,body:body?JSON.stringify(body):undefined,redirect:'error',signal:AbortSignal.any([cancellation.signal,AbortSignal.timeout(Math.max(1,remaining()))])}),limits.maxBytes);
+    const allocation=async()=>{if(!profile||(profile.backend??'ollama')!=='ollama')return null;try{const state=record(await boundedJSON(await (options.fetch??fetch)(new URL('/api/ps',profile.endpoint),{redirect:'error',signal:AbortSignal.any([cancellation.signal,AbortSignal.timeout(250)])}),limits.maxBytes));const models=Array.isArray(state.models)?state.models.map(record):[];const model=models.find(m=>m.name===profile.model);return model&&typeof model.size_vram==='number'?model.size_vram:0;}catch{return null;}};
+    if((options.telemetry||profile?.residency==='suite')&&profile&&options.allowModels&&pack.cases.some(c=>!c.runner&&c.layer==='model')){
+      caseDeadline=Date.now()+Math.min(5000,limits.caseMs);
+      if((profile.backend??'ollama')==='ollama')try{const ps=record(await metadataRequest('/api/ps'));initiallyResident=Array.isArray(ps.models)&&ps.models.map(record).some(m=>m.name===profile.model);warmed=initiallyResident;}catch{initiallyResident=null;}
+      if(options.telemetry)monitor=await monitorResources({port:new URL(profile.endpoint).port||'80',intervalMs:options.sampleMs??500,allocation});
+    }
     for (let iteration = 1; iteration <= limits.repeat; iteration++)
         for (const c of pack.cases.slice(0, limits.maxCases)) {
             const begin = performance.now(), r: Result = { id: c.id, iteration, layer: c.layer, split: c.split, capabilities: [...c.capabilities], critical: c.critical, status: 'not-run', durationMs: 0, tokens: null, reason: null };
@@ -391,38 +434,39 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
                         continue;
                     }
                     if (!modelReady) {
-                        const version=record(await boundedJSON(await (options.fetch??fetch)(new URL('/api/version',profile.endpoint),{redirect:'error',signal:AbortSignal.any([cancellation.signal,AbortSignal.timeout(Math.max(1,Math.min(remaining(),5000)))])}),limits.maxBytes));if(typeof version.version!=='string'||!version.version||version.version.length>100)throw Error('Provider version missing');providerIdentity='ollama:'+version.version;
-                        const show = record(await request('/api/show', { model: profile.model }, timeout));
-                        if (show.remote_host || show.remote_model)
-                            throw Error('Remote-backed models are not local qualification');
-                        const info = record(show.model_info);
-                        if (typeof info['general.file_type'] !== 'number')
-                            throw Error('Model identity unavailable');
-                        const details = record(show.details);
-                        if (details.quantization_level !== profile.quantization)
-                            throw Error('Installed quantization differs from profile');
-                        if (profile.think !== null && (!Array.isArray(show.capabilities) || !show.capabilities.includes('thinking')))
-                            throw Error('Requested thinking is unsupported');
-                        const tags = record(await boundedJSON(await (options.fetch ?? fetch)(new URL('/api/tags', profile.endpoint), { redirect: 'error', signal: AbortSignal.any([cancellation.signal,AbortSignal.timeout(Math.max(1, Math.min(remaining(), 5000)))]) }), limits.maxBytes));
-                        const model = (tags.models as unknown[] | undefined)?.map(record).find(x => x.name === profile.model);
-                        if (!model || typeof model.digest !== 'string' || !/^sha256:[a-f0-9]{64}$|^[a-f0-9]{64}$/.test(model.digest) || typeof model.size !== 'number' || model.size <= 0 || model.remote_host)
-                            throw Error('Installed local model digest unavailable');
-                        digest = model.digest;
-                        modelReady = true;
+                        runtimeIdentity=await inspectRuntime(profile,metadataRequest,{signal:AbortSignal.any([cancellation.signal,AbortSignal.timeout(remaining())])});
+                        digest=runtimeIdentity.modelDigest;providerIdentity=runtimeIdentity.provider;modelReady=true;
                     }
                     const optionsBody: Record<string, unknown> = { num_ctx: profile.context, num_predict: profile.maxOutputTokens };
                     for (const [k, v] of [['temperature', profile.temperature], ['top_p', profile.topP], ['top_k', profile.topK], ['seed', profile.seed]] as const)
                         if (v !== null)
                             optionsBody[k] = v;
                     r.fixtureHash=hash(c.messages);
-                    const response = record(await request('/api/chat', { model: profile.model, messages: c.messages, stream: false, keep_alive: 0, ...(profile.think !== null ? { think: profile.think } : {}), options: optionsBody }, Math.min(limits.caseMs, deadline - Date.now())));
+                    const backend=profile.backend??'ollama';
+                    let response:Record<string,unknown>;let firstTokenMs:number|null=null;
+                    let observedResident:boolean|null=null;
+                    if(options.telemetry)try{if(backend==='ollama'){const state=record(await metadataRequest('/api/ps'));if(Array.isArray(state.models))observedResident=state.models.map(record).some(m=>m.name===profile.model);}else if(backend==='llama.cpp'){const state=record(await metadataRequest('/props'));if(typeof state.is_sleeping==='boolean')observedResident=!state.is_sleeping;}}catch{/* Unknown residency stays unknown. */}
+                    if(backend==='ollama'){
+                      if(profile.residency==='suite')suiteModelRequested=true;
+                      const body={model:profile.model,messages:c.messages,stream:!!options.telemetry,keep_alive:profile.residency==='suite'?'5m':0,...(profile.think!==null?{think:profile.think}:{}),options:optionsBody};
+                      if(options.telemetry){const begin=performance.now();const stream=await ollamaStream(await (options.fetch??fetch)(new URL('/api/chat',profile.endpoint),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body),redirect:'error',signal:AbortSignal.any([cancellation.signal,AbortSignal.timeout(remaining())])}),limits.maxBytes,begin);response=stream.value;firstTokenMs=stream.firstTokenMs;}
+                      else response=record(await request('/api/chat',body,remaining()));
+                    }else{
+                      const raw=record(await request('/v1/chat/completions',compatibleBody(profile,c.messages),remaining()));
+                      if(profile.runtimeManifest?.serverFingerprint!==null&&raw.system_fingerprint!==profile.runtimeManifest?.serverFingerprint)throw Error('Alternative runtime fingerprint differs');
+                      const choices=Array.isArray(raw.choices)?raw.choices.map(record):[];if(choices.length!==1)throw Error('Expected one bounded completion');
+                      const usage=record(raw.usage);if(!integer(usage.prompt_tokens,0,1048576)||!integer(usage.completion_tokens,0,1000000)||usage.prompt_tokens+profile.maxOutputTokens>profile.context)throw Error('Alternative context/usage unverified');
+                      response={model:raw.model,message:choices[0].message,done:choices[0].finish_reason==='stop',done_reason:choices[0].finish_reason,eval_count:usage.completion_tokens,prompt_eval_count:usage.prompt_tokens};
+                    }
                     if(response.model!==profile.model)throw Error('Generation model identity differs');
-                    const finalTags=record(await boundedJSON(await (options.fetch??fetch)(new URL('/api/tags',profile.endpoint),{redirect:'error',signal:AbortSignal.any([cancellation.signal,AbortSignal.timeout(Math.max(1,Math.min(remaining(),5000)))])}),limits.maxBytes));
-                    const finalModel=(finalTags.models as unknown[]|undefined)?.map(record).find(x=>x.name===profile.model);
-                    if(!finalModel||finalModel.digest!==digest||finalModel.remote_host)throw Error('Model identity changed during execution');
-                    const message = record(response.message);
-                    if (typeof message.content !== 'string' || response.done !== true || !integer(response.eval_count, 0, 1000000))
-                        throw Error('Incomplete or unmeasured model response');
+                    const finalIdentity=await inspectRuntime(profile,metadataRequest,{verifyFiles:false,signal:AbortSignal.any([cancellation.signal,AbortSignal.timeout(remaining())])});
+                    if(hash(finalIdentity)!==hash(runtimeIdentity))throw Error('Runtime identity changed during generation');
+                    const message=record(response.message);
+                    if(typeof message.content!=='string'||response.done!==true||!integer(response.eval_count,0,1000000))throw Error('Incomplete or unmeasured model response');
+                    const milliseconds=(value:unknown)=>typeof value==='number'&&Number.isFinite(value)&&value>=0?value/1000000:null;
+                    const generationMs=milliseconds(response.eval_duration);
+                    r.performance={phase:observedResident===null?'unknown':observedResident?'warm-model':'cold-model',loadMs:milliseconds(response.load_duration),promptMs:milliseconds(response.prompt_eval_duration),generationMs,providerTotalMs:milliseconds(response.total_duration),inputTokens:integer(response.prompt_eval_count,0,1048576)?response.prompt_eval_count:null,outputTokens:response.eval_count,tokensPerSecond:generationMs&&generationMs>0?response.eval_count/(generationMs/1000):null,timeToFirstTokenMs:firstTokenMs};
+                    warmed=profile.residency==='suite';
                     tokens += response.eval_count;
                     r.tokens = response.eval_count;
                     r.responseHash = hash(message.content);
@@ -453,11 +497,14 @@ export async function run(pack: Pack, profile: Profile | null, limits: Limits, o
             }
             finally {
                 r.durationMs = Math.round(performance.now() - begin);
+                if(monitor)await monitor.sample();
             }
         }
-    const sourceStable = before === hash(pack) && profileBefore === (profile ? hash(profile) : null), complete = results.length === pack.cases.length * limits.repeat && results.every(x => x.status !== 'not-run' && x.status !== 'error');
-    return { schemaVersion: 1, id: randomUUID(), pack: pack.id, packVersion: pack.version,caseCount:pack.cases.length, packHash: before, registryHash: options.registry ? hash(options.registry) : null, profile, profileHash: profileBefore, modelDigest: digest, started, finished: new Date().toISOString(), sourceStable, limits, results, passed: sourceStable && complete && results.every(x => x.status === 'passed'), complete, promotion: false, usage: { outputTokens: known ? tokens : null }, runtime: { provider:providerIdentity,node: process.version, platform: process.platform, arch: process.arch } };
-    } finally {process.removeListener('SIGINT',cancel);process.removeListener('SIGTERM',cancel);}
+    await releaseOwnedModel();
+    if(monitor){resources=await monitor.stop();monitor=null;}
+    const sourceStable = evaluatorBefore===engineIdentity()&&before === hash(pack) && profileBefore === (profile ? hash(profile) : null), complete = results.length === pack.cases.length * limits.repeat && results.every(x => x.status !== 'not-run' && x.status !== 'error');
+    return { schemaVersion: 1, id: randomUUID(),protocolVersion:'0.2.0',engineHash:evaluatorBefore,residencyCleanup,...(resources?{resources}:{}),...(runtimeIdentity?{identity:runtimeIdentity}:{}), pack: pack.id, packVersion: pack.version,caseCount:pack.cases.length, packHash: before, registryHash: options.registry ? hash(options.registry) : null, profile:profile?evidenceProfile(profile):null, profileHash: profile?hash(evidenceProfile(profile)):null, modelDigest: digest, started, finished: new Date().toISOString(), sourceStable, limits, results, passed: sourceStable && complete && results.every(x => x.status === 'passed'), complete, promotion: false, usage: { outputTokens: known ? tokens : null }, runtime: { provider:providerIdentity,node: process.version, platform: process.platform, arch: process.arch } };
+    } finally {await releaseOwnedModel();if(monitor)await monitor.stop();process.removeListener('SIGINT',cancel);process.removeListener('SIGTERM',cancel);}
 }
 export interface Requirements {
     capabilities: string[];
@@ -471,6 +518,7 @@ export function assess(report: Report, requirements: Requirements) {
     if (!strings(requirements.capabilities) || !integer(requirements.minimumCases, 1, 1000) || !integer(requirements.minimumHoldout, 1, 1000) || !Number.isFinite(requirements.minimumPassRate) || requirements.minimumPassRate < 0 || requirements.minimumPassRate > 1)
         throw Error('Invalid qualification requirements');
     const reasons: string[] = [];
+    if(report.protocolVersion==='0.2.0'&&report.engineHash!==engineIdentity())reasons.push('Evaluator implementation changed; reevaluation required');
     if (!report.profile || report.profileHash !== hash(report.profile) || !report.modelDigest || !report.runtime.provider|| !report.sourceStable || !report.complete || report.promotion !== false || report.results.some(r => r.critical && r.status !== 'passed') || report.usage.outputTokens === null)
         reasons.push('Missing stable configuration, identity, complete evidence or critical pass');
     for (const cap of requirements.capabilities) {
@@ -484,14 +532,24 @@ export function exportProfile(report: Report, review: unknown, requirements: Req
     throw Error('Independent review receipt does not match evidence'); const result = assess(report, requirements); if (!result.eligible)
     throw Error(result.reasons.join('; ')); return { version: 1, profiles: [{ id: report.profile!.id, model: `${report.profile!.model} ${report.profile!.quantization} ${report.modelDigest}`, status: 'qualified', capabilities: requirements.capabilities, evidence: [`Runtime ${report.runtime.provider}; configuration ${JSON.stringify(report.profile)}; registry ${report.registryHash??'direct'}`,`Gauntlet report ${hash(report)}; configuration ${report.profileHash}; pack ${report.pack}@${report.packVersion}; reviewed ${r.reviewed}`, r.evidence] }] }; }
 export function compare(reports: Report[]) { if (!Array.isArray(reports) || reports.length < 1 || reports.length > 100)
-    throw Error('Provide 1–100 reports'); reports.forEach(validateReport); return reports.map(r => ({ id: r.id, profile: r.profile?.id ?? null, configuration: r.profileHash, pack: r.pack, version: r.packVersion, packHash: r.packHash, complete: r.complete, passed: r.passed, counts: Object.fromEntries(['passed', 'failed', 'error', 'not-run'].map(s => [s, r.results.filter(x => x.status === s).length])), tokens: r.usage.outputTokens, durationMs: Date.parse(r.finished) - Date.parse(r.started), comparableToFirst: reports.length > 0 && r.packHash === reports[0].packHash && r.registryHash === reports[0].registryHash && hash(r.limits) === hash(reports[0].limits), automaticPromotion: false })); }
+    throw Error('Provide 1–100 reports'); reports.forEach(validateReport); return reports.map(r => ({ id: r.id, profile: r.profile?.id ?? null, configuration: r.profileHash, pack: r.pack, version: r.packVersion, packHash: r.packHash, complete: r.complete, passed: r.passed, counts: Object.fromEntries(['passed', 'failed', 'error', 'not-run'].map(s => [s, r.results.filter(x => x.status === s).length])), tokens: r.usage.outputTokens,performance:performanceSummary(r), durationMs: Date.parse(r.finished) - Date.parse(r.started), comparableToFirst: reports.length > 0 && r.packHash === reports[0].packHash && r.registryHash === reports[0].registryHash && hash(r.limits) === hash(reports[0].limits)&&r.engineHash===reports[0].engineHash, automaticPromotion: false })); }
 /** Structural checks detect malformed or internally inconsistent evidence; they do not authenticate its author. */
 export function validateReport(input: unknown): Report {
     const v = record(input);
-    fields(v, ['schemaVersion', 'id', 'pack', 'packVersion', 'caseCount','packHash', 'registryHash', 'profile', 'profileHash', 'modelDigest', 'started', 'finished', 'sourceStable', 'limits', 'results', 'passed', 'complete', 'promotion', 'usage', 'runtime']);
+    fields(v, ['schemaVersion', 'id','protocolVersion','engineHash','resources','identity','residencyCleanup', 'pack', 'packVersion', 'caseCount','packHash', 'registryHash', 'profile', 'profileHash', 'modelDigest', 'started', 'finished', 'sourceStable', 'limits', 'results', 'passed', 'complete', 'promotion', 'usage', 'runtime']);
     const digest = (x: unknown) => typeof x === 'string' && /^(sha256:)?[a-f0-9]{64}$/.test(x);
     if (v.schemaVersion !== 1 || typeof v.id !== 'string' || !v.id || typeof v.pack !== 'string' || !id.test(v.pack) || typeof v.packVersion !== 'string' || !/^\d+\.\d+\.\d+$/.test(v.packVersion) || !digest(v.packHash) || typeof v.sourceStable !== 'boolean' || typeof v.complete !== 'boolean' || typeof v.passed !== 'boolean' || v.promotion !== false)
         throw Error('Invalid report identity');
+    if(v.residencyCleanup!==undefined){const cleanup=record(v.residencyCleanup);fields(cleanup,['attempted','status']);if(typeof cleanup.attempted!=='boolean'||!['not-needed','released','unknown'].includes(String(cleanup.status)))throw Error('Invalid residency cleanup evidence');}
+    if(v.engineHash!==undefined&&!digest(v.engineHash))throw Error('Invalid engine hash');
+    if(v.protocolVersion==='0.2.0'&&!digest(v.engineHash))throw Error('Current evidence needs engine identity');
+    if(v.protocolVersion!==undefined&&v.protocolVersion!=='0.2.0')throw Error('Unsupported protocol evidence version');
+    if(v.identity!==undefined){const identity=record(v.identity);fields(identity,['provider','modelDigest','metadataHash','proof']);if(typeof identity.provider!=='string'||identity.provider!==record(v.runtime).provider||identity.modelDigest!==v.modelDigest||!digest(identity.metadataHash)||!['provider-metadata','owner-manifest-and-local-artifacts'].includes(String(identity.proof)))throw Error('Invalid runtime identity evidence');}
+    if(v.resources!==undefined){const resource=record(v.resources);fields(resource,['intervalMs','samples','sampleErrors','samplingTimeMs','peakProcessRssBytes','peakGpuDevicePercent','peakGpuDeviceMemoryBytes','peakModelAllocatedBytes','scope','gpuSource','memoryTotalBytes']);if(!integer(resource.intervalMs,250,10000)||!Array.isArray(resource.samples)||resource.samples.length>10000||!integer(resource.sampleErrors,0,1000000)||typeof resource.scope!=='string'||typeof resource.gpuSource!=='string'||!integer(resource.samplingTimeMs,0,3600000)||!integer(resource.memoryTotalBytes,0,Number.MAX_SAFE_INTEGER))throw Error('Invalid resource evidence');
+      for(const sample of resource.samples){const row=record(sample);fields(row,['elapsedMs','systemFreeBytes','systemLoad1','processRssBytes','processCpuPercent','gpuDevicePercent','gpuDeviceMemoryBytes','modelAllocatedBytes']);for(const [key,value] of Object.entries(row))if(value!==null&&(typeof value!=='number'||!Number.isFinite(value)||value<0||value>Number.MAX_SAFE_INTEGER))throw Error('Invalid resource sample');}
+      const peaks={peakProcessRssBytes:'processRssBytes',peakGpuDevicePercent:'gpuDevicePercent',peakGpuDeviceMemoryBytes:'gpuDeviceMemoryBytes',peakModelAllocatedBytes:'modelAllocatedBytes'};
+      for(const [peak,key] of Object.entries(peaks)){const values=resource.samples.map(x=>record(x)[key]).filter((x):x is number=>typeof x==='number');if(resource[peak]!== (values.length?Math.max(...values):null))throw Error('Inconsistent sampled peak');}
+    }
     const started = Date.parse(String(v.started)), finished = Date.parse(String(v.finished));
     if (!Number.isFinite(started) || !Number.isFinite(finished) || finished < started)
         throw Error('Invalid report dates');
@@ -513,9 +571,10 @@ export function validateReport(input: unknown): Report {
     let tokens = 0, unknown = false;
     for (const value of v.results) {
         const r = record(value);
-        fields(r, ['id', 'iteration', 'layer', 'split', 'capabilities', 'critical', 'status', 'durationMs', 'tokens', 'reason', 'fixtureHash', 'responseHash', 'adapterHash', 'checks']);
+        fields(r, ['id', 'iteration', 'layer', 'split', 'capabilities', 'critical', 'status', 'durationMs','performance', 'tokens', 'reason', 'fixtureHash', 'responseHash', 'adapterHash', 'checks']);
         if (typeof r.id !== 'string' || !id.test(r.id) || !integer(r.iteration, 1, limits.repeat) || !['system', 'model', 'coding', 'end-to-end'].includes(String(r.layer)) || !['regression', 'holdout'].includes(String(r.split)) || !strings(r.capabilities) || typeof r.critical !== 'boolean' || !['passed', 'failed', 'error', 'not-run'].includes(String(r.status)) || !integer(r.durationMs, 0, 3600000) || r.reason !== null && typeof r.reason !== 'string')
             throw Error('Invalid result');
+        if(r.performance!==undefined){const perf=record(r.performance);fields(perf,['phase','loadMs','promptMs','generationMs','providerTotalMs','inputTokens','outputTokens','tokensPerSecond','timeToFirstTokenMs']);if(!['cold-model','warm-model','unknown'].includes(String(perf.phase)))throw Error('Invalid cold/warm phase');for(const [key,value] of Object.entries(perf))if(key!=='phase'&&value!==null&&(typeof value!=='number'||!Number.isFinite(value)||value<0))throw Error('Invalid performance metric');if(perf.outputTokens!==r.tokens)throw Error('Performance token mismatch');}
         const key = r.id + ':' + r.iteration;
         if (seen.has(key))
             throw Error('Duplicate result');
@@ -553,4 +612,15 @@ export function validateReport(input: unknown): Report {
     if (['node', 'platform', 'arch'].some(k => typeof runtime[k] !== 'string' || !runtime[k]))
         throw Error('Invalid runtime identity');
     return v as unknown as Report;
+}
+
+export {catalog,catalogMarkdown,areas} from './catalog.ts';
+export {inspectRuntime,verifyArtifacts,validateManifest} from './runtimes.ts';
+export {serverProcess} from './telemetry.ts';
+export {executeWithEvidence,reuseValid,readEvidence,defaultEvidenceDirectory} from './evidence.ts';
+
+export function performanceSummary(report:Report){
+ const measured=report.results.flatMap(r=>r.performance?[r.performance]:[]);
+ const median=(values:(number|null)[])=>{const sorted=values.filter((x):x is number=>x!==null).sort((a,b)=>a-b);if(!sorted.length)return null;const middle=Math.floor(sorted.length/2);return sorted.length%2?sorted[middle]:(sorted[middle-1]+sorted[middle])/2;};
+ return {coldCases:measured.filter(x=>x.phase==='cold-model').length,warmCases:measured.filter(x=>x.phase==='warm-model').length,unknownResidencyCases:measured.filter(x=>x.phase==='unknown').length,firstLoadMs:measured[0]?.loadMs??null,medianTimeToFirstTokenMs:median(measured.map(x=>x.timeToFirstTokenMs)),medianGenerationTokensPerSecond:median(measured.map(x=>x.tokensPerSecond)),peakProcessRssBytes:report.resources?.peakProcessRssBytes??null,peakGpuDevicePercent:report.resources?.peakGpuDevicePercent??null,peakGpuDeviceMemoryBytes:report.resources?.peakGpuDeviceMemoryBytes??null,peakModelAllocatedBytes:report.resources?.peakModelAllocatedBytes??null,samples:report.resources?.samples.length??0,sampledPeaks:true};
 }

@@ -1,6 +1,6 @@
 {
   "name": "@voidbrain/gauntlet-protocol",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Capability-scoped evaluation contracts, bounded adapters and reviewed model evidence",
   "type": "module",
   "license": "MIT",
@@ -22,7 +22,11 @@
     "LICENSE",
     "examples",
     "docs/PROTOCOL.md",
-    "docs/MAC-PROFILES.md"
+    "docs/MAC-PROFILES.md",
+    "docs/test-index.md",
+    "docs/EVIDENCE.md",
+    "docs/PERFORMANCE.md",
+    "docs/RUNTIMES.md"
   ],
   "scripts": {
     "build": "tsc",
@@ -36,7 +40,9 @@
     "check:maintenance": "node tools/maintenance.mjs check",
     "check:audits": "node tools/check-audits.mjs",
     "check:integrations": "node tools/mcp.mjs check",
-    "ci:status": "node tools/ci-status.mjs"
+    "ci:status": "node tools/ci-status.mjs",
+    "index:build": "node bin/gauntlet.mjs index --packs=examples/smoke-v1.json --out=docs/test-index.md",
+    "check:index": "node bin/gauntlet.mjs index --packs=examples/smoke-v1.json --out=docs/test-index.md --check"
   },
   "devDependencies": {
     "@types/node": "24.10.1",
