@@ -1,54 +1,15 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 9 November 2026 against main `67cb511`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 9 November 2026 against main `b605107`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
 
 ## Features and improvements
 
-### F-005
-
-**Reusable machine profiles and load-scenario evidence scope**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
-
-💻 **→ Human action required: No**<br />Finish independent review/CI and publish0.3.0; no consumer adoption or live model campaign gates release.
-
-| | |
-|---|---|
-| **Issue** | Common evaluation results can serve several consumers, but machine/load declarations need reusable contracts and explicit evidence identity rather than duplicated consumer-only plans. |
-| **Reproduce** | Plan and run a neutral fixture with machine/scenario declarations, then request reuse from another consumer, a different scenario and a mismatched host. |
-| **Check** | Strict non-executable machine/scenario contracts; local host compatibility and explicit owner load confirmation before probes/reuse; report/cache/compare/export preserve scope; full definition changes and unscoped evidence cannot stand in for requested conditions. CLI and library fixtures verify the joins; legacy evidence stays readable; no app, model or power setting is changed. |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Next action / closure evidence:** Implemented for0.3.0: [reusable environment contract](ENVIRONMENTS.md), neutral load examples, machine inspection and explicit current owner scenario confirmation. Complete definitions bind evidence; original host/runtime/source identity and authorization remain. Performance comparisons require fresh measurements; declarations are not independent load verification. Publish after owned tests/CI and fresh-context review; closes on the published tag, independently of consumers.
-
-**Estimates:** Small remaining effort, estimated2026-11-09: implementation and seven focused neutral joins pass; independent review, final CI and publication remain. No live campaign estimate or spend is implied.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #7](https://github.com/voidbrain/gauntlet-protocol/pull/7); Test: test/environments.test.ts; Review: [fresh-context report](reviews/2026-11-09-environments-independent.md), strict-enum finding fixed after unchanged failing regressione7f7183; seven focused tests pass, no remaining findings. |
-| Opened | 2026-11-09 |
-| Verification | Unit/integration: seven machine/scenario/CLI/reuse fixtures pass, all35 deterministic tests plus typecheck/build/index/backlog/rule checks passed locally; final CI recorded before release. No real load/model qualification. |
-| Reviewed | 2026-11-09 |
-
-</details>
-
----
-
-
-
-
-
-
-
-
 ## Other changes
+
+F-005 released in [v0.3.0](https://github.com/voidbrain/gauntlet-protocol/tree/v0.3.0) after PR7 exacthead170611f / CI42607576561 passed all35 deterministic tests and owned packaging/contract checks. Fresh-context strict-enum finding fixed after committed failing regressione7f7183 and rechecked. No model/load campaign or consumer adoption gates the release.
 
 F-002/F-003/F-004 released in v0.2.0 from PR #5, CI42572655186 and independent report-only review; neutral deterministic acceptance only. No consumer adoption or live model qualifies the shared release.
 
