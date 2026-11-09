@@ -1,47 +1,15 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 9 November 2026 against main `6f02768`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 9 November 2026 against main `8d99d9f`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
 
 ## Features and improvements
 
-### F-007
-
-**Explicit Ollama structured-output contracts**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
-
-💻 **→ Human action required: No**<br />Verify and release the reusable format contract.
-
-| | |
-|---|---|
-| **Issue** | Prompt-only JSON smoke failures do not establish schema-constrained Ollama behavior. |
-| **Reproduce** | Plan/run the original smoke pack and the separate schema smoke pack with the same model profile. |
-| **Check** | Explicit JSON/schema forwarding; bounded local schemas; no answer leakage; unsupported backends reject; mode changes pack/cache identity; independent grading and private captures unchanged; deterministic tests, CLI and release evidence. |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Next action / closure evidence:** Verify and publish reusable support; consumer adoption is not a release gate. Optional per-case responseFormat selects JSON mode or a bounded object schema; omission preserves the original request. Separate neutral-smoke-schema pack supplies structural types without answer enums/constants. No real model call authorized or executed. Public reports retain pack identity and grades; no raw responses added. Existing identical-prompt holdout exclusions remain intact across format modes.
-
-**Estimates:** Small remaining effort, estimated2026-11-09: release verification and documentation; provider support checked against official Ollama documentation, live Gemma acceptance remains unknown.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #11](https://github.com/voidbrain/gauntlet-protocol/pull/11);42 deterministic fixtures |
-| Opened | 2026-11-09 |
-| Verification | Unit/integration:42 deterministic tests and typecheck passed2026-11-09; final CI pending. Documentation consistency reviewed against README, AGENTS, area notes, backlog rules and style guide. |
-| Reviewed | 2026-11-09 |
-
-</details>
-
----
-
 ## Other changes
+
+F-007 accepted in v0.4.1 after PR #11 / CI42686856664 and independent review;43 deterministic tests. No real-model campaign.
 
 F-006 released in v0.4.0 after PR #9 / CI42679371024 and independent report-only review;41 deterministic fixtures and packaging/static checks passed. Private capture and selected diagnostics are accepted independently of consumer adoption. No live model campaign or native client source verification.
 
