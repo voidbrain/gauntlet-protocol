@@ -55,3 +55,7 @@ Optional area/requirements metadata, backend/residency/owner artifact manifests,
 ## Version 0.3 additions
 
 [Machine/scenario contracts](ENVIRONMENTS.md) describe local evaluation-host hardware and explicitly owner-declared workload/power conditions. Optional `environment` evidence participates in matching; execution requires explicit scenario confirmation and matching current hardware. Plan/validate never verify load. Reusable definitions/examples stay here; consumer role assignments, device trust, acceptance and promotion remain consumer-owned. Legacy0.2 reports remain readable, current automatic reuse is0.3 only.
+
+## Protocol0.4 diagnostic instrumentation
+
+Reports optionally carry `diagnostics:{failureCaptures:true}` for explicitly requested private final-reply capture. No raw response/path enters the report. Diagnostic runs are fresh, excluded from ordinary automatic reuse/cache and performance-comparable only with the same instrumentation marker. Selected cases have a distinct pack identity/hash; selected completeness never establishes omitted original cases. [Private capture and inspection](FAILURES.md) defines bounded sidecars and source matching;0.2/0.3 reports remain readable as historical evidence.
