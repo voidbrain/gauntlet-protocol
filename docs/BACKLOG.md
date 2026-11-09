@@ -28,13 +28,13 @@ Current work ledger, reviewed 9 November 2026 against main `67cb511`. [Rules](BA
 
 **Next action / closure evidence:** Implemented for0.3.0: [reusable environment contract](ENVIRONMENTS.md), neutral load examples, machine inspection and explicit current owner scenario confirmation. Complete definitions bind evidence; original host/runtime/source identity and authorization remain. Performance comparisons require fresh measurements; declarations are not independent load verification. Publish after owned tests/CI and fresh-context review; closes on the published tag, independently of consumers.
 
-**Estimates:** Small remaining effort, estimated2026-11-09: implementation and six focused neutral joins pass; independent review, final CI and publication remain. No live campaign estimate or spend is implied.
+**Estimates:** Small remaining effort, estimated2026-11-09: implementation and seven focused neutral joins pass; independent review, final CI and publication remain. No live campaign estimate or spend is implied.
 
 | Field | Value |
 |---|---|
-| PR / evidence | This PR; Test: test/environments.test.ts; Review: pending fresh-context report. |
+| PR / evidence | This PR; Test: test/environments.test.ts; Review: [fresh-context report](reviews/2026-11-09-environments-independent.md), strict-enum finding fixed after unchanged failing regressione7f7183; seven focused tests pass, no remaining findings. |
 | Opened | 2026-11-09 |
-| Verification | Unit/integration: targeted machine/scenario/CLI/reuse fixtures pass; final complete deterministic checks and CI pending. No real load/model qualification. |
+| Verification | Unit/integration: seven machine/scenario/CLI/reuse fixtures pass, final complete deterministic suite/CI recorded before release. No real load/model qualification. |
 | Reviewed | 2026-11-09 |
 
 </details>

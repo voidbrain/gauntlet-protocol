@@ -36,7 +36,7 @@ export function validateMachineProfile(input:unknown):MachineProfile {
 }
 export function validateLoadScenario(input:unknown):LoadScenario {
     const v=object(input,['schemaVersion','id','version','load','description','workloadCategories','power']);identity(v);
-    if(!['baseline','minimal','moderate','heavy'].includes(String(v.load))||typeof v.description!=='string'||!v.description.trim()||v.description.length>500||!Array.isArray(v.workloadCategories)||v.workloadCategories.length>20||v.workloadCategories.some(x=>typeof x!=='string'||!identifier.test(x))||new Set(v.workloadCategories).size!==v.workloadCategories.length||!['mains','battery','any'].includes(String(v.power)))throw Error('Invalid load scenario');
+    if(typeof v.load!=='string'||!['baseline','minimal','moderate','heavy'].includes(v.load)||typeof v.description!=='string'||!v.description.trim()||v.description.length>500||!Array.isArray(v.workloadCategories)||v.workloadCategories.length>20||v.workloadCategories.some(x=>typeof x!=='string'||!identifier.test(x))||new Set(v.workloadCategories).size!==v.workloadCategories.length||typeof v.power!=='string'||!['mains','battery','any'].includes(v.power))throw Error('Invalid load scenario');
     return v as unknown as LoadScenario;
 }
 export function validateExecutionEnvironment(input:unknown):ExecutionEnvironment {
