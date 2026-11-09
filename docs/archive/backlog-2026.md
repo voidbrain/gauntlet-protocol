@@ -181,3 +181,40 @@ B-001 reconciliation: [PR #4](https://github.com/voidbrain/gauntlet-protocol/pul
 ---
 
 F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrain/gauntlet-protocol/pull/6), documentation only; implementation acceptance is PR #5 / CI42572655186.
+
+
+## Closed 2026-11-09
+
+### F-005
+
+**Reusable machine profiles and load-scenario evidence scope**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No remaining owned implementation action; publishedv0.3.0 after owned CI/review.
+
+| | |
+|---|---|
+| **Issue** | Common evaluation results can serve several consumers, but machine/load declarations need reusable contracts and explicit evidence identity rather than duplicated consumer-only plans. |
+| **Reproduce** | Plan and run a neutral fixture with machine/scenario declarations, then request reuse from another consumer, a different scenario and a mismatched host. |
+| **Check** | Strict non-executable machine/scenario contracts; local host compatibility and explicit owner load confirmation before probes/reuse; report/cache/compare/export preserve scope; full definition changes and unscoped evidence cannot stand in for requested conditions. CLI and library fixtures verify the joins; legacy evidence stays readable; no app, model or power setting is changed. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Implemented for0.3.0: [reusable environment contract](../ENVIRONMENTS.md), neutral load examples, machine inspection and explicit current owner scenario confirmation. Complete definitions bind evidence; original host/runtime/source identity and authorization remain. Performance comparisons require fresh measurements; declarations are not independent load verification. Publishedv0.3.0 at b605107 after PR7 exacthead170611f / CI42607576561 passed. Closed 2026-11-09 on the published tag, independently of consumers.
+
+**Estimates:** Small remaining effort, estimated2026-11-09: implementation and seven focused neutral joins pass; independent review, final CI and publication are complete; no remaining effort. No live campaign estimate or spend is implied.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #7](https://github.com/voidbrain/gauntlet-protocol/pull/7); Acceptance reconcile: [PR #8](https://github.com/voidbrain/gauntlet-protocol/pull/8); Test: test/environments.test.ts; Review: [fresh-context report](../reviews/2026-11-09-environments-independent.md), strict-enum finding fixed after unchanged failing regressione7f7183; seven focused tests pass, no remaining findings. |
+| Opened | 2026-11-09 |
+| Verification | Unit/integration: seven machine/scenario/CLI/reuse fixtures pass, all35 deterministic tests plus typecheck/build/index/backlog/rule checks passed locally; CI42607576561 passed typecheck/build, all35 tests, index, packaged CLI and harness/record checks. Releasedv0.3.0. No real load/model qualification. |
+| Reviewed | 2026-11-09 |
+
+</details>
+
+---
