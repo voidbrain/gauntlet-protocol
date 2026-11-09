@@ -179,3 +179,5 @@ B-001 reconciliation: [PR #4](https://github.com/voidbrain/gauntlet-protocol/pul
 </details>
 
 ---
+
+F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrain/gauntlet-protocol/pull/6), documentation only; implementation acceptance is PR #5 / CI42572655186.
