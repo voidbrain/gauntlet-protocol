@@ -210,7 +210,7 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #7](https://github.com/voidbrain/gauntlet-protocol/pull/7); Acceptance reconcile: this PR; Test: test/environments.test.ts; Review: [fresh-context report](../reviews/2026-11-09-environments-independent.md), strict-enum finding fixed after unchanged failing regressione7f7183; seven focused tests pass, no remaining findings. |
+| PR / evidence | [PR #7](https://github.com/voidbrain/gauntlet-protocol/pull/7); Acceptance reconcile: [PR #8](https://github.com/voidbrain/gauntlet-protocol/pull/8); Test: test/environments.test.ts; Review: [fresh-context report](../reviews/2026-11-09-environments-independent.md), strict-enum finding fixed after unchanged failing regressione7f7183; seven focused tests pass, no remaining findings. |
 | Opened | 2026-11-09 |
 | Verification | Unit/integration: seven machine/scenario/CLI/reuse fixtures pass, all35 deterministic tests plus typecheck/build/index/backlog/rule checks passed locally; CI42607576561 passed typecheck/build, all35 tests, index, packaged CLI and harness/record checks. Releasedv0.3.0. No real load/model qualification. |
 | Reviewed | 2026-11-09 |
