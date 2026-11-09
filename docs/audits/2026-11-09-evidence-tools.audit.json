@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "kind": "full",
+  "reviewed": "2026-11-09T06:28:51.024Z",
+  "baseline": "60ee7091fa37dd1c18a0db27272ccaef5cee0fbb",
+  "report": "docs/audits/2026-11-09-evidence-tools.md",
+  "areas": {
+    "code": {
+      "result": "checked",
+      "evidence": "Reviewed index/reuse/runtime/telemetry modules and stream/resource cleanup; final strict build/typecheck and28tests pass.",
+      "limits": "No live alternative runtime installed."
+    },
+    "logic": {
+      "result": "checked",
+      "evidence": "Checked exact manifests, opt-ins before reuse/preflight, original timestamps, shared deadline, artifact/runtime/grader identity and failure states.",
+      "limits": "Owner manifests/cache are attestations, not authenticated execution proof."
+    },
+    "tests": {
+      "result": "checked",
+      "evidence": "28 deterministic tests pass Node24 CI42572655186; immutable failing reproductions068eb6f precede three fixes.",
+      "limits": "Fake runtime/neutral process fixtures, not model qualification or real performance measurements."
+    },
+    "documentation": {
+      "result": "checked",
+      "evidence": "README, protocol, EVIDENCE/PERFORMANCE/RUNTIMES, profiles and generated index checked; index drift enforced.",
+      "limits": "Model smoke pack remains ten general cases; no broad specialist qualification."
+    },
+    "harness": {
+      "result": "checked",
+      "evidence": "Copied guides/tools retain4.2.1 parity; project-only impact/CI index checks preserve all shared safeguards; maintenance evidence current.",
+      "limits": "No behavior model runner configured or invoked."
+    },
+    "security": {
+      "result": "checked",
+      "evidence": "Private cache, output identity, permissions/source freshness, no arbitrary reference-file traversal, local artifact hashes, cancellation and opt-ins reviewed.",
+      "limits": "Trusted registered adapters/local runtime and owner receipts; no OS security sandbox."
+    },
+    "delivery": {
+      "result": "checked",
+      "evidence": "PR5 exact head8ea0128 passed CI42572655186 on Node24; v0.2.0 tagged; source-included package independently consumable.",
+      "limits": "No consumer adoption, physical device or real-model benchmark gate."
+    },
+    "backlog": {
+      "result": "checked",
+      "evidence": "F002/F003/F004 own only reusable release outcomes and close on their acceptance; NERV adoption remains consumer-owned.",
+      "limits": "No automatic model promotion or execution permission."
+    }
+  }
+}
