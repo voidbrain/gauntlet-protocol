@@ -13,5 +13,7 @@
   "think": null,
   "parallel": 1,
   "hardware": "apple-m3-pro-36g-shared-ram",
-  "cache": "server-default-unverified"
+  "cache": "server-default-unverified",
+  "backend": "ollama",
+  "residency": "suite"
 }

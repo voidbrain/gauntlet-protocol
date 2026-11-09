@@ -64,6 +64,17 @@
       "then": "Verify protocol and CLI joins; reconcile protocol guide, examples and README.",
       "run": "npm run typecheck && npm test && npm run build",
       "checked": "Deterministic fake-provider and subprocess fixtures only; no model campaign."
+    },
+    {
+      "id": "capability-index",
+      "when": [
+        "examples/**",
+        "src/catalog.ts",
+        "docs/test-index.md"
+      ],
+      "then": "Regenerate executable-pack capability index and verify drift without model execution.",
+      "run": "npm run index:build && npm run check:index",
+      "checked": "Exact generated-index contract in deterministic tests; no capability qualification inferred."
     }
   ],
   "couplings": [],

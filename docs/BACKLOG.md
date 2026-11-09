@@ -7,6 +7,109 @@ Current work ledger, reviewed 9 November 2026 against main `62d8072`. [Rules](BA
 
 ## Features and improvements
 
+### F-002
+
+**Generated capability index and conservative evidence reuse**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Verify final owned CI and release; deterministic implementation and independent review complete.
+
+| | |
+|---|---|
+| **Issue** | Generated capability index and conservative evidence reuse. |
+| **Reproduce** | Exercise CLI/API with neutral packs and fake local runtimes. |
+| **Check** | Generate a stable case/area/capability index from packs. Reuse only complete passing evidence matching current pack/grader, exact profile/runtime/model identity, environment and explicit freshness; retain original report timestamps and provenance; never reuse system results across changed sources or grant qualification. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Generate a stable case/area/capability index from packs. Reuse only complete passing evidence matching current pack/grader, exact profile/runtime/model identity, environment and explicit freshness; retain original report timestamps and provenance; never reuse system results across changed sources or grant qualification. Own strict checks, deterministic join tests, documentation and reviewed CI/release; never wait on NERV adoption or live-model acceptance.
+
+**Estimates:** Medium remaining effort, 2–3 focused days including evidence edge cases; estimated 2026-11-09. No measured duration claimed.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #5](https://github.com/voidbrain/gauntlet-protocol/pull/5); Review: fresh-context report-only review passed after three immutable regressions068eb6f; final CI pending. |
+| Opened | 2026-11-09 |
+| Verification | Local deterministic acceptance and fresh-context report-only review passed; final own CI pending. Review: docs/reviews/2026-11-09-evidence-tools.md; three findings fixed after immutable failing regressions068eb6f. |
+| Reviewed | 2026-11-09 |
+
+</details>
+
+---
+
+### F-003
+
+**Measured cold/warm inference and host telemetry**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Verify final owned CI and release; deterministic implementation and independent review complete.
+
+| | |
+|---|---|
+| **Issue** | Measured cold/warm inference and host telemetry. |
+| **Reproduce** | Exercise CLI/API with neutral packs and fake local runtimes. |
+| **Check** | Retain provider load/prompt/generation timing and tokens, sample host/process/model allocation with declared interval/coverage/unknown GPU values, separate cold and warm calls, bound telemetry requests and cleanup. No model run is a release gate. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Retain provider load/prompt/generation timing and tokens, sample host/process/model allocation with declared interval/coverage/unknown GPU values, separate cold and warm calls, bound telemetry requests and cleanup. No model run is a release gate. Own strict checks, deterministic join tests, documentation and reviewed CI/release; never wait on NERV adoption or live-model acceptance.
+
+**Estimates:** Medium remaining effort, 2–3 focused days including evidence edge cases; estimated 2026-11-09. No measured duration claimed.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #5](https://github.com/voidbrain/gauntlet-protocol/pull/5); Review: fresh-context report-only review passed after three immutable regressions068eb6f; final CI pending. |
+| Opened | 2026-11-09 |
+| Verification | Local deterministic acceptance and fresh-context report-only review passed; final own CI pending. Review: docs/reviews/2026-11-09-evidence-tools.md; three findings fixed after immutable failing regressions068eb6f. |
+| Reviewed | 2026-11-09 |
+
+</details>
+
+---
+
+### F-004
+
+**Explicit local alternative runtime adapters**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Verify final owned CI and release; deterministic implementation and independent review complete.
+
+| | |
+|---|---|
+| **Issue** | Explicit local alternative runtime adapters. |
+| **Reproduce** | Exercise CLI/API with neutral packs and fake local runtimes. |
+| **Check** | Add tested local llama.cpp and MLX-LM adapters with independently checked model artifacts, explicit runtime identity/configuration and capability limits. No implicit installation/download or provider changes; native Ollama remains default. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Add tested local llama.cpp and MLX-LM adapters with independently checked model artifacts, explicit runtime identity/configuration and capability limits. No implicit installation/download or provider changes; native Ollama remains default. Own strict checks, deterministic join tests, documentation and reviewed CI/release; never wait on NERV adoption or live-model acceptance.
+
+**Estimates:** Medium remaining effort, 2–3 focused days including evidence edge cases; estimated 2026-11-09. No measured duration claimed.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #5](https://github.com/voidbrain/gauntlet-protocol/pull/5); Review: fresh-context report-only review passed after three immutable regressions068eb6f; final CI pending. |
+| Opened | 2026-11-09 |
+| Verification | Local deterministic acceptance and fresh-context report-only review passed; final own CI pending. Review: docs/reviews/2026-11-09-evidence-tools.md; three findings fixed after immutable failing regressions068eb6f. |
+| Reviewed | 2026-11-09 |
+
+</details>
+
+---
+
+
 
 
 ## Other changes

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "neutral-smoke",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "cases": [
     {
       "id": "exact-json",
@@ -23,7 +23,11 @@
         "value": {
           "count": 3
         }
-      }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ]
     },
     {
       "id": "change-mind",
@@ -46,7 +50,11 @@
         "value": {
           "action": "cancel"
         }
-      }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ]
     },
     {
       "id": "conflicting-request",
@@ -69,7 +77,11 @@
         "value": {
           "action": "ask-approval"
         }
-      }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ]
     },
     {
       "id": "language-italian",
@@ -93,7 +105,11 @@
           "lingua": "it",
           "azione": "attendi"
         }
-      }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ]
     },
     {
       "id": "tool-choice",
@@ -116,7 +132,11 @@
         "value": {
           "action": "read"
         }
-      }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ]
     },
     {
       "id": "missing-input",
@@ -140,7 +160,11 @@
           "action": "clarify",
           "missing": "time"
         }
-      }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ]
     },
     {
       "id": "holdout-change",
@@ -163,7 +187,11 @@
         "value": {
           "intent": "stop"
         }
-      }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ]
     },
     {
       "id": "holdout-approval",
@@ -187,7 +215,11 @@
           "approved": false,
           "execute": false
         }
-      }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ]
     },
     {
       "id": "holdout-tool",
@@ -210,7 +242,11 @@
         "value": {
           "tool": "list"
         }
-      }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ]
     },
     {
       "id": "holdout-language",
@@ -234,7 +270,11 @@
           "language": "en",
           "status": "pending"
         }
-      }
+      },
+      "area": "general-assistant",
+      "requirements": [
+        "local-model-runtime"
+      ]
     }
   ]
 }

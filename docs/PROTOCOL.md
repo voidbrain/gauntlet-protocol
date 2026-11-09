@@ -16,7 +16,7 @@ Profile: exact model tag/quantization, loopback endpoint, context, maximum outpu
 
 Limits: per-case milliseconds, whole-suite milliseconds, maximum selected cases, repeats, aggregate output-token ceiling and per-response/log bytes. Each direct call reserves its maximum output before execution; unmeasured or over-budget model execution stops later model calls. Timeouts cancel HTTP requests or kill external process groups. A client cancellation cannot independently prove an uncooperative server stopped compute. SIGINT/SIGTERM cancels the active request or owned process group and marks later cases not-run. Signal handlers are removed when the suite finishes. SIGKILL, abrupt machine loss or a separately detached descendant cannot be cleaned up by JavaScript; deployment supervisors and adapter contracts own those limits. No automatic retries. Truncation is an error; skipped or omitted work is not a pass. Separate expensive/model opt-ins are required, in addition to explicit execution.
 
-Direct calls currently unload after each response (`keep_alive: 0`). Durations therefore include cold-loading effects and are not steady-state throughput measurements. Input tokens, peak memory, energy and human repair/review time are not measured by this release; do not report them as zero or infer them from output tokens. No server-wide configuration is changed.
+Legacy/default calls unload after each response (`keep_alive: 0`); suite-resident profiles keep warm state between cases. See [performance measurement](PERFORMANCE.md). Durations therefore include cold-loading effects and are not steady-state throughput measurements. Provider input tokens and sampled memory/device counters are retained when telemetry is enabled. Energy and human repair/review time are not measured; do not report them as zero or infer them from output tokens. No server-wide configuration is changed.
 
 ## Registered external runners
 
@@ -47,3 +47,7 @@ A receipt has `schemaVersion: 1`, `reportHash`, nonempty `reviewer`, `accepted: 
 ## Improvement cycle
 
 Capture a failure, add a regression and separately maintained holdout, prepare an isolated candidate configuration, compare under the same acceptance contract, independently review, then let the consumer's existing owner process decide promotion. Preserve the prior configuration and rollback/monitoring evidence. This supports measured self-improvement without automatic weight training, evaluator rewriting or self-granted permissions.
+
+## Version 0.2 additions
+
+Optional area/requirements metadata, backend/residency/owner artifact manifests, versioned runtime identity, streaming phase timings, bounded sampled resources and explicit residency cleanup extend the contracts. See [index/reuse](EVIDENCE.md), [telemetry](PERFORMANCE.md) and [runtimes](RUNTIMES.md). Legacy reports remain readable; only current-version matching reports enter automatic reuse.
