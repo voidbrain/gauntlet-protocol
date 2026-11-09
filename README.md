@@ -1,6 +1,6 @@
 # Gauntlet Protocol
 
-Version 0.2.0 adds a [generated capability index](docs/test-index.md), [conservative evidence reuse](docs/EVIDENCE.md), [performance telemetry](docs/PERFORMANCE.md) and [local runtime adapters](docs/RUNTIMES.md).
+Version 0.3.0 adds [reusable machine/load-scenario contracts](docs/ENVIRONMENTS.md) and scoped evidence reuse. Version 0.2.0 introduced a [generated capability index](docs/test-index.md), [conservative evidence reuse](docs/EVIDENCE.md), [performance telemetry](docs/PERFORMANCE.md) and [local runtime adapters](docs/RUNTIMES.md).
 
 An independent TypeScript library and CLI for capability-scoped AI evaluation. It records the tested configuration, bounded execution and independent acceptance evidence. It never grants production permission or promotes a model automatically.
 

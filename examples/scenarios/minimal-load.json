@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "minimal-load",
+  "version": "1.0.0",
+  "load": "minimal",
+  "description": "Minimal competing application load on an awake available host.",
+  "workloadCategories": [],
+  "power": "any"
+}

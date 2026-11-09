@@ -51,3 +51,7 @@ Capture a failure, add a regression and separately maintained holdout, prepare a
 ## Version 0.2 additions
 
 Optional area/requirements metadata, backend/residency/owner artifact manifests, versioned runtime identity, streaming phase timings, bounded sampled resources and explicit residency cleanup extend the contracts. See [index/reuse](EVIDENCE.md), [telemetry](PERFORMANCE.md) and [runtimes](RUNTIMES.md). Legacy reports remain readable; only current-version matching reports enter automatic reuse.
+
+## Version 0.3 additions
+
+[Machine/scenario contracts](ENVIRONMENTS.md) describe local evaluation-host hardware and explicitly owner-declared workload/power conditions. Optional `environment` evidence participates in matching; execution requires explicit scenario confirmation and matching current hardware. Plan/validate never verify load. Reusable definitions/examples stay here; consumer role assignments, device trust, acceptance and promotion remain consumer-owned. Legacy0.2 reports remain readable, current automatic reuse is0.3 only.
