@@ -42,7 +42,7 @@ Current work ledger, reviewed 11 November 2026 against main `a7fc26c`. [Rules](B
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
+| PR / evidence | [PR #18](https://github.com/voidbrain/gauntlet-protocol/pull/18) implements T01 contract assessment; [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration |
 | Opened | 2026-11-10 |
 | Verification | T01 implemented locally: coverage/versioning decision plus ordered transcript/provider/grader regression; merged CI pending. |
 | Reviewed | 2026-11-11 |
