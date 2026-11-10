@@ -42,7 +42,7 @@ Current work ledger, reviewed 10 November 2026 against main `267315c`. [Rules](B
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
+| PR / evidence | [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
 | Opened | 2026-11-10 |
 | Verification | Pending implementation; documentation registration only. |
 | Reviewed | 2026-11-10 |
@@ -86,7 +86,7 @@ Current work ledger, reviewed 10 November 2026 against main `267315c`. [Rules](B
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
+| PR / evidence | [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
 | Opened | 2026-11-10 |
 | Verification | Pending implementation; documentation registration only. |
 | Reviewed | 2026-11-10 |
@@ -98,7 +98,7 @@ Current work ledger, reviewed 10 November 2026 against main `267315c`. [Rules](B
 
 ## Other changes
 
-**Harness reconciliation and upfront plans, 2026-11-10.** Adopt published v4.7.0 (harness PR97/98/99), source-owned records and optional featurePlans enforcement. Initial exact migration preserved all ledger bytes before enabling derived step tables. F-008/F-009 each have three anticipated steps with dated effort, status, dependencies and uncertainty. Native metadata imports/optional explicit launcher preserve source/privacy limits; no model call, download, client configuration, native exporter or production permission follows. No behaviour runner is configured; rule-following and actual session tokens remain unmeasured. Shared reconciliation work spans both features and is explicitly unallocated rather than duplicated. Validation:43 deterministic tests, typecheck/build/index, work/backlog/rules/harness/audit/integration and impact checks pass. Review: independent fresh-context consumer_plans_review found no content blocker; no app/model acceptance claimed.
+**Harness reconciliation and upfront plans, 2026-11-10 ([PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15)).** Adopt published v4.7.0 (harness PR97/98/99), source-owned records and optional featurePlans enforcement. Initial exact migration preserved all ledger bytes before enabling derived step tables. F-008/F-009 each have three anticipated steps with dated effort, status, dependencies and uncertainty. Native metadata imports/optional explicit launcher preserve source/privacy limits; no model call, download, client configuration, native exporter or production permission follows. No behaviour runner is configured; rule-following and actual session tokens remain unmeasured. Shared reconciliation work spans both features and is explicitly unallocated rather than duplicated. Validation:43 deterministic tests, typecheck/build/index, work/backlog/rules/harness/audit/integration and impact checks pass. Review: independent fresh-context consumer_plans_review found no content blocker; no app/model acceptance claimed.
 
 Boundary clarification2026-11-10 ([PR #13](https://github.com/voidbrain/gauntlet-protocol/pull/13)): external-runner contract supplies no coding sandbox. Worktrees/process supervision/hashes do not enforce hidden-test confidentiality; that requires independently accepted runner/grader isolation. PROTOCOL/EVIDENCE now state these limits explicitly. Documentation-only; no new isolation implementation or live campaign. README/AGENTS/area notes/backlog rules/style guide reviewed for consistency.
 
