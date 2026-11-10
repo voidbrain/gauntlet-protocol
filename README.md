@@ -4,7 +4,9 @@ Version0.4.0 adds [bounded private failure captures and selected diagnostics](do
 
 An independent TypeScript library and CLI for capability-scoped AI evaluation. It records the tested configuration, bounded execution and independent acceptance evidence. It never grants production permission or promotes a model automatically.
 
-Requires Node 24. Install with `npm ci`, then `npm run build`. This project adopts [project-harness](https://github.com/voidbrain/project-harness) 4.7.0 for development. The harness does not depend on Gauntlet. Consumer projects own their domain packs and adapters.
+The planned [expanded general-assistant pack](docs/EXPANDED-PACK.md) defines stable coverage identities and transcript-based correction cases without claiming interactive execution or hidden-test isolation.
+
+Requires Node 24. Install with `npm ci`, then `npm run build`. This project adopts [project-harness](https://github.com/voidbrain/project-harness) 4.8.0 for development. The harness does not depend on Gauntlet. Consumer projects own their domain packs and adapters.
 
 ```sh
 node bin/gauntlet.mjs validate --pack=examples/smoke-v1.json --profile=examples/profiles/gemma4-12b.json
