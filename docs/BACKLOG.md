@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 10 November 2026 against main `267315c`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 11 November 2026 against main `197531a`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
@@ -97,6 +97,8 @@ Current work ledger, reviewed 10 November 2026 against main `267315c`. [Rules](B
 
 
 ## Other changes
+
+**Harness v4.8.0 reconciliation, 2026-11-11 ([PR #16](https://github.com/voidbrain/gauntlet-protocol/pull/16)).** Adopt the published subscription-usage release by copying the updated work-usage tool and guide byte-identically and advancing the project stamp. Existing private stores require no migration; no client setting, collector, model call, allowance capture or export is enabled or run. Reconciled merged PR #15 / CI 42888597710 and advanced the ledger header to main `197531a`. Validation: 43 deterministic tests, typecheck, build, work/backlog/rules/harness/audit/integration/impact and maintenance checks pass. Independent fresh-context review remains required before merge because harness files changed. README, AGENTS, area notes, backlog rules and style guide reviewed with no further affected claim.
 
 **Harness reconciliation and upfront plans, 2026-11-10 ([PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15)).** Adopt published v4.7.0 (harness PR97/98/99), source-owned records and optional featurePlans enforcement. Initial exact migration preserved all ledger bytes before enabling derived step tables. F-008/F-009 each have three anticipated steps with dated effort, status, dependencies and uncertainty. Native metadata imports/optional explicit launcher preserve source/privacy limits; no model call, download, client configuration, native exporter or production permission follows. No behaviour runner is configured; rule-following and actual session tokens remain unmeasured. Shared reconciliation work spans both features and is explicitly unallocated rather than duplicated. Validation:43 deterministic tests, typecheck/build/index, work/backlog/rules/harness/audit/integration and impact checks pass. Review: independent fresh-context consumer_plans_review found no content blocker; no app/model acceptance claimed.
 
