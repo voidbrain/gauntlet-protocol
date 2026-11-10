@@ -45,7 +45,12 @@
     "ci:status": "node tools/ci-status.mjs",
     "index:build": "node bin/gauntlet.mjs index --packs=examples/smoke-v1.json --out=docs/test-index.md",
     "check:index": "node bin/gauntlet.mjs index --packs=examples/smoke-v1.json --out=docs/test-index.md --check",
-    "work:usage": "node tools/work-usage.mjs"
+    "work:usage": "node tools/work-usage.mjs",
+    "work:build": "node tools/work-items.mjs build",
+    "check:work": "node tools/work-items.mjs check",
+    "work:tasks": "node tools/work-items.mjs tasks",
+    "work:launch": "node tools/usage-launch.mjs",
+    "check:impact": "node tools/impact-map.mjs && git diff --exit-code -- docs/agents/impact-map.md"
   },
   "devDependencies": {
     "@types/node": "24.10.1",

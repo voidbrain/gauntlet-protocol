@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 10 November 2026 against main `90dc2b6`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 10 November 2026 against main `267315c`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
@@ -15,7 +15,7 @@ Current work ledger, reviewed 10 November 2026 against main `90dc2b6`. [Rules](B
 |:---:|---|---|---|
 | 🔴 | 🔶 P2 | Open | 🟡 Medium |
 
-💻 **→ Human action required: No**<br />Prepare the reusable contracts and deterministic acceptance fixtures.
+💻 **→ Human action required: No**<br />Start T01 contract assessment, then follow the upfront delivery plan.
 
 | | |
 |---|---|
@@ -23,8 +23,18 @@ Current work ledger, reviewed 10 November 2026 against main `90dc2b6`. [Rules](B
 | **Reproduce** | Owner request 2026-11-10: expand reusable evaluation coverage and make candidate comparisons reproducible. |
 | **Check** | Versioned coverage includes paraphrases, ambiguity, multi-turn corrections, invalid tool arguments, refusal, prompt injection and harder held-out cases. Strict semantic grading remains separate from structural validity; deterministic grader fixtures prove both correct and deliberately incorrect answers. Held-out labels alone never imply confidentiality or isolation. |
 
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-008-T01 — Define coverage matrix and multi-turn contract | 🟢 Small — 2–4 focused hours<br />2026-11-10: Initial investigation estimate; multi-turn support is the principal unknown and may require an owner-reviewed plan revision. | Ready |
+| F-008-T02 — Implement the versioned expanded pack and semantic graders | 🟡 Medium — About 2 focused days<br />2026-11-10: Initial implementation estimate assumes existing runner/grader contracts are reusable; newly discovered protocol work needs review. | Planned |
+| F-008-T03 — Verify graders, generate index and document coverage limits | 🟢 Small — 2–4 focused hours<br />2026-11-10: Initial verification estimate assumes deterministic fake providers suffice for generic release acceptance. | Planned |
+
 <details>
 <summary>Next action, estimates and evidence</summary>
+
+**Initial plan 2026-11-10:** Three source-owned tasks now cover contract assessment, implementation and deterministic release acceptance. Effort is remaining work, with assumptions/uncertainty in each task; no implementation or model acceptance advances because a plan exists. Material expansion or distinct outcome splitting requires owner agreement.
 
 **Next action / closure evidence:** Design a coverage matrix and versioned expanded pack with stable case/capability/split identities; assess multi-turn runner support before choosing an explicit contract. Preserve existing smoke versions and historical evidence. Add positive/negative grader joins, regenerate the capability index and document coverage limits. Generic contracts, packs, graders, CLI and repository-owned fixtures belong here. Consumer role packs, runtime routing and production acceptance remain consumer-owned. Release acceptance never waits for NERV adoption. Live campaigns, model downloads and installations require separately reviewed scope and budgets; registration launches none.
 
@@ -49,7 +59,7 @@ Current work ledger, reviewed 10 November 2026 against main `90dc2b6`. [Rules](B
 |:---:|---|---|---|
 | 🔴 | 🔶 P2 | Open | 🟡 Medium |
 
-💻 **→ Human action required: No**<br />Prepare the reusable contracts and deterministic acceptance fixtures.
+💻 **→ Human action required: No**<br />Start T01 contract assessment, then follow the upfront delivery plan.
 
 | | |
 |---|---|
@@ -57,8 +67,18 @@ Current work ledger, reviewed 10 November 2026 against main `90dc2b6`. [Rules](B
 | **Reproduce** | Owner request 2026-11-10: expand reusable evaluation coverage and make candidate comparisons reproducible. |
 | **Check** | Preserve exact requested/actual model, runtime, context, sampling, thinking, quantization and environment identities; repeated outcomes, failures/errors/not-run, cold/warm latency and measured input/output/cache tokens retain provenance and unknown coverage. Structural validity and semantic success are reported separately. Incompatible configurations are rejected or explicitly separated; no automatic promotion follows. |
 
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-009-T01 — Define candidate matrix and repeat/comparison contract | 🟢 Small — 2–4 focused hours<br />2026-11-10: Initial contract assessment; source identity and incompatible configuration behavior may expose additional work. | Ready |
+| F-009-T02 — Implement bounded repetitions and failure-preserving summaries | 🟡 Medium — About 2 focused days<br />2026-11-10: Initial estimate assumes reusable engine/report boundaries; aggregate budget or cancellation gaps need owner-reviewed scope changes. | Planned |
+| F-009-T03 — Verify budgets, interruption and reproducible reporting | 🟢 Small — 2–4 focused hours<br />2026-11-10: Initial acceptance estimate uses fake providers/reports; real campaigns remain separately authorized. | Planned |
+
 <details>
 <summary>Next action, estimates and evidence</summary>
+
+**Initial plan 2026-11-10:** Three source-owned tasks now cover contract assessment, implementation and deterministic release acceptance. Effort is remaining work, with assumptions/uncertainty in each task; no implementation or model acceptance advances because a plan exists. Material expansion or distinct outcome splitting requires owner agreement.
 
 **Next action / closure evidence:** Assess existing compare/repeat/report behavior, then define a bounded candidate matrix, compatible comparison dimensions, repetition policy and failure-preserving summaries. Use repository-owned fake providers/reports to verify identity, aggregate budgets, interruption, repeat accounting and unknown telemetry; retain source event identities and avoid duplicate token totals. Expanded-pack campaigns can consume F-008 after release, but comparison contract implementation can proceed independently. Generic contracts, packs, graders, CLI and repository-owned fixtures belong here. Consumer role packs, runtime routing and production acceptance remain consumer-owned. Release acceptance never waits for NERV adoption. Live campaigns, model downloads and installations require separately reviewed scope and budgets; registration launches none.
 
@@ -77,6 +97,8 @@ Current work ledger, reviewed 10 November 2026 against main `90dc2b6`. [Rules](B
 
 
 ## Other changes
+
+**Harness reconciliation and upfront plans, 2026-11-10.** Adopt published v4.7.0 (harness PR97/98/99), source-owned records and optional featurePlans enforcement. Initial exact migration preserved all ledger bytes before enabling derived step tables. F-008/F-009 each have three anticipated steps with dated effort, status, dependencies and uncertainty. Native metadata imports/optional explicit launcher preserve source/privacy limits; no model call, download, client configuration, native exporter or production permission follows. No behaviour runner is configured; rule-following and actual session tokens remain unmeasured. Shared reconciliation work spans both features and is explicitly unallocated rather than duplicated. Validation:43 deterministic tests, typecheck/build/index, work/backlog/rules/harness/audit/integration and impact checks pass. Review: independent fresh-context consumer_plans_review found no content blocker; no app/model acceptance claimed.
 
 Boundary clarification2026-11-10 ([PR #13](https://github.com/voidbrain/gauntlet-protocol/pull/13)): external-runner contract supplies no coding sandbox. Worktrees/process supervision/hashes do not enforce hidden-test confidentiality; that requires independently accepted runner/grader isolation. PROTOCOL/EVIDENCE now state these limits explicitly. Documentation-only; no new isolation implementation or live campaign. README/AGENTS/area notes/backlog rules/style guide reviewed for consistency.
 

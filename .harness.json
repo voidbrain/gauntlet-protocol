@@ -3,7 +3,7 @@
     "path": "../project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "4.4.1",
+  "version": "4.7.0",
   "stacks": [
     "core"
   ],
@@ -47,7 +47,8 @@
     "docs/agents/procedures.md": "core/docs/agents/procedures.md",
     "docs/agents/task-context.md": "core/docs/agents/task-context.md",
     "tools/work-usage.mjs": "core/tools/work-usage.mjs",
-    "docs/agents/work-usage.md": "core/docs/agents/work-usage.md"
+    "docs/agents/work-usage.md": "core/docs/agents/work-usage.md",
+    "tools/usage-launch.mjs": "core/tools/usage-launch.mjs"
   },
   "forked": {},
   "freshness": {
@@ -78,11 +79,29 @@
       "then": "Regenerate executable-pack capability index and verify drift without model execution.",
       "run": "npm run index:build && npm run check:index",
       "checked": "Exact generated-index contract in deterministic tests; no capability qualification inferred."
+    },
+    {
+      "id": "work-items",
+      "when": [
+        "docs/work/**",
+        "docs/agents/model-profiles.json",
+        "tools/work-items.mjs"
+      ],
+      "then": "Regenerate the source-owned backlog and validate upfront feature steps, effort and status.",
+      "run": "node tools/work-items.mjs build",
+      "checked": "npm run check:work and check:backlog in CI",
+      "after": []
     }
   ],
   "couplings": [],
   "outside": [],
-  "pages": [],
+  "pages": [
+    {
+      "title": "Development impact map",
+      "path": "docs/agents/impact-map.md",
+      "about": "Project-owned derived outputs and verification obligations"
+    }
+  ],
   "adapted": {
     "AGENTS.md": "core/AGENTS.md",
     "CLAUDE.md": "core/CLAUDE.md",
@@ -126,7 +145,8 @@
       "tools/task-claims.mjs",
       "docs/agents/task-context.md",
       "docs/agents/work-usage.md",
-      "tools/work-usage.mjs"
+      "tools/work-usage.mjs",
+      "tools/usage-launch.mjs"
     ]
   },
   "audit": {
@@ -148,7 +168,12 @@
     "enabled": false
   },
   "workItems": {
-    "enabled": false
+    "enabled": true,
+    "layout": "docs/work/layout.json",
+    "records": "docs/work/records",
+    "tasks": "docs/work/tasks",
+    "profiles": "docs/agents/model-profiles.json",
+    "featurePlans": true
   },
   "workUsage": {
     "enabled": true

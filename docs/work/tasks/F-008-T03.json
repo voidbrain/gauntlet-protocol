@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id": "F-008-T03",
+  "parent": "F-008",
+  "title": "Verify graders, generate index and document coverage limits",
+  "goal": "Establish deterministic positive/negative joins and publish the expanded coverage contract",
+  "status": "planned",
+  "acceptance": [
+    "Prove both correct and deliberately incorrect outputs at pack/grader joins",
+    "Regenerate capability index and CLI examples; document held-out/isolation and actual model acceptance limits",
+    "Complete owned checks and release without waiting for consumer adoption or running a model campaign"
+  ],
+  "dependsOn": [
+    "F-008-T02"
+  ],
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "examples/**",
+    "docs/**",
+    "contract:evaluation-protocol",
+    "generated:capability-index"
+  ],
+  "capabilities": [
+    "typescript",
+    "structured-tools",
+    "regression-design",
+    "privacy-review"
+  ],
+  "privacy": "Repository-owned neutral fixtures only. No real model calls, downloads, secrets, private transcripts or consumer implementation.",
+  "validation": [
+    "Meaningful protocol/pack/grader or compare/report join fixtures",
+    "Typecheck, deterministic tests, build, generated capability index and final required CI; actual model qualification is separately scoped"
+  ],
+  "escalation": [
+    "Material scope/effort expansion or distinct outcome split requires owner agreement",
+    "No real-model campaign, installation or consumer-dependent release gate"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "2\u20134 focused hours",
+    "basis": "Initial verification estimate assumes deterministic fake providers suffice for generic release acceptance.",
+    "reviewed": "2026-11-10"
+  }
+}
