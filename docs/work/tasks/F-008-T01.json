@@ -4,7 +4,7 @@
   "parent": "F-008",
   "title": "Define coverage matrix and multi-turn contract",
   "goal": "Map requested capabilities and splits, then assess existing runner support before choosing the expanded pack contract",
-  "status": "implemented",
+  "status": "verified",
   "acceptance": [
     "Map paraphrases, ambiguity, corrections, invalid arguments, refusal, injection and harder held-out coverage with stable identities",
     "Record multi-turn runner capability, versioning and compatibility decision; labels do not imply hidden-test isolation"
@@ -29,6 +29,7 @@
   "validation": [
     "Ordered transcript/provider/grader join regression proves unchanged history forwarding, independent final grading and fixture identity",
     "Coverage matrix and multi-message compatibility decision recorded in docs/EXPANDED-PACK.md",
+    "PR #18 merged as e1665af after CI 42927563424 passed all required validation",
     "Typecheck, deterministic tests, build, generated capability index and final required CI; actual model qualification is separately scoped"
   ],
   "escalation": [
@@ -37,8 +38,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "Merged CI verification and reconciliation only",
-    "basis": "The contract assessment, coverage matrix and join regression are implemented; final task verification requires the exact merged revision's green CI.",
+    "estimate": "0 remaining",
+    "basis": "Verified by merged PR #18 and its green required CI; no model campaign was run or required for this contract task.",
     "reviewed": "2026-11-11"
   }
 }

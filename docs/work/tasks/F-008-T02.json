@@ -4,7 +4,7 @@
   "parent": "F-008",
   "title": "Implement the versioned expanded pack and semantic graders",
   "goal": "Deliver the agreed reusable cases and strict graders while preserving existing smoke evidence",
-  "status": "planned",
+  "status": "ready",
   "acceptance": [
     "Implement reviewed coverage matrix with stable case/capability/split identities",
     "Preserve existing smoke versions and report semantic success separately from structural validity"
