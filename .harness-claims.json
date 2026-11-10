@@ -1,1 +1,1 @@
-{"version":1,"fence":0,"claims":[]}
+{"version":1,"fence":1,"claims":[{"task":"F-008-T01","owner":"codex","baseline":"a7fc26cce4d085c3537587d8faff0840045cebf1","branch":"feat/f008-coverage-contract","resources":["src/**","bin/**","test/**","examples/**","docs/**","contract:evaluation-protocol","generated:capability-index"],"profile":null,"fence":1,"leaseId":"1726364a-8aa8-4067-861e-dbfb1c3c062b","expires":1794362108760,"state":"active"}]}
