@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-09T18:57:49.802Z",
-  "policy": "852032bfa47e2d007e7acca238d70baacc41d8b235b93e518bcfb72616216d0a",
+  "reviewed": "2026-11-10T19:43:16.533Z",
+  "policy": "18c0059e726d071aefd8c71b9a5d27b54b923320af6b34567c262491c7c1c9bb",
   "inputs": {
-    "AGENTS.md": "9a4db2104835c05dbf7fdd23b8189285261363727b0b5de3af337d0e18270f7f",
-    "docs/BACKLOG-RULES.md": "f568f6193751a98d54062f3bd99e88f813b32378f1c843a21d50b8ad2ccac845",
+    "AGENTS.md": "96f8e2c9b6511e513667c51784ac3245cde3e4daddb0039b80b62259c2c90b2f",
+    "docs/BACKLOG-RULES.md": "b820312031c8a58efed3cbf23e11ab60a972601f53f12034dfabb1388f3a2c0e",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "171636323e1cd991b33d5b723329d14dd51919a24fd78778b33d8a2a17dde539",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -12,19 +12,20 @@
     "docs/agents/coverage-guide.md": "3d539eb8beedfa101a5e47d9973cdf85dce197436fab2ab096f760e12d208106",
     "docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "docs/agents/mcp.md": "d813daeb38628e3f0613131ccb4e09fa1b98f82a1ad5cc647e9b27c26821a524",
-    "docs/agents/parallel-work.md": "1b5f50c8f3afd1a222871fd3b7a8e23f987eb83ec2bd4593af343fe70df0f892",
+    "docs/agents/parallel-work.md": "e6bdd99075598d2e33fb23373d87fd5b48ed1c86028a20dbad0b5759a62b2e13",
     "docs/agents/procedures.md": "649de48ddc9e3ae627d0752f44f4a8d2cf25b837dc32350a597f6d4bf80e514f",
     "docs/agents/skills.md": "5d60223eccfaad88c7153f57316da5ca10bfdd9d58d3a8cebc1eef25b9f0d5f5",
     "docs/agents/solution-profile.md": "857fc0e5f5c36d1d139d2507f1f97460edfdcde4d5cd5d590a922d88c4459862",
     "docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
-    "docs/agents/work-usage.md": "9f430c7fe6f1bfc7511ee3b777a17131b72e50c019a9439f7ba9d3e9dceb2dd2",
+    "docs/agents/work-usage.md": "4b179506a4d431b4e9559b3932ee0ef64020cbf7c27985178e0cb0f5c1f7c7d1",
     "tools/task-claims.mjs": "05d40141b354db19e958d1f191f9a2e1b75c46126527ce3aba67f7b902ba16d2",
-    "tools/work-items.mjs": "ac02388da462c72e60dbcbd86bc9b9af0dd63376689f75ce80901be789e6b4dd",
-    "tools/work-usage.mjs": "ed2f6c2032127301e323a1fa84d7ab80ebd880d8e01711e741370e2f3ee48dd4"
+    "tools/usage-launch.mjs": "ac8713a3e4c4359cfdda5b4b6eb5d18e957408fb77b85609853ba2cda5f4a4e0",
+    "tools/work-items.mjs": "f3175c3150286bf569fc108d86a3640a4bbfd30deda940ddbb9c27d8fabe56f4",
+    "tools/work-usage.mjs": "c09a6a4f7ad6d0b65565bf6847b0727967f7d921dba816b92446450c0c90ca36"
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-09T18:57:49.743Z",
+    "latestAt": "2026-11-10T19:43:16.440Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -54,7 +55,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 1034690
+          "median": 164163
         },
         "conflicts": {
           "observed": 0,
@@ -78,14 +79,14 @@
     {
       "kind": "rule",
       "disposition": "implemented",
-      "target": "AGENTS.md",
-      "evidence": "Adopt published harness4.4.1 optional task context/job-usage guide, private metadata tool and client entry bridges, preserving project safety/ownership/privacy/permission/model-budget gates. Copied parity checked; no host reset API or behavior runner available. Native client loading/counters remain unverified. Timed isolated reconciliation includes capture implementation/review/waits and is not a comparable adoption-only performance sample."
+      "target": "docs/BACKLOG-RULES.md",
+      "evidence": "Owner requested initial feature steps before implementation, per-step effort/completion and agreement for material changes. Adopt published4.7.0 optional featurePlans and source-owned records. Migration preserved exact ledger bytes before generated tables; F008/F009 each retain acceptance/ownership and3 initial tasks with uncertainty. No old safeguard removed or model campaign/client configuration performed; no behaviour runner configured."
     },
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "src/failures.ts",
-      "evidence": "Opt-in bounded external private failed-final-reply sidecars, no prompts/expected answers/separate thinking fields, source-bound local inspection, explicit selected-case diagnostic budget and report/cache instrumentation identity.41 deterministic fixtures passed, six focused tests rechecked independently after no-Git confinement finding fixed with committed regression. No live provider/model call or consumer release dependency."
+      "target": "tools/work-items.mjs",
+      "evidence": "Copied published4.7.0 tools byte-identically. Work/backlog/rules checks,43 deterministic tests, typecheck/build/index pass. Source records/task schema and generated view are joined; CI now checks work and impact output. Native metadata/launcher support remains optional and source coverage unknown; no actual tokens or agent-loading claim."
     }
   ]
 }
