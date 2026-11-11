@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 11 November 2026 against main `bb04c4e`. PR #31 CI 43011498006 passed `validate`: harness 5.1.1 reconciled. `.gitignore` gains the template's `.claude/` local ignores (this PR). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 11 November 2026 against main `bb04c4e`. PR #31 CI 43011498006 passed `validate`: harness 5.1.1 reconciled. `.gitignore` gains the template's `.claude/` local ignores (PR #32). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
