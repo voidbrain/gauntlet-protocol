@@ -38,6 +38,10 @@
     "prepack": "npm run build",
     "check:freshness": "node tools/check-freshness.mjs",
     "check:backlog": "node tools/check-backlog.mjs",
+    "check:tooling": "node tools/check-tooling.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
     "check:harness": "node tools/check-harness.mjs",
     "check:rules": "node tools/check-rules.mjs",
     "check:maintenance": "node tools/maintenance.mjs check",
@@ -54,7 +58,11 @@
     "check:impact": "node tools/impact-map.mjs && git diff --exit-code -- docs/agents/impact-map.md"
   },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
     "@types/node": "24.10.1",
-    "typescript": "6.0.3"
+    "eslint": "10.14.0",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.2"
   }
 }

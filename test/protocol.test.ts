@@ -1,80 +1,599 @@
-import {test} from 'node:test';
+import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtempSync,writeFileSync,rmSync,readFileSync,existsSync,realpathSync} from 'node:fs';
-import {tmpdir} from 'node:os';
-import {join,resolve} from 'node:path';
-import {spawnSync} from 'node:child_process';
-import {validatePack,validateProfile,validateRegistry,validateReport,defaults,run,plan,assess,exportProfile,compare,hash,writeEvidence,type Profile,type Pack} from '../src/index.ts';
-const profile:Profile={schemaVersion:1,id:'fixture-q4',model:'fixture:1b',quantization:'Q4_K_M',endpoint:'http://127.0.0.1:11434',context:8192,maxOutputTokens:64,temperature:0.2,topP:null,topK:null,seed:42,think:null,parallel:1,hardware:'neutral-fixture',cache:'runtime-default-unverified'};
-const pack:Pack={schemaVersion:1,id:'fixture',version:'1.0.0',cases:[{id:'structured',layer:'model',split:'regression',capabilities:['structured-output'],critical:true,expensive:false,messages:[{role:'user',content:'Return JSON {"ok":true}'}],expected:{kind:'json',value:{ok:true}}},{id:'heldout',layer:'model',split:'holdout',capabilities:['structured-output'],critical:true,expensive:false,messages:[{role:'user',content:'Return JSON {"ok":false}'}],expected:{kind:'json',value:{ok:false}}}]};
-function provider(replies=['{"ok":true}','{"ok":false}'],settings:{tokens?:number;quantization?:string;remote?:boolean;model?:string}={}) {let i=0;const bodies:Record<string,unknown>[]=[];const model=settings.model??profile.model;const fetcher=(async(input:unknown,init?:RequestInit)=>{const path=new URL(String(input)).pathname;let value:unknown;if(path==='/api/version')value={version:'fixture-runtime-1'};else if(path==='/api/show')value={model_info:{'general.file_type':15},details:{quantization_level:settings.quantization??'Q4_K_M'},...(settings.remote?{remote_host:'remote.invalid'}:{})};else if(path==='/api/tags')value={models:[{name:model,size:1024,digest:'a'.repeat(64)}]};else {bodies.push(JSON.parse(String(init?.body)) as Record<string,unknown>);value={model,message:{content:replies[i++]??''},done:true,eval_count:settings.tokens??5,done_reason:'stop'};}return new Response(JSON.stringify(value));}) as typeof fetch;return {fetcher,bodies};}
-const options={execute:true,allowModels:true};
-test('strict contracts reject unsafe endpoints, unknown fields, command injection and ambiguous concurrency',()=>{
- assert.throws(()=>validateProfile({...profile,endpoint:'https://outside.invalid'}));assert.throws(()=>validateProfile({...profile,parallel:'1'}));assert.throws(()=>validateProfile({...profile,temperature:undefined}));assert.throws(()=>validatePack({...pack,command:'echo execute'}));assert.throws(()=>validatePack({...pack,cases:[{...pack.cases[0],runner:'unsafe',messages:[]}]}));assert.throws(()=>validateRegistry({schemaVersion:1,runners:{unsafe:{command:'node',args:['{untrusted}'],cwd:'.',layers:['system'],allowModels:false}}},process.cwd()));
+import { mkdtempSync, writeFileSync, rmSync, readFileSync, existsSync, realpathSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import {
+  validatePack,
+  validateProfile,
+  validateRegistry,
+  validateReport,
+  defaults,
+  run,
+  plan,
+  assess,
+  exportProfile,
+  compare,
+  hash,
+  writeEvidence,
+  type Profile,
+  type Pack,
+} from '../src/index.ts';
+const profile: Profile = {
+  schemaVersion: 1,
+  id: 'fixture-q4',
+  model: 'fixture:1b',
+  quantization: 'Q4_K_M',
+  endpoint: 'http://127.0.0.1:11434',
+  context: 8192,
+  maxOutputTokens: 64,
+  temperature: 0.2,
+  topP: null,
+  topK: null,
+  seed: 42,
+  think: null,
+  parallel: 1,
+  hardware: 'neutral-fixture',
+  cache: 'runtime-default-unverified',
+};
+const pack: Pack = {
+  schemaVersion: 1,
+  id: 'fixture',
+  version: '1.0.0',
+  cases: [
+    {
+      id: 'structured',
+      layer: 'model',
+      split: 'regression',
+      capabilities: ['structured-output'],
+      critical: true,
+      expensive: false,
+      messages: [{ role: 'user', content: 'Return JSON {"ok":true}' }],
+      expected: { kind: 'json', value: { ok: true } },
+    },
+    {
+      id: 'heldout',
+      layer: 'model',
+      split: 'holdout',
+      capabilities: ['structured-output'],
+      critical: true,
+      expensive: false,
+      messages: [{ role: 'user', content: 'Return JSON {"ok":false}' }],
+      expected: { kind: 'json', value: { ok: false } },
+    },
+  ],
+};
+function provider(
+  replies = ['{"ok":true}', '{"ok":false}'],
+  settings: { tokens?: number; quantization?: string; remote?: boolean; model?: string } = {},
+) {
+  let i = 0;
+  const bodies: Record<string, unknown>[] = [];
+  const model = settings.model ?? profile.model;
+  const fetcher = (async (input: unknown, init?: RequestInit) => {
+    const path = new URL(String(input)).pathname;
+    let value: unknown;
+    if (path === '/api/version') value = { version: 'fixture-runtime-1' };
+    else if (path === '/api/show')
+      value = {
+        model_info: { 'general.file_type': 15 },
+        details: { quantization_level: settings.quantization ?? 'Q4_K_M' },
+        ...(settings.remote ? { remote_host: 'remote.invalid' } : {}),
+      };
+    else if (path === '/api/tags') value = { models: [{ name: model, size: 1024, digest: 'a'.repeat(64) }] };
+    else {
+      bodies.push(JSON.parse(String(init?.body)) as Record<string, unknown>);
+      value = {
+        model,
+        message: { content: replies[i++] ?? '' },
+        done: true,
+        eval_count: settings.tokens ?? 5,
+        done_reason: 'stop',
+      };
+    }
+    return new Response(JSON.stringify(value));
+  }) as typeof fetch;
+  return { fetcher, bodies };
+}
+const options = { execute: true, allowModels: true };
+test('strict contracts reject unsafe endpoints, unknown fields, command injection and ambiguous concurrency', () => {
+  assert.throws(() => validateProfile({ ...profile, endpoint: 'https://outside.invalid' }));
+  assert.throws(() => validateProfile({ ...profile, parallel: '1' }));
+  assert.throws(() => validateProfile({ ...profile, temperature: undefined }));
+  assert.throws(() => validatePack({ ...pack, command: 'echo execute' }));
+  assert.throws(() => validatePack({ ...pack, cases: [{ ...pack.cases[0], runner: 'unsafe', messages: [] }] }));
+  assert.throws(() =>
+    validateRegistry(
+      {
+        schemaVersion: 1,
+        runners: {
+          unsafe: { command: 'node', args: ['{untrusted}'], cwd: '.', layers: ['system'], allowModels: false },
+        },
+      },
+      process.cwd(),
+    ),
+  );
 });
-test('plan and unauthorised run never invoke provider',async()=>{let calls=0;const fetcher=(async()=>{calls++;throw Error('unexpected');}) as typeof fetch;assert.equal(plan(pack,profile,defaults).cases[0].eligible,false);await assert.rejects(run(pack,profile,defaults,{execute:false,fetch:fetcher}));const r=await run(pack,profile,defaults,{execute:true,fetch:fetcher});assert.equal(calls,0);assert.equal(r.complete,false);assert.equal(r.results[0].status,'not-run');validateReport(r);});
-test('real protocol joins requested settings, independent grading, holdouts and reviewed profile export',async()=>{
- const {fetcher,bodies}=provider();const report=await run(pack,profile,defaults,{...options,fetch:fetcher});validateReport(report);assert.equal(report.passed,true);assert.equal(report.usage.outputTokens,10);assert.equal(bodies.length,2);assert.deepEqual(bodies[0].options,{num_ctx:8192,num_predict:64,temperature:0.2,seed:42});assert.equal(Object.hasOwn(bodies[0],'expected'),false);
- const requirements={capabilities:['structured-output'],minimumCases:2,minimumHoldout:1,minimumPassRate:1};assert.equal(assess(report,requirements).eligible,true);assert.throws(()=>exportProfile(report,{schemaVersion:1,reportHash:'bad'},requirements));const exported=exportProfile(report,{schemaVersion:1,reportHash:hash(report),reviewer:'independent-review-fixture',accepted:true,capabilities:['structured-output'],reviewed:report.finished,evidence:'Neutral independent test receipt; not a real model qualification.'},requirements);assert.equal(exported.profiles[0].status,'qualified');assert.equal(report.promotion,false);
+test('plan and unauthorised run never invoke provider', async () => {
+  let calls = 0;
+  const fetcher = (async () => {
+    calls++;
+    throw Error('unexpected');
+  }) as typeof fetch;
+  assert.equal(plan(pack, profile, defaults).cases[0].eligible, false);
+  await assert.rejects(run(pack, profile, defaults, { execute: false, fetch: fetcher }));
+  const r = await run(pack, profile, defaults, { execute: true, fetch: fetcher });
+  assert.equal(calls, 0);
+  assert.equal(r.complete, false);
+  assert.equal(r.results[0].status, 'not-run');
+  validateReport(r);
 });
-test('ordered transcript histories reach the provider unchanged and only the final reply is graded',async()=>{
- const messages=[{role:'system' as const,content:'Preserve the latest user intent.'},{role:'user' as const,content:'Schedule the neutral task.'},{role:'assistant' as const,content:'I will schedule it.'},{role:'user' as const,content:'Correction: do not schedule it. Return {"execute":false}.'}];
- const transcript:Pack={schemaVersion:1,id:'transcript',version:'1.0.0',cases:[{id:'correction-r1',layer:'model',split:'regression',capabilities:['intent-resolution','structured-output'],critical:true,expensive:false,messages,expected:{kind:'json',value:{execute:false}}}]};
- const fixture=provider(['{"execute":false}']);const report=await run(transcript,profile,defaults,{...options,fetch:fixture.fetcher});
- assert.equal(report.passed,true);assert.deepEqual(fixture.bodies[0].messages,messages);assert.equal(Object.hasOwn(fixture.bodies[0],'expected'),false);assert.equal(report.results[0].fixtureHash,hash(messages));
+test('real protocol joins requested settings, independent grading, holdouts and reviewed profile export', async () => {
+  const { fetcher, bodies } = provider();
+  const report = await run(pack, profile, defaults, { ...options, fetch: fetcher });
+  validateReport(report);
+  assert.equal(report.passed, true);
+  assert.equal(report.usage.outputTokens, 10);
+  assert.equal(bodies.length, 2);
+  assert.deepEqual(bodies[0].options, { num_ctx: 8192, num_predict: 64, temperature: 0.2, seed: 42 });
+  assert.equal(Object.hasOwn(bodies[0], 'expected'), false);
+  const requirements = { capabilities: ['structured-output'], minimumCases: 2, minimumHoldout: 1, minimumPassRate: 1 };
+  assert.equal(assess(report, requirements).eligible, true);
+  assert.throws(() => exportProfile(report, { schemaVersion: 1, reportHash: 'bad' }, requirements));
+  const exported = exportProfile(
+    report,
+    {
+      schemaVersion: 1,
+      reportHash: hash(report),
+      reviewer: 'independent-review-fixture',
+      accepted: true,
+      capabilities: ['structured-output'],
+      reviewed: report.finished,
+      evidence: 'Neutral independent test receipt; not a real model qualification.',
+    },
+    requirements,
+  );
+  assert.equal(exported.profiles[0].status, 'qualified');
+  assert.equal(report.promotion, false);
 });
-test('expanded pack keeps structurally valid wrong JSON as a semantic failure',async()=>{
- const expanded=validatePack(JSON.parse(readFileSync('examples/general-assistant-expanded-v1.json','utf8')));assert.equal(expanded.cases.length,28);assert.equal(new Set(expanded.cases.map(c=>c.id)).size,28);
- const one:Pack={...expanded,id:expanded.id+':fixture',cases:[expanded.cases[0]]};const fixture=provider(['{"action":"cancel"}']);const report=await run(one,profile,defaults,{...options,fetch:fixture.fetcher});
- assert.equal(report.complete,true);assert.equal(report.results[0].status,'failed');assert.equal(report.passed,false);assert.equal(fixture.bodies[0].format,'json');
+test('ordered transcript histories reach the provider unchanged and only the final reply is graded', async () => {
+  const messages = [
+    { role: 'system' as const, content: 'Preserve the latest user intent.' },
+    { role: 'user' as const, content: 'Schedule the neutral task.' },
+    { role: 'assistant' as const, content: 'I will schedule it.' },
+    { role: 'user' as const, content: 'Correction: do not schedule it. Return {"execute":false}.' },
+  ];
+  const transcript: Pack = {
+    schemaVersion: 1,
+    id: 'transcript',
+    version: '1.0.0',
+    cases: [
+      {
+        id: 'correction-r1',
+        layer: 'model',
+        split: 'regression',
+        capabilities: ['intent-resolution', 'structured-output'],
+        critical: true,
+        expensive: false,
+        messages,
+        expected: { kind: 'json', value: { execute: false } },
+      },
+    ],
+  };
+  const fixture = provider(['{"execute":false}']);
+  const report = await run(transcript, profile, defaults, { ...options, fetch: fixture.fetcher });
+  assert.equal(report.passed, true);
+  assert.deepEqual(fixture.bodies[0].messages, messages);
+  assert.equal(Object.hasOwn(fixture.bodies[0], 'expected'), false);
+  assert.equal(report.results[0].fixtureHash, hash(messages));
 });
-test('expanded pack representative capabilities accept exact semantics and reject one wrong answer',async()=>{
- const expanded=validatePack(JSON.parse(readFileSync('examples/general-assistant-expanded-v1.json','utf8')));const selected=expanded.cases.filter(c=>c.id.endsWith('-r1'));assert.equal(selected.length,7);
- const representative:Pack={...expanded,id:expanded.id+':representative',cases:selected};const correct=selected.map(c=>JSON.stringify(c.expected?.value));const passing=provider(correct);const passed=await run(representative,profile,defaults,{...options,fetch:passing.fetcher});assert.equal(passed.complete,true);assert.equal(passed.passed,true);
- const wrong=[...correct];wrong[3]='{"call":true}';const failing=provider(wrong);const failed=await run(representative,profile,defaults,{...options,fetch:failing.fetcher});assert.equal(failed.complete,true);assert.equal(failed.passed,false);assert.equal(failed.results[3].status,'failed');assert.equal(failed.results.filter(r=>r.status==='passed').length,6);
+test('expanded pack keeps structurally valid wrong JSON as a semantic failure', async () => {
+  const expanded = validatePack(JSON.parse(readFileSync('examples/general-assistant-expanded-v1.json', 'utf8')));
+  assert.equal(expanded.cases.length, 28);
+  assert.equal(new Set(expanded.cases.map((c) => c.id)).size, 28);
+  const one: Pack = { ...expanded, id: expanded.id + ':fixture', cases: [expanded.cases[0]] };
+  const fixture = provider(['{"action":"cancel"}']);
+  const report = await run(one, profile, defaults, { ...options, fetch: fixture.fetcher });
+  assert.equal(report.complete, true);
+  assert.equal(report.results[0].status, 'failed');
+  assert.equal(report.passed, false);
+  assert.equal(fixture.bodies[0].format, 'json');
 });
-test('wrong answers remain complete failures; duplicate results and forged pass flags rejected',async()=>{const {fetcher}=provider(['wrong','{"ok":false}']);const report=await run(pack,profile,defaults,{...options,fetch:fetcher});assert.equal(report.complete,true);assert.equal(report.passed,false);validateReport(report);assert.equal(assess(report,{capabilities:['structured-output'],minimumCases:2,minimumHoldout:1,minimumPassRate:0.5}).eligible,false);assert.throws(()=>validateReport({...report,passed:true}));assert.throws(()=>validateReport({...report,results:[report.results[0],report.results[0]]}));});
-test('unknown or exceeded model usage stops subsequent calls and cannot qualify',async()=>{const {fetcher,bodies}=provider(undefined,{tokens:65});const report=await run(pack,profile,defaults,{...options,fetch:fetcher});assert.equal(bodies.length,1);assert.equal(report.results[0].status,'error');assert.equal(report.results[1].status,'not-run');assert.equal(report.usage.outputTokens,null);validateReport(report);});
-test('insufficient budget is not-run rather than zero-cost success; quantization and remote identity fail closed',async()=>{const {fetcher,bodies}=provider();const r=await run(pack,profile,{...defaults,outputTokens:63},{...options,fetch:fetcher});assert.equal(bodies.length,0);assert.equal(r.complete,false);for(const setting of [{quantization:'Q8_0'},{remote:true}]){const p=provider(undefined,setting);const r=await run(pack,profile,defaults,{...options,fetch:p.fetcher});assert.equal(r.results[0].status,'error');assert.equal(p.bodies.length,0);}});
-test('modified source and mismatched comparison packs cannot silently share acceptance',async()=>{const p=structuredClone(pack),f=provider();const fetcher=(async(...args:Parameters<typeof fetch>)=>{p.version='1.0.1';return f.fetcher(...args);}) as typeof fetch;const r=await run(p,profile,defaults,{...options,fetch:fetcher});assert.equal(r.sourceStable,false);assert.equal(r.passed,false);const other={...r,packHash:'b'.repeat(64)};assert.equal(compare([r,other])[1].comparableToFirst,false);});
-test('comparison is bounded and preserves candidate identity, repetitions, outcomes and mismatch reasons',async()=>{
- const baseline=await run(pack,profile,{...defaults,repeat:2},{...options,fetch:provider(['{"ok":true}','{"ok":false}','{"ok":true}','{"ok":false}']).fetcher});const candidateProfile={...profile,id:'candidate-q8',model:'candidate:2b',quantization:'Q8_0',temperature:0.4};const candidate=await run(pack,candidateProfile,{...defaults,repeat:2},{...options,fetch:provider(['{"ok":true}','wrong','{"ok":true}','{"ok":false}'],{quantization:'Q8_0',model:'candidate:2b'}).fetcher});
- const rows=compare([baseline,candidate]);assert.equal(rows[1].comparableToFirst,true);assert.deepEqual(rows[1].mismatchReasons,[]);assert.equal(rows[1].requested?.model,'candidate:2b');assert.equal(rows[1].requested?.quantization,'Q8_0');assert.equal(rows[1].requested?.context,8192);assert.equal(rows[1].requested?.think,null);assert.equal(rows[1].observed.modelDigest,'a'.repeat(64));assert.equal(rows[1].iterations,2);assert.equal(rows[1].counts.failed,1);assert.equal(rows[1].results.length,4);assert.deepEqual(rows[1].tokenCoverage,{inputTokens:null,outputTokens:20,cacheTokens:null,cacheMeasured:false});
- const different={...candidate,diagnostics:{failureCaptures:true as const}};const mismatch=compare([baseline,different])[1];assert.equal(mismatch.comparableToFirst,false);assert.deepEqual(mismatch.mismatchReasons,['diagnostics']);assert.throws(()=>compare([baseline]));assert.throws(()=>compare(Array.from({length:65},()=>baseline)));
+test('expanded pack representative capabilities accept exact semantics and reject one wrong answer', async () => {
+  const expanded = validatePack(JSON.parse(readFileSync('examples/general-assistant-expanded-v1.json', 'utf8')));
+  const selected = expanded.cases.filter((c) => c.id.endsWith('-r1'));
+  assert.equal(selected.length, 7);
+  const representative: Pack = { ...expanded, id: expanded.id + ':representative', cases: selected };
+  const correct = selected.map((c) => JSON.stringify(c.expected?.value));
+  const passing = provider(correct);
+  const passed = await run(representative, profile, defaults, { ...options, fetch: passing.fetcher });
+  assert.equal(passed.complete, true);
+  assert.equal(passed.passed, true);
+  const wrong = [...correct];
+  wrong[3] = '{"call":true}';
+  const failing = provider(wrong);
+  const failed = await run(representative, profile, defaults, { ...options, fetch: failing.fetcher });
+  assert.equal(failed.complete, true);
+  assert.equal(failed.passed, false);
+  assert.equal(failed.results[3].status, 'failed');
+  assert.equal(failed.results.filter((r) => r.status === 'passed').length, 6);
 });
-test('comparison retains error, not-run and unknown usage without hiding the successful baseline',async()=>{
- const baseline=await run(pack,profile,defaults,{...options,fetch:provider().fetcher});const notRun=await run(pack,profile,defaults,{execute:true,allowModels:false});const fixture=provider();const badIdentity=(async(...args:Parameters<typeof fetch>)=>{const response=await fixture.fetcher(...args);const value=await response.json() as Record<string,unknown>;if(new URL(String(args[0])).pathname==='/api/chat')value.model='wrong-model';return new Response(JSON.stringify(value));}) as typeof fetch;const errored=await run(pack,profile,defaults,{...options,fetch:badIdentity});
- const rows=compare([baseline,notRun,errored]);assert.equal(rows[0].passed,true);assert.deepEqual(rows[1].counts,{passed:0,failed:0,error:0,'not-run':2});assert.equal(rows[1].complete,false);assert.equal(rows[2].counts.error,1);assert.equal(rows[2].counts['not-run'],1);assert.equal(rows[2].tokenCoverage.outputTokens,null);assert.equal(rows[2].tokenCoverage.cacheTokens,null);assert.ok(rows.every(r=>r.comparableToFirst));assert.ok(rows.every(r=>r.automaticPromotion===false));
+test('wrong answers remain complete failures; duplicate results and forged pass flags rejected', async () => {
+  const { fetcher } = provider(['wrong', '{"ok":false}']);
+  const report = await run(pack, profile, defaults, { ...options, fetch: fetcher });
+  assert.equal(report.complete, true);
+  assert.equal(report.passed, false);
+  validateReport(report);
+  assert.equal(
+    assess(report, { capabilities: ['structured-output'], minimumCases: 2, minimumHoldout: 1, minimumPassRate: 0.5 })
+      .eligible,
+    false,
+  );
+  assert.throws(() => validateReport({ ...report, passed: true }));
+  assert.throws(() => validateReport({ ...report, results: [report.results[0], report.results[0]] }));
 });
-test('trusted subprocess adapter runs across process/evidence boundary; errors and timeouts stay errors',async()=>{
- const root=mkdtempSync(join(realpathSync(tmpdir()),'gauntlet-test-'));try{
- const fixture=resolve('test/fixtures/runner.mjs');const registry=(mode:string)=>validateRegistry({schemaVersion:1,runners:{fixture:{command:'node',args:[fixture,mode,'{report}'],cwd:root,layers:['system'],allowModels:false}}},root);
- const p:Pack={schemaVersion:1,id:'system-fixture',version:'1.0.0',cases:[{id:'policy',runner:'fixture',layer:'system',split:'regression',capabilities:['policy-fixture'],critical:true,expensive:false}]};
- const success=await run(p,null,defaults,{execute:true,registry:registry('pass')});assert.equal(success.passed,true);validateReport(success);assert.equal(assess(success,{capabilities:['policy-fixture'],minimumCases:1,minimumHoldout:1,minimumPassRate:1}).eligible,false);
- for(const mode of ['nonzero','malformed','hang','overflow']){const r=await run(p,null,{...defaults,caseMs:mode==='hang'?100:3000,maxBytes:1024},{execute:true,registry:registry(mode)});assert.equal(r.results[0].status,'error',mode);}
- }finally{rmSync(root,{recursive:true,force:true});}
+test('unknown or exceeded model usage stops subsequent calls and cannot qualify', async () => {
+  const { fetcher, bodies } = provider(undefined, { tokens: 65 });
+  const report = await run(pack, profile, defaults, { ...options, fetch: fetcher });
+  assert.equal(bodies.length, 1);
+  assert.equal(report.results[0].status, 'error');
+  assert.equal(report.results[1].status, 'not-run');
+  assert.equal(report.usage.outputTokens, null);
+  validateReport(report);
 });
-test('evidence is append-only and CLI planning cannot execute',()=>{const root=mkdtempSync(join(realpathSync(tmpdir()),'gauntlet-cli-'));try{const file=join(root,'pack.json');writeFileSync(file,JSON.stringify(pack));const output=join(root,'evidence.json');writeEvidence(output,{safe:true});assert.throws(()=>writeEvidence(output,{safe:false}));const cli=spawnSync(process.execPath,['bin/gauntlet.mjs','plan','--pack='+file],{encoding:'utf8'});assert.equal(cli.status,0,cli.stderr);assert.equal(JSON.parse(cli.stdout).modelCallsAuthorized,false);const no=spawnSync(process.execPath,['bin/gauntlet.mjs','run','--pack='+file,'--out='+join(root,'never.json')],{encoding:'utf8'});assert.equal(no.status,1);assert.equal(existsSync(join(root,'never.json')),false);assert.deepEqual(JSON.parse(readFileSync(output,'utf8')),{safe:true});}finally{rmSync(root,{recursive:true,force:true});}});
-test('review: advertised model cannot differ from generation identity',async()=>{const p=provider();const fetcher=(async(...args:Parameters<typeof fetch>)=>{const response=await p.fetcher(...args);const value=await response.json() as Record<string,unknown>;if(new URL(String(args[0])).pathname==='/api/chat')value.model='different-model';return new Response(JSON.stringify(value));}) as typeof fetch;const report=await run(pack,profile,defaults,{...options,fetch:fetcher});assert.equal(report.passed,false);});
-test('review: imported report cannot exceed its own token ceiling',async()=>{const p=provider();const report=await run(pack,profile,defaults,{...options,fetch:p.fetcher});assert.throws(()=>validateReport({...report,limits:{...report.limits,outputTokens:1}}));});
-test('review: silent external report obeys byte budget',async()=>{const p:Pack={schemaVersion:1,id:'oversized',version:'1.0.0',cases:[{id:'oversized',runner:'fixture',layer:'system',split:'regression',capabilities:['fixture'],critical:true,expensive:false}]};const registry=validateRegistry({schemaVersion:1,runners:{fixture:{command:'node',args:[resolve('test/fixtures/runner.mjs'),'large-evidence','{report}'],cwd:'.',layers:['system'],allowModels:false}}},process.cwd());const report=await run(p,null,{...defaults,maxBytes:1024},{execute:true,registry});assert.equal(report.passed,false);});
-test('review: repeated identical prompts are not independent heldout cases',async()=>{const p=structuredClone(pack);p.cases[1].messages=p.cases[0].messages;p.cases[1].expected=p.cases[0].expected;const f=provider(['{"ok":true}','{"ok":true}']);const report=await run(p,profile,defaults,{...options,fetch:f.fetcher});assert.equal(assess(report,{capabilities:['structured-output'],minimumCases:2,minimumHoldout:1,minimumPassRate:1}).eligible,false);});
-test('model runner evidence is case-bound and identical fixtures cannot create holdout coverage',async()=>{const registry=(mode:string)=>validateRegistry({schemaVersion:1,runners:{fixture:{command:'node',args:[resolve('test/fixtures/model-runner.mjs'),'{report}','{configuration}','{budget}','{case}',mode],cwd:'.',layers:['model'],allowModels:true}}},process.cwd());const p:Pack={schemaVersion:1,id:'external-model',version:'1.0.0',cases:pack.cases.map(c=>({id:c.id,layer:c.layer,split:c.split,critical:c.critical,capabilities:c.capabilities,expensive:false,runner:'fixture'}))};const wrong=await run(p,profile,defaults,{...options,registry:registry('wrong-case')});assert.equal(wrong.results[0].status,'error');const same=await run(p,profile,defaults,{...options,registry:registry('same')});assert.equal(same.passed,true);validateReport(same);assert.equal(assess(same,{capabilities:['structured-output'],minimumCases:2,minimumHoldout:1,minimumPassRate:1}).eligible,false);});
-test('provider tag digest changes during generation invalidate evidence',async()=>{const p=provider();let tags=0;const fetcher=(async(...args:Parameters<typeof fetch>)=>{const response=await p.fetcher(...args);if(new URL(String(args[0])).pathname!=='/api/tags'||++tags===1)return response;return new Response(JSON.stringify({models:[{name:profile.model,size:1024,digest:'b'.repeat(64)}]}));}) as typeof fetch;const r=await run(pack,profile,defaults,{...options,fetch:fetcher});assert.equal(r.results[0].status,'error');assert.equal(r.passed,false);});
-test('review: regression fixture exclusion applies across capability labels',async()=>{const p=structuredClone(pack);p.cases[0].capabilities=['capability-a'];p.cases[1].capabilities=['capability-b'];p.cases[1].messages=p.cases[0].messages;p.cases[1].expected=p.cases[0].expected;const f=provider(['{"ok":true}','{"ok":true}']);const report=await run(p,profile,defaults,{...options,fetch:f.fetcher});assert.equal(assess(report,{capabilities:['capability-b'],minimumCases:1,minimumHoldout:1,minimumPassRate:1}).eligible,false);});
+test('insufficient budget is not-run rather than zero-cost success; quantization and remote identity fail closed', async () => {
+  const { fetcher, bodies } = provider();
+  const r = await run(pack, profile, { ...defaults, outputTokens: 63 }, { ...options, fetch: fetcher });
+  assert.equal(bodies.length, 0);
+  assert.equal(r.complete, false);
+  for (const setting of [{ quantization: 'Q8_0' }, { remote: true }]) {
+    const p = provider(undefined, setting);
+    const r = await run(pack, profile, defaults, { ...options, fetch: p.fetcher });
+    assert.equal(r.results[0].status, 'error');
+    assert.equal(p.bodies.length, 0);
+  }
+});
+test('modified source and mismatched comparison packs cannot silently share acceptance', async () => {
+  const p = structuredClone(pack),
+    f = provider();
+  const fetcher = (async (...args: Parameters<typeof fetch>) => {
+    p.version = '1.0.1';
+    return f.fetcher(...args);
+  }) as typeof fetch;
+  const r = await run(p, profile, defaults, { ...options, fetch: fetcher });
+  assert.equal(r.sourceStable, false);
+  assert.equal(r.passed, false);
+  const other = { ...r, packHash: 'b'.repeat(64) };
+  assert.equal(compare([r, other])[1].comparableToFirst, false);
+});
+test('comparison is bounded and preserves candidate identity, repetitions, outcomes and mismatch reasons', async () => {
+  const baseline = await run(
+    pack,
+    profile,
+    { ...defaults, repeat: 2 },
+    { ...options, fetch: provider(['{"ok":true}', '{"ok":false}', '{"ok":true}', '{"ok":false}']).fetcher },
+  );
+  const candidateProfile = {
+    ...profile,
+    id: 'candidate-q8',
+    model: 'candidate:2b',
+    quantization: 'Q8_0',
+    temperature: 0.4,
+  };
+  const candidate = await run(
+    pack,
+    candidateProfile,
+    { ...defaults, repeat: 2 },
+    {
+      ...options,
+      fetch: provider(['{"ok":true}', 'wrong', '{"ok":true}', '{"ok":false}'], {
+        quantization: 'Q8_0',
+        model: 'candidate:2b',
+      }).fetcher,
+    },
+  );
+  const rows = compare([baseline, candidate]);
+  assert.equal(rows[1].comparableToFirst, true);
+  assert.deepEqual(rows[1].mismatchReasons, []);
+  assert.equal(rows[1].requested?.model, 'candidate:2b');
+  assert.equal(rows[1].requested?.quantization, 'Q8_0');
+  assert.equal(rows[1].requested?.context, 8192);
+  assert.equal(rows[1].requested?.think, null);
+  assert.equal(rows[1].observed.modelDigest, 'a'.repeat(64));
+  assert.equal(rows[1].iterations, 2);
+  assert.equal(rows[1].counts.failed, 1);
+  assert.equal(rows[1].results.length, 4);
+  assert.deepEqual(rows[1].tokenCoverage, {
+    inputTokens: null,
+    outputTokens: 20,
+    cacheTokens: null,
+    cacheMeasured: false,
+  });
+  const different = { ...candidate, diagnostics: { failureCaptures: true as const } };
+  const mismatch = compare([baseline, different])[1];
+  assert.equal(mismatch.comparableToFirst, false);
+  assert.deepEqual(mismatch.mismatchReasons, ['diagnostics']);
+  assert.throws(() => compare([baseline]));
+  assert.throws(() => compare(Array.from({ length: 65 }, () => baseline)));
+});
+test('comparison retains error, not-run and unknown usage without hiding the successful baseline', async () => {
+  const baseline = await run(pack, profile, defaults, { ...options, fetch: provider().fetcher });
+  const notRun = await run(pack, profile, defaults, { execute: true, allowModels: false });
+  const fixture = provider();
+  const badIdentity = (async (...args: Parameters<typeof fetch>) => {
+    const response = await fixture.fetcher(...args);
+    const value = (await response.json()) as Record<string, unknown>;
+    if (new URL(String(args[0])).pathname === '/api/chat') value.model = 'wrong-model';
+    return new Response(JSON.stringify(value));
+  }) as typeof fetch;
+  const errored = await run(pack, profile, defaults, { ...options, fetch: badIdentity });
+  const rows = compare([baseline, notRun, errored]);
+  assert.equal(rows[0].passed, true);
+  assert.deepEqual(rows[1].counts, { passed: 0, failed: 0, error: 0, 'not-run': 2 });
+  assert.equal(rows[1].complete, false);
+  assert.equal(rows[2].counts.error, 1);
+  assert.equal(rows[2].counts['not-run'], 1);
+  assert.equal(rows[2].tokenCoverage.outputTokens, null);
+  assert.equal(rows[2].tokenCoverage.cacheTokens, null);
+  assert.ok(rows.every((r) => r.comparableToFirst));
+  assert.ok(rows.every((r) => r.automaticPromotion === false));
+});
+test('trusted subprocess adapter runs across process/evidence boundary; errors and timeouts stay errors', async () => {
+  const root = mkdtempSync(join(realpathSync(tmpdir()), 'gauntlet-test-'));
+  try {
+    const fixture = resolve('test/fixtures/runner.mjs');
+    const registry = (mode: string) =>
+      validateRegistry(
+        {
+          schemaVersion: 1,
+          runners: {
+            fixture: {
+              command: 'node',
+              args: [fixture, mode, '{report}'],
+              cwd: root,
+              layers: ['system'],
+              allowModels: false,
+            },
+          },
+        },
+        root,
+      );
+    const p: Pack = {
+      schemaVersion: 1,
+      id: 'system-fixture',
+      version: '1.0.0',
+      cases: [
+        {
+          id: 'policy',
+          runner: 'fixture',
+          layer: 'system',
+          split: 'regression',
+          capabilities: ['policy-fixture'],
+          critical: true,
+          expensive: false,
+        },
+      ],
+    };
+    const success = await run(p, null, defaults, { execute: true, registry: registry('pass') });
+    assert.equal(success.passed, true);
+    validateReport(success);
+    assert.equal(
+      assess(success, { capabilities: ['policy-fixture'], minimumCases: 1, minimumHoldout: 1, minimumPassRate: 1 })
+        .eligible,
+      false,
+    );
+    for (const mode of ['nonzero', 'malformed', 'hang', 'overflow']) {
+      const r = await run(
+        p,
+        null,
+        { ...defaults, caseMs: mode === 'hang' ? 100 : 3000, maxBytes: 1024 },
+        { execute: true, registry: registry(mode) },
+      );
+      assert.equal(r.results[0].status, 'error', mode);
+    }
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+test('evidence is append-only and CLI planning cannot execute', () => {
+  const root = mkdtempSync(join(realpathSync(tmpdir()), 'gauntlet-cli-'));
+  try {
+    const file = join(root, 'pack.json');
+    writeFileSync(file, JSON.stringify(pack));
+    const output = join(root, 'evidence.json');
+    writeEvidence(output, { safe: true });
+    assert.throws(() => writeEvidence(output, { safe: false }));
+    const cli = spawnSync(process.execPath, ['bin/gauntlet.mjs', 'plan', '--pack=' + file], { encoding: 'utf8' });
+    assert.equal(cli.status, 0, cli.stderr);
+    assert.equal(JSON.parse(cli.stdout).modelCallsAuthorized, false);
+    const no = spawnSync(
+      process.execPath,
+      ['bin/gauntlet.mjs', 'run', '--pack=' + file, '--out=' + join(root, 'never.json')],
+      { encoding: 'utf8' },
+    );
+    assert.equal(no.status, 1);
+    assert.equal(existsSync(join(root, 'never.json')), false);
+    assert.deepEqual(JSON.parse(readFileSync(output, 'utf8')), { safe: true });
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+test('review: advertised model cannot differ from generation identity', async () => {
+  const p = provider();
+  const fetcher = (async (...args: Parameters<typeof fetch>) => {
+    const response = await p.fetcher(...args);
+    const value = (await response.json()) as Record<string, unknown>;
+    if (new URL(String(args[0])).pathname === '/api/chat') value.model = 'different-model';
+    return new Response(JSON.stringify(value));
+  }) as typeof fetch;
+  const report = await run(pack, profile, defaults, { ...options, fetch: fetcher });
+  assert.equal(report.passed, false);
+});
+test('review: imported report cannot exceed its own token ceiling', async () => {
+  const p = provider();
+  const report = await run(pack, profile, defaults, { ...options, fetch: p.fetcher });
+  assert.throws(() => validateReport({ ...report, limits: { ...report.limits, outputTokens: 1 } }));
+});
+test('review: silent external report obeys byte budget', async () => {
+  const p: Pack = {
+    schemaVersion: 1,
+    id: 'oversized',
+    version: '1.0.0',
+    cases: [
+      {
+        id: 'oversized',
+        runner: 'fixture',
+        layer: 'system',
+        split: 'regression',
+        capabilities: ['fixture'],
+        critical: true,
+        expensive: false,
+      },
+    ],
+  };
+  const registry = validateRegistry(
+    {
+      schemaVersion: 1,
+      runners: {
+        fixture: {
+          command: 'node',
+          args: [resolve('test/fixtures/runner.mjs'), 'large-evidence', '{report}'],
+          cwd: '.',
+          layers: ['system'],
+          allowModels: false,
+        },
+      },
+    },
+    process.cwd(),
+  );
+  const report = await run(p, null, { ...defaults, maxBytes: 1024 }, { execute: true, registry });
+  assert.equal(report.passed, false);
+});
+test('review: repeated identical prompts are not independent heldout cases', async () => {
+  const p = structuredClone(pack);
+  p.cases[1].messages = p.cases[0].messages;
+  p.cases[1].expected = p.cases[0].expected;
+  const f = provider(['{"ok":true}', '{"ok":true}']);
+  const report = await run(p, profile, defaults, { ...options, fetch: f.fetcher });
+  assert.equal(
+    assess(report, { capabilities: ['structured-output'], minimumCases: 2, minimumHoldout: 1, minimumPassRate: 1 })
+      .eligible,
+    false,
+  );
+});
+test('model runner evidence is case-bound and identical fixtures cannot create holdout coverage', async () => {
+  const registry = (mode: string) =>
+    validateRegistry(
+      {
+        schemaVersion: 1,
+        runners: {
+          fixture: {
+            command: 'node',
+            args: [
+              resolve('test/fixtures/model-runner.mjs'),
+              '{report}',
+              '{configuration}',
+              '{budget}',
+              '{case}',
+              mode,
+            ],
+            cwd: '.',
+            layers: ['model'],
+            allowModels: true,
+          },
+        },
+      },
+      process.cwd(),
+    );
+  const p: Pack = {
+    schemaVersion: 1,
+    id: 'external-model',
+    version: '1.0.0',
+    cases: pack.cases.map((c) => ({
+      id: c.id,
+      layer: c.layer,
+      split: c.split,
+      critical: c.critical,
+      capabilities: c.capabilities,
+      expensive: false,
+      runner: 'fixture',
+    })),
+  };
+  const wrong = await run(p, profile, defaults, { ...options, registry: registry('wrong-case') });
+  assert.equal(wrong.results[0].status, 'error');
+  const same = await run(p, profile, defaults, { ...options, registry: registry('same') });
+  assert.equal(same.passed, true);
+  validateReport(same);
+  assert.equal(
+    assess(same, { capabilities: ['structured-output'], minimumCases: 2, minimumHoldout: 1, minimumPassRate: 1 })
+      .eligible,
+    false,
+  );
+});
+test('provider tag digest changes during generation invalidate evidence', async () => {
+  const p = provider();
+  let tags = 0;
+  const fetcher = (async (...args: Parameters<typeof fetch>) => {
+    const response = await p.fetcher(...args);
+    if (new URL(String(args[0])).pathname !== '/api/tags' || ++tags === 1) return response;
+    return new Response(JSON.stringify({ models: [{ name: profile.model, size: 1024, digest: 'b'.repeat(64) }] }));
+  }) as typeof fetch;
+  const r = await run(pack, profile, defaults, { ...options, fetch: fetcher });
+  assert.equal(r.results[0].status, 'error');
+  assert.equal(r.passed, false);
+});
+test('review: regression fixture exclusion applies across capability labels', async () => {
+  const p = structuredClone(pack);
+  p.cases[0].capabilities = ['capability-a'];
+  p.cases[1].capabilities = ['capability-b'];
+  p.cases[1].messages = p.cases[0].messages;
+  p.cases[1].expected = p.cases[0].expected;
+  const f = provider(['{"ok":true}', '{"ok":true}']);
+  const report = await run(p, profile, defaults, { ...options, fetch: f.fetcher });
+  assert.equal(
+    assess(report, { capabilities: ['capability-b'], minimumCases: 1, minimumHoldout: 1, minimumPassRate: 1 }).eligible,
+    false,
+  );
+});
 
-test('Ollama formats are explicit, identity-bound and independently graded',async()=>{
- const schema={type:'object',properties:{ok:{type:'boolean'}},required:['ok'],additionalProperties:false};
- for(const format of ['json',schema] as const){
-  const p=structuredClone(pack);p.cases.forEach(c=>{c.responseFormat=format;});validatePack(p);
-  assert.notEqual(hash(p),hash(pack));assert.notEqual(hash(p.cases[0]),hash(pack.cases[0]));
-  const f=provider(['{"ok":false}','{"ok":false}']);const r=await run(p,profile,defaults,{...options,fetch:f.fetcher});
-  assert.deepEqual(f.bodies[0].format,format);assert.equal(r.results[0].status,'failed');assert.equal(r.results[1].status,'passed');validateReport(r);
- }
- const ordinary=provider();await run(pack,profile,defaults,{...options,fetch:ordinary.fetcher});assert.equal(Object.hasOwn(ordinary.bodies[0],'format'),false);
- for(const bad of [null,true,[],{type:'string'},{type:'object',properties:{x:{$ref:'https://outside.invalid'}}}]){
-  const p=structuredClone(pack);Object.assign(p.cases[0],{responseFormat:bad});assert.throws(()=>validatePack(p));
- }
- const p=structuredClone(pack);p.cases[0].responseFormat='json';
- await assert.rejects(run(p,{...profile,backend:'mlx-lm'},defaults,{...options,fetch:provider().fetcher}));
+test('Ollama formats are explicit, identity-bound and independently graded', async () => {
+  const schema = {
+    type: 'object',
+    properties: { ok: { type: 'boolean' } },
+    required: ['ok'],
+    additionalProperties: false,
+  };
+  for (const format of ['json', schema] as const) {
+    const p = structuredClone(pack);
+    p.cases.forEach((c) => {
+      c.responseFormat = format;
+    });
+    validatePack(p);
+    assert.notEqual(hash(p), hash(pack));
+    assert.notEqual(hash(p.cases[0]), hash(pack.cases[0]));
+    const f = provider(['{"ok":false}', '{"ok":false}']);
+    const r = await run(p, profile, defaults, { ...options, fetch: f.fetcher });
+    assert.deepEqual(f.bodies[0].format, format);
+    assert.equal(r.results[0].status, 'failed');
+    assert.equal(r.results[1].status, 'passed');
+    validateReport(r);
+  }
+  const ordinary = provider();
+  await run(pack, profile, defaults, { ...options, fetch: ordinary.fetcher });
+  assert.equal(Object.hasOwn(ordinary.bodies[0], 'format'), false);
+  for (const bad of [
+    null,
+    true,
+    [],
+    { type: 'string' },
+    { type: 'object', properties: { x: { $ref: 'https://outside.invalid' } } },
+  ]) {
+    const p = structuredClone(pack);
+    Object.assign(p.cases[0], { responseFormat: bad });
+    assert.throws(() => validatePack(p));
+  }
+  const p = structuredClone(pack);
+  p.cases[0].responseFormat = 'json';
+  await assert.rejects(run(p, { ...profile, backend: 'mlx-lm' }, defaults, { ...options, fetch: provider().fetcher }));
 });
