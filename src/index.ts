@@ -747,10 +747,46 @@ export function exportProfile(report: Report, review: unknown, requirements: Req
     return { version: 1, profiles: [{ id: report.profile!.id, model: `${report.profile!.model} ${report.profile!.quantization} ${report.modelDigest}`, status: 'qualified', capabilities: requirements.capabilities, evidence: [`Runtime ${report.runtime.provider}; configuration ${JSON.stringify(report.profile)}; registry ${report.registryHash ?? 'direct'}`, `Gauntlet report ${hash(report)}; configuration ${report.profileHash}; pack ${report.pack}@${report.packVersion}; reviewed ${r.reviewed}`, ...(report.environment?[`Evaluation environment ${JSON.stringify(report.environment)}; owner-declared load/power, not independent attestation`]:[]),r.evidence] }] };
 }
 export function compare(reports: Report[]) {
-    if (!Array.isArray(reports) || reports.length < 1 || reports.length > 100)
-        throw Error('Provide 1–100 reports');
+    if (!Array.isArray(reports) || reports.length < 2 || reports.length > 64)
+        throw Error('Provide 2–64 reports');
     reports.forEach(validateReport);
-    return reports.map(r => ({ id: r.id, profile: r.profile?.id ?? null, configuration: r.profileHash, environment:r.environment??null, environmentHash:hash(r.environment??null), taskContractMatchesFirst:r.packHash===reports[0].packHash&&r.registryHash===reports[0].registryHash&&hash(r.limits)===hash(reports[0].limits)&&r.engineHash===reports[0].engineHash, pack: r.pack, version: r.packVersion, packHash: r.packHash, complete: r.complete, passed: r.passed, counts: Object.fromEntries(['passed', 'failed', 'error', 'not-run'].map(s => [s, r.results.filter(x => x.status === s).length])), tokens: r.usage.outputTokens, performance: performanceSummary(r), durationMs: Date.parse(r.finished) - Date.parse(r.started), comparableToFirst: hash(r.diagnostics??null)===hash(reports[0].diagnostics??null) && reports.length > 0 && r.packHash === reports[0].packHash && r.registryHash === reports[0].registryHash && hash(r.limits) === hash(reports[0].limits) && r.engineHash === reports[0].engineHash && hash(r.environment??null)===hash(reports[0].environment??null), automaticPromotion: false }));
+    const first = reports[0];
+    return reports.map(r => {
+        const mismatchReasons = [
+            r.packHash !== first.packHash ? 'pack' : null,
+            r.registryHash !== first.registryHash ? 'registry' : null,
+            hash(r.limits) !== hash(first.limits) ? 'limits' : null,
+            r.engineHash !== first.engineHash ? 'engine' : null,
+            hash(r.environment ?? null) !== hash(first.environment ?? null) ? 'environment' : null,
+            hash(r.diagnostics ?? null) !== hash(first.diagnostics ?? null) ? 'diagnostics' : null
+        ].filter((x): x is string => x !== null);
+        const measured = r.results.map(x => x.performance?.inputTokens ?? null);
+        const inputTokens = measured.length && measured.every((x): x is number => x !== null) ? measured.reduce((sum, x) => sum + x, 0) : null;
+        return {
+            id: r.id,
+            baseline: r === first,
+            requested: r.profile,
+            configuration: r.profileHash,
+            observed: { modelDigest: r.modelDigest, identity: r.identity ?? null, runtime: r.runtime },
+            environment: r.environment ?? null,
+            environmentHash: hash(r.environment ?? null),
+            contract: { pack: r.pack, version: r.packVersion, packHash: r.packHash, registryHash: r.registryHash, engineHash: r.engineHash, limits: r.limits, diagnostics: r.diagnostics ?? null },
+            mismatchReasons,
+            taskContractMatchesFirst: !mismatchReasons.some(x => ['pack', 'registry', 'limits', 'engine'].includes(x)),
+            comparableToFirst: mismatchReasons.length === 0,
+            started: r.started,
+            finished: r.finished,
+            complete: r.complete,
+            passed: r.passed,
+            counts: Object.fromEntries(['passed', 'failed', 'error', 'not-run'].map(s => [s, r.results.filter(x => x.status === s).length])),
+            iterations: r.limits.repeat,
+            results: r.results.map(x => ({ id: x.id, iteration: x.iteration, status: x.status, inputTokens: x.performance?.inputTokens ?? null, outputTokens: x.tokens, cacheTokens: null, phase: x.performance?.phase ?? null })),
+            tokenCoverage: { inputTokens, outputTokens: r.usage.outputTokens, cacheTokens: null, cacheMeasured: false },
+            performance: performanceSummary(r),
+            durationMs: Date.parse(r.finished) - Date.parse(r.started),
+            automaticPromotion: false
+        };
+    });
 }
 /** Structural checks detect malformed or internally inconsistent evidence; they do not authenticate its author. */
 export function validateReport(input: unknown): Report {

@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 11 November 2026 against main `9eab9a7`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 11 November 2026 against main `6283da7`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
@@ -15,7 +15,7 @@ Current work ledger, reviewed 11 November 2026 against main `9eab9a7`. [Rules](B
 |:---:|---|---|---|
 | 🔴 | 🔶 P2 | Open | 🟡 Medium |
 
-💻 **→ Human action required: No**<br />T01 is verified; start ready T02 bounded identity-preserving comparison implementation.
+💻 **→ Human action required: No**<br />T02 is implemented; verify it in merged CI, then start T03 comparison acceptance.
 
 | | |
 |---|---|
@@ -28,7 +28,7 @@ Current work ledger, reviewed 11 November 2026 against main `9eab9a7`. [Rules](B
 | Step | Remaining effort | Status |
 |---|---|---|
 | F-009-T01 — Define candidate matrix and repeat/comparison contract | 🟢 Small — 0 remaining<br />2026-11-11: Verified by merged PR #24 and its green required CI; T02 owns the separately planned implementation gaps. | Verified |
-| F-009-T02 — Implement bounded repetitions and failure-preserving summaries | 🟡 Medium — About 2 focused days<br />2026-11-10: Initial estimate assumes reusable engine/report boundaries; aggregate budget or cancellation gaps need owner-reviewed scope changes. | Ready |
+| F-009-T02 — Implement bounded repetitions and failure-preserving summaries | 🟡 Medium — Merged CI verification and reconciliation only<br />2026-11-11: Bounded identity-rich summaries, mismatch reasons and failure/unknown preservation are implemented; exact merged CI remains. | Implemented; verification pending |
 | F-009-T03 — Verify budgets, interruption and reproducible reporting | 🟢 Small — 2–4 focused hours<br />2026-11-10: Initial acceptance estimate uses fake providers/reports; real campaigns remain separately authorized. | Planned |
 
 <details>
@@ -36,15 +36,15 @@ Current work ledger, reviewed 11 November 2026 against main `9eab9a7`. [Rules](B
 
 **Initial plan 2026-11-10:** Three source-owned tasks now cover contract assessment, implementation and deterministic release acceptance. Effort is remaining work, with assumptions/uncertainty in each task; no implementation or model acceptance advances because a plan exists. Material expansion or distinct outcome splitting requires owner agreement.
 
-**Next action / closure evidence:** Verified T01 assessed existing compare/repeat/report behavior and defines a bounded candidate matrix, compatible comparison dimensions, repetition policy and failure-preserving summaries. Start ready T02 to implement the missing identity-rich bounded summary and mismatch reasons. Use repository-owned fake providers/reports to verify identity, aggregate budgets, interruption, repeat accounting and unknown telemetry; retain source event identities and avoid duplicate token totals. Expanded-pack campaigns can consume F-008 after release, but comparison contract implementation can proceed independently. Generic contracts, packs, graders, CLI and repository-owned fixtures belong here. Consumer role packs, runtime routing and production acceptance remain consumer-owned. Release acceptance never waits for NERV adoption. Live campaigns, model downloads and installations require separately reviewed scope and budgets; registration launches none.
+**Next action / closure evidence:** Verified T01 assessed existing compare/repeat/report behavior and defines a bounded candidate matrix, compatible comparison dimensions, repetition policy and failure-preserving summaries. T02 implements the identity-rich bounded summary and mismatch reasons; merged CI verification remains before T03. Use repository-owned fake providers/reports to verify identity, aggregate budgets, interruption, repeat accounting and unknown telemetry; retain source event identities and avoid duplicate token totals. Expanded-pack campaigns can consume F-008 after release, but comparison contract implementation can proceed independently. Generic contracts, packs, graders, CLI and repository-owned fixtures belong here. Consumer role packs, runtime routing and production acceptance remain consumer-owned. Release acceptance never waits for NERV adoption. Live campaigns, model downloads and installations require separately reviewed scope and budgets; registration launches none.
 
-**Estimates:** 🟡 Medium, reviewed 2026-11-11: T02 implementation and T03 deterministic release acceptance remain; live model availability and campaign cost are unknown and separately scoped.
+**Estimates:** 🟢 Small, reviewed 2026-11-11: T03 deterministic release acceptance remains; live model availability and campaign cost are unknown and separately scoped.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #25](https://github.com/voidbrain/gauntlet-protocol/pull/25) reconciles T01 verification; [PR #24](https://github.com/voidbrain/gauntlet-protocol/pull/24) implements T01 comparison contract; [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
+| PR / evidence | [PR #26](https://github.com/voidbrain/gauntlet-protocol/pull/26) implements T02 comparison summary; [PR #25](https://github.com/voidbrain/gauntlet-protocol/pull/25) reconciles T01 verification; [PR #24](https://github.com/voidbrain/gauntlet-protocol/pull/24) implements T01 comparison contract; [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
 | Opened | 2026-11-10 |
-| Verification | T01 verified: PR #24 merged as `9eab9a7`; CI 42972124601 passed 46 deterministic tests and required validation. No model campaign. |
+| Verification | T01 verified: PR #24 merged as `9eab9a7`; CI 42972124601 passed 46 deterministic tests and required validation. No model campaign. T02 bounded comparison implementation is complete locally; merged CI pending. |
 | Reviewed | 2026-11-11 |
 
 </details>
