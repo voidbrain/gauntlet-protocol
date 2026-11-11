@@ -29,7 +29,7 @@ Current work ledger, reviewed 11 November 2026 against main `6cca8d1`. v0.6.0 pu
 
 | Field | Value |
 |---|---|
-| PR / evidence | Found against v0.6.0 ([PR #34](https://github.com/voidbrain/gauntlet-protocol/pull/34)): `LedgerEntry` holds `caseHash` and `profileHash` only, while the F-010-T01 acceptance (archived task file) named runtime and machine scenario. |
+| PR / evidence | Planned in [PR #36](https://github.com/voidbrain/gauntlet-protocol/pull/36). Found against v0.6.0 ([PR #34](https://github.com/voidbrain/gauntlet-protocol/pull/34)): `LedgerEntry` holds `caseHash` and `profileHash` only, while the F-010-T01 acceptance (archived task file) named runtime and machine scenario. |
 | Opened | 2026-11-11 |
 | Verification | Pending |
 | Reviewed | 2026-11-11 |
