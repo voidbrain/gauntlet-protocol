@@ -1,5 +1,9 @@
 # Releases
 
+## 0.6.0
+
+Run ledger and pending cases (F-010, docs/LEDGER.md): `gauntlet ledger` records into a consumer-owned, metadata-only ledger the cases a saved report ran, refusing reports of another pack definition; `gauntlet pending` lists new, changed, stale or other-profile cases of the given packs and exits 1 when any are pending. Consumer-agnostic. Grading, packs and protocol 0.4 evidence are unchanged; the engine hash changes with the new exports, so cache reuse needs evidence produced by 0.6.0 (ledger coverage does not depend on the engine). No real-model run.
+
 ## 0.5.0
 
 Separate 28-case `general-assistant-expanded@1.0.0` pack with transcript contract and generated index (F-008). Repeatable candidate comparisons: bounded summary with full requested and observed identity, repeat/result identities, explicit mismatch reasons, error/not-run counts, incomplete state and unknown output/cache usage; no automatic promotion (F-009, docs/COMPARISONS.md). Original smoke packs, grading and protocol 0.4 evidence are unchanged. No real-model run.

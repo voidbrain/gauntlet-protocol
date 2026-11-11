@@ -13,9 +13,9 @@ Current work ledger, reviewed 11 November 2026 against main `cfd6dc3`. PR #32 CI
 
 | Signal | Priority | Status | Effort |
 |:---:|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟢 Small |
+| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
 
-💻 **→ Human action required: No**<br />Implement T01 (ledger contract) and T02 (`gauntlet pending`), then release 0.6.0.
+💻 **→ Human action required: No**<br />Merge on green CI after the fresh-context review, then tag and publish v0.6.0.
 
 | | |
 |---|---|
@@ -27,21 +27,21 @@ Current work ledger, reviewed 11 November 2026 against main `cfd6dc3`. PR #32 CI
 
 | Step | Remaining effort | Status |
 |---|---|---|
-| F-010-T01 — Run ledger contract | 🟢 Small — 0.5 focused day<br />2026-11-11: Owner decision 2026-11-11: Gauntlet and the harness are reused by future projects, so the generic part of 'a pack added or changed raises a run' lives here; consumers keep their ledger, rule and budgets. Estimate, not a measurement. | Planned |
-| F-010-T02 — &#96;gauntlet pending&#96; command | 🟢 Small — 1 focused day<br />2026-11-11: Owner decision 2026-11-11: Gauntlet and the harness are reused by future projects, so the generic part of 'a pack added or changed raises a run' lives here; consumers keep their ledger, rule and budgets. Estimate, not a measurement. | Planned |
+| F-010-T01 — Run ledger contract | 🟢 Small — 0 remaining; release pending<br />2026-11-11: Owner decision 2026-11-11: Gauntlet and the harness are reused by future projects, so the generic part of 'a pack added or changed raises a run' lives here; consumers keep their ledger, rule and budgets. Estimate, not a measurement. | Implemented; verification pending |
+| F-010-T02 — &#96;gauntlet pending&#96; command | 🟢 Small — 0 remaining; release pending<br />2026-11-11: Owner decision 2026-11-11: Gauntlet and the harness are reused by future projects, so the generic part of 'a pack added or changed raises a run' lives here; consumers keep their ledger, rule and budgets. Estimate, not a measurement. | Implemented; verification pending |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-**Next action / closure evidence:** T01, then T02; release 0.6.0. Closes on the release tag after green CI. Consumers adopt it in their own backlogs.
+**Next action / closure evidence:** F-010-T01 and F-010-T02 implemented (this PR); release 0.6.0. Closes on the release tag after green CI. Consumers adopt it in their own backlogs.
 
-**Estimates:** Small, about 1.5 focused days (T01 0.5, T02 1), estimated 2026-11-11.
+**Estimates:** Small remaining effort: release only. Estimated 2026-11-11 at about 1.5 focused days (F-010-T01 0.5, F-010-T02 1).
 
 | Field | Value |
 |---|---|
 | PR / evidence | — |
 | Opened | 2026-11-11 |
-| Verification | Pending. |
+| Verification | 2026-11-11 Unit/integration: test/ledger.test.ts (coverage by case definition and profile; new, changed, stale and other-profile; refusal of another pack definition, duplicates and extra fields; idempotent recording; CLI record and pending with exit codes, through a saved report from a fixture runtime); npm test 51/51 pass. No real-model run. |
 | Reviewed | 2026-11-11 |
 
 </details>
