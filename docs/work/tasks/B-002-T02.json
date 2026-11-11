@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "implemented",
+  "status": "closed",
   "id": "B-002-T02",
   "parent": "B-002",
   "title": "`pending` reports identity changes",
@@ -22,8 +22,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 focused day",
-    "basis": "Estimated 2026-11-11 from the v0.6.0 pendingCases code. Estimate, not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Released in v0.7.0 after PR #37 (CI 43061373995) and review-fix PR #38 (main CI 43062377867) passed, with independent review; initial estimate 0.5 focused day retained in Git.",
     "reviewed": "2026-11-11"
   },
   "resources": [

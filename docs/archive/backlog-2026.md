@@ -405,3 +405,40 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 </details>
 
 ---
+
+## Closed 2026-11-11
+
+### B-002
+
+**Ledger coverage ignores model digest, runtime, machine scenario and consumer source**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 0.7.0 is published.
+
+| | |
+|---|---|
+| **Issue** | F-010-T01 required ledger entries keyed by "model/profile/runtime/settings identity, machine scenario", but v0.6.0 keys coverage on case hash and profile hash only. A run stays covering after the model weights (digest), the runtime build, the machine scenario or the system under test changes, so `pending` reports nothing and a consumer reuses evidence that no longer matches. Found by voidbrain/nerv F-074-T08 on 2026-11-11. |
+| **Reproduce** | Record a report in a ledger, then call `pendingCases` for the same pack and profile after changing the model digest, the runtime identity or the environment scenario of the run you intend to make: the case is not pending. A system case run against an older consumer source is also not pending. |
+| **Check** | A ledger entry records, from the admitted report, the model digest, a runtime identity hash (`identity` and `runtime`), the environment/scenario hash or null, and an optional opaque `sourceKey` the consumer passes to `ledger record` (no consumer name, path or policy in Gauntlet). `pending` takes the intended identity and lists a case as pending with a named reason (`model-changed`, `runtime-changed`, `scenario-changed`, `source-changed`) when the latest covering entry differs; an unset field in the query does not constrain. Ledger schema version 2 reads version 1 entries as unknown identity, which never covers a constrained query. Metadata only. Fixtures for each reason, for v1 entries and for unconstrained queries. Released with a CHANGELOG entry. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-11 after PR #37 (CI 43061373995) and PR #38 merged, main CI 43062377867 passed on 5a2af1d, and v0.7.0 was tagged and published on GitHub. Consumers adopt it in their own backlogs (voidbrain/nerv F-074-T10).
+
+**Estimates:** Small remaining effort: zero; released. Initial estimate about 1 focused day.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #37](https://github.com/voidbrain/gauntlet-protocol/pull/37). Test: test/ledger-identity.test.ts, committed failing before the fix (adb0122). The 0.6.0 entry key-set expectation in test/ledger.test.ts changed because this record's Check adds the identity fields. Review: fresh-context design review (Opus) of PR #37: no blocker; should-fix items, all fixed in [PR #38](https://github.com/voidbrain/gauntlet-protocol/pull/38) (PR #37 was green, so no work was pushed to it): runner cases on coding/end-to-end layers ignored the source key, re-recording a report could rewrite its source key, no CLI to obtain the runtime and scenario hashes (`gauntlet identity`); notes applied (Node version in the runtime hash stated, `sha256:` prefix normalised). Their regressions were committed failing first. Planned in [PR #36](https://github.com/voidbrain/gauntlet-protocol/pull/36) (CI 43027105309 success). Found against v0.6.0 ([PR #34](https://github.com/voidbrain/gauntlet-protocol/pull/34)): `LedgerEntry` holds `caseHash` and `profileHash` only, while the F-010-T01 acceptance (archived task file) named runtime and machine scenario. |
+| Opened | 2026-11-11 |
+| Closed | 2026-11-11 |
+| Verification | 2026-11-11 Unit/integration: test/ledger-identity.test.ts (identity recorded from fixture-runtime reports with and without a scenario and source key; refusal of path-like and unbounded keys; model-changed, runtime-changed, scenario-changed and source-changed; unconstrained queries; system cases ignore model fields and model cases ignore the source key; schema 1 read as unknown identity and upgraded on write; all-or-none identity fields; CLI record and pending with exit codes 0/1/2); npm test 61/61 after the review fixes (runner cases on every layer, re-recording, digest prefixes, schema 1 with identity fields, `identity` command, runtime-changed through the CLI). No real-model run. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
