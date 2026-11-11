@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "status": "planned",
+  "id": "F-010-T02",
+  "title": "`gauntlet pending` command",
+  "goal": "List new, changed and stale cases of the given packs against a ledger, for any consumer",
+  "dependsOn": [
+    "F-010-T01"
+  ],
+  "acceptance": [
+    "Classifies each case: new (no entry), changed (hash differs), stale (older than --max-age), identity mismatch (requested profile differs), current",
+    "Human and --json output; exit 1 when anything is pending, 0 otherwise",
+    "No knowledge of any consumer; packs and ledger paths are arguments"
+  ],
+  "validation": [
+    "Fixtures: new pack, changed case, unchanged case, stale entry, other profile; npm test; release 0.6.0 after green CI"
+  ],
+  "escalation": [
+    "Default max age is the consumer’s setting, not Gauntlet’s"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 focused day",
+    "basis": "Owner decision 2026-11-11: Gauntlet and the harness are reused by future projects, so the generic part of 'a pack added or changed raises a run' lives here; consumers keep their ledger, rule and budgets. Estimate, not a measurement.",
+    "reviewed": "2026-11-11"
+  },
+  "parent": "F-010",
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "docs/**",
+    "examples/**",
+    "CHANGELOG.md",
+    "package.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "typescript",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Metadata only: identities, hashes, dates; no outputs, prompts or credentials."
+}

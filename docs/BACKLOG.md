@@ -1,12 +1,52 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 11 November 2026 against main `bb04c4e`. PR #31 CI 43011498006 passed `validate`: harness 5.1.1 reconciled. `.gitignore` gains the template's `.claude/` local ignores (PR #32). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 11 November 2026 against main `cfd6dc3`. PR #32 CI 43011932448 passed `validate`: `.claude/` local ignores added. F-010 opened: pending cases against a consumer's run ledger (this PR). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
 
 ## Features and improvements
 
+### F-010
+
+**Report pending cases against a consumer’s run ledger**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔴 | 🔶 P2 | Open | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Implement T01 (ledger contract) and T02 (`gauntlet pending`), then release 0.6.0.
+
+| | |
+|---|---|
+| **Issue** | A consumer that pins a release cannot tell which cases it has never run: NERV pinned 0.5.0 and its 28 new `general-assistant-expanded` cases went unrun and unindexed (voidbrain/nerv F-074). Each consumer would otherwise rewrite the same comparison. |
+| **Reproduce** | Pin a release that adds or changes a pack in a consumer with earlier admitted reports; nothing lists the cases that lack a matching run. |
+| **Check** | `gauntlet pending --packs=… --ledger=…` lists every new, changed and stale case (by pack id, version and case hash) and exits non-zero when any are pending; `gauntlet ledger record` adds entries only from admitted reports; the ledger holds metadata only. Consumer-agnostic: no consumer name, path or policy in Gauntlet. Released with a CHANGELOG entry. |
+
+**Feature steps** (remaining estimates; status is not parent acceptance)
+
+| Step | Remaining effort | Status |
+|---|---|---|
+| F-010-T01 — Run ledger contract | 🟢 Small — 0.5 focused day<br />2026-11-11: Owner decision 2026-11-11: Gauntlet and the harness are reused by future projects, so the generic part of 'a pack added or changed raises a run' lives here; consumers keep their ledger, rule and budgets. Estimate, not a measurement. | Planned |
+| F-010-T02 — &#96;gauntlet pending&#96; command | 🟢 Small — 1 focused day<br />2026-11-11: Owner decision 2026-11-11: Gauntlet and the harness are reused by future projects, so the generic part of 'a pack added or changed raises a run' lives here; consumers keep their ledger, rule and budgets. Estimate, not a measurement. | Planned |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** T01, then T02; release 0.6.0. Closes on the release tag after green CI. Consumers adopt it in their own backlogs.
+
+**Estimates:** Small, about 1.5 focused days (T01 0.5, T02 1), estimated 2026-11-11.
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-11 |
+| Verification | Pending. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
 ## Other changes
 
 **Harness v5.1.1 reconciliation, 2026-11-11 ([PR #31](https://github.com/voidbrain/gauntlet-protocol/pull/31)).** Covers template releases 5.0.1, 5.0.2, 5.1.0 and 5.1.1. 5.0.1 and 5.0.2 need nothing here: the ESLint and Prettier ignores already exclude `.harness/` (PR #30), and the Angular change does not apply to this core-only project. 5.1.0: `tools/check-harness.mjs` (new `--strict` flag) and the reviewer agents `.claude/agents/mechanical-reviewer.md` (Haiku) and `design-reviewer.md` (Opus) are copied byte-identically from tag v5.1.1 and listed under `copied`; `node tools/check-harness.mjs --strict` passes. The Independent review paragraph of BACKLOG-RULES and its pointer in AGENTS.md are reconciled by hand: a copy-only reconcile needs no reviewer when `--strict` passes, and reviews are matched to the change; no check, never or ask-first rule, or safeguard is removed. 5.1.1: `.gitignore` ignores `node_modules` without the trailing slash, so a worktree symlink is ignored (none was committed). CI checks the copies against v5.1.1. Fresh-context review (Opus): no blockers. Its should-fix, applied in a follow-up PR because #31 was already green: `.gitignore` lacked the template's `.claude/settings.local.json` and `.claude/worktrees/` lines (missing since before 5.0.0), which matter now that `.claude/agents/` is versioned. ESLint still ignores all of `tools/**` instead of the copied tools by path (APPLY 5.0.1); every file there is a copied tool, so nothing project-owned escapes lint, but a project tool added later must be un-ignored. No behaviour runner is configured.
