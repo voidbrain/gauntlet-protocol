@@ -23,6 +23,9 @@ import {
   emptyLedger,
   recordRun,
   pendingCases,
+  runtimeHash,
+  scenarioHash,
+  validateReport,
 } from '../dist/index.js';
 const [command, ...args] = process.argv.slice(2),
   options = {};
@@ -66,6 +69,7 @@ try {
     ],
     compare: ['reports'],
     ledger: ['ledger', 'report', 'pack', 'source-key'],
+    identity: ['report'],
     pending: [
       'packs',
       'ledger',
@@ -80,7 +84,9 @@ try {
     qualify: ['report', 'review', 'requirements', 'out'],
   };
   if (!allowed[command])
-    throw Error('Use machine, validate, index, plan, run, inspect-failures, compare, qualify, ledger or pending');
+    throw Error(
+      'Use machine, validate, index, plan, run, inspect-failures, compare, qualify, ledger, identity or pending',
+    );
   for (const arg of args) {
     const m = /^--([a-z-]+)(?:=(.+))?$/.exec(arg);
     if (!m || !allowed[command].includes(m[1]) || Object.hasOwn(options, m[1]))
@@ -124,6 +130,20 @@ try {
     writeFileSync(temporary, JSON.stringify(next, null, 2) + '\n', { flag: 'wx' });
     renameSync(temporary, path);
     console.log(JSON.stringify({ ledger: path, entries: next.entries.length }));
+  } else if (command === 'identity') {
+    // Prints the run identity a saved report would record, for `pending --model-digest/--runtime-hash/--scenario-hash`.
+    const report = validateReport(readEvidence(required('report')));
+    console.log(
+      JSON.stringify(
+        {
+          modelDigest: report.modelDigest,
+          runtimeHash: runtimeHash(report),
+          scenarioHash: scenarioHash(report.environment),
+        },
+        null,
+        2,
+      ),
+    );
   } else if (command === 'pending') {
     // Lists cases with no covering run, one per line (or --json); exits 1 when any are pending.
     const days = options['max-age-days'];
@@ -265,5 +285,5 @@ try {
 } catch (error) {
   console.error(error instanceof Error ? error.message : 'Gauntlet failed');
   // pending and ledger keep exit 1 for "cases pending"; their errors exit 2 so a consumer can tell them apart.
-  process.exitCode = command === 'pending' || command === 'ledger' ? 2 : 1;
+  process.exitCode = ['pending', 'ledger', 'identity'].includes(command) ? 2 : 1;
 }

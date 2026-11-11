@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 11 November 2026 against main `a48bcb9`. B-002 planned (PR #36, CI 43027105309) and implemented for 0.7.0 (PR #37): identity-bound ledger coverage. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 11 November 2026 against main `1fb4ed5`. B-002 implemented in PR #37 (CI 43061373995); review fixes in PR #38 before the 0.7.0 tag. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
@@ -23,15 +23,15 @@ Current work ledger, reviewed 11 November 2026 against main `a48bcb9`. B-002 pla
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-**Next action / closure evidence:** B-002-T01 and B-002-T02 implemented ([PR #37](https://github.com/voidbrain/gauntlet-protocol/pull/37)); release 0.7.0. Closes on the release tag after green CI. Consumers adopt it in their own backlogs.
+**Next action / closure evidence:** B-002-T01 and B-002-T02 implemented ([PR #37](https://github.com/voidbrain/gauntlet-protocol/pull/37), merged) with review fixes in [PR #38](https://github.com/voidbrain/gauntlet-protocol/pull/38); release 0.7.0. Closes on the release tag after green CI. Consumers adopt it in their own backlogs.
 
 **Estimates:** Small remaining effort: review and release only. Estimated 2026-11-11 at about 1 focused day (B-002-T01 0.5, B-002-T02 0.5). Estimates, not measurements.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #37](https://github.com/voidbrain/gauntlet-protocol/pull/37). Test: test/ledger-identity.test.ts, committed failing before the fix (adb0122). The 0.6.0 entry key-set expectation in test/ledger.test.ts changed because this record's Check adds the identity fields. Review: pending. Planned in [PR #36](https://github.com/voidbrain/gauntlet-protocol/pull/36) (CI 43027105309 success). Found against v0.6.0 ([PR #34](https://github.com/voidbrain/gauntlet-protocol/pull/34)): `LedgerEntry` holds `caseHash` and `profileHash` only, while the F-010-T01 acceptance (archived task file) named runtime and machine scenario. |
+| PR / evidence | [PR #37](https://github.com/voidbrain/gauntlet-protocol/pull/37). Test: test/ledger-identity.test.ts, committed failing before the fix (adb0122). The 0.6.0 entry key-set expectation in test/ledger.test.ts changed because this record's Check adds the identity fields. Review: fresh-context design review (Opus) of PR #37: no blocker; should-fix items, all fixed in [PR #38](https://github.com/voidbrain/gauntlet-protocol/pull/38) (PR #37 was green, so no work was pushed to it): runner cases on coding/end-to-end layers ignored the source key, re-recording a report could rewrite its source key, no CLI to obtain the runtime and scenario hashes (`gauntlet identity`); notes applied (Node version in the runtime hash stated, `sha256:` prefix normalised). Their regressions were committed failing first. Planned in [PR #36](https://github.com/voidbrain/gauntlet-protocol/pull/36) (CI 43027105309 success). Found against v0.6.0 ([PR #34](https://github.com/voidbrain/gauntlet-protocol/pull/34)): `LedgerEntry` holds `caseHash` and `profileHash` only, while the F-010-T01 acceptance (archived task file) named runtime and machine scenario. |
 | Opened | 2026-11-11 |
-| Verification | 2026-11-11 Unit/integration: test/ledger-identity.test.ts (identity recorded from fixture-runtime reports with and without a scenario and source key; refusal of path-like and unbounded keys; model-changed, runtime-changed, scenario-changed and source-changed; unconstrained queries; system cases ignore model fields and model cases ignore the source key; schema 1 read as unknown identity and upgraded on write; all-or-none identity fields; CLI record and pending with exit codes 0/1/2); npm test 57/57. No real-model run. |
+| Verification | 2026-11-11 Unit/integration: test/ledger-identity.test.ts (identity recorded from fixture-runtime reports with and without a scenario and source key; refusal of path-like and unbounded keys; model-changed, runtime-changed, scenario-changed and source-changed; unconstrained queries; system cases ignore model fields and model cases ignore the source key; schema 1 read as unknown identity and upgraded on write; all-or-none identity fields; CLI record and pending with exit codes 0/1/2); npm test 61/61 after the review fixes (runner cases on every layer, re-recording, digest prefixes, schema 1 with identity fields, `identity` command, runtime-changed through the CLI). No real-model run. |
 | Reviewed | 2026-11-11 |
 
 </details>
