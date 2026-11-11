@@ -40,7 +40,7 @@ Statuses: passed, failed, error, not-run. Empty/zero-check/incomplete evidence c
 
 Reports include pack/profile/registry hashes, declared case count, model digest, runtime identity, selection results, iterations, layer/capability tags, timing, response or adapter hashes, token measurements, complete/pass/source-stability flags and `promotion: false`. Source/profile mutation invalidates acceptance. Responses/prompts and raw process logs are not copied into reports. Existing evidence is never overwritten.
 
-`compare --reports=a.json,b.json` preserves errors/not-run counts and unknown usage. Different pack/registry/budget contracts are marked noncomparable. Configuration changes remain visible; comparison alone chooses no winner.
+`compare --reports=a.json,b.json` preserves errors/not-run counts and unknown usage. Different pack/registry/budget contracts are marked noncomparable. Configuration changes remain visible; comparison alone chooses no winner. The [repeatable comparison contract](COMPARISONS.md) defines the bounded candidate matrix, identity fields, compatibility dimensions and repetition limits.
 
 `qualify --report=report.json --review=receipt.json --requirements=examples/requirements.json --out=results/reviewed-profile.json` exports a harness-compatible profile only when stable complete model evidence meets each capability's minimum unique cases, minimum unique holdouts and pass rate, with all critical cases passed and known usage. Repeats do not inflate unique-case coverage. Capability minima are owner-authored and task-specific; meeting a small smoke threshold does not establish broader fitness.
 
