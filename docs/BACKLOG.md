@@ -42,7 +42,7 @@ Current work ledger, reviewed 11 November 2026 against main `cbe64a6`. [Rules](B
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
+| PR / evidence | [PR #24](https://github.com/voidbrain/gauntlet-protocol/pull/24) implements T01 comparison contract; [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
 | Opened | 2026-11-10 |
 | Verification | T01 implemented locally: existing behavior assessed and bounded identity/compatibility/repetition contract documented; merged CI pending. |
 | Reviewed | 2026-11-11 |
