@@ -42,7 +42,7 @@ Current work ledger, reviewed 11 November 2026 against main `6283da7`. [Rules](B
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #25](https://github.com/voidbrain/gauntlet-protocol/pull/25) reconciles T01 verification; [PR #24](https://github.com/voidbrain/gauntlet-protocol/pull/24) implements T01 comparison contract; [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
+| PR / evidence | [PR #26](https://github.com/voidbrain/gauntlet-protocol/pull/26) implements T02 comparison summary; [PR #25](https://github.com/voidbrain/gauntlet-protocol/pull/25) reconciles T01 verification; [PR #24](https://github.com/voidbrain/gauntlet-protocol/pull/24) implements T01 comparison contract; [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
 | Opened | 2026-11-10 |
 | Verification | T01 verified: PR #24 merged as `9eab9a7`; CI 42972124601 passed 46 deterministic tests and required validation. No model campaign. T02 bounded comparison implementation is complete locally; merged CI pending. |
 | Reviewed | 2026-11-11 |
