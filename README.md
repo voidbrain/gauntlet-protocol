@@ -13,6 +13,7 @@ Requires Node 24. Install with `npm ci`, then `npm run build`. This project adop
 ```sh
 node bin/gauntlet.mjs validate --pack=examples/smoke-v1.json --profile=examples/profiles/gemma4-12b.json
 node bin/gauntlet.mjs validate --pack=examples/general-assistant-expanded-v1.json --profile=examples/profiles/gemma4-12b.json
+node bin/gauntlet.mjs compare --reports=results/candidate-a.json,results/candidate-b.json
 node bin/gauntlet.mjs plan --pack=examples/smoke-v1.json --profile=examples/profiles/gemma4-12b.json --limits=examples/limits-day.json
 ```
 
