@@ -4,7 +4,7 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   // Copied harness tools and generated or example data are not this project's source.
-  { ignores: ['node_modules/**', 'dist/**', 'coverage/**', 'tools/**', 'examples/**'] },
+  { ignores: ['node_modules/**', 'dist/**', 'coverage/**', 'tools/**', 'examples/**', '.harness/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

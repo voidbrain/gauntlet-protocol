@@ -40,7 +40,7 @@ npm run lint              # ESLint with TypeScript rules
 npm run check:tooling     # a formatter check and a linter exist and run in CI (required for every stack)
 ```
 
-- Every project formats and lints its source, in CI too: `check:tooling` fails without both.
+- Every project formats and lints its source, in CI too: `check:tooling` fails without both. A project with no source code records `tooling.exempt` with its reason in `.harness.json`.
 
 - With scoped verification explicitly enabled, follow [verification selection](docs/agents/verification.md): applicable fast checks and affected regressions by default; full deterministic checks on request, risk or freshness limits. Without adoption, the checks above remain required.
 - A failing test is evidence until shown otherwise: check it against the intended behaviour. Change its expectation only when the requirement deliberately changed, and say which requirement; otherwise fix the code.
