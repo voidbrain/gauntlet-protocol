@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "implemented",
+  "status": "closed",
   "id": "F-010-T02",
   "title": "`gauntlet pending` command",
   "goal": "List new, changed and stale cases of the given packs against a ledger, for any consumer",
@@ -20,8 +20,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0 remaining; release pending",
-    "basis": "Owner decision 2026-11-11: Gauntlet and the harness are reused by future projects, so the generic part of 'a pack added or changed raises a run' lives here; consumers keep their ledger, rule and budgets. Estimate, not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Released in v0.6.0 after PR #34 green CI 43020317739 and independent review; initial estimate retained in Git.",
     "reviewed": "2026-11-11"
   },
   "parent": "F-010",

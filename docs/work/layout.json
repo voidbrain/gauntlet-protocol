@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Gauntlet Protocol backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `cfd6dc3`. PR #32 CI 43011932448 passed `validate`: `.claude/` local ignores added. F-010 opened: pending cases against a consumer's run ledger (PR #33). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).\n\n## Bugs and reliability\n\n\n## Features and improvements\n\n"
+      "text": "# Gauntlet Protocol backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `fc6ec02`. v0.6.0 published (PR #34, CI 43020317739): F-010 closed, run ledger and `pending`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).\n\n## Bugs and reliability\n\n\n## Features and improvements\n\n"
     },
     {
       "records": "F"
