@@ -6,6 +6,8 @@ An independent TypeScript library and CLI for capability-scoped AI evaluation. I
 
 The [expanded general-assistant pack](docs/EXPANDED-PACK.md) defines 28 stable coverage identities and transcript-based correction cases without claiming interactive execution or hidden-test isolation.
 
+The [repeatable comparison contract](docs/COMPARISONS.md) defines candidate identity, compatibility and repetition rules without running a campaign or selecting a winner.
+
 Requires Node 24. Install with `npm ci`, then `npm run build`. This project adopts [project-harness](https://github.com/voidbrain/project-harness) 4.8.0 for development. The harness does not depend on Gauntlet. Consumer projects own their domain packs and adapters.
 
 ```sh
