@@ -320,7 +320,7 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #22](https://github.com/voidbrain/gauntlet-protocol/pull/22) T03 acceptance; [PR #20](https://github.com/voidbrain/gauntlet-protocol/pull/20) T02 expanded pack; [PR #18](https://github.com/voidbrain/gauntlet-protocol/pull/18) T01 contract; reconciliation PRs #19 and #21 |
+| PR / evidence | [PR #23](https://github.com/voidbrain/gauntlet-protocol/pull/23) closure reconciliation; [PR #22](https://github.com/voidbrain/gauntlet-protocol/pull/22) T03 acceptance; [PR #20](https://github.com/voidbrain/gauntlet-protocol/pull/20) T02 expanded pack; [PR #18](https://github.com/voidbrain/gauntlet-protocol/pull/18) T01 contract; reconciliation PRs #19 and #21 |
 | Opened | 2026-11-10 |
 | Closed | 2026-11-11 |
 | Verification | CI 42928961766 passed 46 deterministic tests, typecheck, build, generated index and required repository checks at merged PR #22. Earlier T01/T02 CI runs 42927563424 and 42928393224 passed. No real-model qualification claimed. |
