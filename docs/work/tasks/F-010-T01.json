@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "status": "planned",
+  "id": "F-010-T01",
+  "title": "Run ledger contract",
+  "goal": "A versioned, metadata-only run ledger keyed by case identity, written only from admitted reports",
+  "dependsOn": [],
+  "acceptance": [
+    "Schema: per case pack id, pack version, case hash, model/profile/runtime/settings identity, machine scenario, report hash, date; no outputs or prompts",
+    "`gauntlet ledger record --report=… --ledger=…` admits the report first and refuses unadmitted, partial-identity or duplicate entries",
+    "Documented in docs with the identity fields that make evidence reusable"
+  ],
+  "validation": [
+    "Fixtures for admit, refuse and duplicate; npm test"
+  ],
+  "escalation": [
+    "A schema field that could carry private content is an owner decision"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 focused day",
+    "basis": "Owner decision 2026-11-11: Gauntlet and the harness are reused by future projects, so the generic part of 'a pack added or changed raises a run' lives here; consumers keep their ledger, rule and budgets. Estimate, not a measurement.",
+    "reviewed": "2026-11-11"
+  },
+  "parent": "F-010",
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "docs/**",
+    "examples/**",
+    "CHANGELOG.md",
+    "package.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "typescript",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Metadata only: identities, hashes, dates; no outputs, prompts or credentials."
+}
