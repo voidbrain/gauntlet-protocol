@@ -4,7 +4,7 @@
   "parent": "F-009",
   "title": "Verify budgets, interruption and reproducible reporting",
   "goal": "Prove comparison joins with repository-owned fake providers and document limits",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "Test aggregate budgets, interruption, repetition and unknown/partial telemetry across engine/report joins",
     "Regenerate relevant index/examples and document reproducibility constraints without automatic promotion",
@@ -30,7 +30,8 @@
   ],
   "privacy": "Repository-owned neutral fixtures only. No real model calls, downloads, secrets, private transcripts or consumer implementation.",
   "validation": [
-    "Meaningful protocol/pack/grader or compare/report join fixtures",
+    "Comparison join retains a successful baseline beside explicit error and not-run counts, incomplete state and unknown output/cache usage without automatic promotion",
+    "Existing aggregate-budget, cancellation and repeat regressions plus CLI comparison example establish deterministic acceptance",
     "Typecheck, deterministic tests, build, generated capability index and final required CI; actual model qualification is separately scoped"
   ],
   "escalation": [
@@ -39,8 +40,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "2\u20134 focused hours",
-    "basis": "Initial acceptance estimate uses fake providers/reports; real campaigns remain separately authorized.",
-    "reviewed": "2026-11-10"
+    "estimate": "Merged CI verification and reconciliation only",
+    "basis": "Deterministic failure/unknown comparison acceptance and CLI documentation are implemented; exact merged CI remains.",
+    "reviewed": "2026-11-11"
   }
 }
