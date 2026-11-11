@@ -19,9 +19,10 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: voidbrain/project-harness
-          ref: v4.7.0
+          ref: v5.0.0
           path: .harness/template
       - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run format:check && npm run lint && npm run check:tooling
       - run: npm run typecheck && npm run build && npm test && npm run check:index
       - name: Harness and record checks
         env:

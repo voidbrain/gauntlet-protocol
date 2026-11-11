@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-10T23:48:16.750Z",
+  "reviewed": "2026-11-11T08:28:31.060Z",
   "policy": "18c0059e726d071aefd8c71b9a5d27b54b923320af6b34567c262491c7c1c9bb",
   "inputs": {
-    "AGENTS.md": "96f8e2c9b6511e513667c51784ac3245cde3e4daddb0039b80b62259c2c90b2f",
-    "docs/BACKLOG-RULES.md": "b820312031c8a58efed3cbf23e11ab60a972601f53f12034dfabb1388f3a2c0e",
+    "AGENTS.md": "8e7998ed2846839a70f45b887fd1d6692e07535efdd87712dcd810a3f46f41bd",
+    "docs/BACKLOG-RULES.md": "5b7497f7f3cbb53b3ad204a546490e362fa73ace01dd42ecd098835e58907fa8",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "171636323e1cd991b33d5b723329d14dd51919a24fd78778b33d8a2a17dde539",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -18,14 +18,14 @@
     "docs/agents/solution-profile.md": "857fc0e5f5c36d1d139d2507f1f97460edfdcde4d5cd5d590a922d88c4459862",
     "docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
-    "tools/task-claims.mjs": "05d40141b354db19e958d1f191f9a2e1b75c46126527ce3aba67f7b902ba16d2",
-    "tools/usage-launch.mjs": "ac8713a3e4c4359cfdda5b4b6eb5d18e957408fb77b85609853ba2cda5f4a4e0",
-    "tools/work-items.mjs": "f3175c3150286bf569fc108d86a3640a4bbfd30deda940ddbb9c27d8fabe56f4",
-    "tools/work-usage.mjs": "0fdd6f4c8106c986c7798badec4d655119341edf6bb6f60c30e1cfc97bd786cb"
+    "tools/task-claims.mjs": "2a7b7d0ea9e23fb36eceba5e5433eb640fee3e3633426066e4050f0fa8ebb9cf",
+    "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
+    "tools/work-items.mjs": "c5e40c70ef45011ccaa20c951e8e645cc3e9f2fb65a4563779e7af83882df839",
+    "tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219"
   },
   "measurements": {
-    "samples": 2,
-    "latestAt": "2026-11-10T23:47:20.847Z",
+    "samples": 4,
+    "latestAt": "2026-11-11T08:28:31.009Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -51,25 +51,25 @@
         }
       },
       "reconciliation": {
-        "samples": 2,
+        "samples": 4,
         "durationMs": {
-          "observed": 2,
+          "observed": 4,
           "missing": 0,
-          "median": 122536
+          "median": 40555.5
         },
         "conflicts": {
           "observed": 0,
-          "missing": 2,
+          "missing": 4,
           "median": null
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 2,
+          "missing": 4,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 2,
+          "missing": 4,
           "median": null
         }
       }
@@ -77,16 +77,16 @@
   },
   "outcomes": [
     {
-      "kind": "tool",
+      "kind": "rule",
       "disposition": "implemented",
-      "target": "tools/work-usage.mjs",
-      "evidence": "Reconciled published v4.8.0 byte-identically with its guide. Reviewed allowance lifecycle, overlap filtering, calibration qualification and private export safeguards from the released template. Existing stores need no migration; no collector, client setting, model call, allowance capture or export was enabled or run. 43 deterministic project tests, typecheck, build, work/backlog/rules/harness/audit/integration and impact checks pass."
+      "target": "AGENTS.md",
+      "evidence": "Reconciled published harness v5.0.0: the session-start bullet and the BACKLOG-RULES reconcile sentence fold reconciliation into the next working PR (due at 10 merged PRs or one day behind, or at once for a commit without a PR), and the check catalogue gains format:check, lint and check:tooling. No never or ask-first rule is removed; evidence requirements are unchanged. No behaviour runner configured; token counters unavailable."
     },
     {
-      "kind": "none",
-      "disposition": "no-change",
-      "target": "docs/agents/work-usage.md",
-      "evidence": "The v4.8.0 guide preserves Gauntlet privacy and ownership boundaries: allowance metadata remains private and separate from token/cost claims, exports refuse unsafe destinations and calibration stays advisory. No project-specific override or additional rule is justified. Reconciliation measurement recorded 80,909 ms wall time; conflict and prompt/reload counters were not observed and remain unknown."
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "tools/check-tooling.mjs",
+      "evidence": "Copied byte-identically from tag v5.0.0 with the 26 reformatted copied tools; check-harness reports copied files match. Prettier and ESLint adopted with a mechanical reformat of 18 source files (equal syntax-tree fingerprints) and four hand lint fixes; 48 deterministic tests pass."
     }
   ]
 }
