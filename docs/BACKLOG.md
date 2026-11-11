@@ -1,58 +1,15 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 11 November 2026 against main `2e83cd2`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 11 November 2026 against main `eba3c05`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
 
 ## Features and improvements
 
-### F-009
-
-**Define repeatable candidate comparisons**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟡 Medium |
-
-💻 **→ Human action required: No**<br />T03 comparison acceptance is implemented; verify the exact merged revision, then close F-009.
-
-| | |
-|---|---|
-| **Issue** | Existing report comparison needs an explicit repeatable protocol for broader candidate evaluation rather than treating one smoke pass as competence. |
-| **Reproduce** | Owner request 2026-11-10: expand reusable evaluation coverage and make candidate comparisons reproducible. |
-| **Check** | Preserve exact requested/actual model, runtime, context, sampling, thinking, quantization and environment identities; repeated outcomes, failures/errors/not-run, cold/warm latency and measured input/output/cache tokens retain provenance and unknown coverage. Structural validity and semantic success are reported separately. Incompatible configurations are rejected or explicitly separated; no automatic promotion follows. |
-
-**Feature steps** (remaining estimates; status is not parent acceptance)
-
-| Step | Remaining effort | Status |
-|---|---|---|
-| F-009-T01 — Define candidate matrix and repeat/comparison contract | 🟢 Small — 0 remaining<br />2026-11-11: Verified by merged PR #24 and its green required CI; T02 owns the separately planned implementation gaps. | Verified |
-| F-009-T02 — Implement bounded repetitions and failure-preserving summaries | 🟡 Medium — 0 remaining<br />2026-11-11: Verified by merged PR #26 and its green required CI; no real-model campaign was run or required. | Verified |
-| F-009-T03 — Verify budgets, interruption and reproducible reporting | 🟢 Small — Merged CI verification and reconciliation only<br />2026-11-11: Deterministic failure/unknown comparison acceptance and CLI documentation are implemented; exact merged CI remains. | Implemented; verification pending |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Initial plan 2026-11-10:** Three source-owned tasks now cover contract assessment, implementation and deterministic release acceptance. Effort is remaining work, with assumptions/uncertainty in each task; no implementation or model acceptance advances because a plan exists. Material expansion or distinct outcome splitting requires owner agreement.
-
-**Next action / closure evidence:** Verified T01 assessed existing compare/repeat/report behavior and defines a bounded candidate matrix, compatible comparison dimensions, repetition policy and failure-preserving summaries. Verified T02 implements the identity-rich bounded summary and mismatch reasons. T03 adds deterministic error/not-run/unknown-usage comparison acceptance; merged CI and closure reconciliation remain. Use repository-owned fake providers/reports to verify identity, aggregate budgets, interruption, repeat accounting and unknown telemetry; retain source event identities and avoid duplicate token totals. Expanded-pack campaigns can consume F-008 after release, but comparison contract implementation can proceed independently. Generic contracts, packs, graders, CLI and repository-owned fixtures belong here. Consumer role packs, runtime routing and production acceptance remain consumer-owned. Release acceptance never waits for NERV adoption. Live campaigns, model downloads and installations require separately reviewed scope and budgets; registration launches none.
-
-**Estimates:** 🟢 Small, reviewed 2026-11-11: merged CI verification and closure reconciliation remain; live model availability and campaign cost are unknown and separately scoped.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #27](https://github.com/voidbrain/gauntlet-protocol/pull/27) reconciles T02 verification; [PR #26](https://github.com/voidbrain/gauntlet-protocol/pull/26) implements T02 comparison summary; [PR #25](https://github.com/voidbrain/gauntlet-protocol/pull/25) reconciles T01 verification; [PR #24](https://github.com/voidbrain/gauntlet-protocol/pull/24) implements T01 comparison contract; [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration; implementation pending |
-| Opened | 2026-11-10 |
-| Verification | T01 verified in PR #24 / CI 42972124601. T02 verified: PR #26 merged as `2f00f63`; CI 42972801436 passed 47 deterministic tests and required validation. No model campaign. T03 deterministic comparison acceptance is implemented locally; merged CI pending. |
-| Reviewed | 2026-11-11 |
-
-</details>
-
----
-
-
 ## Other changes
+
+F-009 closed 2026-11-11 and released in v0.5.0 with F-008 after PR #28 / CI 42973260515 passed 48 deterministic tests and owned checks. Repeatable candidate comparisons keep full requested and observed identity, explicit mismatch reasons, error/not-run counts and unknown usage; no automatic promotion, live model campaign or consumer adoption gate.
 
 F-008 closed 2026-11-11 after PR #22 / CI 42928961766 passed 46 deterministic tests and owned checks. The 28-case expanded pack, transcript contract, strict semantic joins and generated index are accepted without a live model campaign or consumer adoption gate.
 

@@ -330,3 +330,41 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 
 ---
 
+## Closed 2026-11-11
+
+### F-009
+
+**Define repeatable candidate comparisons**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No remaining owned action. The comparison contract, summary and deterministic acceptance are complete and released in v0.5.0.
+
+| | |
+|---|---|
+| **Issue** | Existing report comparison needs an explicit repeatable protocol for broader candidate evaluation rather than treating one smoke pass as competence. |
+| **Reproduce** | Owner request 2026-11-10: expand reusable evaluation coverage and make candidate comparisons reproducible. |
+| **Check** | Preserve exact requested/actual model, runtime, context, sampling, thinking, quantization and environment identities; repeated outcomes, failures/errors/not-run, cold/warm latency and measured input/output/cache tokens retain provenance and unknown coverage. Structural validity and semantic success are reported separately. Incompatible configurations are rejected or explicitly separated; no automatic promotion follows. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Initial plan 2026-11-10:** Three source-owned tasks now cover contract assessment, implementation and deterministic release acceptance. Effort is remaining work, with assumptions/uncertainty in each task; no implementation or model acceptance advances because a plan exists. Material expansion or distinct outcome splitting requires owner agreement.
+
+**Next action / closure evidence:** Closed 2026-11-11 after T01 defined the bounded candidate matrix, compatible comparison dimensions and repetition policy (docs/COMPARISONS.md), T02 implemented the identity-rich bounded summary with explicit mismatch reasons, and T03 proved that a successful baseline stays beside explicit error and not-run counts, incomplete state and unknown output/cache usage, with a documented CLI comparison. PR #28 merged as eba3c05; CI 42973260515 passed 48 deterministic tests and required validation. No automatic promotion follows a comparison. Released in v0.5.0. No consumer adoption, live model campaign, download or installation gates this reusable release; expanded-pack campaigns remain separately scoped consumer work.
+
+**Estimates:** Small at closure: no remaining owned work. Live model availability and campaign cost remain unknown and separately scoped.
+
+| Field | Value |
+|---|---|
+| PR / evidence | PRNEW closure reconciliation and v0.5.0 release; [PR #28](https://github.com/voidbrain/gauntlet-protocol/pull/28) T03 acceptance; [PR #27](https://github.com/voidbrain/gauntlet-protocol/pull/27) reconciles T02 verification; [PR #26](https://github.com/voidbrain/gauntlet-protocol/pull/26) implements T02 comparison summary; [PR #25](https://github.com/voidbrain/gauntlet-protocol/pull/25) reconciles T01 verification; [PR #24](https://github.com/voidbrain/gauntlet-protocol/pull/24) implements T01 comparison contract; [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration |
+| Opened | 2026-11-10 |
+| Closed | 2026-11-11 |
+| Verification | CI 42973260515 passed 48 deterministic tests, typecheck, build, generated index and required repository checks at merged PR #28. Earlier T01/T02 CI runs 42972124601 and 42972801436 passed. No real-model qualification claimed. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
