@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-11T11:22:34.685Z",
+  "reviewed": "2026-11-11T16:44:17.120Z",
   "policy": "18c0059e726d071aefd8c71b9a5d27b54b923320af6b34567c262491c7c1c9bb",
   "inputs": {
-    "AGENTS.md": "f0b2f2a187d69b81f6cb1b8d862560904ba8ce62f551393b7b3074a6c05c6471",
-    "docs/BACKLOG-RULES.md": "e429c53927a1cdde23a4e826759d73076c69f1543ac269559ead6734591ee1a5",
+    "AGENTS.md": "4b9f45f1b0755a476cb2583b2689d7b81f6990c1e9636fc34a4be6d593c61a9f",
+    "docs/BACKLOG-RULES.md": "f4a93374ef9d5daff8337ed2ecb2fe717475f7c1b907055cb41a27c546b9a44b",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "171636323e1cd991b33d5b723329d14dd51919a24fd78778b33d8a2a17dde539",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -24,8 +24,8 @@
     "tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219"
   },
   "measurements": {
-    "samples": 5,
-    "latestAt": "2026-11-11T11:22:34.629Z",
+    "samples": 6,
+    "latestAt": "2026-11-11T16:44:17.054Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -51,25 +51,25 @@
         }
       },
       "reconciliation": {
-        "samples": 5,
+        "samples": 6,
         "durationMs": {
-          "observed": 5,
+          "observed": 6,
           "missing": 0,
-          "median": 57041
+          "median": 29074
         },
         "conflicts": {
-          "observed": 1,
+          "observed": 2,
           "missing": 4,
           "median": 0
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 5,
+          "missing": 6,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 5,
+          "missing": 6,
           "median": null
         }
       }
@@ -80,13 +80,13 @@
       "kind": "rule",
       "disposition": "implemented",
       "target": "docs/BACKLOG-RULES.md",
-      "evidence": "Reconciled published harness v5.1.1 (5.1.0 rule change): the Independent review paragraph gains the copy-only reconcile exemption (requires check-harness --strict) and matches the reviewer model to the change; the AGENTS.md pointer says the exemptions are listed there. No check, never or ask-first rule, or safeguard removed. 5.0.1/5.0.2 need no change (ignores already exclude .harness/). No behaviour runner configured."
+      "evidence": "Reconciled published harness v5.2.0: the Evaluation dependencies paragraph and the AGENTS.md session-start bullet carried by hand. Gauntlet is itself the evaluation dependency for its consumers and declares no evaluations of its own. No check, never or ask-first rule, or safeguard removed. No behaviour runner configured."
     },
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "tools/check-harness.mjs",
-      "evidence": "Copied byte-identically from tag v5.1.1 with .claude/agents/mechanical-reviewer.md and design-reviewer.md; check-harness --strict reports copied files match v5.1.1. .gitignore ignores node_modules without the trailing slash (5.1.1)."
+      "target": "tools/check-freshness.mjs",
+      "evidence": "Copied byte-identically from tag v5.2.0; all 44 copied files compared against the tag (the worktree has no ../project-harness, so check-harness --strict was replaced by a byte comparison against git show v5.2.0). Friction sample times only the final validation pass (byte comparison, check:backlog, check:rules); the hand-carry of two one-line paragraphs is not in the sample."
     }
   ]
 }

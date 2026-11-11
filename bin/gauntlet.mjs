@@ -65,8 +65,18 @@ try {
       'only',
     ],
     compare: ['reports'],
-    ledger: ['ledger', 'report', 'pack'],
-    pending: ['packs', 'ledger', 'profile', 'max-age-days', 'json'],
+    ledger: ['ledger', 'report', 'pack', 'source-key'],
+    pending: [
+      'packs',
+      'ledger',
+      'profile',
+      'max-age-days',
+      'json',
+      'model-digest',
+      'runtime-hash',
+      'scenario-hash',
+      'source-key',
+    ],
     qualify: ['report', 'review', 'requirements', 'out'],
   };
   if (!allowed[command])
@@ -107,7 +117,9 @@ try {
     const ledger = existsSync(path) ? readJSON(path) : emptyLedger();
     if (lstatSync(path, { throwIfNoEntry: false })?.isSymbolicLink())
       throw Error('Ledger path must be a regular file, not a symlink');
-    const next = recordRun(ledger, readEvidence(required('report')), load('pack'));
+    const next = recordRun(ledger, readEvidence(required('report')), load('pack'), {
+      ...(options['source-key'] !== undefined ? { sourceKey: options['source-key'] } : {}),
+    });
     const temporary = path + '.' + process.pid + '.tmp';
     writeFileSync(temporary, JSON.stringify(next, null, 2) + '\n', { flag: 'wx' });
     renameSync(temporary, path);
@@ -125,6 +137,13 @@ try {
       {
         ...(options.profile ? { profile: validateProfile(load('profile')) } : {}),
         ...(days !== undefined ? { maxAgeMs: Number(days) * 86400000 } : {}),
+        // Intended identity (B-002): a flag left out does not constrain; --scenario-hash=none asks for a run without one.
+        ...(options['model-digest'] !== undefined ? { modelDigest: options['model-digest'] } : {}),
+        ...(options['runtime-hash'] !== undefined ? { runtimeHash: options['runtime-hash'] } : {}),
+        ...(options['scenario-hash'] !== undefined
+          ? { scenarioHash: options['scenario-hash'] === 'none' ? null : options['scenario-hash'] }
+          : {}),
+        ...(options['source-key'] !== undefined ? { sourceKey: options['source-key'] } : {}),
       },
     );
     if (options.json) console.log(JSON.stringify(list, null, 2));

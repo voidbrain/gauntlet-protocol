@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "planned",
+  "status": "implemented",
   "id": "B-002-T01",
   "parent": "B-002",
   "title": "Identity fields in the ledger entry",
@@ -8,7 +8,7 @@
   "dependsOn": [],
   "acceptance": [
     "`LedgerEntry` gains modelDigest, runtimeHash (hash of the report's identity and runtime), scenarioHash (environment hash or null) and sourceKey (opaque string or null)",
-    "`gauntlet ledger record --source-key=…` stores the key; the key is validated as a bounded opaque token, never a path or free text",
+    "`gauntlet ledger record --source-key=\u2026` stores the key; the key is validated as a bounded opaque token, never a path or free text",
     "Schema 1 ledgers still validate and are read as unknown identity; writing upgrades the file to schema 2",
     "docs/LEDGER.md lists every identity field and what changes it"
   ],

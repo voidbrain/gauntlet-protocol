@@ -1,6 +1,6 @@
 {
   "name": "@voidbrain/gauntlet-protocol",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Capability-scoped evaluation contracts, bounded adapters and reviewed model evidence",
   "type": "module",
   "license": "MIT",
@@ -29,7 +29,8 @@
     "docs/RUNTIMES.md",
     "docs/ENVIRONMENTS.md",
     "docs/FAILURES.md",
-    "docs/COMPARISONS.md"
+    "docs/COMPARISONS.md",
+    "docs/LEDGER.md"
   ],
   "scripts": {
     "build": "tsc",

@@ -6,7 +6,7 @@ An independent TypeScript library and CLI for capability-scoped AI evaluation. I
 
 The [expanded general-assistant pack](docs/EXPANDED-PACK.md) defines 28 stable coverage identities and transcript-based correction cases without claiming interactive execution or hidden-test isolation.
 
-The [run ledger](docs/LEDGER.md) lets a consumer list the cases of the packs it consumes that it has not run in their current definition (`pending`), without storing evidence.
+The [run ledger](docs/LEDGER.md) lets a consumer list the cases of the packs it consumes that it has not run in their current definition, or under the model, runtime, machine scenario or consumer source it now intends (`pending`), without storing evidence.
 
 The [repeatable comparison contract](docs/COMPARISONS.md) defines candidate identity, compatibility and repetition rules without running a campaign or selecting a winner.
 
