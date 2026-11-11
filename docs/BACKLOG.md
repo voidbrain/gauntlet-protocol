@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 11 November 2026 against main `cfd6dc3`. PR #32 CI 43011932448 passed `validate`: `.claude/` local ignores added. F-010 opened: pending cases against a consumer's run ledger (this PR). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 11 November 2026 against main `cfd6dc3`. PR #32 CI 43011932448 passed `validate`: `.claude/` local ignores added. F-010 opened: pending cases against a consumer's run ledger (PR #33). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
