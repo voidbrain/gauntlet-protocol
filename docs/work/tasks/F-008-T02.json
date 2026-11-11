@@ -4,7 +4,7 @@
   "parent": "F-008",
   "title": "Implement the versioned expanded pack and semantic graders",
   "goal": "Deliver the agreed reusable cases and strict graders while preserving existing smoke evidence",
-  "status": "ready",
+  "status": "implemented",
   "acceptance": [
     "Implement reviewed coverage matrix with stable case/capability/split identities",
     "Preserve existing smoke versions and report semantic success separately from structural validity"
@@ -29,7 +29,8 @@
   ],
   "privacy": "Repository-owned neutral fixtures only. No real model calls, downloads, secrets, private transcripts or consumer implementation.",
   "validation": [
-    "Meaningful protocol/pack/grader or compare/report join fixtures",
+    "Expanded pack fixture validates all 28 unique stable identities and proves structurally valid wrong JSON remains a semantic failure",
+    "Generated capability index includes the original smoke pack and the separate expanded pack",
     "Typecheck, deterministic tests, build, generated capability index and final required CI; actual model qualification is separately scoped"
   ],
   "escalation": [
@@ -38,8 +39,8 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "About 2 focused days",
-    "basis": "Initial implementation estimate assumes existing runner/grader contracts are reusable; newly discovered protocol work needs review.",
-    "reviewed": "2026-11-10"
+    "estimate": "Merged CI verification and reconciliation only",
+    "basis": "The reviewed 28-case matrix, pack integration, semantic failure regression and generated index are implemented; exact merged CI remains.",
+    "reviewed": "2026-11-11"
   }
 }

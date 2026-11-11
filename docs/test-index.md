@@ -15,11 +15,39 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [neutral-smoke@1.1.0 / holdout-approval](../examples/smoke-v1.json) | general-assistant | approval-boundaries, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [neutral-smoke@1.1.0 / holdout-tool](../examples/smoke-v1.json) | general-assistant | tool-selection, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [neutral-smoke@1.1.0 / holdout-language](../examples/smoke-v1.json) | general-assistant | language-control, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / paraphrase-r1](../examples/general-assistant-expanded-v1.json) | general-assistant | language-control, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / paraphrase-r2](../examples/general-assistant-expanded-v1.json) | general-assistant | language-control, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / paraphrase-h1](../examples/general-assistant-expanded-v1.json) | general-assistant | language-control, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / paraphrase-h2](../examples/general-assistant-expanded-v1.json) | general-assistant | language-control, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / ambiguity-r1](../examples/general-assistant-expanded-v1.json) | general-assistant | clarification, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / ambiguity-r2](../examples/general-assistant-expanded-v1.json) | general-assistant | clarification, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / ambiguity-h1](../examples/general-assistant-expanded-v1.json) | general-assistant | clarification, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / ambiguity-h2](../examples/general-assistant-expanded-v1.json) | general-assistant | clarification, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / correction-r1](../examples/general-assistant-expanded-v1.json) | general-assistant | intent-resolution, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / correction-r2](../examples/general-assistant-expanded-v1.json) | general-assistant | intent-resolution, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / correction-h1](../examples/general-assistant-expanded-v1.json) | general-assistant | intent-resolution, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / correction-h2](../examples/general-assistant-expanded-v1.json) | general-assistant | intent-resolution, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / invalid-tool-args-r1](../examples/general-assistant-expanded-v1.json) | general-assistant | tool-selection, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / invalid-tool-args-r2](../examples/general-assistant-expanded-v1.json) | general-assistant | tool-selection, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / invalid-tool-args-h1](../examples/general-assistant-expanded-v1.json) | general-assistant | tool-selection, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / invalid-tool-args-h2](../examples/general-assistant-expanded-v1.json) | general-assistant | tool-selection, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / refusal-r1](../examples/general-assistant-expanded-v1.json) | general-assistant | approval-boundaries, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / refusal-r2](../examples/general-assistant-expanded-v1.json) | general-assistant | approval-boundaries, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / refusal-h1](../examples/general-assistant-expanded-v1.json) | general-assistant | approval-boundaries, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / refusal-h2](../examples/general-assistant-expanded-v1.json) | general-assistant | approval-boundaries, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / prompt-injection-r1](../examples/general-assistant-expanded-v1.json) | general-assistant | approval-boundaries, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / prompt-injection-r2](../examples/general-assistant-expanded-v1.json) | general-assistant | approval-boundaries, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / prompt-injection-h1](../examples/general-assistant-expanded-v1.json) | general-assistant | approval-boundaries, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / prompt-injection-h2](../examples/general-assistant-expanded-v1.json) | general-assistant | approval-boundaries, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / combined-r1](../examples/general-assistant-expanded-v1.json) | general-assistant | intent-resolution, clarification, approval-boundaries, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / combined-r2](../examples/general-assistant-expanded-v1.json) | general-assistant | intent-resolution, clarification, approval-boundaries, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / combined-h1](../examples/general-assistant-expanded-v1.json) | general-assistant | intent-resolution, clarification, approval-boundaries, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [general-assistant-expanded@1.0.0 / combined-h2](../examples/general-assistant-expanded-v1.json) | general-assistant | intent-resolution, clarification, approval-boundaries, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 
 ## Area coverage
 
 - unclassified: 0 mapped cases
-- general-assistant: 10 mapped cases
+- general-assistant: 38 mapped cases
 - coding: 0 mapped cases
 - code-review: 0 mapped cases
 - math: 0 mapped cases

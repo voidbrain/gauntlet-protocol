@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 11 November 2026 against main `e1665af`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 11 November 2026 against main `42e2893`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
@@ -15,7 +15,7 @@ Current work ledger, reviewed 11 November 2026 against main `e1665af`. [Rules](B
 |:---:|---|---|---|
 | 🔴 | 🔶 P2 | Open | 🟡 Medium |
 
-💻 **→ Human action required: No**<br />T01 is verified; start ready T02 to implement the expanded pack and strict graders.
+💻 **→ Human action required: No**<br />T02 is implemented; verify it in merged CI, then start T03 release acceptance.
 
 | | |
 |---|---|
@@ -28,7 +28,7 @@ Current work ledger, reviewed 11 November 2026 against main `e1665af`. [Rules](B
 | Step | Remaining effort | Status |
 |---|---|---|
 | F-008-T01 — Define coverage matrix and multi-turn contract | 🟢 Small — 0 remaining<br />2026-11-11: Verified by merged PR #18 and its green required CI; no model campaign was run or required for this contract task. | Verified |
-| F-008-T02 — Implement the versioned expanded pack and semantic graders | 🟡 Medium — About 2 focused days<br />2026-11-10: Initial implementation estimate assumes existing runner/grader contracts are reusable; newly discovered protocol work needs review. | Ready |
+| F-008-T02 — Implement the versioned expanded pack and semantic graders | 🟡 Medium — Merged CI verification and reconciliation only<br />2026-11-11: The reviewed 28-case matrix, pack integration, semantic failure regression and generated index are implemented; exact merged CI remains. | Implemented; verification pending |
 | F-008-T03 — Verify graders, generate index and document coverage limits | 🟢 Small — 2–4 focused hours<br />2026-11-10: Initial verification estimate assumes deterministic fake providers suffice for generic release acceptance. | Planned |
 
 <details>
@@ -36,15 +36,15 @@ Current work ledger, reviewed 11 November 2026 against main `e1665af`. [Rules](B
 
 **Initial plan 2026-11-10:** Three source-owned tasks now cover contract assessment, implementation and deterministic release acceptance. Effort is remaining work, with assumptions/uncertainty in each task; no implementation or model acceptance advances because a plan exists. Material expansion or distinct outcome splitting requires owner agreement.
 
-**Next action / closure evidence:** Verified T01 defines `general-assistant-expanded@1.0.0`, a 28-identity coverage matrix and the transcript-based multi-message boundary: ordered histories are forwarded for one final generation, not executed as an interactive evaluator. Start ready T02 to implement the pack and strict semantic graders. Preserve existing smoke versions and historical evidence, regenerate the capability index and document coverage limits. Generic contracts, packs, graders, CLI and repository-owned fixtures belong here. Consumer role packs, runtime routing and production acceptance remain consumer-owned. Release acceptance never waits for NERV adoption. Live campaigns, model downloads and installations require separately reviewed scope and budgets; registration launches none.
+**Next action / closure evidence:** Verified T01 defines `general-assistant-expanded@1.0.0`, a 28-identity coverage matrix and the transcript-based multi-message boundary: ordered histories are forwarded for one final generation, not executed as an interactive evaluator. T02 implements the reviewed pack and strict semantic graders; after merged CI verifies it, start T03 release acceptance. Preserve existing smoke versions and historical evidence, regenerate the capability index and document coverage limits. Generic contracts, packs, graders, CLI and repository-owned fixtures belong here. Consumer role packs, runtime routing and production acceptance remain consumer-owned. Release acceptance never waits for NERV adoption. Live campaigns, model downloads and installations require separately reviewed scope and budgets; registration launches none.
 
-**Estimates:** 🟡 Medium, reviewed 2026-11-11: T02 pack/grader implementation and T03 deterministic release acceptance remain; live model availability and campaign cost are unknown and outside this delivery.
+**Estimates:** 🟢 Small, reviewed 2026-11-11: T03 deterministic release acceptance remains; live model availability and campaign cost are unknown and outside this delivery.
 
 | Field | Value |
 |---|---|
 | PR / evidence | [PR #19](https://github.com/voidbrain/gauntlet-protocol/pull/19) reconciles T01 verification; [PR #18](https://github.com/voidbrain/gauntlet-protocol/pull/18) implements T01 contract assessment; [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration |
 | Opened | 2026-11-10 |
-| Verification | T01 verified: PR #18 merged as `e1665af`; CI 42927563424 passed the 44-test deterministic suite and required validation. No model campaign. |
+| Verification | T01 verified: PR #18 merged as `e1665af`; CI 42927563424 passed. T02 implemented locally with 28 unique cases, generated-index integration and a valid-but-wrong semantic failure regression; merged CI pending. No model campaign. |
 | Reviewed | 2026-11-11 |
 
 </details>
