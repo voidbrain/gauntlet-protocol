@@ -56,6 +56,8 @@ const sha = /^[0-9a-f]{64}$/;
 const modelDigestPattern = /^(sha256:)?[a-f0-9]{64}$/;
 // An opaque consumer token (a commit, a content hash, a version): no spaces, no path separators, bounded.
 const sourceKeyPattern = /^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$/;
+// `sha256:<hex>` and `<hex>` name the same digest.
+const bareDigest = (d: string | null) => (d === null ? null : d.replace(/^sha256:/, ''));
 const identityFields = ['modelDigest', 'runtimeHash', 'scenarioHash', 'sourceKey'] as const;
 const nullOr = (test: (v: string) => boolean) => (v: unknown) => v === null || (typeof v === 'string' && test(v));
 const identityChecks: Record<(typeof identityFields)[number], (v: unknown) => boolean> = {
@@ -183,7 +185,10 @@ export function recordRun(
     (Date.parse(a.finished) === Date.parse(b.finished) && a.reportHash > b.reportHash);
   for (const e of ran) {
     const old = entries.get(entryKey(e));
-    if (!old || old.reportHash === e.reportHash || newer(e, old)) entries.set(entryKey(e), e);
+    if (old?.reportHash === e.reportHash && 'modelDigest' in old) {
+      // The report does not carry the source key, so the first recording binds it; recording again is a no-op.
+      if (old.sourceKey !== e.sourceKey) throw Error('Report already recorded with a different source key');
+    } else if (!old || old.reportHash === e.reportHash || newer(e, old)) entries.set(entryKey(e), e);
   }
   return { schemaVersion: 2, entries: [...entries.values()].sort(order) };
 }
@@ -202,16 +207,21 @@ export function pendingCases(
 ): PendingCase[] {
   const ledger = validateLedger(ledgerInput);
   validateIntendedIdentity(options);
-  const checks: Record<'model' | 'system', [(typeof identityFields)[number], PendingReason][]> = {
-    model: [
-      ['modelDigest', 'model-changed'],
-      ['runtimeHash', 'runtime-changed'],
-      ['scenarioHash', 'scenario-changed'],
-    ],
-    system: [
-      ['scenarioHash', 'scenario-changed'],
-      ['sourceKey', 'source-changed'],
-    ],
+  // Model fields apply to every case that may call a model (any layer but system); the source key to every case
+  // that runs the consumer's code (a runner); the scenario to all.
+  const checksFor = (c: Pack['cases'][number]): (readonly [(typeof identityFields)[number], PendingReason])[] => [
+    ...(c.layer !== 'system'
+      ? ([
+          ['modelDigest', 'model-changed'],
+          ['runtimeHash', 'runtime-changed'],
+        ] as const)
+      : []),
+    ['scenarioHash', 'scenario-changed'],
+    ...(c.runner !== undefined ? ([['sourceKey', 'source-changed']] as const) : []),
+  ];
+  const wantedIdentity: IntendedIdentity = {
+    ...options,
+    ...(typeof options.modelDigest === 'string' ? { modelDigest: bareDigest(options.modelDigest) } : {}),
   };
   const now = options.now ?? Date.now();
   const wanted =
@@ -232,8 +242,10 @@ export function pendingCases(
         );
       const last = latest(mine);
       const identityChanged = (e: LedgerEntry) =>
-        checks[c.layer === 'system' ? 'system' : 'model'].find(
-          ([k]) => options[k] !== undefined && (!(k in e) || e[k] !== options[k]),
+        checksFor(c).find(
+          ([k]) =>
+            wantedIdentity[k] !== undefined &&
+            (!(k in e) || (k === 'modelDigest' ? bareDigest(e[k] ?? null) : e[k]) !== wantedIdentity[k]),
         )?.[1] ?? null;
       const stale = (e: LedgerEntry) =>
         options.maxAgeMs !== undefined && now - Date.parse(e.finished) > options.maxAgeMs ? 'stale' : null;
