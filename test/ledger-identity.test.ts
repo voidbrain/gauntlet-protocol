@@ -255,3 +255,64 @@ test('B-002: the CLI records a source key and filters pending by identity', asyn
     2,
   );
 });
+
+// Review of PR #37 (fresh context): runner cases on any layer run the consumer's code, so they follow its source key.
+test('B-002 review: every runner case follows the source key; non-system cases follow model fields', () => {
+  const runnerCase = (id: string, layer: 'model' | 'coding' | 'end-to-end'): Pack['cases'][number] => ({
+    ...systemCase(id),
+    layer,
+  });
+  const agents = pack('agents', runnerCase('c', 'coding'), runnerCase('e', 'end-to-end'), runnerCase('r', 'model'));
+  const ledger = validateLedger({
+    schemaVersion: 2,
+    entries: ['c', 'e', 'r'].map((id) => entry(agents, id, { sourceKey: 'rev-1' }, null)),
+  });
+  const reasons = (options: Record<string, unknown>) =>
+    pendingCases([agents], ledger, options as never).map((p) => `${p.case}:${p.reason}`);
+  assert.deepEqual(reasons({ sourceKey: 'rev-1' }), []);
+  assert.deepEqual(reasons({ sourceKey: 'rev-2' }), ['c:source-changed', 'e:source-changed', 'r:source-changed']);
+  assert.deepEqual(reasons({ modelDigest: digestB }), ['c:model-changed', 'e:model-changed', 'r:model-changed']);
+});
+
+test('B-002 review: re-recording a report cannot rewrite its source key', async () => {
+  const smoke = pack('smoke', modelCase('a'));
+  const report = (await run(smoke, profile, defaults, { execute: true, allowModels: true, fetch: fetcher })) as Report;
+  const first = recordRun(emptyLedger(), report, smoke, { sourceKey: 'rev-1' });
+  assert.deepEqual(recordRun(first, report, smoke, { sourceKey: 'rev-1' }), first);
+  assert.throws(() => recordRun(first, report, smoke, { sourceKey: 'rev-2' }), /source key/i);
+  assert.throws(() => recordRun(first, report, smoke), /source key/i);
+});
+
+test('B-002 review: digest prefixes compare equal; schema 1 refuses identity fields', () => {
+  const models = pack('models', modelCase('m'));
+  const ledger = validateLedger({ schemaVersion: 2, entries: [entry(models, 'm', {}, null)] });
+  assert.deepEqual(pendingCases([models], ledger, { modelDigest: 'sha256:' + digestA } as never), []);
+  const prefixed = validateLedger({
+    schemaVersion: 2,
+    entries: [entry(models, 'm', { modelDigest: 'sha256:' + digestA }, null)],
+  });
+  assert.deepEqual(pendingCases([models], prefixed, { modelDigest: digestA } as never), []);
+  assert.throws(() => validateLedger({ schemaVersion: 1, entries: [entry(models, 'm', {}, null)] }), /entry/);
+});
+
+test('B-002 review: the CLI prints a report identity and names runtime and source changes', async (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'gauntlet identity cli '));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const smoke = pack('smoke', modelCase('a'));
+  const files = { pack: join(dir, 'p.json'), report: join(dir, 'r.json'), ledger: join(dir, 'l.json') };
+  writeFileSync(files.pack, JSON.stringify(smoke));
+  const report = (await run(smoke, profile, defaults, { execute: true, allowModels: true, fetch: fetcher })) as Report;
+  writeFileSync(files.report, JSON.stringify(report));
+  const cli = (...args: string[]) => spawnSync(process.execPath, ['bin/gauntlet.mjs', ...args], { encoding: 'utf8' });
+  const id = cli('identity', `--report=${files.report}`);
+  assert.equal(id.status, 0, id.stderr);
+  assert.deepEqual(JSON.parse(id.stdout), {
+    modelDigest: report.modelDigest,
+    runtimeHash: runtimeOf(report),
+    scenarioHash: null,
+  });
+  assert.equal(cli('identity').status, 2);
+  cli('ledger', `--ledger=${files.ledger}`, `--report=${files.report}`, `--pack=${files.pack}`);
+  const pending = (...flags: string[]) => cli('pending', `--packs=${files.pack}`, `--ledger=${files.ledger}`, ...flags);
+  assert.equal(pending('--runtime-hash=' + '0'.repeat(64)).stdout, 'smoke/a (runtime-changed)\n');
+});
