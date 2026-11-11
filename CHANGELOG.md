@@ -1,5 +1,9 @@
 # Releases
 
+## 0.5.0
+
+Separate 28-case `general-assistant-expanded@1.0.0` pack with transcript contract and generated index (F-008). Repeatable candidate comparisons: bounded summary with full requested and observed identity, repeat/result identities, explicit mismatch reasons, error/not-run counts, incomplete state and unknown output/cache usage; no automatic promotion (F-009, docs/COMPARISONS.md). Original smoke packs, grading and protocol 0.4 evidence are unchanged. No real-model run.
+
 ## 0.4.1
 
 Explicit per-case Ollama JSON/schema response formats, separate structural smoke pack, mode-visible plans and conservative pack/cache identity. Unconstrained defaults, semantic grading and failure captures remain unchanged. Other backends reject unsupported formats. No real-model run.
