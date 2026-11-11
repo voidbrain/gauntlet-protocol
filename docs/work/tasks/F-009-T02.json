@@ -4,7 +4,7 @@
   "parent": "F-009",
   "title": "Implement bounded repetitions and failure-preserving summaries",
   "goal": "Execute the agreed comparison protocol without losing failures, identity or unknown telemetry",
-  "status": "planned",
+  "status": "ready",
   "acceptance": [
     "Implement reviewed repeat accounting and compatible comparison separation/rejection",
     "Preserve failed/error/not-run outcomes, cold/warm latency and measured input/output/cache provenance",
