@@ -2,7 +2,13 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Gauntlet Protocol backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `fc6ec02`. v0.6.0 published (PR #34, CI 43020317739): F-010 closed, run ledger and `pending`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).\n\n## Bugs and reliability\n\n\n## Features and improvements\n\n"
+      "text": "# Gauntlet Protocol backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `6cca8d1`. v0.6.0 published (PR #34, CI 43020317739); B-002 opened: ledger coverage ignores model, runtime, scenario and source identity. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).\n\n## Bugs and reliability\n\n"
+    },
+    {
+      "records": "B"
+    },
+    {
+      "text": "\n## Features and improvements\n\n"
     },
     {
       "records": "F"

@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "status": "planned",
+  "id": "B-002-T01",
+  "parent": "B-002",
+  "title": "Identity fields in the ledger entry",
+  "goal": "Ledger schema 2: each entry records model digest, runtime identity hash, scenario hash and an optional consumer source key taken from the admitted report and the record call",
+  "dependsOn": [],
+  "acceptance": [
+    "`LedgerEntry` gains modelDigest, runtimeHash (hash of the report's identity and runtime), scenarioHash (environment hash or null) and sourceKey (opaque string or null)",
+    "`gauntlet ledger record --source-key=…` stores the key; the key is validated as a bounded opaque token, never a path or free text",
+    "Schema 1 ledgers still validate and are read as unknown identity; writing upgrades the file to schema 2",
+    "docs/LEDGER.md lists every identity field and what changes it"
+  ],
+  "validation": [
+    "Fixtures for record with and without a source key, schema 1 read and upgrade, refusal of an unbounded key; npm test"
+  ],
+  "escalation": [
+    "A field that could carry private content is an owner decision"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 focused day",
+    "basis": "Estimated 2026-11-11 from the v0.6.0 ledger code (one entry type, one record function). Estimate, not a measurement.",
+    "reviewed": "2026-11-11"
+  },
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "docs/**",
+    "examples/**",
+    "CHANGELOG.md",
+    "package.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "typescript",
+    "structured-tools",
+    "regression-design"
+  ],
+  "privacy": "Metadata only: identities, hashes, dates; no outputs, prompts, paths or credentials."
+}
