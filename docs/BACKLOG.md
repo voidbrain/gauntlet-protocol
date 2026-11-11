@@ -33,7 +33,7 @@ Current work ledger, reviewed 11 November 2026 against main `cfd6dc3`. PR #32 CI
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-**Next action / closure evidence:** F-010-T01 and F-010-T02 implemented (this PR); release 0.6.0. Closes on the release tag after green CI. Consumers adopt it in their own backlogs.
+**Next action / closure evidence:** F-010-T01 and F-010-T02 implemented ([PR #34](https://github.com/voidbrain/gauntlet-protocol/pull/34)); release 0.6.0. Closes on the release tag after green CI. Consumers adopt it in their own backlogs.
 
 **Estimates:** Small remaining effort: release only. Estimated 2026-11-11 at about 1.5 focused days (F-010-T01 0.5, F-010-T02 1).
 
