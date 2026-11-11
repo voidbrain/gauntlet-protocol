@@ -1,5 +1,9 @@
 # Releases
 
+## 0.7.1
+
+Development harness reconciled to 5.4.0 (effort totals, estimate calibration reminder, actual effort column, queue-ordered backlog). No package code, protocol, grading or evidence change; the engine hash is unchanged. No real-model run.
+
 ## 0.7.0
 
 Identity-bound ledger coverage (B-002, docs/LEDGER.md): ledger schema 2 records each run's model digest, runtime hash (`runtimeHash(report)`: identity proof and runtime), scenario hash (`scenarioHash(environment)` or null) and an optional opaque consumer `--source-key`; `gauntlet pending` and `pendingCases` take the intended identity (`--model-digest`, `--runtime-hash`, `--scenario-hash=<sha256|none>`, `--source-key`) and name `model-changed`, `runtime-changed`, `scenario-changed` or `source-changed`. Unset fields do not constrain. Every case outside the system layer follows the model digest and runtime, every case follows the scenario, and every runner case (any layer) follows the source key. The runtime hash includes the Node version, so a Node upgrade makes model cases `runtime-changed` for a consumer that passes `--runtime-hash`. `gauntlet identity --report=…` prints the identity a report records. Recording the same report again with a different source key is refused; `sha256:` digest prefixes compare equal. Schema 1 ledgers stay readable as unknown identity, which never covers a constrained query; recording upgrades the file to schema 2. Consumers adopt it by passing the identity they intend to run under; without it, behaviour matches 0.6.0. `docs/LEDGER.md` now ships in the package. The engine hash changes with the new exports, so cache reuse needs evidence produced by 0.7.0. No real-model run.

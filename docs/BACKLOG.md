@@ -1,6 +1,10 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 11 November 2026 against main `1fb4ed5`. B-002 implemented in PR #37 (CI 43061373995); review fixes in PR #38 before the 0.7.0 tag. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 11 November 2026 against main `31d73b6`. v0.7.0 published (PRs #37, #38; B-002 closed in #39). Harness 5.4.0 reconciled: effort totals, actual effort column, queue order. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+
+<!-- totals:start -->
+**Remaining effort:** no open steps. Generated from the task files.
+<!-- totals:end -->
 
 ## Bugs and reliability
 
