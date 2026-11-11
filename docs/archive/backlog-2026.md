@@ -291,3 +291,42 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 
 ---
 
+## Closed 2026-11-11
+
+### F-008
+
+**Expand the common evaluation pack beyond ten smoke cases**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No remaining owned action. The expanded pack and deterministic release acceptance are complete.
+
+| | |
+|---|---|
+| **Issue** | The ten-case neutral smoke pack is too narrow to support broad capability comparisons. |
+| **Reproduce** | Owner request 2026-11-10: expand reusable evaluation coverage and make candidate comparisons reproducible. |
+| **Check** | Versioned coverage includes paraphrases, ambiguity, multi-turn corrections, invalid tool arguments, refusal, prompt injection and harder held-out cases. Strict semantic grading remains separate from structural validity; deterministic grader fixtures prove both correct and deliberately incorrect answers. Held-out labels alone never imply confidentiality or isolation. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Initial plan 2026-11-10:** Three source-owned tasks covered contract assessment, implementation and deterministic release acceptance. No model acceptance advanced because a plan existed.
+
+**Next action / closure evidence:** Closed 2026-11-11 after T01 defined the 28-identity general-assistant-expanded@1.0.0 matrix and transcript boundary, T02 implemented the separate pack and generated index, and T03 proved exact positive semantics across all seven capability groups plus a structurally valid negative result. PR #22 merged as f7214ec; CI 42928961766 passed all 46 deterministic tests and required validation. Original smoke packs and evidence remain unchanged. No consumer adoption, live model campaign, download or installation gates this reusable release.
+
+**Estimates:** Small at closure: no remaining owned work. Live model availability and campaign cost remain unknown and separately scoped.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #22](https://github.com/voidbrain/gauntlet-protocol/pull/22) T03 acceptance; [PR #20](https://github.com/voidbrain/gauntlet-protocol/pull/20) T02 expanded pack; [PR #18](https://github.com/voidbrain/gauntlet-protocol/pull/18) T01 contract; reconciliation PRs #19 and #21 |
+| Opened | 2026-11-10 |
+| Closed | 2026-11-11 |
+| Verification | CI 42928961766 passed 46 deterministic tests, typecheck, build, generated index and required repository checks at merged PR #22. Earlier T01/T02 CI runs 42927563424 and 42928393224 passed. No real-model qualification claimed. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---
+
