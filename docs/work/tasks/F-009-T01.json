@@ -4,7 +4,7 @@
   "parent": "F-009",
   "title": "Define candidate matrix and repeat/comparison contract",
   "goal": "Assess existing compare/repeat/report behavior and define compatible comparison dimensions",
-  "status": "implemented",
+  "status": "verified",
   "acceptance": [
     "Specify bounded candidate identity/configuration matrix, compatible dimensions and repetition policy",
     "Preserve exact requested/actual model/runtime/context/sampling/thinking/quantization/environment identities"
@@ -29,6 +29,7 @@
   "validation": [
     "Current compare/repeat/report path assessed against source, CLI and deterministic regressions",
     "Bounded matrix, exact identity fields, compatibility dimensions, repetition policy and failure/unknown preservation recorded in docs/COMPARISONS.md",
+    "PR #24 merged as 9eab9a7 after CI 42972124601 passed all required validation",
     "Typecheck, deterministic tests, build, generated capability index and final required CI; actual model qualification is separately scoped"
   ],
   "escalation": [
@@ -37,8 +38,8 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "Merged CI verification and reconciliation only",
-    "basis": "Assessment and target contract are implemented; T02 owns the identified bounded identity-summary and reason-code gaps.",
+    "estimate": "0 remaining",
+    "basis": "Verified by merged PR #24 and its green required CI; T02 owns the separately planned implementation gaps.",
     "reviewed": "2026-11-11"
   }
 }
