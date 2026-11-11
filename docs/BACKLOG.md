@@ -1,55 +1,11 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 11 November 2026 against main `6d0299a`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 11 November 2026 against main `f7214ec`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
 
 ## Features and improvements
-
-### F-008
-
-**Expand the common evaluation pack beyond ten smoke cases**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🔴 | 🔶 P2 | Open | 🟡 Medium |
-
-💻 **→ Human action required: No**<br />T03 release acceptance is implemented; verify the exact merged revision, then close F-008.
-
-| | |
-|---|---|
-| **Issue** | The ten-case neutral smoke pack is too narrow to support broad capability comparisons. |
-| **Reproduce** | Owner request 2026-11-10: expand reusable evaluation coverage and make candidate comparisons reproducible. |
-| **Check** | Versioned coverage includes paraphrases, ambiguity, multi-turn corrections, invalid tool arguments, refusal, prompt injection and harder held-out cases. Strict semantic grading remains separate from structural validity; deterministic grader fixtures prove both correct and deliberately incorrect answers. Held-out labels alone never imply confidentiality or isolation. |
-
-**Feature steps** (remaining estimates; status is not parent acceptance)
-
-| Step | Remaining effort | Status |
-|---|---|---|
-| F-008-T01 — Define coverage matrix and multi-turn contract | 🟢 Small — 0 remaining<br />2026-11-11: Verified by merged PR #18 and its green required CI; no model campaign was run or required for this contract task. | Verified |
-| F-008-T02 — Implement the versioned expanded pack and semantic graders | 🟡 Medium — 0 remaining<br />2026-11-11: Verified by merged PR #20 and its green required CI; no real-model campaign was run or required. | Verified |
-| F-008-T03 — Verify graders, generate index and document coverage limits | 🟢 Small — Merged CI verification and reconciliation only<br />2026-11-11: Deterministic positive/negative acceptance, generated index and documented limits are implemented; exact merged CI remains. | Implemented; verification pending |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Initial plan 2026-11-10:** Three source-owned tasks now cover contract assessment, implementation and deterministic release acceptance. Effort is remaining work, with assumptions/uncertainty in each task; no implementation or model acceptance advances because a plan exists. Material expansion or distinct outcome splitting requires owner agreement.
-
-**Next action / closure evidence:** Verified T01 defines `general-assistant-expanded@1.0.0`, a 28-identity coverage matrix and the transcript-based multi-message boundary: ordered histories are forwarded for one final generation, not executed as an interactive evaluator. Verified T02 implements the reviewed pack and strict semantic graders. T03 adds deterministic positive/negative joins across all seven capability groups; merged CI and closure reconciliation remain. Preserve existing smoke versions and historical evidence, regenerate the capability index and document coverage limits. Generic contracts, packs, graders, CLI and repository-owned fixtures belong here. Consumer role packs, runtime routing and production acceptance remain consumer-owned. Release acceptance never waits for NERV adoption. Live campaigns, model downloads and installations require separately reviewed scope and budgets; registration launches none.
-
-**Estimates:** 🟢 Small, reviewed 2026-11-11: merged CI verification and closure reconciliation remain; live model availability and campaign cost are unknown and outside this delivery.
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #22](https://github.com/voidbrain/gauntlet-protocol/pull/22) implements T03 release acceptance; [PR #21](https://github.com/voidbrain/gauntlet-protocol/pull/21) reconciles T02 verification; [PR #20](https://github.com/voidbrain/gauntlet-protocol/pull/20) implements T02 expanded pack; [PR #19](https://github.com/voidbrain/gauntlet-protocol/pull/19) reconciles T01 verification; [PR #18](https://github.com/voidbrain/gauntlet-protocol/pull/18) implements T01 contract assessment; [PR #15](https://github.com/voidbrain/gauntlet-protocol/pull/15) upfront plan and harness4.7.0 reconciliation; [PR #14](https://github.com/voidbrain/gauntlet-protocol/pull/14) backlog registration |
-| Opened | 2026-11-10 |
-| Verification | T01 verified in PR #18 / CI 42927563424. T02 verified: PR #20 merged as `352d360`; CI 42928393224 passed 45 deterministic tests and required validation. No model campaign. T03 deterministic acceptance is implemented locally; merged CI pending. |
-| Reviewed | 2026-11-11 |
-
-</details>
-
----
 
 ### F-009
 
@@ -97,6 +53,8 @@ Current work ledger, reviewed 11 November 2026 against main `6d0299a`. [Rules](B
 
 
 ## Other changes
+
+F-008 closed 2026-11-11 after PR #22 / CI 42928961766 passed 46 deterministic tests and owned checks. The 28-case expanded pack, transcript contract, strict semantic joins and generated index are accepted without a live model campaign or consumer adoption gate.
 
 **Harness v4.8.0 reconciliation, 2026-11-11 ([PR #16](https://github.com/voidbrain/gauntlet-protocol/pull/16)).** Adopt the published subscription-usage release by copying the updated work-usage tool and guide byte-identically and advancing the project stamp. Existing private stores require no migration; no client setting, collector, model call, allowance capture or export is enabled or run. Reconciled merged PR #15 / CI 42888597710 and advanced the ledger header to main `197531a`. Merged as `58c45b8` after CI 42926423088 passed. A report-only fresh-context review completed after merge and found no content, privacy or security blocker; because PR #16 merged before that review completed, it did not satisfy the required pre-merge review timing. [PR #17](https://github.com/voidbrain/gauntlet-protocol/pull/17) reconciles that evidence and the merged-branch cleanup. Copied files match published v4.8.0; no optional collector/client configuration/model call/export was exercised and no behaviour runner is configured. README, AGENTS, area notes, backlog rules and style guide reviewed with no further affected claim.
 
