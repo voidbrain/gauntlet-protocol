@@ -4,7 +4,7 @@
   "parent": "F-008",
   "title": "Verify graders, generate index and document coverage limits",
   "goal": "Establish deterministic positive/negative joins and publish the expanded coverage contract",
-  "status": "planned",
+  "status": "ready",
   "acceptance": [
     "Prove both correct and deliberately incorrect outputs at pack/grader joins",
     "Regenerate capability index and CLI examples; document held-out/isolation and actual model acceptance limits",
