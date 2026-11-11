@@ -4,7 +4,7 @@
   "parent": "F-009",
   "title": "Verify budgets, interruption and reproducible reporting",
   "goal": "Prove comparison joins with repository-owned fake providers and document limits",
-  "status": "planned",
+  "status": "ready",
   "acceptance": [
     "Test aggregate budgets, interruption, repetition and unknown/partial telemetry across engine/report joins",
     "Regenerate relevant index/examples and document reproducibility constraints without automatic promotion",
