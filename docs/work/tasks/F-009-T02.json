@@ -4,7 +4,7 @@
   "parent": "F-009",
   "title": "Implement bounded repetitions and failure-preserving summaries",
   "goal": "Execute the agreed comparison protocol without losing failures, identity or unknown telemetry",
-  "status": "implemented",
+  "status": "verified",
   "acceptance": [
     "Implement reviewed repeat accounting and compatible comparison separation/rejection",
     "Preserve failed/error/not-run outcomes, cold/warm latency and measured input/output/cache provenance",
@@ -32,6 +32,7 @@
   "validation": [
     "Bounded comparison join preserves full requested and observed identity, repeat/result identities, outcome counts and unknown cache coverage across candidate configuration differences",
     "Explicit environment mismatch reason prevents silent comparison while failures remain visible",
+    "PR #26 merged as 2f00f63 after CI 42972801436 passed all required validation",
     "Typecheck, deterministic tests, build, generated capability index and final required CI; actual model qualification is separately scoped"
   ],
   "escalation": [
@@ -40,8 +41,8 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "Merged CI verification and reconciliation only",
-    "basis": "Bounded identity-rich summaries, mismatch reasons and failure/unknown preservation are implemented; exact merged CI remains.",
+    "estimate": "0 remaining",
+    "basis": "Verified by merged PR #26 and its green required CI; no real-model campaign was run or required.",
     "reviewed": "2026-11-11"
   }
 }
