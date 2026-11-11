@@ -368,3 +368,40 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 </details>
 
 ---
+
+## Closed 2026-11-11
+
+### F-010
+
+**Report pending cases against a consumer’s run ledger**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; release 0.6.0 is published.
+
+| | |
+|---|---|
+| **Issue** | A consumer that pins a release cannot tell which cases it has never run: NERV pinned 0.5.0 and its 28 new `general-assistant-expanded` cases went unrun and unindexed (voidbrain/nerv F-074). Each consumer would otherwise rewrite the same comparison. |
+| **Reproduce** | Pin a release that adds or changes a pack in a consumer with earlier admitted reports; nothing lists the cases that lack a matching run. |
+| **Check** | `gauntlet pending --packs=… --ledger=…` lists every new, changed and stale case (by pack id, version and case hash) and exits non-zero when any are pending; `gauntlet ledger record` adds entries only from admitted reports; the ledger holds metadata only. Consumer-agnostic: no consumer name, path or policy in Gauntlet. Released with a CHANGELOG entry. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-11 after PR #34 / CI 43020317739 passed, merged fc6ec02, and v0.6.0 was tagged and published on GitHub. Consumers adopt it in their own backlogs (voidbrain/nerv F-074-T07).
+
+**Estimates:** Small remaining effort: zero; released.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #34](https://github.com/voidbrain/gauntlet-protocol/pull/34). Test: test/ledger.test.ts. Review: fresh-context design review (Opus): one blocker (an error result from an unanswering runtime counted as covering the case, so a campaign against a down endpoint cleared every pending case) and should-fix items (errors exited 1 like pending cases; system cases stayed pending under a profile; missing repeat, newer-run and tie tests), all fixed in #34: only graded results cover, errors exit 2, system cases covered by profile-less runs, ties broken by report hash, symlinked ledger refused and writes atomic. |
+| Opened | 2026-11-11 |
+| Closed | 2026-11-11 |
+| Verification | 2026-11-11 Unit/integration: test/ledger.test.ts (coverage by case definition and profile; new, changed, stale and other-profile; refusal of another pack definition, duplicates and extra fields; idempotent recording; CLI record and pending with exit codes 0/1/2, error results that cover nothing, repeats, newer-run-wins and ties, system cases under a profile, symlinked ledger refused, through saved reports from a fixture runtime); npm test passes. No real-model run. |
+| Reviewed | 2026-11-11 |
+
+</details>
+
+---

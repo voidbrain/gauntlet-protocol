@@ -1,52 +1,12 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 11 November 2026 against main `cfd6dc3`. PR #32 CI 43011932448 passed `validate`: `.claude/` local ignores added. F-010 opened: pending cases against a consumer's run ledger (PR #33). [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 11 November 2026 against main `fc6ec02`. v0.6.0 published (PR #34, CI 43020317739): F-010 closed, run ledger and `pending`. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 ## Bugs and reliability
 
 
 ## Features and improvements
 
-### F-010
-
-**Report pending cases against a consumer’s run ledger**
-
-| Signal | Priority | Status | Effort |
-|:---:|---|---|---|
-| 🟡 | 🔶 P2 | Implemented | 🟢 Small |
-
-💻 **→ Human action required: No**<br />Merge on green CI after the fresh-context review, then tag and publish v0.6.0.
-
-| | |
-|---|---|
-| **Issue** | A consumer that pins a release cannot tell which cases it has never run: NERV pinned 0.5.0 and its 28 new `general-assistant-expanded` cases went unrun and unindexed (voidbrain/nerv F-074). Each consumer would otherwise rewrite the same comparison. |
-| **Reproduce** | Pin a release that adds or changes a pack in a consumer with earlier admitted reports; nothing lists the cases that lack a matching run. |
-| **Check** | `gauntlet pending --packs=… --ledger=…` lists every new, changed and stale case (by pack id, version and case hash) and exits non-zero when any are pending; `gauntlet ledger record` adds entries only from admitted reports; the ledger holds metadata only. Consumer-agnostic: no consumer name, path or policy in Gauntlet. Released with a CHANGELOG entry. |
-
-**Feature steps** (remaining estimates; status is not parent acceptance)
-
-| Step | Remaining effort | Status |
-|---|---|---|
-| F-010-T01 — Run ledger contract | 🟢 Small — 0 remaining; release pending<br />2026-11-11: Owner decision 2026-11-11: Gauntlet and the harness are reused by future projects, so the generic part of 'a pack added or changed raises a run' lives here; consumers keep their ledger, rule and budgets. Estimate, not a measurement. | Implemented; verification pending |
-| F-010-T02 — &#96;gauntlet pending&#96; command | 🟢 Small — 0 remaining; release pending<br />2026-11-11: Owner decision 2026-11-11: Gauntlet and the harness are reused by future projects, so the generic part of 'a pack added or changed raises a run' lives here; consumers keep their ledger, rule and budgets. Estimate, not a measurement. | Implemented; verification pending |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-**Next action / closure evidence:** F-010-T01 and F-010-T02 implemented ([PR #34](https://github.com/voidbrain/gauntlet-protocol/pull/34)); release 0.6.0. Closes on the release tag after green CI. Consumers adopt it in their own backlogs.
-
-**Estimates:** Small remaining effort: release only. Estimated 2026-11-11 at about 1.5 focused days (F-010-T01 0.5, F-010-T02 1).
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #34](https://github.com/voidbrain/gauntlet-protocol/pull/34). Test: test/ledger.test.ts. Review: fresh-context design review (Opus): one blocker (an error result from an unanswering runtime counted as covering the case, so a campaign against a down endpoint cleared every pending case) and should-fix items (errors exited 1 like pending cases; system cases stayed pending under a profile; missing repeat, newer-run and tie tests), all fixed in #34: only graded results cover, errors exit 2, system cases covered by profile-less runs, ties broken by report hash, symlinked ledger refused and writes atomic. |
-| Opened | 2026-11-11 |
-| Verification | 2026-11-11 Unit/integration: test/ledger.test.ts (coverage by case definition and profile; new, changed, stale and other-profile; refusal of another pack definition, duplicates and extra fields; idempotent recording; CLI record and pending with exit codes 0/1/2, error results that cover nothing, repeats, newer-run-wins and ties, system cases under a profile, symlinked ledger refused, through saved reports from a fixture runtime); npm test passes. No real-model run. |
-| Reviewed | 2026-11-11 |
-
-</details>
-
----
 ## Other changes
 
 **Harness v5.1.1 reconciliation, 2026-11-11 ([PR #31](https://github.com/voidbrain/gauntlet-protocol/pull/31)).** Covers template releases 5.0.1, 5.0.2, 5.1.0 and 5.1.1. 5.0.1 and 5.0.2 need nothing here: the ESLint and Prettier ignores already exclude `.harness/` (PR #30), and the Angular change does not apply to this core-only project. 5.1.0: `tools/check-harness.mjs` (new `--strict` flag) and the reviewer agents `.claude/agents/mechanical-reviewer.md` (Haiku) and `design-reviewer.md` (Opus) are copied byte-identically from tag v5.1.1 and listed under `copied`; `node tools/check-harness.mjs --strict` passes. The Independent review paragraph of BACKLOG-RULES and its pointer in AGENTS.md are reconciled by hand: a copy-only reconcile needs no reviewer when `--strict` passes, and reviews are matched to the change; no check, never or ask-first rule, or safeguard is removed. 5.1.1: `.gitignore` ignores `node_modules` without the trailing slash, so a worktree symlink is ignored (none was committed). CI checks the copies against v5.1.1. Fresh-context review (Opus): no blockers. Its should-fix, applied in a follow-up PR because #31 was already green: `.gitignore` lacked the template's `.claude/settings.local.json` and `.claude/worktrees/` lines (missing since before 5.0.0), which matter now that `.claude/agents/` is versioned. ESLint still ignores all of `tools/**` instead of the copied tools by path (APPLY 5.0.1); every file there is a copied tool, so nothing project-owned escapes lint, but a project tool added later must be un-ignored. No behaviour runner is configured.
