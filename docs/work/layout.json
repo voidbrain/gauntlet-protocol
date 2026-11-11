@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Gauntlet Protocol backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `1fb4ed5`. B-002 implemented in PR #37 (CI 43061373995); review fixes follow before the 0.7.0 tag. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).\n\n## Bugs and reliability\n\n"
+      "text": "# Gauntlet Protocol backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `1fb4ed5`. B-002 implemented in PR #37 (CI 43061373995); review fixes in PR #38 before the 0.7.0 tag. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).\n\n## Bugs and reliability\n\n"
     },
     {
       "records": "B"
