@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-11T08:28:31.060Z",
+  "reviewed": "2026-11-11T11:22:34.685Z",
   "policy": "18c0059e726d071aefd8c71b9a5d27b54b923320af6b34567c262491c7c1c9bb",
   "inputs": {
-    "AGENTS.md": "8e7998ed2846839a70f45b887fd1d6692e07535efdd87712dcd810a3f46f41bd",
-    "docs/BACKLOG-RULES.md": "5b7497f7f3cbb53b3ad204a546490e362fa73ace01dd42ecd098835e58907fa8",
+    "AGENTS.md": "f0b2f2a187d69b81f6cb1b8d862560904ba8ce62f551393b7b3074a6c05c6471",
+    "docs/BACKLOG-RULES.md": "e429c53927a1cdde23a4e826759d73076c69f1543ac269559ead6734591ee1a5",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "171636323e1cd991b33d5b723329d14dd51919a24fd78778b33d8a2a17dde539",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -24,8 +24,8 @@
     "tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219"
   },
   "measurements": {
-    "samples": 4,
-    "latestAt": "2026-11-11T08:28:31.009Z",
+    "samples": 5,
+    "latestAt": "2026-11-11T11:22:34.629Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -51,25 +51,25 @@
         }
       },
       "reconciliation": {
-        "samples": 4,
+        "samples": 5,
         "durationMs": {
-          "observed": 4,
+          "observed": 5,
           "missing": 0,
-          "median": 40555.5
+          "median": 57041
         },
         "conflicts": {
-          "observed": 0,
+          "observed": 1,
           "missing": 4,
-          "median": null
+          "median": 0
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 4,
+          "missing": 5,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 4,
+          "missing": 5,
           "median": null
         }
       }
@@ -79,14 +79,14 @@
     {
       "kind": "rule",
       "disposition": "implemented",
-      "target": "AGENTS.md",
-      "evidence": "Reconciled published harness v5.0.0: the session-start bullet and the BACKLOG-RULES reconcile sentence fold reconciliation into the next working PR (due at 10 merged PRs or one day behind, or at once for a commit without a PR), and the check catalogue gains format:check, lint and check:tooling. No never or ask-first rule is removed; evidence requirements are unchanged. No behaviour runner configured; token counters unavailable."
+      "target": "docs/BACKLOG-RULES.md",
+      "evidence": "Reconciled published harness v5.1.1 (5.1.0 rule change): the Independent review paragraph gains the copy-only reconcile exemption (requires check-harness --strict) and matches the reviewer model to the change; the AGENTS.md pointer says the exemptions are listed there. No check, never or ask-first rule, or safeguard removed. 5.0.1/5.0.2 need no change (ignores already exclude .harness/). No behaviour runner configured."
     },
     {
       "kind": "tool",
       "disposition": "implemented",
-      "target": "tools/check-tooling.mjs",
-      "evidence": "Copied byte-identically from tag v5.0.0 with the 26 reformatted copied tools; check-harness reports copied files match. Prettier and ESLint adopted with a mechanical reformat of 18 source files (equal syntax-tree fingerprints) and four hand lint fixes; 48 deterministic tests pass."
+      "target": "tools/check-harness.mjs",
+      "evidence": "Copied byte-identically from tag v5.1.1 with .claude/agents/mechanical-reviewer.md and design-reviewer.md; check-harness --strict reports copied files match v5.1.1. .gitignore ignores node_modules without the trailing slash (5.1.1)."
     }
   ]
 }

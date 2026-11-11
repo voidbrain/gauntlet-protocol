@@ -3,7 +3,7 @@
     "path": "../project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "5.0.0",
+  "version": "5.1.1",
   "stacks": [
     "core"
   ],
@@ -11,6 +11,8 @@
     "tools/check-backlog.mjs": "core/tools/check-backlog.mjs",
     "tools/check-freshness.mjs": "core/tools/check-freshness.mjs",
     "tools/check-tooling.mjs": "core/tools/check-tooling.mjs",
+    ".claude/agents/mechanical-reviewer.md": "core/.claude/agents/mechanical-reviewer.md",
+    ".claude/agents/design-reviewer.md": "core/.claude/agents/design-reviewer.md",
     "tools/impact-map.mjs": "core/tools/impact-map.mjs",
     "tools/coverage-table.mjs": "core/tools/coverage-table.mjs",
     "tools/lcov-summary.mjs": "core/tools/lcov-summary.mjs",
