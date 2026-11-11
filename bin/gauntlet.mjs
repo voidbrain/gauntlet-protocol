@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { resolve, dirname, relative } from 'node:path';
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, lstatSync, renameSync } from 'node:fs';
 import {
   readJSON,
   readEvidence,
@@ -20,6 +20,9 @@ import {
   inspectMachine,
   validateExecutionEnvironment,
   inspectFailures,
+  emptyLedger,
+  recordRun,
+  pendingCases,
 } from '../dist/index.js';
 const [command, ...args] = process.argv.slice(2),
   options = {};
@@ -62,9 +65,12 @@ try {
       'only',
     ],
     compare: ['reports'],
+    ledger: ['ledger', 'report', 'pack'],
+    pending: ['packs', 'ledger', 'profile', 'max-age-days', 'json'],
     qualify: ['report', 'review', 'requirements', 'out'],
   };
-  if (!allowed[command]) throw Error('Use machine, validate, index, plan, run, inspect-failures, compare or qualify');
+  if (!allowed[command])
+    throw Error('Use machine, validate, index, plan, run, inspect-failures, compare, qualify, ledger or pending');
   for (const arg of args) {
     const m = /^--([a-z-]+)(?:=(.+))?$/.exec(arg);
     if (!m || !allowed[command].includes(m[1]) || Object.hasOwn(options, m[1]))
@@ -77,6 +83,7 @@ try {
       'fresh',
       'telemetry',
       'confirm-scenario',
+      'json',
     ].includes(m[1]);
     if (boolean === !!m[2]) throw Error('Invalid argument value');
     options[m[1]] = boolean ? true : m[2];
@@ -94,7 +101,36 @@ try {
         2,
       ),
     );
-  else if (command === 'machine')
+  else if (command === 'ledger') {
+    // Records the cases a saved report ran into the consumer's ledger (created when missing).
+    const path = resolve(required('ledger'));
+    const ledger = existsSync(path) ? readJSON(path) : emptyLedger();
+    if (lstatSync(path, { throwIfNoEntry: false })?.isSymbolicLink())
+      throw Error('Ledger path must be a regular file, not a symlink');
+    const next = recordRun(ledger, readEvidence(required('report')), load('pack'));
+    const temporary = path + '.' + process.pid + '.tmp';
+    writeFileSync(temporary, JSON.stringify(next, null, 2) + '\n', { flag: 'wx' });
+    renameSync(temporary, path);
+    console.log(JSON.stringify({ ledger: path, entries: next.entries.length }));
+  } else if (command === 'pending') {
+    // Lists cases with no covering run, one per line (or --json); exits 1 when any are pending.
+    const days = options['max-age-days'];
+    if (days !== undefined && !/^\d+$/.test(days)) throw Error('Invalid --max-age-days');
+    const ledgerPath = resolve(required('ledger'));
+    const list = pendingCases(
+      required('packs')
+        .split(',')
+        .map((p) => readJSON(resolve(p))),
+      existsSync(ledgerPath) ? readJSON(ledgerPath) : emptyLedger(),
+      {
+        ...(options.profile ? { profile: validateProfile(load('profile')) } : {}),
+        ...(days !== undefined ? { maxAgeMs: Number(days) * 86400000 } : {}),
+      },
+    );
+    if (options.json) console.log(JSON.stringify(list, null, 2));
+    else for (const p of list) console.log(`${p.pack}/${p.case} (${p.reason})`);
+    if (list.length) process.exitCode = 1;
+  } else if (command === 'machine')
     console.log(JSON.stringify(inspectMachine(required('id'), options.version ?? '1.0.0'), null, 2));
   else if (command === 'index') {
     const entries = catalog(
@@ -209,5 +245,6 @@ try {
   }
 } catch (error) {
   console.error(error instanceof Error ? error.message : 'Gauntlet failed');
-  process.exitCode = 1;
+  // pending and ledger keep exit 1 for "cases pending"; their errors exit 2 so a consumer can tell them apart.
+  process.exitCode = command === 'pending' || command === 'ledger' ? 2 : 1;
 }

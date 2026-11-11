@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "planned",
+  "status": "implemented",
   "id": "F-010-T01",
   "title": "Run ledger contract",
   "goal": "A versioned, metadata-only run ledger keyed by case identity, written only from admitted reports",
@@ -18,7 +18,7 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 focused day",
+    "estimate": "0 remaining; release pending",
     "basis": "Owner decision 2026-11-11: Gauntlet and the harness are reused by future projects, so the generic part of 'a pack added or changed raises a run' lives here; consumers keep their ledger, rule and budgets. Estimate, not a measurement.",
     "reviewed": "2026-11-11"
   },
