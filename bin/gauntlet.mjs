@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { resolve, dirname, relative } from 'node:path';
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, lstatSync, renameSync } from 'node:fs';
 import {
   readJSON,
   readEvidence,
@@ -105,8 +105,12 @@ try {
     // Records the cases a saved report ran into the consumer's ledger (created when missing).
     const path = resolve(required('ledger'));
     const ledger = existsSync(path) ? readJSON(path) : emptyLedger();
+    if (lstatSync(path, { throwIfNoEntry: false })?.isSymbolicLink())
+      throw Error('Ledger path must be a regular file, not a symlink');
     const next = recordRun(ledger, readEvidence(required('report')), load('pack'));
-    writeFileSync(path, JSON.stringify(next, null, 2) + '\n');
+    const temporary = path + '.' + process.pid + '.tmp';
+    writeFileSync(temporary, JSON.stringify(next, null, 2) + '\n', { flag: 'wx' });
+    renameSync(temporary, path);
     console.log(JSON.stringify({ ledger: path, entries: next.entries.length }));
   } else if (command === 'pending') {
     // Lists cases with no covering run, one per line (or --json); exits 1 when any are pending.
@@ -241,5 +245,6 @@ try {
   }
 } catch (error) {
   console.error(error instanceof Error ? error.message : 'Gauntlet failed');
-  process.exitCode = 1;
+  // pending and ledger keep exit 1 for "cases pending"; their errors exit 2 so a consumer can tell them apart.
+  process.exitCode = command === 'pending' || command === 'ledger' ? 2 : 1;
 }

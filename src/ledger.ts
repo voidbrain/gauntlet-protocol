@@ -9,7 +9,7 @@ export interface LedgerEntry {
   case: string;
   caseHash: string;
   profileHash: string | null;
-  status: 'passed' | 'failed' | 'error';
+  status: 'passed' | 'failed';
   reportHash: string;
   finished: string;
 }
@@ -25,7 +25,7 @@ export interface PendingCase {
   last: LedgerEntry | null;
 }
 
-const statuses = new Set(['passed', 'failed', 'error']);
+const statuses = new Set(['passed', 'failed']);
 const sha = /^[0-9a-f]{64}$/;
 
 export function caseHash(c: Pack['cases'][number]): string {
@@ -64,8 +64,11 @@ const entryKey = (e: { pack: string; case: string; profileHash: string | null })
   JSON.stringify([e.pack, e.case, e.profileHash]);
 const order = (a: LedgerEntry, b: LedgerEntry) => (entryKey(a) < entryKey(b) ? -1 : entryKey(a) > entryKey(b) ? 1 : 0);
 
-// Adds the cases a report actually ran. The report must validate and must have run exactly this pack definition;
-// not-run results cover nothing. A newer run of the same case and profile replaces the older entry.
+// Adds the cases a report actually ran. The report must validate and must have run exactly this pack definition.
+// Only graded results cover a case: passed or failed. An error (the runtime or adapter never answered) and not-run
+// cover nothing. With repeats, a case is covered when every iteration was graded, and passed when every one passed.
+// A newer run of the same case and profile replaces the older entry; on equal times the larger report hash wins, so the
+// result does not depend on recording order.
 export function recordRun(ledgerInput: unknown, reportInput: unknown, packInput: unknown): Ledger {
   const ledger = validateLedger(ledgerInput);
   const report: Report = validateReport(reportInput);
@@ -76,35 +79,41 @@ export function recordRun(ledgerInput: unknown, reportInput: unknown, packInput:
   const profileHash = report.profile ? hash(evidenceProfile(report.profile)) : null;
   if (report.profileHash !== profileHash) throw Error('Report profile hash does not match its profile');
   const reportHash = hash(report);
-  const ran = new Map<string, LedgerEntry>();
+  const graded = new Map<string, { status: LedgerEntry['status']; ungraded: boolean }>();
   for (const r of report.results) {
-    const c = cases.get(r.id);
-    if (!c) throw Error('Report result for a case outside the pack');
-    if (r.status === 'not-run') continue;
-    const prev = ran.get(r.id);
-    // With repeats, a case counts as passed only when every iteration passed.
-    const status = prev && prev.status !== 'passed' ? prev.status : (r.status as LedgerEntry['status']);
-    ran.set(r.id, {
-      pack: pack.id,
-      packVersion: pack.version,
-      case: r.id,
-      caseHash: caseHash(c),
-      profileHash,
-      status,
-      reportHash,
-      finished: report.finished,
-    });
+    if (!cases.has(r.id)) throw Error('Report result for a case outside the pack');
+    const prev = graded.get(r.id) ?? { status: 'passed' as LedgerEntry['status'], ungraded: false };
+    if (r.status === 'passed' || r.status === 'failed')
+      graded.set(r.id, { ...prev, status: prev.status === 'failed' || r.status === 'failed' ? 'failed' : 'passed' });
+    else graded.set(r.id, { ...prev, ungraded: true });
   }
+  const ran: LedgerEntry[] = [];
+  for (const [id, g] of graded)
+    if (!g.ungraded)
+      ran.push({
+        pack: pack.id,
+        packVersion: pack.version,
+        case: id,
+        caseHash: caseHash(cases.get(id)!),
+        profileHash,
+        status: g.status,
+        reportHash,
+        finished: report.finished,
+      });
   const entries = new Map(ledger.entries.map((e) => [entryKey(e), e]));
-  for (const e of ran.values()) {
+  const newer = (a: LedgerEntry, b: LedgerEntry) =>
+    Date.parse(a.finished) > Date.parse(b.finished) ||
+    (Date.parse(a.finished) === Date.parse(b.finished) && a.reportHash > b.reportHash);
+  for (const e of ran) {
     const old = entries.get(entryKey(e));
-    if (!old || Date.parse(old.finished) <= Date.parse(e.finished)) entries.set(entryKey(e), e);
+    if (!old || old.reportHash === e.reportHash || newer(e, old)) entries.set(entryKey(e), e);
   }
   return { schemaVersion: 1, entries: [...entries.values()].sort(order) };
 }
 
 // Lists the cases of the given packs with no covering run. With a profile, only runs under that exact profile cover a
-// case (other-profile when only other profiles ran it); without one, any profile covers it. maxAgeMs makes older runs
+// model case (other-profile when only other profiles ran it); system cases run without a model, so a run without a
+// profile covers them under any profile. Without a profile, any run covers a case. maxAgeMs makes older runs
 // stale. The consumer decides what pending means for it (warn, fail CI, raise a record).
 export function pendingCases(
   packInputs: unknown[],
@@ -120,7 +129,10 @@ export function pendingCases(
     const pack = validatePack(input);
     for (const c of pack.cases) {
       const all = ledger.entries.filter((e) => e.pack === pack.id && e.case === c.id);
-      const mine = wanted === undefined ? all : all.filter((e) => e.profileHash === wanted);
+      const mine =
+        wanted === undefined
+          ? all
+          : all.filter((e) => e.profileHash === wanted || (c.layer === 'system' && e.profileHash === null));
       const latest = (list: LedgerEntry[]) =>
         list.reduce<LedgerEntry | null>(
           (a, e) => (!a || Date.parse(e.finished) > Date.parse(a.finished) ? e : a),

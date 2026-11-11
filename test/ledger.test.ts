@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync, writeFileSync, readFileSync } from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync, readFileSync, symlinkSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
@@ -11,6 +11,7 @@ import {
   recordRun,
   pendingCases,
   validateLedger,
+  caseHash,
   type Pack,
   type Profile,
   type Report,
@@ -46,28 +47,35 @@ const modelCase = (id: string, content = 'Return {"ok":true}'): Pack['cases'][nu
 const pack = (id: string, ...cases: Pack['cases']): Pack => ({ schemaVersion: 1, id, version: '1.0.0', cases });
 
 // A local Ollama stand-in that answers {"ok":true}; no network, no model.
-const fetcher = (async (url: unknown) => {
-  const path = new URL(String(url)).pathname;
-  const answers: Record<string, unknown> = {
-    '/api/version': { version: 'fixture-v1' },
-    '/api/show': { model_info: { 'general.file_type': 15 }, details: { quantization_level: 'Q4_K_M' } },
-    '/api/tags': { models: [{ name: profile.model, size: 100, digest: 'a'.repeat(64) }] },
-    '/api/ps': { models: [] },
-    '/api/generate': { done: true, done_reason: 'unload' },
-    '/api/chat': {
-      model: profile.model,
-      message: { content: '{"ok":true}' },
-      done: true,
-      eval_count: 3,
-      prompt_eval_count: 5,
-      total_duration: 6000000,
-    },
-  };
-  if (!(path in answers)) throw Error('Unexpected endpoint ' + path);
-  return new Response(JSON.stringify(answers[path]));
-}) as typeof fetch;
-const execute = (p: Pack, prof: Profile = profile) =>
-  run(p, prof, defaults, { execute: true, allowModels: true, fetch: fetcher }) as Promise<Report>;
+const answering = (answer: () => string | Error) =>
+  (async (url: unknown) => {
+    const path = new URL(String(url)).pathname;
+    const answers: Record<string, unknown> = {
+      '/api/version': { version: 'fixture-v1' },
+      '/api/show': { model_info: { 'general.file_type': 15 }, details: { quantization_level: 'Q4_K_M' } },
+      '/api/tags': { models: [{ name: profile.model, size: 100, digest: 'a'.repeat(64) }] },
+      '/api/ps': { models: [] },
+      '/api/generate': { done: true, done_reason: 'unload' },
+      '/api/chat': {
+        model: profile.model,
+        message: { content: '' },
+        done: true,
+        eval_count: 3,
+        prompt_eval_count: 5,
+        total_duration: 6000000,
+      },
+    };
+    if (!(path in answers)) throw Error('Unexpected endpoint ' + path);
+    if (path === '/api/chat') {
+      const a = answer();
+      if (a instanceof Error) throw a;
+      (answers[path] as { message: { content: string } }).message.content = a;
+    }
+    return new Response(JSON.stringify(answers[path]));
+  }) as typeof fetch;
+const fetcher = answering(() => '{"ok":true}');
+const execute = (p: Pack, prof: Profile = profile, f: typeof fetch = fetcher, repeat = 1) =>
+  run(p, prof, { ...defaults, repeat }, { execute: true, allowModels: true, fetch: f }) as Promise<Report>;
 
 test('ledger: a run covers exactly the case definitions it ran, under its profile', async () => {
   const smoke = pack('smoke', modelCase('a'), modelCase('b'));
@@ -127,6 +135,95 @@ test('ledger: refuses a report of another pack definition and a tampered ledger'
   assert.deepEqual(recordRun(ledger, report, smoke), ledger);
 });
 
+test('ledger: only graded runs cover; repeats, newer runs and ties are deterministic', async () => {
+  const smoke = pack('smoke', modelCase('a'));
+  // The runtime never answered: an error covers nothing.
+  const down = await execute(
+    smoke,
+    profile,
+    answering(() => new Error('connect ECONNREFUSED')),
+  );
+  assert.equal(down.results[0].status, 'error');
+  assert.deepEqual(recordRun(emptyLedger(), down, smoke).entries, []);
+  // A failed answer is a graded run: covered, recorded as failed.
+  const wrong = await execute(
+    smoke,
+    profile,
+    answering(() => '{"ok":false}'),
+  );
+  const failed = recordRun(emptyLedger(), wrong, smoke);
+  assert.equal(failed.entries[0].status, 'failed');
+  assert.deepEqual(pendingCases([smoke], failed, { profile }), []);
+  // Repeats: one failed iteration makes the case failed; an ungraded iteration leaves it uncovered.
+  let n = 0;
+  const mixed = await execute(
+    smoke,
+    profile,
+    answering(() => (n++ % 2 ? '{"ok":false}' : '{"ok":true}')),
+    2,
+  );
+  assert.equal(recordRun(emptyLedger(), mixed, smoke).entries[0].status, 'failed');
+  let m = 0;
+  const flaky = await execute(
+    smoke,
+    profile,
+    answering(() => (m++ % 2 ? new Error('reset') : '{"ok":true}')),
+    2,
+  );
+  assert.deepEqual(recordRun(emptyLedger(), flaky, smoke).entries, []);
+  // A newer run replaces an older one; recording the older one later does not undo it.
+  const older = { ...wrong, started: '2026-01-01T00:00:00.000Z', finished: '2026-01-01T00:00:01.000Z' };
+  const newer = await execute(smoke);
+  const forward = recordRun(recordRun(emptyLedger(), older, smoke), newer, smoke);
+  const backward = recordRun(recordRun(emptyLedger(), newer, smoke), older, smoke);
+  assert.deepEqual(forward, backward);
+  assert.equal(forward.entries[0].status, 'passed');
+  // Equal times: the order of recording does not matter.
+  const twin = { ...wrong, started: newer.started, finished: newer.finished };
+  assert.deepEqual(
+    recordRun(recordRun(emptyLedger(), twin, smoke), newer, smoke),
+    recordRun(recordRun(emptyLedger(), newer, smoke), twin, smoke),
+  );
+});
+
+test('ledger: system cases run without a profile stay covered under any model profile', () => {
+  const system: Pack = pack('system', {
+    id: 's',
+    layer: 'system',
+    split: 'regression',
+    capabilities: ['policy'],
+    critical: true,
+    expensive: false,
+    runner: 'policy',
+  });
+  const ledger = validateLedger({
+    schemaVersion: 1,
+    entries: [
+      {
+        pack: 'system',
+        packVersion: '1.0.0',
+        case: 's',
+        caseHash: caseHash(system.cases[0]),
+        profileHash: null,
+        status: 'passed',
+        reportHash: 'b'.repeat(64),
+        finished: '2026-11-11T00:00:00.000Z',
+      },
+    ],
+  });
+  assert.deepEqual(pendingCases([system], ledger, { profile }), []);
+  // A model case run without a profile does not cover a profiled request.
+  const model = pack('m', modelCase('x'));
+  const modelLedger = validateLedger({
+    schemaVersion: 1,
+    entries: [{ ...ledger.entries[0], pack: 'm', case: 'x', caseHash: caseHash(model.cases[0]) }],
+  });
+  assert.deepEqual(
+    pendingCases([model], modelLedger, { profile }).map((p) => p.reason),
+    ['other-profile'],
+  );
+});
+
 test('ledger: the CLI records a saved report and lists pending cases with exit 1', async (t) => {
   const dir = mkdtempSync(join(tmpdir(), 'gauntlet ledger '));
   t.after(() => rmSync(dir, { recursive: true, force: true }));
@@ -155,5 +252,14 @@ test('ledger: the CLI records a saved report and lists pending cases with exit 1
     ['c'],
   );
   assert.equal(cli('pending', `--packs=${files.smoke}`, `--ledger=${files.ledger}`).status, 0);
-  assert.notEqual(cli('pending', `--packs=${files.smoke}`, `--ledger=${files.ledger}`, '--max-age-days=x').status, 0);
+  // Errors exit 2, never 1, so a consumer cannot mistake them for pending cases.
+  assert.equal(cli('pending', `--packs=${files.smoke}`, `--ledger=${files.ledger}`, '--max-age-days=x').status, 2);
+  assert.equal(cli('pending', `--packs=${join(dir, 'missing.json')}`, `--ledger=${files.ledger}`).status, 2);
+  writeFileSync(join(dir, 'bad-ledger.json'), '{"schemaVersion":1,"entries":[{"x":1}]}');
+  assert.equal(cli('pending', `--packs=${files.smoke}`, `--ledger=${join(dir, 'bad-ledger.json')}`).status, 2);
+  symlinkSync(join(dir, 'elsewhere.json'), join(dir, 'link.json'));
+  assert.equal(
+    cli('ledger', `--ledger=${join(dir, 'link.json')}`, `--report=${files.report}`, `--pack=${files.smoke}`).status,
+    2,
+  );
 });
