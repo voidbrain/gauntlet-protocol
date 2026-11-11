@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Gauntlet Protocol backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `6cca8d1`. v0.6.0 published (PR #34, CI 43020317739); B-002 opened: ledger coverage ignores model, runtime, scenario and source identity. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).\n\n## Bugs and reliability\n\n"
+      "text": "# Gauntlet Protocol backlog\n\nCurrent work ledger, reviewed 11 November 2026 against main `a48bcb9`. B-002 planned (PR #36, CI 43027105309) and implemented for 0.7.0 (PR #37): identity-bound ledger coverage. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).\n\n## Bugs and reliability\n\n"
     },
     {
       "records": "B"

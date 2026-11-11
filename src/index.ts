@@ -1583,8 +1583,17 @@ export { catalog, catalogMarkdown, areas } from './catalog.ts';
 export { inspectRuntime, verifyArtifacts, validateManifest } from './runtimes.ts';
 export { serverProcess } from './telemetry.ts';
 export { executeWithEvidence, reuseValid, readEvidence, defaultEvidenceDirectory } from './evidence.ts';
-export { caseHash, emptyLedger, validateLedger, recordRun, pendingCases } from './ledger.ts';
-export type { Ledger, LedgerEntry, PendingCase, PendingReason } from './ledger.ts';
+export {
+  caseHash,
+  emptyLedger,
+  validateLedger,
+  validateIntendedIdentity,
+  recordRun,
+  pendingCases,
+  runtimeHash,
+  scenarioHash,
+} from './ledger.ts';
+export type { Ledger, LedgerEntry, LedgerIdentity, IntendedIdentity, PendingCase, PendingReason } from './ledger.ts';
 export function performanceSummary(report: Report) {
   const measured = report.results.flatMap((r) => (r.performance ? [r.performance] : []));
   const median = (values: (number | null)[]) => {

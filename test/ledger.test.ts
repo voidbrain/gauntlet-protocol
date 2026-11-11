@@ -86,10 +86,15 @@ test('ledger: a run covers exactly the case definitions it ran, under its profil
     'case',
     'caseHash',
     'finished',
+    // B-002 deliberately added the run identity to every entry.
+    'modelDigest',
     'pack',
     'packVersion',
     'profileHash',
     'reportHash',
+    'runtimeHash',
+    'scenarioHash',
+    'sourceKey',
     'status',
   ]);
   assert.ok(!JSON.stringify(ledger).includes('Return'), 'the ledger holds no prompts or outputs');

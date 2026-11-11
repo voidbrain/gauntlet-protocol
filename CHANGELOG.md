@@ -1,5 +1,9 @@
 # Releases
 
+## 0.7.0
+
+Identity-bound ledger coverage (B-002, docs/LEDGER.md): ledger schema 2 records each run's model digest, runtime hash (`runtimeHash(report)`: identity proof and runtime), scenario hash (`scenarioHash(environment)` or null) and an optional opaque consumer `--source-key`; `gauntlet pending` and `pendingCases` take the intended identity (`--model-digest`, `--runtime-hash`, `--scenario-hash=<sha256|none>`, `--source-key`) and name `model-changed`, `runtime-changed`, `scenario-changed` or `source-changed`. Unset fields do not constrain. System cases follow the scenario and source key, model cases the model digest, runtime and scenario. Schema 1 ledgers stay readable as unknown identity, which never covers a constrained query; recording upgrades the file to schema 2. Consumers adopt it by passing the identity they intend to run under; without it, behaviour matches 0.6.0. `docs/LEDGER.md` now ships in the package. The engine hash changes with the new exports, so cache reuse needs evidence produced by 0.7.0. No real-model run.
+
 ## 0.6.0
 
 Run ledger and pending cases (F-010, docs/LEDGER.md): `gauntlet ledger` records into a consumer-owned, metadata-only ledger the cases a saved report ran, refusing reports of another pack definition; `gauntlet pending` lists new, changed, stale or other-profile cases of the given packs and exits 1 when any are pending, 2 on an error. Only graded results (passed or failed) cover a case: an error from an unanswering runtime covers nothing. System cases run without a profile stay covered under any model profile. Consumer-agnostic. Grading, packs and protocol 0.4 evidence are unchanged; the engine hash changes with the new exports, so cache reuse needs evidence produced by 0.6.0 (ledger coverage does not depend on the engine). No real-model run.

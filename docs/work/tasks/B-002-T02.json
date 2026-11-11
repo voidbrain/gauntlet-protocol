@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "planned",
+  "status": "implemented",
   "id": "B-002-T02",
   "parent": "B-002",
   "title": "`pending` reports identity changes",
