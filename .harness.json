@@ -3,7 +3,7 @@
     "path": "../project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "5.4.0",
+  "version": "6.0.0",
   "stacks": [
     "core"
   ],
@@ -177,7 +177,10 @@
     "tasks": "docs/work/tasks",
     "profiles": "docs/agents/model-profiles.json",
     "featurePlans": true,
-    "order": "queue"
+    "order": "queue",
+    "estimation": {
+      "since": "2026-11-12"
+    }
   },
   "workUsage": {
     "enabled": true
