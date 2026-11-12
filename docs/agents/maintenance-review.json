@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-11T17:52:23.459Z",
+  "reviewed": "2026-11-12T11:30:11.580Z",
   "policy": "18c0059e726d071aefd8c71b9a5d27b54b923320af6b34567c262491c7c1c9bb",
   "inputs": {
     "AGENTS.md": "4b9f45f1b0755a476cb2583b2689d7b81f6990c1e9636fc34a4be6d593c61a9f",
-    "docs/BACKLOG-RULES.md": "6ee6166b7e1bda4f397d6dfb1c4b7c33c98246b8c41d002be32b0d9f53b4cfaa",
+    "docs/BACKLOG-RULES.md": "32b8b500a24f20a8bc4533c3578535e9e2fea0b89404f4d0f7550bacbf8f21e8",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "171636323e1cd991b33d5b723329d14dd51919a24fd78778b33d8a2a17dde539",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -20,12 +20,12 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "2a7b7d0ea9e23fb36eceba5e5433eb640fee3e3633426066e4050f0fa8ebb9cf",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "06641539d02ce4c60b50ef9d4bf394c112c98c948dba172c6aca40f958c84b4f",
+    "tools/work-items.mjs": "6b9f25f077ec2c29f7ded46e75a6ef229068d4ab6a8469348d9d40ec7404a905",
     "tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219"
   },
   "measurements": {
     "samples": 6,
-    "latestAt": "2026-11-11T17:52:23.401Z",
+    "latestAt": "2026-11-12T11:30:11.516Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -55,7 +55,7 @@
         "durationMs": {
           "observed": 6,
           "missing": 0,
-          "median": 63193.5
+          "median": 68975
         },
         "conflicts": {
           "observed": 2,
@@ -80,13 +80,13 @@
       "kind": "rule",
       "disposition": "implemented",
       "target": "docs/BACKLOG-RULES.md",
-      "evidence": "Reconciled published harness 5.4.0 (from 5.2.0): the Optional upfront feature plans paragraph and the new Estimate calibration paragraph carried byte-identically from the template. Owner-confirmed default thresholds. No check, never or ask-first rule, or safeguard removed. No behaviour runner configured."
+      "evidence": "Reconciled published harness 6.0.0 (from 5.4.0, 5.5.0 and 5.6.0 included): the BACKLOG-RULES template diff v5.4.0..v6.0.0 applied byte-identically (agent hours, dependencies in each record, one priority-ordered list, every record with a step). No check, never or ask-first rule, or safeguard removed. No behaviour runner configured."
     },
     {
       "kind": "tool",
       "disposition": "implemented",
       "target": "tools/work-items.mjs",
-      "evidence": "tools/work-items.mjs and tools/check-freshness.mjs copied byte-identically from tag v5.4.0; all copied files compared against the tag. workItems.order queue and backlog totals markers adopted. Friction sample covers the whole reconcile (timer started before reading the rules)."
+      "evidence": "work-items, check-backlog, backlog-queue, backlog-dependencies and check-freshness copied byte-identically from tag v6.0.0; check-harness --strict passes. Layout uses one records: all segment. Fresh-context mechanical review: all checks pass. Friction sample: wall-clock from worktree creation (12:23:45 +0100), waits included."
     }
   ]
 }
