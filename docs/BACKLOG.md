@@ -31,10 +31,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | F-011-T01 — Run only pending cases | 0.5 h | 0 h | 0.5 h | Ready |
-| 🟢 Small | F-011-T02 — Resume an interrupted campaign | 0.5 h | 0 h | 0.5 h | Planned |
-| 🟢 Small | F-011-T03 — Merge partial runs into the ledger | 0.5 h | 0 h | 0.5 h | Planned |
-| 🟢 Small | F-011-T04 — Release with a per-pack list of added and changed cases | 0.25 h | 0 h | 0.25 h | Planned |
+| 🟢 Small | <a id="f-011-t01"></a>F-011-T01 — Run only pending cases | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="f-011-t02"></a>F-011-T02 — Resume an interrupted campaign | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-011-T01](#f-011-t01) |
+| 🟢 Small | <a id="f-011-t03"></a>F-011-T03 — Merge partial runs into the ledger | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-011-T02](#f-011-t02) |
+| 🟢 Small | <a id="f-011-t04"></a>F-011-T04 — Release with a per-pack list of added and changed cases | 0.25 h | 0 h | 0.25 h | Planned · waits on [F-011-T03](#f-011-t03) |
 | 🟡 Medium | **Total** | 1.75 h | 0 h (0 of 4 steps recorded) | 1.75 h | 0 of 4 completed |
 
 <details>
@@ -72,13 +72,13 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | F-012-T01 — Structured-output robustness pack | 0.5 h | 0 h | 0.5 h | Ready |
-| 🟢 Small | F-012-T02 — Tool use pack | 0.5 h | 0 h | 0.5 h | Ready |
-| 🟢 Small | F-012-T03 — Bilingual (Italian and English) pack | 0.5 h | 0 h | 0.5 h | Ready |
-| 🟢 Small | F-012-T04 — Multi-step agent pack | 0.5 h | 0 h | 0.5 h | Planned |
-| 🟢 Small | F-012-T05 — Refusal and permission escalation pack | 0.5 h | 0 h | 0.5 h | Planned |
-| 🟢 Small | F-012-T06 — Long context pack | 0.5 h | 0 h | 0.5 h | Ready |
-| 🟢 Small | F-012-T07 — Release the new packs | 0.25 h | 0 h | 0.25 h | Planned |
+| 🟢 Small | <a id="f-012-t01"></a>F-012-T01 — Structured-output robustness pack | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="f-012-t02"></a>F-012-T02 — Tool use pack | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="f-012-t03"></a>F-012-T03 — Bilingual (Italian and English) pack | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="f-012-t06"></a>F-012-T06 — Long context pack | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="f-012-t04"></a>F-012-T04 — Multi-step agent pack | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-012-T02](#f-012-t02) |
+| 🟢 Small | <a id="f-012-t05"></a>F-012-T05 — Refusal and permission escalation pack | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-012-T02](#f-012-t02) |
+| 🟢 Small | <a id="f-012-t07"></a>F-012-T07 — Release the new packs | 0.25 h | 0 h | 0.25 h | Planned · waits on [F-012-T01](#f-012-t01), [F-012-T02](#f-012-t02), [F-012-T03](#f-012-t03), [F-012-T04](#f-012-t04), [F-012-T05](#f-012-t05), [F-012-T06](#f-012-t06) |
 | 🟡 Medium | **Total** | 3.25 h | 0 h (0 of 7 steps recorded) | 3.25 h | 0 of 7 completed |
 
 <details>
@@ -116,8 +116,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | F-013-T01 — Host fit in model profiles | 0.5 h | 0 h | 0.5 h | Ready |
-| 🟢 Small | F-013-T02 — Small-host example profiles | 0.5 h | 0 h | 0.5 h | Planned |
+| 🟢 Small | <a id="f-013-t01"></a>F-013-T01 — Host fit in model profiles | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="f-013-t02"></a>F-013-T02 — Small-host example profiles | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-013-T01](#f-013-t01) |
 | 🟢 Small | **Total** | 1 h | 0 h (0 of 2 steps recorded) | 1 h | 0 of 2 completed |
 
 <details>
