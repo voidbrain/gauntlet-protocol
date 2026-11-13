@@ -7,7 +7,8 @@
   "goal": "Release with a per-pack list of added and changed cases",
   "acceptance": [
     "CHANGELOG lists added, changed and removed cases per pack, so a consumer sees what will be pending",
-    "Tagged release after green CI"
+    "Tagged release after green CI",
+    "The release title names what changes in the published package (for example \"0.8.0 — incremental runs\"), never the development-harness version; harness-only updates are not released (owner, 2026-11-13)"
   ],
   "dependsOn": [
     "F-011-T03"
