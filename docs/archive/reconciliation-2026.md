@@ -2,6 +2,10 @@
 
 Dated reconciliation entries, newest by date. The backlog header is generated from the newest `## <date> — <branch> `<sha>`` entry (harness 8.4.0); its first paragraph stays under 300 characters.
 
+## 2026-11-13 — main `f418cd2`
+
+PRs #46 (harness 8.8.0) and #47 (release-title rule) merged. Harness 8.9.0 reconciled: work-items copied; steps show an Agent column and ⏳ for owner steps that still wait.
+
 ## 2026-11-13 — main `ff473a4`
 
 PRs #42, #44 and #45 (harness 8.6.0) merged; main CI 43481028115 passed. Harness 8.8.0 reconciled: work-items, check-backlog, backlog-queue and merge-when-green copied; BACKLOG-RULES gains step-level owner faces, ownerLink and step prerequisites.

@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 13 November 2026 against main `ff473a4`. PRs #42, #44 and #45 (harness 8.6.0) merged; main CI 43481028115 passed. Harness 8.8.0 reconciled: work-items, check-backlog, backlog-queue and merge-when-green copied; BACKLOG-RULES gains step-level owner faces, ownerLink and step prerequisites.
+Current work ledger, reviewed 13 November 2026 against main `f418cd2`. PRs #46 (harness 8.8.0) and #47 (release-title rule) merged. Harness 8.9.0 reconciled: work-items copied; steps show an Agent column and ⏳ for owner steps that still wait.
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
