@@ -1,0 +1,2 @@
+# Append-only records: parallel appends to archives and the reconciliation log merge without a conflict. Never for generated files.
+docs/archive/*.md merge=union

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-12T11:30:11.580Z",
+  "reviewed": "2026-11-13T16:46:37.490Z",
   "policy": "18c0059e726d071aefd8c71b9a5d27b54b923320af6b34567c262491c7c1c9bb",
   "inputs": {
-    "AGENTS.md": "4b9f45f1b0755a476cb2583b2689d7b81f6990c1e9636fc34a4be6d593c61a9f",
-    "docs/BACKLOG-RULES.md": "32b8b500a24f20a8bc4533c3578535e9e2fea0b89404f4d0f7550bacbf8f21e8",
+    "AGENTS.md": "e214a4fcb21ce61b58e3666395c6df53531481a8f1089c62d47b4712492b484c",
+    "docs/BACKLOG-RULES.md": "dbdc759bcd6612988f8108ffccde0624d309ba93f7de0cc7d11e154c42208bda",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "171636323e1cd991b33d5b723329d14dd51919a24fd78778b33d8a2a17dde539",
     "docs/agents/audit.md": "bc5de5707f9ec5c523e73602499312c373d6112ffc498d69bf68604522527992",
@@ -12,20 +12,20 @@
     "docs/agents/coverage-guide.md": "3d539eb8beedfa101a5e47d9973cdf85dce197436fab2ab096f760e12d208106",
     "docs/agents/maintenance.md": "5219a64e6e85ced3fa9d437fc0adb2674bfa2d566d86fe95cca1ef321d3b8b27",
     "docs/agents/mcp.md": "d813daeb38628e3f0613131ccb4e09fa1b98f82a1ad5cc647e9b27c26821a524",
-    "docs/agents/parallel-work.md": "e6bdd99075598d2e33fb23373d87fd5b48ed1c86028a20dbad0b5759a62b2e13",
+    "docs/agents/parallel-work.md": "30c647889e206abbd97d36d7b8fe3a86bf1ffd1ffd4d737ad951650a8f18c1db",
     "docs/agents/procedures.md": "649de48ddc9e3ae627d0752f44f4a8d2cf25b837dc32350a597f6d4bf80e514f",
     "docs/agents/skills.md": "5d60223eccfaad88c7153f57316da5ca10bfdd9d58d3a8cebc1eef25b9f0d5f5",
     "docs/agents/solution-profile.md": "857fc0e5f5c36d1d139d2507f1f97460edfdcde4d5cd5d590a922d88c4459862",
     "docs/agents/task-context.md": "c38395d5989a3fd7cfbf319bce53b24c17a1740822398f4376ecc2c3e95d531f",
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
-    "tools/task-claims.mjs": "2a7b7d0ea9e23fb36eceba5e5433eb640fee3e3633426066e4050f0fa8ebb9cf",
+    "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "6b9f25f077ec2c29f7ded46e75a6ef229068d4ab6a8469348d9d40ec7404a905",
+    "tools/work-items.mjs": "4980a69ecf53d5a151247fcabda50dc3c2c6803cff3033bb2fb80ca01219068e",
     "tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219"
   },
   "measurements": {
-    "samples": 6,
-    "latestAt": "2026-11-12T11:30:11.516Z",
+    "samples": 1,
+    "latestAt": "2026-11-13T16:44:49.941Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -51,25 +51,25 @@
         }
       },
       "reconciliation": {
-        "samples": 6,
+        "samples": 1,
         "durationMs": {
-          "observed": 6,
+          "observed": 1,
           "missing": 0,
-          "median": 68975
+          "median": 123000
         },
         "conflicts": {
-          "observed": 2,
-          "missing": 4,
-          "median": 0
+          "observed": 0,
+          "missing": 1,
+          "median": null
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 6,
+          "missing": 1,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 6,
+          "missing": 1,
           "median": null
         }
       }
@@ -77,16 +77,16 @@
   },
   "outcomes": [
     {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "docs/BACKLOG-RULES.md",
-      "evidence": "Reconciled published harness 6.0.0 (from 5.4.0, 5.5.0 and 5.6.0 included): the BACKLOG-RULES template diff v5.4.0..v6.0.0 applied byte-identically (agent hours, dependencies in each record, one priority-ordered list, every record with a step). No check, never or ask-first rule, or safeguard removed. No behaviour runner configured."
-    },
-    {
       "kind": "tool",
       "disposition": "implemented",
       "target": "tools/work-items.mjs",
-      "evidence": "work-items, check-backlog, backlog-queue, backlog-dependencies and check-freshness copied byte-identically from tag v6.0.0; check-harness --strict passes. Layout uses one records: all segment. Fresh-context mechanical review: all checks pass. Friction sample: wall-clock from worktree creation (12:23:45 +0100), waits included."
+      "evidence": "Reconciled to project-harness v8.5.0 (6.1.0-8.4.0 included): ten copied files byte-identical (check-harness --strict passes); optional 8.4.0 union merge and generated header adopted; test timeout added. Duration measured from branch creation; reading APPLY.md beforehand is not included."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "docs/BACKLOG-RULES.md",
+      "evidence": "BACKLOG-RULES was identical to template v6.0.0 and is now v8.5.0 as published; AGENTS.md reconciled by hand from the v6.0.0..v8.5.0 template diff (Documentation, worktree per branch, fast pre-push, reviewer diff, record sources first). No safeguard, never or ask-first rule removed; project lines unchanged. Fresh-context review (mechanical-reviewer, Haiku): no blockers. Earlier receipts remain in git history; the receipt is replaced by design."
     }
   ]
 }

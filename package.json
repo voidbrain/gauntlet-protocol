@@ -35,7 +35,7 @@
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "test": "node --test test/*.test.ts",
+    "test": "node --test --test-timeout=60000 test/*.test.ts",
     "prepack": "npm run build",
     "check:freshness": "node tools/check-freshness.mjs",
     "check:backlog": "node tools/check-backlog.mjs",
