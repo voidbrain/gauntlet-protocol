@@ -2,7 +2,7 @@
   "version": 1,
   "segments": [
     {
-      "text": "# Gauntlet Protocol backlog\n\nCurrent work ledger, reviewed 12 November 2026 against main `4443a28`. Harness 6.0.0 reconciled (5.5.0 and 5.6.0 included): one priority-ordered list, fuller record summary table. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
+      "text": "# Gauntlet Protocol backlog\n\nCurrent work ledger, reviewed 13 November 2026 against main `b2f5e76`. PR #41 (harness 6.0.0) passed CI 43209718538; roadmap planned: F-011 incremental runs, F-012 six packs, F-013 host fit. [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).\n\n<!-- totals:start -->\n<!-- totals:end -->\n\n## Work items\n\nBugs (B-) and features (F-) in one list, most urgent first.\n\n"
     },
     {
       "records": "all"

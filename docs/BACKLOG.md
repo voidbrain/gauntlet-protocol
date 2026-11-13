@@ -1,15 +1,167 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 12 November 2026 against main `4443a28`. Harness 6.0.0 reconciled (5.5.0 and 5.6.0 included): one priority-ordered list, fuller record summary table. [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 13 November 2026 against main `b2f5e76`. PR #41 (harness 6.0.0) passed CI 43209718538; roadmap planned: F-011 incremental runs, F-012 six packs, F-013 host fit. [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 18 h across 13 open steps of 3 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### F-011
+
+**Incremental runs: only what changed, resumable**
+
+| Signal | Priority | Status | Effort | Remaining | Depends on | Unlocks | Human action |
+|:---:|---|---|---|---|---|---|:---:|
+| 🔴 | 🔶 P2 | Open | 🔴 Large | 4.5 h | — | — | 💻 No |
+
+💻 **→** F-011-T01.
+
+| | |
+|---|---|
+| **Issue** | Every campaign reruns all selected cases, even when `pending` already knows most are current; an interrupted local-model campaign starts over. Slow models on small hosts make this costly. |
+| **Reproduce** | Run a pack, change one case, run again: every case runs. Interrupt a run: nothing is reusable. |
+| **Check** | Only pending cases run; an interrupted run resumes to the same result; partial runs merge into the ledger; releases list changed cases per pack. |
+
+**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
+
+| Step | Baseline | Actual | Remaining | Status |
+|---|---|---|---|---|
+| F-011-T01 — Run only pending cases | 1.5 h | 0 h | 🟢 Small — 1.5 h | Ready |
+| F-011-T02 — Resume an interrupted campaign | 1.5 h | 0 h | 🟢 Small — 1.5 h | Planned |
+| F-011-T03 — Merge partial runs into the ledger | 1 h | 0 h | 🟢 Small — 1 h | Planned |
+| F-011-T04 — Release with a per-pack list of added and changed cases | 0.5 h | 0 h | 🟢 Small — 0.5 h | Planned |
+| **Total** | 4.5 h | 0 h (0 of 4 steps recorded) | 4.5 h | 0 of 4 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Step estimates** (dated basis; generated from the task files)
+
+- F-011-T01: 1.5 h agent (2026-11-13). Estimated 2026-11-13 in the evaluation roadmap plan (owner request). Not a measurement.
+- F-011-T02: 1.5 h agent (2026-11-13). Estimated 2026-11-13 in the evaluation roadmap plan (owner request). Not a measurement.
+- F-011-T03: 1 h agent (2026-11-13). Estimated 2026-11-13 in the evaluation roadmap plan (owner request). Not a measurement.
+- F-011-T04: 0.5 h agent (2026-11-13). Estimated 2026-11-13 in the evaluation roadmap plan (owner request). Not a measurement.
+
+**Next action / closure evidence:** F-011-T01. Planned 2026-11-13 at the owner's request as part of the [roadmap](ROADMAP.md); every step is in its task file.
+
+**Estimates:** 4.5 h agent over 4 steps, estimated 2026-11-13; not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
+| Opened | 2026-11-13 |
+| Verification | Pending. |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+### F-012
+
+**Six new packs: structured output, tools, bilingual, multi-step, refusal, long context**
+
+| Signal | Priority | Status | Effort | Remaining | Depends on | Unlocks | Human action |
+|:---:|---|---|---|---|---|---|:---:|
+| 🔴 | 🔶 P2 | Open | 🔴 Large | 11 h | — | — | 💻 No |
+
+💻 **→** F-012-T01, F-012-T02, F-012-T03 or F-012-T06 (independent).
+
+| | |
+|---|---|
+| **Issue** | Three packs exist (smoke, smoke-schema, general-assistant-expanded). They cannot tell whether a model can choose tools, keep structured output under pressure, work in Italian, run several steps, refuse escalation or use long inputs. |
+| **Reproduce** | `gauntlet packs` lists three packs. |
+| **Check** | Six new packs, each with regression and holdout splits, deterministic grader fixtures and an index entry, released in a tagged version. |
+
+**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
+
+| Step | Baseline | Actual | Remaining | Status |
+|---|---|---|---|---|
+| F-012-T01 — Structured-output robustness pack | 2 h | 0 h | 🟢 Small — 2 h | Ready |
+| F-012-T02 — Tool use pack | 2 h | 0 h | 🟢 Small — 2 h | Ready |
+| F-012-T03 — Bilingual (Italian and English) pack | 1.5 h | 0 h | 🟢 Small — 1.5 h | Ready |
+| F-012-T04 — Multi-step agent pack | 2 h | 0 h | 🟢 Small — 2 h | Planned |
+| F-012-T05 — Refusal and permission escalation pack | 1.5 h | 0 h | 🟢 Small — 1.5 h | Planned |
+| F-012-T06 — Long context pack | 1.5 h | 0 h | 🟢 Small — 1.5 h | Ready |
+| F-012-T07 — Release the new packs | 0.5 h | 0 h | 🟢 Small — 0.5 h | Planned |
+| **Total** | 11 h | 0 h (0 of 7 steps recorded) | 11 h | 0 of 7 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Step estimates** (dated basis; generated from the task files)
+
+- F-012-T01: 2 h agent (2026-11-13). Estimated 2026-11-13 in the evaluation roadmap plan (owner request). Not a measurement.
+- F-012-T02: 2 h agent (2026-11-13). Estimated 2026-11-13 in the evaluation roadmap plan (owner request). Not a measurement.
+- F-012-T03: 1.5 h agent (2026-11-13). Estimated 2026-11-13 in the evaluation roadmap plan (owner request). Not a measurement.
+- F-012-T04: 2 h agent (2026-11-13). Estimated 2026-11-13 in the evaluation roadmap plan (owner request). Not a measurement.
+- F-012-T05: 1.5 h agent (2026-11-13). Estimated 2026-11-13 in the evaluation roadmap plan (owner request). Not a measurement.
+- F-012-T06: 1.5 h agent (2026-11-13). Estimated 2026-11-13 in the evaluation roadmap plan (owner request). Not a measurement.
+- F-012-T07: 0.5 h agent (2026-11-13). Estimated 2026-11-13 in the evaluation roadmap plan (owner request). Not a measurement.
+
+**Next action / closure evidence:** F-012-T01, F-012-T02, F-012-T03 or F-012-T06 (independent). Planned 2026-11-13 at the owner's request as part of the [roadmap](ROADMAP.md); every step is in its task file.
+
+**Estimates:** 11 h agent over 7 steps, estimated 2026-11-13; not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
+| Opened | 2026-11-13 |
+| Verification | Pending. |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+### F-013
+
+**Host-aware profiles: a model that does not fit the host is refused before the run**
+
+| Signal | Priority | Status | Effort | Remaining | Depends on | Unlocks | Human action |
+|:---:|---|---|---|---|---|---|:---:|
+| 🔴 | 🔹 P3 | Open | 🟡 Medium | 2.5 h | — | — | 💻 No |
+
+💻 **→** F-013-T01.
+
+| | |
+|---|---|
+| **Issue** | Profiles describe a model but not what it needs; a campaign on a small host discovers too late that the model does not fit or times out. |
+| **Reproduce** | Plan a 30B profile against a 16 GB host: nothing warns. |
+| **Check** | Profiles and environments declare size and memory; `plan` refuses or warns on a misfit; small-host example profiles and limits exist. |
+
+**Feature steps** (baseline: accepted estimate; actual: effort spent, so far while open; h: agent hours, owner time apart; status is not parent acceptance)
+
+| Step | Baseline | Actual | Remaining | Status |
+|---|---|---|---|---|
+| F-013-T01 — Host fit in model profiles | 1.5 h | 0 h | 🟢 Small — 1.5 h | Ready |
+| F-013-T02 — Small-host example profiles | 1 h | 0 h | 🟢 Small — 1 h | Planned |
+| **Total** | 2.5 h | 0 h (0 of 2 steps recorded) | 2.5 h | 0 of 2 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Step estimates** (dated basis; generated from the task files)
+
+- F-013-T01: 1.5 h agent (2026-11-13). Estimated 2026-11-13 in the evaluation roadmap plan (owner request). Not a measurement.
+- F-013-T02: 1 h agent (2026-11-13). Estimated 2026-11-13 in the evaluation roadmap plan (owner request). Not a measurement.
+
+**Next action / closure evidence:** F-013-T01. Planned 2026-11-13 at the owner's request as part of the [roadmap](ROADMAP.md); every step is in its task file.
+
+**Estimates:** 2.5 h agent over 2 steps, estimated 2026-11-13; not a measurement.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
+| Opened | 2026-11-13 |
+| Verification | Pending. |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
 
 ## Other changes
 
