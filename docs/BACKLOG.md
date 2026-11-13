@@ -1,16 +1,140 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 13 November 2026 against main `b2f5e76`. PR #41 (harness 6.0.0) passed CI 43209718538. Harness 8.5.0 reconciled: ten copied files updated, AGENTS.md, BACKLOG-RULES and the ledger legend reconciled by hand, header generated from this log.
-[Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
+Current work ledger, reviewed 13 November 2026 against main `7c50b95`. PR #43 (harness 8.5.0) passed CI 43466132027. Roadmap planned: F-011 incremental runs, F-012 six packs, F-013 host-aware profiles (PR #42).
+[Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 6 h across 13 open steps of 3 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="f-011"></a>[✨ F-011](#top)
+
+**Incremental runs: only what changed, resumable**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.75 h | — | — | — | — |
+
+💻 **→** F-011-T01.
+
+| | |
+|---|---|
+| **Issue** | Every campaign reruns all selected cases, even when `pending` already knows most are current; an interrupted local-model campaign starts over. Slow models on small hosts make this costly. |
+| **Reproduce** | Run a pack, change one case, run again: every case runs. Interrupt a run: nothing is reusable. |
+| **Check** | Only pending cases run; an interrupted run resumes to the same result; partial runs merge into the ledger; releases list changed cases per pack. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | F-011-T01 — Run only pending cases | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | F-011-T02 — Resume an interrupted campaign | 0.5 h | 0 h | 0.5 h | Planned |
+| 🟢 Small | F-011-T03 — Merge partial runs into the ledger | 0.5 h | 0 h | 0.5 h | Planned |
+| 🟢 Small | F-011-T04 — Release with a per-pack list of added and changed cases | 0.25 h | 0 h | 0.25 h | Planned |
+| 🟡 Medium | **Total** | 1.75 h | 0 h (0 of 4 steps recorded) | 1.75 h | 0 of 4 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-011.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42); owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
+| Opened | 2026-11-13 |
+| Verification | Pending. |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+### <a id="f-012"></a>[✨ F-012](#top)
+
+**Six new packs: structured output, tools, bilingual, multi-step, refusal, long context**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.25 h | — | — | — | — |
+
+💻 **→** F-012-T01, F-012-T02, F-012-T03 or F-012-T06 (independent).
+
+| | |
+|---|---|
+| **Issue** | Three packs exist (smoke, smoke-schema, general-assistant-expanded). They cannot tell whether a model can choose tools, keep structured output under pressure, work in Italian, run several steps, refuse escalation or use long inputs. |
+| **Reproduce** | `gauntlet packs` lists three packs. |
+| **Check** | Six new packs, each with regression and holdout splits, deterministic grader fixtures and an index entry, released in a tagged version. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | F-012-T01 — Structured-output robustness pack | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | F-012-T02 — Tool use pack | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | F-012-T03 — Bilingual (Italian and English) pack | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | F-012-T04 — Multi-step agent pack | 0.5 h | 0 h | 0.5 h | Planned |
+| 🟢 Small | F-012-T05 — Refusal and permission escalation pack | 0.5 h | 0 h | 0.5 h | Planned |
+| 🟢 Small | F-012-T06 — Long context pack | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | F-012-T07 — Release the new packs | 0.25 h | 0 h | 0.25 h | Planned |
+| 🟡 Medium | **Total** | 3.25 h | 0 h (0 of 7 steps recorded) | 3.25 h | 0 of 7 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-012.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42); owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
+| Opened | 2026-11-13 |
+| Verification | Pending. |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
+### <a id="f-013"></a>[✨ F-013](#top)
+
+**Host-aware profiles: a model that does not fit the host is refused before the run**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 1 h | — | — | — | — |
+
+💻 **→** F-013-T01.
+
+| | |
+|---|---|
+| **Issue** | Profiles describe a model but not what it needs; a campaign on a small host discovers too late that the model does not fit or times out. |
+| **Reproduce** | Plan a 30B profile against a 16 GB host: nothing warns. |
+| **Check** | Profiles and environments declare size and memory; `plan` refuses or warns on a misfit; small-host example profiles and limits exist. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | F-013-T01 — Host fit in model profiles | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | F-013-T02 — Small-host example profiles | 0.5 h | 0 h | 0.5 h | Planned |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 2 steps recorded) | 1 h | 0 of 2 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-013.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42); owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
+| Opened | 2026-11-13 |
+| Verification | Pending. |
+| Reviewed | 2026-11-13 |
+
+</details>
+
+---
 
 ## Other changes
 
