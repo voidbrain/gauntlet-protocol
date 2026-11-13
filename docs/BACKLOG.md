@@ -52,7 +52,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
+| PR / evidence | [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42); owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
 | Opened | 2026-11-13 |
 | Verification | Pending. |
 | Reviewed | 2026-11-13 |
@@ -108,7 +108,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
+| PR / evidence | [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42); owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
 | Opened | 2026-11-13 |
 | Verification | Pending. |
 | Reviewed | 2026-11-13 |
@@ -154,7 +154,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
+| PR / evidence | [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42); owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
 | Opened | 2026-11-13 |
 | Verification | Pending. |
 | Reviewed | 2026-11-13 |
