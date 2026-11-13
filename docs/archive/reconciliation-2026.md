@@ -10,6 +10,10 @@ PR #41 (harness 6.0.0) passed CI 43209718538. Harness 8.5.0 reconciled: ten copi
 
 PR #43 (harness 8.5.0) passed CI 43466132027. Roadmap planned: F-011 incremental runs, F-012 six packs, F-013 host-aware profiles (PR #42).
 
+## 2026-11-13 — main `b4a8c63`
+
+PR #44 (concise Other changes) passed CI 43479963697. Aligned to harness v8.6.0 (including v8.5.1): copied check-harness.mjs and reconcile-preview.mjs, updated CI ref and stamp to v8.6.0.
+
 ## Archived Other changes (moved from BACKLOG.md on 2026-11-13)
 
 **Harness v8.5.0 reconciliation (6.1.0 to 8.4.0 included), 2026-11-13.** Copied byte-identically from v8.5.0: `tools/work-items.mjs`, `check-backlog.mjs`, `backlog-queue.mjs`, `backlog-dependencies.mjs`, `merge-backlog.mjs`, `maintenance.mjs`, `behaviour.mjs`, `task-claims.mjs`, `docs/agents/verification.md` and `docs/agents/parallel-work.md`. By hand: AGENTS.md (Documentation section, every branch in its own worktree, one fast pre-push pass, the reviewer gets the diff, read record sources first), BACKLOG-RULES (identical to v6.0.0 before, so taken as v8.5.0) and the ledger legend (effort in agent hours, Procedures and Decisions). Optional 8.4.0 adopted: `.gitattributes` union merge for `docs/archive/*.md` and the header generated from [the reconciliation log](archive/reconciliation-2026.md). 8.5.0: `npm test` runs with `--test-timeout=60000`. CI checks out template v8.5.0 (was v5.1.1). No active record needed migration (no 🧑 Yes cue, no open step). Not adopted: step `prs` in task files (`workItems.repository` unset). [PR #43](https://github.com/voidbrain/gauntlet-protocol/pull/43). Review: fresh-context mechanical review (Haiku), no blockers; its should-fix (the maintenance receipt lost the earlier rule outcome) answered by recording a rule outcome next to the tool outcome; the receipt is replaced by design and earlier ones stay in git history.

@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 13 November 2026 against main `7c50b95`. PR #43 (harness 8.5.0) passed CI 43466132027. Roadmap planned: F-011 incremental runs, F-012 six packs, F-013 host-aware profiles (PR #42).
+Current work ledger, reviewed 13 November 2026 against main `b4a8c63`. PR #44 (concise Other changes) passed CI 43479963697. Aligned to harness v8.6.0 (including v8.5.1): copied check-harness.mjs and reconcile-preview.mjs, updated CI ref and stamp to v8.6.0.
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
