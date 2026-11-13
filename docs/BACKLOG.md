@@ -15,9 +15,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Incremental runs: only what changed, resumable**
 
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.75 h | — | — | — | — |
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.75 h | — | — | 🤖 | — | — |
 
 💻 **→** F-011-T01.
 
@@ -56,9 +56,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Six new packs: structured output, tools, bilingual, multi-step, refusal, long context**
 
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.25 h | — | — | — | — |
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.25 h | — | — | 🤖 | — | — |
 
 💻 **→** F-012-T01, F-012-T02, F-012-T03 or F-012-T06 (independent).
 
@@ -100,9 +100,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Host-aware profiles: a model that does not fit the host is refused before the run**
 
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 1 h | — | — | — | — |
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
 
 💻 **→** F-013-T01.
 
