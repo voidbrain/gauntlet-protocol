@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-13T21:29:43.280Z",
+  "reviewed": "2026-11-13T21:45:35.603Z",
   "policy": "18c0059e726d071aefd8c71b9a5d27b54b923320af6b34567c262491c7c1c9bb",
   "inputs": {
     "AGENTS.md": "e214a4fcb21ce61b58e3666395c6df53531481a8f1089c62d47b4712492b484c",
@@ -20,12 +20,12 @@
     "docs/agents/work-usage.md": "e2f7c484f1c07f4b47fd1133857d8744ccab0ad2a7b85b220946c115a002bebc",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "3a732e35b5240a3f8c3457405e6262786e3ca62005f54b8703f092bb7ec4c8f2",
+    "tools/work-items.mjs": "19c364e3946727f2f3caa750e0542f10f818fb1797aea0cce01d60b6266bb472",
     "tools/work-usage.mjs": "4329262c0b9e723e046dd8878e15a99cff5f590201cd0918563f3204bbe79219"
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-13T21:29:43.010Z",
+    "latestAt": "2026-11-13T21:45:35.306Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -55,7 +55,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 295
+          "median": 296
         },
         "conflicts": {
           "observed": 0,
@@ -77,10 +77,10 @@
   },
   "outcomes": [
     {
-      "kind": "rule",
+      "kind": "tool",
       "disposition": "implemented",
-      "target": "docs/BACKLOG-RULES.md",
-      "evidence": "Harness v8.9.0 reconcile: Agent column and waiting owner steps; work-items copied."
+      "target": "tools/work-items.mjs",
+      "evidence": "Harness v8.9.1 reconcile: queue order counts step-level dependencies; byte copy."
     }
   ]
 }
