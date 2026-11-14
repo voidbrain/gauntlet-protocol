@@ -505,7 +505,7 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 
 | Field | Value |
 |---|---|
-| PR / evidence | PR #72 closure; [PR #71](https://github.com/voidbrain/gauntlet-protocol/pull/71) release; [PR #70](https://github.com/voidbrain/gauntlet-protocol/pull/70) release readiness; [PR #64](https://github.com/voidbrain/gauntlet-protocol/pull/64), [#65](https://github.com/voidbrain/gauntlet-protocol/pull/65), [#66](https://github.com/voidbrain/gauntlet-protocol/pull/66), [#67](https://github.com/voidbrain/gauntlet-protocol/pull/67), [#68](https://github.com/voidbrain/gauntlet-protocol/pull/68) and [#69](https://github.com/voidbrain/gauntlet-protocol/pull/69) implement the six packs; roadmap request PR #42. |
+| PR / evidence | [PR #72](https://github.com/voidbrain/gauntlet-protocol/pull/72) closure; [PR #71](https://github.com/voidbrain/gauntlet-protocol/pull/71) release; [PR #70](https://github.com/voidbrain/gauntlet-protocol/pull/70) release readiness; [PR #64](https://github.com/voidbrain/gauntlet-protocol/pull/64), [#65](https://github.com/voidbrain/gauntlet-protocol/pull/65), [#66](https://github.com/voidbrain/gauntlet-protocol/pull/66), [#67](https://github.com/voidbrain/gauntlet-protocol/pull/67), [#68](https://github.com/voidbrain/gauntlet-protocol/pull/68) and [#69](https://github.com/voidbrain/gauntlet-protocol/pull/69) implement the six packs; roadmap request PR #42. |
 | Opened | 2026-11-13 |
 | Closed | 2026-11-14 |
 | Verification | PR #64–#69 CI passed the deterministic pack regressions. Release PR #71 passed required CI before merge; package 0.9.0 and its GitHub release are published. The generated catalog lists all 66 cases. No real-model qualification claimed. |
