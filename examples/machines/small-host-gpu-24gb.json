@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "small-host-gpu-24gb",
+  "version": "1.0.0",
+  "platform": "linux",
+  "arch": "x64",
+  "cpu": "owner-reviewed 64-bit CPU",
+  "memoryBytes": 25769803776,
+  "accelerator": "discrete-gpu"
+}

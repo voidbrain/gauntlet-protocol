@@ -26,6 +26,12 @@ A separately authorized run uses the same arguments plus `--execute --allow-mode
 
 Profiles may declare both `weightsBytes` and `minimumMemoryBytes`; they are an inseparable pair, and minimum memory cannot be smaller than the weights. When both a sized profile and an environment are supplied, `plan` reports `hostFit` as `fits` or `misfit`. Every case in a memory-misfit plan is ineligible, and direct execution rejects the same mismatch before any provider request. Legacy profiles without sizing remain valid but produce `hostFit: unknown`; this is not evidence that they fit.
 
+## Small-host presets
+
+The example profiles `small-host-cpu-7b-q4.json` and `small-host-gpu-14b-q4.json` pair 7B/14B Q4 configurations with 4K/8K contexts and explicit memory requirements. Their matching files under `examples/machines/` demonstrate CPU and small discrete-GPU declarations. These are portable shapes, not detected hardware or promises that a particular model build uses exactly the stated bytes: replace the generic model, measured weight size and machine identity with owner-reviewed values before execution.
+
+`examples/limits-slow-host.json` allows three minutes per case but selects at most four cases in a suite. Use a deliberate `--only` selection when a larger pack needs coverage across several bounded runs; the preset does not redefine the pack or turn partial evidence into qualification.
+
 ## Reuse and comparison
 
 Reports retain the machine and scenario definitions. Complete matching definitions are included in the cache key, alongside existing evaluator/case/grader/profile/runtime/source/limits/host identity. Common evidence can therefore be reused by multiple authorized consumers of the same cache; each applies its own acceptance criteria. This does not require a shared online service or copying project-private test data.
