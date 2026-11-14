@@ -6,7 +6,7 @@ Dated reconciliation entries, newest by date. The backlog header is generated fr
 
 PRs #48–#52 (harness 8.9.0–8.12.0 reconciles) merged on green CI. Harness 8.14.1 reconciled: quiet outputs, reconcile:draft, work:next, code:map, record size budget.
 
-No record owns #48–#52: each only reconciled the harness. Drafted with `reconcile:draft`.
+No record owns #48–#52: each only reconciled the harness. Drafted with `reconcile:draft`; this reconcile is [#53](https://github.com/voidbrain/gauntlet-protocol/pull/53).
 
 ## 2026-11-13 — main `f418cd2`
 
