@@ -42,7 +42,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42); owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
+| PR / evidence | [PR #73](https://github.com/voidbrain/gauntlet-protocol/pull/73) implements plan-time host fit; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the roadmap request. |
 | Opened | 2026-11-13 |
 | Verification | Pending. |
 | Reviewed | 2026-11-13 |
