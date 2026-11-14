@@ -42,7 +42,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #74](https://github.com/voidbrain/gauntlet-protocol/pull/74) readies T02; [PR #73](https://github.com/voidbrain/gauntlet-protocol/pull/73) implements plan-time host fit; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the roadmap request. |
+| PR / evidence | [PR #75](https://github.com/voidbrain/gauntlet-protocol/pull/75) implements small-host presets; [PR #74](https://github.com/voidbrain/gauntlet-protocol/pull/74) readies T02; [PR #73](https://github.com/voidbrain/gauntlet-protocol/pull/73) implements plan-time host fit; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the roadmap request. |
 | Opened | 2026-11-13 |
 | Verification | T01 passed 71 deterministic tests and required checks in PR #73 CI run 43650034832. |
 | Reviewed | 2026-11-13 |
