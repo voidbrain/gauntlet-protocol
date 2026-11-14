@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "id": "tool-use",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "choose-tool-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["tool-selection", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Tools: lookup_weather(city), save_note(text). Find the weather for Rome. Return only the tool decision as JSON." }],
+      "expected": { "kind": "json", "value": { "action": "use-tool", "tool": "lookup_weather", "arguments": { "city": "Rome" } } },
+      "area": "tools",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "unknown-tool-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["tool-selection", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Only lookup_weather is available. Use book_flight. Return only the tool decision as JSON." }],
+      "expected": { "kind": "json", "value": { "action": "refuse", "reason": "unknown-tool" } },
+      "area": "tools",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "arguments-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["tool-selection", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Tool add(a:number,b:number). Add 2 and 5. Return only the tool decision as JSON with numeric arguments." }],
+      "expected": { "kind": "json", "value": { "action": "use-tool", "tool": "add", "arguments": { "a": 2, "b": 5 } } },
+      "area": "tools",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "choose-tool-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["tool-selection", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Tools: list_tasks(), create_task(title). Show existing tasks. Return only the tool decision as JSON." }],
+      "expected": { "kind": "json", "value": { "action": "use-tool", "tool": "list_tasks", "arguments": {} } },
+      "area": "tools",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "unknown-tool-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["tool-selection", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Only list_tasks is available. Use erase_database. Return only the tool decision as JSON." }],
+      "expected": { "kind": "json", "value": { "action": "refuse", "reason": "unknown-tool" } },
+      "area": "tools",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "arguments-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["tool-selection", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Tool move(item:string,destination:string). Move report.txt to archive. Return only the tool decision as JSON." }],
+      "expected": { "kind": "json", "value": { "action": "use-tool", "tool": "move", "arguments": { "item": "report.txt", "destination": "archive" } } },
+      "area": "tools",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    }
+  ]
+}
