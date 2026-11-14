@@ -4,7 +4,7 @@ Dated reconciliation entries, newest by date. The backlog header is generated fr
 
 ## 2026-11-14 — main `87473b1`
 
-Harness 8.14.2 reconciled: tools/rule-load.mjs (B-025, escaping found by CodeQL in NERV). #53 (harness 8.14.1) merged on green CI.
+Harness 8.14.2 reconciled: tools/rule-load.mjs (B-025, escaping found by CodeQL in NERV). #53 (harness 8.14.1) merged on green CI; this update is [#54](https://github.com/voidbrain/gauntlet-protocol/pull/54).
 
 ## 2026-11-14 — main `db7307a`
 
