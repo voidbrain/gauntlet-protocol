@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-011-T01",
   "parent": "F-011",
-  "status": "verified",
+  "status": "closed",
   "title": "Run only pending cases",
   "goal": "Run only pending cases",
   "acceptance": [
