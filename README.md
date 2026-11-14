@@ -1,10 +1,19 @@
 # Gauntlet Protocol
 
-Version 0.8.0 adds incremental pending-only runs, private checkpoints, interrupted-campaign resume and observable partial ledger merges. Version 0.4.0 added [bounded private failure captures and selected diagnostics](docs/FAILURES.md); earlier releases added [reusable machine/load-scenario contracts](docs/ENVIRONMENTS.md), a [generated capability index](docs/test-index.md), [conservative evidence reuse](docs/EVIDENCE.md), [performance telemetry](docs/PERFORMANCE.md) and [local runtime adapters](docs/RUNTIMES.md).
+Version 0.9.0 adds six focused evaluation packs; version 0.8.0 added incremental pending-only runs, private checkpoints, interrupted-campaign resume and observable partial ledger merges. Version 0.4.0 added [bounded private failure captures and selected diagnostics](docs/FAILURES.md); earlier releases added [reusable machine/load-scenario contracts](docs/ENVIRONMENTS.md), a [generated capability index](docs/test-index.md), [conservative evidence reuse](docs/EVIDENCE.md), [performance telemetry](docs/PERFORMANCE.md) and [local runtime adapters](docs/RUNTIMES.md).
 
 An independent TypeScript library and CLI for capability-scoped AI evaluation. It records the tested configuration, bounded execution and independent acceptance evidence. It never grants production permission or promotes a model automatically.
 
 The [expanded general-assistant pack](docs/EXPANDED-PACK.md) defines 28 stable coverage identities and transcript-based correction cases without claiming interactive execution or hidden-test isolation.
+
+The generated [pack catalog](docs/test-index.md) also lists six focused 1.0.0 packs with regression and holdout coverage:
+
+- `structured-output-robustness` — six constrained JSON and schema cases;
+- `tool-use` — six tool-selection and argument cases;
+- `bilingual-it-en` — four Italian/English language-control cases;
+- `multi-step-agent` — four deterministic scripted-runner cases;
+- `refusal-permission` — four refusal and permission-boundary cases;
+- `long-context` — four retrieval cases with facts at varied context depths.
 
 The [run ledger](docs/LEDGER.md) lets a consumer list the cases of the packs it consumes that it has not run in their current definition, or under the model, runtime, machine scenario or consumer source it now intends (`pending`), without storing evidence.
 Use `run --pending --ledger=results/ledger.json` to execute only those cases while retaining the complete pack identity in the report; ledger-current cases are explicitly reported as `not-run / skipped-current`.
