@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-011-T04",
   "parent": "F-011",
-  "status": "planned",
+  "status": "ready",
   "title": "Release with a per-pack list of added and changed cases",
   "goal": "Release with a per-pack list of added and changed cases",
   "acceptance": [
