@@ -12,6 +12,8 @@ The direct local provider supports Ollama's loopback API, exact installed quanti
 
 Pack: `schemaVersion`, `id`, semantic `version`, `cases`. Each case has stable `id`, `layer`, `split` (regression or holdout), named `capabilities`, `critical`, `expensive`; either `runner`, or model `messages` plus independent `expected: {kind: "text"|"json", value}`. No shell commands in packs. Expectations are never sent to the direct model.
 
+Model profiles can declare `weightsBytes` and `minimumMemoryBytes` together, alongside their quantization and context. Machine environments declare total memory and an owner-reviewed accelerator class. Planning with both declarations reports host fit, makes every case ineligible on a memory misfit and leaves missing sizing explicitly unknown; execution enforces the same memory gate before contacting a provider.
+
 Ordered model messages may represent a complete prior transcript, including assistant content followed by a correcting user message. The array is validated, fixture-hashed and forwarded unchanged for one final generation; Gauntlet does not generate intermediate turns or execute an interactive dialogue. The [expanded-pack contract](EXPANDED-PACK.md) records the coverage matrix, versioning and holdout limits.
 
 Profile: exact model tag/quantization, loopback endpoint, context, maximum output, nullable temperature/topP/topK/seed/think, concurrency, hardware and cache description. Null sampling settings inherit runtime defaults, so runtime version/default changes require reevaluation. Candidate profiles are configuration proposals, not qualification. The baseline executor is serial; a profile requesting parallel execution fails closed until a suitable scheduling adapter is supplied.

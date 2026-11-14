@@ -9,6 +9,7 @@ import {
   validateMachineProfile,
   validateLoadScenario,
   validateExecutionEnvironment,
+  validateProfile,
   run,
   executeWithEvidence,
   reuseValid,
@@ -67,6 +68,64 @@ const pack: Pack = {
     },
   ],
 };
+
+test('profiles and environments declare host-fit inputs and plan rejects a memory misfit', async () => {
+  const sizedProfile = validateProfile({
+      ...profile,
+      weightsBytes: 8_000_000_000,
+      minimumMemoryBytes: 12_000_000_000,
+    }),
+    smallHost = validateExecutionEnvironment({
+      ...environment(),
+      machine: {
+        ...environment().machine,
+        memoryBytes: 8_000_000_000,
+        accelerator: 'cpu',
+      },
+    }),
+    result = plan(pack, sizedProfile, defaults, {
+      environment: smallHost,
+      allowModels: true,
+    });
+
+  assert.deepEqual(result.hostFit, {
+    status: 'misfit',
+    reason: 'Profile requires 12000000000 bytes but host declares 8000000000 bytes',
+  });
+  assert.equal(result.cases[0].eligible, false);
+  assert.equal(result.cases[0].reason, 'Profile does not fit the declared host memory');
+  let requests = 0;
+  const currentHost = validateExecutionEnvironment({
+    ...environment(),
+    machine: { ...environment().machine, accelerator: 'cpu' },
+  });
+  await assert.rejects(
+    run(
+      pack,
+      {
+        ...sizedProfile,
+        minimumMemoryBytes: currentHost.machine.memoryBytes + 1,
+      },
+      defaults,
+      {
+        execute: true,
+        allowModels: true,
+        environment: currentHost,
+        scenarioConfirmed: true,
+        fetch: provider(() => requests++).fetcher,
+      },
+    ),
+    /does not fit/,
+  );
+  assert.equal(requests, 0);
+  assert.throws(() => validateProfile({ ...profile, weightsBytes: 0, minimumMemoryBytes: 1 }));
+  assert.throws(() =>
+    validateExecutionEnvironment({
+      ...environment(),
+      machine: { ...environment().machine, accelerator: 'unknown-device' },
+    }),
+  );
+});
 function provider(onRequest = () => {}) {
   let calls = 0;
   const fetcher = (async (url: unknown) => {
