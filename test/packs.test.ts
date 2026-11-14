@@ -76,7 +76,10 @@ test('structured-output robustness pack has both splits and deterministic semant
 test('tool-use pack covers selection, refusal and schema-shaped arguments', async () => {
   const pack = load('examples/tool-use-v1.json');
   assert.deepEqual(new Set(pack.cases.map((entry) => entry.split)), new Set(['regression', 'holdout']));
-  assert.equal(pack.cases.every((entry) => entry.capabilities.includes('tool-selection')), true);
+  assert.equal(
+    pack.cases.every((entry) => entry.capabilities.includes('tool-selection')),
+    true,
+  );
   const passing = await run(pack, profile, defaults, {
     execute: true,
     allowModels: true,

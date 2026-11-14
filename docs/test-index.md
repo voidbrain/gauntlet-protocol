@@ -49,6 +49,12 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [structured-output-robustness@1.0.0 / tool-choice-holdout](../examples/structured-output-robustness-v1.json) | tools | tool-selection, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [structured-output-robustness@1.0.0 / missing-input-regression](../examples/structured-output-robustness-v1.json) | general-assistant | clarification, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [structured-output-robustness@1.0.0 / missing-input-holdout](../examples/structured-output-robustness-v1.json) | general-assistant | clarification, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [tool-use@1.0.0 / choose-tool-regression](../examples/tool-use-v1.json) | tools | tool-selection, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [tool-use@1.0.0 / unknown-tool-regression](../examples/tool-use-v1.json) | tools | tool-selection, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [tool-use@1.0.0 / arguments-regression](../examples/tool-use-v1.json) | tools | tool-selection, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [tool-use@1.0.0 / choose-tool-holdout](../examples/tool-use-v1.json) | tools | tool-selection, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [tool-use@1.0.0 / unknown-tool-holdout](../examples/tool-use-v1.json) | tools | tool-selection, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [tool-use@1.0.0 / arguments-holdout](../examples/tool-use-v1.json) | tools | tool-selection, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 
 ## Area coverage
 
@@ -63,7 +69,7 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 - estimation: 0 mapped cases
 - ci-operations: 0 mapped cases
 - research: 0 mapped cases
-- tools: 2 mapped cases
+- tools: 8 mapped cases
 - conversation-memory: 0 mapped cases
 - distributed-coordination: 0 mapped cases
 - ui-visual: 0 mapped cases
