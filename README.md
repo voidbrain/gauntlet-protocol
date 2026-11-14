@@ -9,6 +9,7 @@ The [expanded general-assistant pack](docs/EXPANDED-PACK.md) defines 28 stable c
 The [run ledger](docs/LEDGER.md) lets a consumer list the cases of the packs it consumes that it has not run in their current definition, or under the model, runtime, machine scenario or consumer source it now intends (`pending`), without storing evidence.
 Use `run --pending --ledger=results/ledger.json` to execute only those cases while retaining the complete pack identity in the report; ledger-current cases are explicitly reported as `not-run / skipped-current`.
 Runs atomically checkpoint each finished case to their private output. Resume an interrupted campaign with `run --resume=results/interrupted.json` and a new `--out`; the pack, source and execution identity must still match.
+Recording a partial or resumed report merges only its graded cases into the ledger and reports whether each entry was added, replaced, unchanged or kept because existing evidence was newer.
 
 The [repeatable comparison contract](docs/COMPARISONS.md) defines candidate identity, compatibility and repetition rules without running a campaign or selecting a winner.
 

@@ -153,15 +153,25 @@ test('ledger: partial merges retain other cases and report newer conflicts', asy
     results: [original.results[0]],
     complete: false,
     passed: false,
+    usage: { outputTokens: original.results[0].tokens },
   });
   const newer = mergeRun(ledger, partial, smoke);
   assert.equal(newer.ledger.entries.length, 2);
-  assert.deepEqual(newer.changes.map((change) => [change.case, change.outcome]), [['a', 'replaced']]);
+  assert.deepEqual(
+    newer.changes.map((change) => [change.case, change.outcome]),
+    [['a', 'replaced']],
+  );
   assert.equal(newer.ledger.entries.find((entry) => entry.case === 'b')?.reportHash, ledger.entries[1].reportHash);
 
   const older = mergeRun(newer.ledger, original, smoke);
   assert.deepEqual(older.ledger, newer.ledger);
-  assert.deepEqual(older.changes.map((change) => [change.case, change.outcome]), [['a', 'kept-newer'], ['b', 'unchanged']]);
+  assert.deepEqual(
+    older.changes.map((change) => [change.case, change.outcome]),
+    [
+      ['a', 'kept-newer'],
+      ['b', 'unchanged'],
+    ],
+  );
 });
 
 test('ledger: only graded runs cover; repeats, newer runs and ties are deterministic', async () => {
