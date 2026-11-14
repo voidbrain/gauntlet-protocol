@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-012-T07",
   "parent": "F-012",
-  "status": "planned",
+  "status": "ready",
   "title": "Release the new packs",
   "goal": "Release the new packs",
   "acceptance": [
