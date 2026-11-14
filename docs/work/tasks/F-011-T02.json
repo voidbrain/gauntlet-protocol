@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-011-T02",
   "parent": "F-011",
-  "status": "planned",
+  "status": "ready",
   "title": "Resume an interrupted campaign",
   "goal": "Resume an interrupted campaign",
   "acceptance": [

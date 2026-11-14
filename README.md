@@ -7,6 +7,7 @@ An independent TypeScript library and CLI for capability-scoped AI evaluation. I
 The [expanded general-assistant pack](docs/EXPANDED-PACK.md) defines 28 stable coverage identities and transcript-based correction cases without claiming interactive execution or hidden-test isolation.
 
 The [run ledger](docs/LEDGER.md) lets a consumer list the cases of the packs it consumes that it has not run in their current definition, or under the model, runtime, machine scenario or consumer source it now intends (`pending`), without storing evidence.
+Use `run --pending --ledger=results/ledger.json` to execute only those cases while retaining the complete pack identity in the report; ledger-current cases are explicitly reported as `not-run / skipped-current`.
 
 The [repeatable comparison contract](docs/COMPARISONS.md) defines candidate identity, compatibility and repetition rules without running a campaign or selecting a winner.
 
@@ -23,6 +24,7 @@ These commands validate and plan; they do not contact a model, download weights 
 
 ```sh
 node bin/gauntlet.mjs run --pack=examples/smoke-v1.json --profile=examples/profiles/gemma4-12b.json --limits=examples/limits-day.json --execute --allow-models --telemetry --fresh --out=results/gemma-first.json
+node bin/gauntlet.mjs run --pack=examples/smoke-v1.json --profile=examples/profiles/gemma4-12b.json --limits=examples/limits-day.json --execute --allow-models --pending --ledger=results/ledger.json --out=results/gemma-pending.json
 node bin/gauntlet.mjs compare --reports=results/gemma-first.json,results/qwen-first.json
 ```
 
