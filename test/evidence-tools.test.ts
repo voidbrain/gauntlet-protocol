@@ -132,14 +132,16 @@ test('generated catalog maps cases and evidence without claiming unmeasured area
   const smoke = validatePack(JSON.parse(readFileSync('examples/smoke-v1.json', 'utf8'))),
     expanded = validatePack(JSON.parse(readFileSync('examples/general-assistant-expanded-v1.json', 'utf8'))),
     structured = validatePack(JSON.parse(readFileSync('examples/structured-output-robustness-v1.json', 'utf8'))),
-    tools = validatePack(JSON.parse(readFileSync('examples/tool-use-v1.json', 'utf8')));
+    tools = validatePack(JSON.parse(readFileSync('examples/tool-use-v1.json', 'utf8'))),
+    bilingual = validatePack(JSON.parse(readFileSync('examples/bilingual-it-en-v1.json', 'utf8')));
   assert.equal(
     generated,
-    catalogMarkdown(catalog([smoke, expanded, structured, tools]), {
+    catalogMarkdown(catalog([smoke, expanded, structured, tools, bilingual]), {
       'neutral-smoke': '../examples/smoke-v1.json',
       'general-assistant-expanded': '../examples/general-assistant-expanded-v1.json',
       'structured-output-robustness': '../examples/structured-output-robustness-v1.json',
       'tool-use': '../examples/tool-use-v1.json',
+      'bilingual-it-en': '../examples/bilingual-it-en-v1.json',
     }),
   );
 });
