@@ -2,6 +2,10 @@
 
 Dated reconciliation entries, newest by date. The backlog header is generated from the newest `## <date> — <branch> `<sha>`` entry (harness 8.4.0); its first paragraph stays under 300 characters.
 
+## 2026-11-14 — main `ea71bef`
+
+Harness 8.14.3 reconciled: reconcile-draft (F-066 entry heading), rule-load (generated pages), re-estimation sentence. #54 (harness 8.14.2) merged on green CI; this update is [#55](https://github.com/voidbrain/gauntlet-protocol/pull/55).
+
 ## 2026-11-14 — main `87473b1`
 
 Harness 8.14.2 reconciled: tools/rule-load.mjs (B-025, escaping found by CodeQL in NERV). #53 (harness 8.14.1) merged on green CI; this update is [#54](https://github.com/voidbrain/gauntlet-protocol/pull/54).

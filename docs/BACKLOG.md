@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 14 November 2026 against main `87473b1`. Harness 8.14.2 reconciled: tools/rule-load.mjs (B-025, escaping found by CodeQL in NERV). #53 (harness 8.14.1) merged on green CI; this update is [#54](https://github.com/voidbrain/gauntlet-protocol/pull/54).
+Current work ledger, reviewed 14 November 2026 against main `ea71bef`. Harness 8.14.3 reconciled: reconcile-draft (F-066 entry heading), rule-load (generated pages), re-estimation sentence. #54 (harness 8.14.2) merged on green CI; this update is [#55](https://github.com/voidbrain/gauntlet-protocol/pull/55).
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
