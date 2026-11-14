@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "small-host-cpu-16gb",
+  "version": "1.0.0",
+  "platform": "linux",
+  "arch": "x64",
+  "cpu": "owner-reviewed 64-bit CPU",
+  "memoryBytes": 17179869184,
+  "accelerator": "cpu"
+}

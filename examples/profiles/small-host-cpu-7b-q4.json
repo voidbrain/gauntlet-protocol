@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "small-host-cpu-7b-q4-4096",
+  "model": "generic-local:7b-q4",
+  "quantization": "Q4_K_M",
+  "endpoint": "http://127.0.0.1:11434",
+  "context": 4096,
+  "weightsBytes": 4500000000,
+  "minimumMemoryBytes": 8589934592,
+  "maxOutputTokens": 1024,
+  "temperature": null,
+  "topP": null,
+  "topK": null,
+  "seed": 42,
+  "think": false,
+  "parallel": 1,
+  "hardware": "small-host-cpu-16gb",
+  "cache": "server-default-unverified",
+  "backend": "ollama",
+  "residency": "suite"
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "small-host-gpu-14b-q4-8192",
+  "model": "generic-local:14b-q4",
+  "quantization": "Q4_K_M",
+  "endpoint": "http://127.0.0.1:11434",
+  "context": 8192,
+  "weightsBytes": 9000000000,
+  "minimumMemoryBytes": 17179869184,
+  "maxOutputTokens": 2048,
+  "temperature": null,
+  "topP": null,
+  "topK": null,
+  "seed": 42,
+  "think": false,
+  "parallel": 1,
+  "hardware": "small-host-gpu-24gb",
+  "cache": "server-default-unverified",
+  "backend": "ollama",
+  "residency": "suite"
+}

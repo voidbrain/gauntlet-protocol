@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -10,6 +10,7 @@ import {
   validateLoadScenario,
   validateExecutionEnvironment,
   validateProfile,
+  validateLimits,
   run,
   executeWithEvidence,
   reuseValid,
@@ -21,6 +22,7 @@ import {
   type Profile,
   type Pack,
 } from '../src/index.ts';
+const fixture = (path: string): unknown => JSON.parse(readFileSync(resolve(path), 'utf8')) as unknown;
 const scenario = {
   schemaVersion: 1 as const,
   id: 'minimal-load',
@@ -68,6 +70,27 @@ const pack: Pack = {
     },
   ],
 };
+
+test('small-host presets pair sized Q4 profiles with CPU/GPU machines and slow limits', () => {
+  const cpuProfile = validateProfile(fixture('examples/profiles/small-host-cpu-7b-q4.json')),
+    gpuProfile = validateProfile(fixture('examples/profiles/small-host-gpu-14b-q4.json')),
+    cpuMachine = validateMachineProfile(fixture('examples/machines/small-host-cpu-16gb.json')),
+    gpuMachine = validateMachineProfile(fixture('examples/machines/small-host-gpu-24gb.json')),
+    slow = validateLimits(fixture('examples/limits-slow-host.json'));
+
+  assert.match(cpuProfile.model, /7b/i);
+  assert.match(gpuProfile.model, /14b/i);
+  assert.match(cpuProfile.quantization, /q4/i);
+  assert.match(gpuProfile.quantization, /q4/i);
+  assert.equal(cpuProfile.context, 4096);
+  assert.equal(gpuProfile.context, 8192);
+  assert.equal(cpuMachine.accelerator, 'cpu');
+  assert.equal(gpuMachine.accelerator, 'discrete-gpu');
+  assert.equal(plan(pack, cpuProfile, slow, { environment: { machine: cpuMachine, scenario } }).hostFit.status, 'fits');
+  assert.equal(plan(pack, gpuProfile, slow, { environment: { machine: gpuMachine, scenario } }).hostFit.status, 'fits');
+  assert.ok(slow.caseMs > 30_000);
+  assert.ok(slow.maxCases < 10);
+});
 
 test('profiles and environments declare host-fit inputs and plan rejects a memory misfit', async () => {
   const sizedProfile = validateProfile({
