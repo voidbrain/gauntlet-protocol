@@ -43,11 +43,17 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [general-assistant-expanded@1.0.0 / combined-r2](../examples/general-assistant-expanded-v1.json) | general-assistant | intent-resolution, clarification, approval-boundaries, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [general-assistant-expanded@1.0.0 / combined-h1](../examples/general-assistant-expanded-v1.json) | general-assistant | intent-resolution, clarification, approval-boundaries, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [general-assistant-expanded@1.0.0 / combined-h2](../examples/general-assistant-expanded-v1.json) | general-assistant | intent-resolution, clarification, approval-boundaries, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [structured-output-robustness@1.0.0 / change-mind-regression](../examples/structured-output-robustness-v1.json) | general-assistant | intent-resolution, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [structured-output-robustness@1.0.0 / change-mind-holdout](../examples/structured-output-robustness-v1.json) | general-assistant | intent-resolution, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [structured-output-robustness@1.0.0 / tool-choice-regression](../examples/structured-output-robustness-v1.json) | tools | tool-selection, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [structured-output-robustness@1.0.0 / tool-choice-holdout](../examples/structured-output-robustness-v1.json) | tools | tool-selection, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [structured-output-robustness@1.0.0 / missing-input-regression](../examples/structured-output-robustness-v1.json) | general-assistant | clarification, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [structured-output-robustness@1.0.0 / missing-input-holdout](../examples/structured-output-robustness-v1.json) | general-assistant | clarification, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 
 ## Area coverage
 
 - unclassified: 0 mapped cases
-- general-assistant: 38 mapped cases
+- general-assistant: 42 mapped cases
 - coding: 0 mapped cases
 - code-review: 0 mapped cases
 - math: 0 mapped cases
@@ -57,7 +63,7 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 - estimation: 0 mapped cases
 - ci-operations: 0 mapped cases
 - research: 0 mapped cases
-- tools: 0 mapped cases
+- tools: 2 mapped cases
 - conversation-memory: 0 mapped cases
 - distributed-coordination: 0 mapped cases
 - ui-visual: 0 mapped cases
