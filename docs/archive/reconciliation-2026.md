@@ -4,7 +4,7 @@ Dated reconciliation entries, newest by date. The backlog header is generated fr
 
 ## 2026-11-14 — main `ea71bef`
 
-Harness 8.14.3 reconciled: reconcile-draft (F-066 entry heading), rule-load (generated pages), re-estimation sentence. #54 (harness 8.14.2) merged on green CI.
+Harness 8.14.3 reconciled: reconcile-draft (F-066 entry heading), rule-load (generated pages), re-estimation sentence. #54 (harness 8.14.2) merged on green CI; this update is [#55](https://github.com/voidbrain/gauntlet-protocol/pull/55).
 
 ## 2026-11-14 — main `87473b1`
 
