@@ -514,3 +514,38 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 </details>
 
 ---
+
+### F-013
+
+**Host-aware profiles: a model that does not fit the host is refused before the run**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; host-fit admission and small-host presets are available.
+
+| | |
+|---|---|
+| **Issue** | Profiles described a model but not what it needed; a campaign on a small host discovered too late that the model did not fit or timed out. |
+| **Reproduce** | Plan a 30B profile against a 16 GB host: nothing warned. |
+| **Check** | Profiles and environments declare size and memory; `plan` refuses or warns on a misfit; small-host example profiles and limits exist. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-14 after plan-time and execution-time memory admission, accelerator declarations, sized Q4 CPU/GPU profiles and slow-host limits passed deterministic tests and required CI. No model was contacted and no real-model fit was claimed.
+
+**Estimates:** Zero remaining. Both scoped steps retain their original baselines and measured elapsed effort in their task files.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #76](https://github.com/voidbrain/gauntlet-protocol/pull/76) closure; [PR #75](https://github.com/voidbrain/gauntlet-protocol/pull/75) small-host presets; [PR #74](https://github.com/voidbrain/gauntlet-protocol/pull/74) T02 readiness; [PR #73](https://github.com/voidbrain/gauntlet-protocol/pull/73) host-fit admission; roadmap request PR #42. |
+| Opened | 2026-11-13 |
+| Closed | 2026-11-14 |
+| Verification | PR #73 CI 43650034832 passed 71 deterministic tests and required checks. PR #75 CI 43650490173 passed 72 deterministic tests and required checks. No real-model run. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---

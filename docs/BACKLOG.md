@@ -4,52 +4,13 @@ Current work ledger, reviewed 14 November 2026 against main `ea71bef`. Harness 8
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 0.5 h across 1 open step of 1 feature. 0.25 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** no open steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="f-013"></a>[✨ F-013](#top)
-
-**Host-aware profiles: a model that does not fit the host is refused before the run**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
-
-💻 **→** F-013-T02.
-
-| | |
-|---|---|
-| **Issue** | Profiles describe a model but not what it needs; a campaign on a small host discovers too late that the model does not fit or times out. |
-| **Reproduce** | Plan a 30B profile against a 16 GB host: nothing warns. |
-| **Check** | Profiles and environments declare size and memory; `plan` refuses or warns on a misfit; small-host example profiles and limits exist. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-013-t02"></a>F-013-T02 — Small-host example profiles | 0.5 h | 0 h | 0.5 h | Ready |
-| — | <a id="f-013-t01"></a>F-013-T01 — Host fit in model profiles | 0.5 h | 0.25 h (measured) | 0 h | Completed |
-| 🟢 Small | **Total** | 1 h | 0.25 h (1 of 2 steps recorded) | 0.5 h | 1 of 2 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-013.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #75](https://github.com/voidbrain/gauntlet-protocol/pull/75) implements small-host presets; [PR #74](https://github.com/voidbrain/gauntlet-protocol/pull/74) readies T02; [PR #73](https://github.com/voidbrain/gauntlet-protocol/pull/73) implements plan-time host fit; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the roadmap request. |
-| Opened | 2026-11-13 |
-| Verification | T01 passed 71 deterministic tests and required checks in PR #73 CI run 43650034832. |
-| Reviewed | 2026-11-13 |
-
-</details>
-
----
 
 ## Other changes
 
