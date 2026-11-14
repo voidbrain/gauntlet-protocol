@@ -21,7 +21,7 @@ import {
   validateExecutionEnvironment,
   inspectFailures,
   emptyLedger,
-  recordRun,
+  mergeRun,
   pendingCases,
   runtimeHash,
   scenarioHash,
@@ -128,13 +128,14 @@ try {
     const ledger = existsSync(path) ? readJSON(path) : emptyLedger();
     if (lstatSync(path, { throwIfNoEntry: false })?.isSymbolicLink())
       throw Error('Ledger path must be a regular file, not a symlink');
-    const next = recordRun(ledger, readEvidence(required('report')), load('pack'), {
+    const merged = mergeRun(ledger, readEvidence(required('report')), load('pack'), {
       ...(options['source-key'] !== undefined ? { sourceKey: options['source-key'] } : {}),
     });
+    const next = merged.ledger;
     const temporary = path + '.' + process.pid + '.tmp';
     writeFileSync(temporary, JSON.stringify(next, null, 2) + '\n', { flag: 'wx' });
     renameSync(temporary, path);
-    console.log(JSON.stringify({ ledger: path, entries: next.entries.length }));
+    console.log(JSON.stringify({ ledger: path, entries: next.entries.length, changes: merged.changes }));
   } else if (command === 'identity') {
     // Prints the run identity a saved report would record, for `pending --model-digest/--runtime-hash/--scenario-hash`.
     const report = validateReport(readEvidence(required('report')));

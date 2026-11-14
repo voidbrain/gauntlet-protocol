@@ -1650,11 +1650,21 @@ export {
   validateLedger,
   validateIntendedIdentity,
   recordRun,
+  mergeRun,
   pendingCases,
   runtimeHash,
   scenarioHash,
 } from './ledger.ts';
-export type { Ledger, LedgerEntry, LedgerIdentity, IntendedIdentity, PendingCase, PendingReason } from './ledger.ts';
+export type {
+  Ledger,
+  LedgerEntry,
+  LedgerIdentity,
+  LedgerMerge,
+  LedgerMergeChange,
+  IntendedIdentity,
+  PendingCase,
+  PendingReason,
+} from './ledger.ts';
 export function performanceSummary(report: Report) {
   const measured = report.results.flatMap((r) => (r.performance ? [r.performance] : []));
   const median = (values: (number | null)[]) => {

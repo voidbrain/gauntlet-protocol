@@ -31,7 +31,7 @@ The source key is a bounded token (letters, digits and `. _ : + -`, up to 128 ch
 
 A schema 1 ledger still validates. Its entries are read as unknown identity: they cover a query that sets no identity field and never cover one that does. Recording into it writes schema 2 and keeps those entries as they were, without identity fields. In schema 2 an entry holds all four identity fields or none.
 
-`node bin/gauntlet.mjs ledger --ledger=evals/ledger.json --report=results/run.json --pack=packs/smoke.json [--source-key=<token>]` validates the saved report, refuses it unless it ran exactly that pack definition (id, version and pack hash), and records its cases. Recording the same report twice changes nothing, and recording it again with a different `--source-key` is refused (the report does not carry the key, so the first recording binds it); an older report never replaces a newer entry.
+`node bin/gauntlet.mjs ledger --ledger=evals/ledger.json --report=results/run.json --pack=packs/smoke.json [--source-key=<token>]` validates the saved report, refuses it unless it ran exactly that pack definition (id, version and pack hash), and records its graded cases. Partial and resumed reports update only those cases; every other ledger entry remains unchanged. The JSON response lists each admitted case as `added`, `replaced`, `kept-newer` or `unchanged`, making conflict resolution observable. Recording the same report twice changes nothing, and recording it again with a different `--source-key` is refused; an older report never replaces a newer entry, with report hash as the deterministic tie-breaker for equal finish times.
 
 ## Pending cases
 

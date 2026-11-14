@@ -50,6 +50,16 @@ export interface PendingCase {
   reason: PendingReason;
   last: LedgerEntry | null;
 }
+export interface LedgerMergeChange {
+  pack: string;
+  case: string;
+  profileHash: string | null;
+  outcome: 'added' | 'replaced' | 'kept-newer' | 'unchanged';
+}
+export interface LedgerMerge {
+  ledger: Ledger;
+  changes: LedgerMergeChange[];
+}
 
 const statuses = new Set(['passed', 'failed']);
 const sha = /^[0-9a-f]{64}$/;
@@ -134,16 +144,18 @@ const order = (a: LedgerEntry, b: LedgerEntry) => (entryKey(a) < entryKey(b) ? -
 // result does not depend on recording order. Each new entry records the run's identity: model digest, runtime hash,
 // scenario hash, and the consumer's opaque `sourceKey` (the version of its system under test), or null. The result is
 // schema 2; entries carried over from schema 1 keep unknown identity.
-export function recordRun(
+export function mergeRun(
   ledgerInput: unknown,
   reportInput: unknown,
   packInput: unknown,
   options: { sourceKey?: string | null } = {},
-): Ledger {
-  const sourceKey = options.sourceKey ?? null;
-  if (!identityChecks.sourceKey(sourceKey)) throw Error('Invalid source key: use a bounded opaque token, not a path');
+): LedgerMerge {
   const ledger = validateLedger(ledgerInput);
   const report: Report = validateReport(reportInput);
+  if (report.sourceKey !== undefined && options.sourceKey !== undefined && report.sourceKey !== options.sourceKey)
+    throw Error('Report source key does not match the ledger recording');
+  const sourceKey = options.sourceKey ?? report.sourceKey ?? null;
+  if (!identityChecks.sourceKey(sourceKey)) throw Error('Invalid source key: use a bounded opaque token, not a path');
   const pack = validatePack(packInput);
   if (report.pack !== pack.id || report.packVersion !== pack.version || report.packHash !== hash(pack))
     throw Error('Report did not run this pack definition');
@@ -183,14 +195,36 @@ export function recordRun(
   const newer = (a: LedgerEntry, b: LedgerEntry) =>
     Date.parse(a.finished) > Date.parse(b.finished) ||
     (Date.parse(a.finished) === Date.parse(b.finished) && a.reportHash > b.reportHash);
+  const changes: LedgerMergeChange[] = [];
   for (const e of ran) {
     const old = entries.get(entryKey(e));
     if (old?.reportHash === e.reportHash && 'modelDigest' in old) {
-      // The report does not carry the source key, so the first recording binds it; recording again is a no-op.
+      // The first recording binds the ledger source key; recording the same evidence again is a no-op.
       if (old.sourceKey !== e.sourceKey) throw Error('Report already recorded with a different source key');
-    } else if (!old || old.reportHash === e.reportHash || newer(e, old)) entries.set(entryKey(e), e);
+      changes.push({ pack: e.pack, case: e.case, profileHash: e.profileHash, outcome: 'unchanged' });
+    } else if (!old) {
+      entries.set(entryKey(e), e);
+      changes.push({ pack: e.pack, case: e.case, profileHash: e.profileHash, outcome: 'added' });
+    } else if (old.reportHash === e.reportHash || newer(e, old)) {
+      entries.set(entryKey(e), e);
+      changes.push({
+        pack: e.pack,
+        case: e.case,
+        profileHash: e.profileHash,
+        outcome: old.reportHash === e.reportHash ? 'unchanged' : 'replaced',
+      });
+    } else changes.push({ pack: e.pack, case: e.case, profileHash: e.profileHash, outcome: 'kept-newer' });
   }
-  return { schemaVersion: 2, entries: [...entries.values()].sort(order) };
+  return { ledger: { schemaVersion: 2, entries: [...entries.values()].sort(order) }, changes };
+}
+
+export function recordRun(
+  ledgerInput: unknown,
+  reportInput: unknown,
+  packInput: unknown,
+  options: { sourceKey?: string | null } = {},
+): Ledger {
+  return mergeRun(ledgerInput, reportInput, packInput, options).ledger;
 }
 
 // Lists the cases of the given packs with no covering run. With a profile, only runs under that exact profile cover a
