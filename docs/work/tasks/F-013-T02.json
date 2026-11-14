@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-013-T02",
   "parent": "F-013",
-  "status": "planned",
+  "status": "ready",
   "title": "Small-host example profiles",
   "goal": "Small-host example profiles",
   "acceptance": [
