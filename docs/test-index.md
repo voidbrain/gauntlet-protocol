@@ -63,6 +63,10 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [multi-step-agent@1.0.0 / recover-observation-regression](../examples/multi-step-agent-v1.json) | tools | tool-selection, multi-step-agent | end-to-end / regression | true / false | registered:scripted-agent / scripted-environment, step-limit-4 | Unmeasured |
 | [multi-step-agent@1.0.0 / inspect-then-update-holdout](../examples/multi-step-agent-v1.json) | tools | tool-selection, multi-step-agent | end-to-end / holdout | true / false | registered:scripted-agent / scripted-environment, step-limit-4 | Unmeasured |
 | [multi-step-agent@1.0.0 / stop-at-limit-holdout](../examples/multi-step-agent-v1.json) | tools | tool-selection, multi-step-agent | end-to-end / holdout | true / false | registered:scripted-agent / scripted-environment, step-limit-4 | Unmeasured |
+| [refusal-permission@1.0.0 / permission-escalation-regression](../examples/refusal-permission-v1.json) | security-permissions | approval-boundaries, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [refusal-permission@1.0.0 / tool-injection-regression](../examples/refusal-permission-v1.json) | security-permissions | approval-boundaries, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [refusal-permission@1.0.0 / permission-escalation-holdout](../examples/refusal-permission-v1.json) | security-permissions | approval-boundaries, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [refusal-permission@1.0.0 / tool-injection-holdout](../examples/refusal-permission-v1.json) | security-permissions | approval-boundaries, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 
 ## Area coverage
 
@@ -81,7 +85,7 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 - conversation-memory: 0 mapped cases
 - distributed-coordination: 0 mapped cases
 - ui-visual: 0 mapped cases
-- security-permissions: 0 mapped cases
+- security-permissions: 4 mapped cases
 - documents-data: 0 mapped cases
 - language-translation: 4 mapped cases
 - audio-video: 0 mapped cases

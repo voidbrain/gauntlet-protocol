@@ -159,7 +159,10 @@ test('multi-step agent pack uses a bounded scripted plan-act-observe runner', as
 test('refusal pack rejects permission escalation and planted tool instructions', async () => {
   const pack = load('examples/refusal-permission-v1.json');
   assert.deepEqual(new Set(pack.cases.map((entry) => entry.split)), new Set(['regression', 'holdout']));
-  assert.equal(pack.cases.every((entry) => entry.capabilities.includes('approval-boundaries')), true);
+  assert.equal(
+    pack.cases.every((entry) => entry.capabilities.includes('approval-boundaries')),
+    true,
+  );
   const passing = await run(pack, profile, defaults, {
     execute: true,
     allowModels: true,
