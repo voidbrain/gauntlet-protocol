@@ -1,6 +1,6 @@
 {
   "name": "@voidbrain/gauntlet-protocol",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Capability-scoped evaluation contracts, bounded adapters and reviewed model evidence",
   "type": "module",
   "license": "MIT",

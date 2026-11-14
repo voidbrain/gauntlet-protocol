@@ -1,5 +1,9 @@
 # Releases
 
+## 0.9.0 — focused evaluation packs
+
+Six independently versioned packs add focused regression and holdout coverage: `structured-output-robustness@1.0.0` (six constrained JSON/schema cases), `tool-use@1.0.0` (six selection/argument cases), `bilingual-it-en@1.0.0` (four Italian/English cases), `multi-step-agent@1.0.0` (four deterministic scripted-runner cases), `refusal-permission@1.0.0` (four refusal/permission cases) and `long-context@1.0.0` (four varied-depth retrieval cases). The generated catalog contains all 66 cases. Existing pack definitions, grading and evidence remain unchanged. No real-model run.
+
 ## 0.8.0 — incremental runs
 
 Incremental campaigns (F-011): `run --pending --ledger=<file>` executes new, changed, stale or identity-mismatched cases while listing ledger-current cases as the neutral `not-run / skipped-current`; ordinary report shape and pass/fail exit semantics remain intact. Private run reports are atomically checkpointed after each finished case, and `run --resume=<report>` carries forward only graded results when the source, pack, evaluator, configuration, registry, scenario and available runtime/model identity still match. Partial and resumed reports merge only their graded cases into a ledger; the API and CLI report `added`, `replaced`, `kept-newer` or `unchanged`, with newer evidence and a deterministic equal-time report-hash tie-breaker winning conflicts. The engine hash changes, so automatic cache reuse requires 0.8.0 evidence. No real-model run.
