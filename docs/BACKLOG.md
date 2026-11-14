@@ -4,57 +4,13 @@ Current work ledger, reviewed 14 November 2026 against main `ea71bef`. Harness 8
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 1.25 h across 3 open steps of 2 features. 5.75 h of actual effort recorded on 6 steps. Generated from the task files.
+**Remaining effort:** 1 h across 2 open steps of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="f-012"></a>[✨ F-012](#top)
-
-**Six new packs: structured output, tools, bilingual, multi-step, refusal, long context**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** F-012-T07.
-
-| | |
-|---|---|
-| **Issue** | Three packs exist (smoke, smoke-schema, general-assistant-expanded). They cannot tell whether a model can choose tools, keep structured output under pressure, work in Italian, run several steps, refuse escalation or use long inputs. |
-| **Reproduce** | `gauntlet packs` lists three packs. |
-| **Check** | Six new packs, each with regression and holdout splits, deterministic grader fixtures and an index entry, released in a tagged version. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-012-t07"></a>F-012-T07 — Release the new packs | 0.25 h | 0 h | 0.25 h | Ready |
-| — | <a id="f-012-t01"></a>F-012-T01 — Structured-output robustness pack | 0.5 h | 0.25 h (measured) | 0 h | Completed |
-| — | <a id="f-012-t02"></a>F-012-T02 — Tool use pack | 0.5 h | 0.25 h (measured) | 0 h | Completed |
-| — | <a id="f-012-t03"></a>F-012-T03 — Bilingual (Italian and English) pack | 0.5 h | 4.5 h (measured) | 0 h | Completed |
-| — | <a id="f-012-t04"></a>F-012-T04 — Multi-step agent pack | 0.5 h | 0.25 h (measured) | 0 h | Completed |
-| — | <a id="f-012-t05"></a>F-012-T05 — Refusal and permission escalation pack | 0.5 h | 0.25 h (measured) | 0 h | Completed |
-| — | <a id="f-012-t06"></a>F-012-T06 — Long context pack | 0.5 h | 0.25 h (measured) | 0 h | Completed |
-| 🟢 Small | **Total** | 3.25 h | 5.75 h (6 of 7 steps recorded) | 0.25 h | 6 of 7 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-012.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #64](https://github.com/voidbrain/gauntlet-protocol/pull/64) implements T01; [PR #65](https://github.com/voidbrain/gauntlet-protocol/pull/65) implements T02; [PR #66](https://github.com/voidbrain/gauntlet-protocol/pull/66) implements T03; [PR #67](https://github.com/voidbrain/gauntlet-protocol/pull/67) implements T04; [PR #68](https://github.com/voidbrain/gauntlet-protocol/pull/68) implements T05; [PR #69](https://github.com/voidbrain/gauntlet-protocol/pull/69) implements T06; [PR #70](https://github.com/voidbrain/gauntlet-protocol/pull/70) readies the release; [PR #71](https://github.com/voidbrain/gauntlet-protocol/pull/71) prepares release 0.9.0; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the roadmap request. |
-| Opened | 2026-11-13 |
-| Verification | T01–T05 passed in PR #64–#68 CI. T06 passed in PR #69 CI run 43648766199. |
-| Reviewed | 2026-11-13 |
-
-</details>
-
----
 ### <a id="f-013"></a>[✨ F-013](#top)
 
 **Host-aware profiles: a model that does not fit the host is refused before the run**

@@ -479,3 +479,38 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 </details>
 
 ---
+
+### F-012
+
+**Six new packs: structured output, tools, bilingual, multi-step, refusal, long context**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; focused-pack release 0.9.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Three packs existed (smoke, smoke-schema, general-assistant-expanded). They could not tell whether a model could choose tools, keep structured output under pressure, work in Italian, run several steps, refuse escalation or use long inputs. |
+| **Reproduce** | `gauntlet packs` listed three packs. |
+| **Check** | Six new packs, each with regression and holdout splits, deterministic grader fixtures and an index entry, released in a tagged version. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-14 after all six packs passed deterministic regressions, PR #71 passed green CI and merged, and release [v0.9.0](https://github.com/voidbrain/gauntlet-protocol/releases/tag/v0.9.0) was published. No real-model run or consumer adoption gates this reusable release.
+
+**Estimates:** Zero remaining. The seven scoped steps retain their original baselines and measured elapsed effort in their task files.
+
+| Field | Value |
+|---|---|
+| PR / evidence | PR #72 closure; [PR #71](https://github.com/voidbrain/gauntlet-protocol/pull/71) release; [PR #70](https://github.com/voidbrain/gauntlet-protocol/pull/70) release readiness; [PR #64](https://github.com/voidbrain/gauntlet-protocol/pull/64), [#65](https://github.com/voidbrain/gauntlet-protocol/pull/65), [#66](https://github.com/voidbrain/gauntlet-protocol/pull/66), [#67](https://github.com/voidbrain/gauntlet-protocol/pull/67), [#68](https://github.com/voidbrain/gauntlet-protocol/pull/68) and [#69](https://github.com/voidbrain/gauntlet-protocol/pull/69) implement the six packs; roadmap request PR #42. |
+| Opened | 2026-11-13 |
+| Closed | 2026-11-14 |
+| Verification | PR #64–#69 CI passed the deterministic pack regressions. Release PR #71 passed required CI before merge; package 0.9.0 and its GitHub release are published. The generated catalog lists all 66 cases. No real-model qualification claimed. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
