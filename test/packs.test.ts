@@ -125,21 +125,21 @@ test('bilingual pack keeps paired intents and follows the request language', asy
 test('multi-step agent pack uses a bounded scripted plan-act-observe runner', async () => {
   const pack = load('examples/multi-step-agent-v1.json');
   assert.deepEqual(new Set(pack.cases.map((entry) => entry.split)), new Set(['regression', 'holdout']));
-  assert.equal(pack.cases.every((entry) => entry.runner === 'scripted-agent'), true);
-  assert.equal(pack.cases.every((entry) => entry.requirements?.includes('step-limit-4')), true);
+  assert.equal(
+    pack.cases.every((entry) => entry.runner === 'scripted-agent'),
+    true,
+  );
+  assert.equal(
+    pack.cases.every((entry) => entry.requirements?.includes('step-limit-4')),
+    true,
+  );
   const registry = validateRegistry(
     {
       schemaVersion: 1,
       runners: {
         'scripted-agent': {
           command: process.execPath,
-          args: [
-            resolve('test/fixtures/multi-step-runner.mjs'),
-            '{report}',
-            '{configuration}',
-            '{budget}',
-            '{case}',
-          ],
+          args: [resolve('test/fixtures/multi-step-runner.mjs'), '{report}', '{configuration}', '{budget}', '{case}'],
           cwd: process.cwd(),
           layers: ['end-to-end'],
           allowModels: true,
@@ -150,5 +150,8 @@ test('multi-step agent pack uses a bounded scripted plan-act-observe runner', as
   );
   const report = await run(pack, profile, defaults, { execute: true, allowModels: true, registry });
   assert.equal(report.passed, true);
-  assert.equal(report.results.every((result) => result.checks === 3), true);
+  assert.equal(
+    report.results.every((result) => result.checks === 3),
+    true,
+  );
 });
