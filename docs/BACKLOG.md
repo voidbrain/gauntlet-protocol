@@ -44,9 +44,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #56](https://github.com/voidbrain/gauntlet-protocol/pull/56) implements T01; [PR #57](https://github.com/voidbrain/gauntlet-protocol/pull/57) reconciles it; [PR #58](https://github.com/voidbrain/gauntlet-protocol/pull/58) implements T02; [PR #59](https://github.com/voidbrain/gauntlet-protocol/pull/59) reconciles it; [PR #60](https://github.com/voidbrain/gauntlet-protocol/pull/60) implements T03; [PR #61](https://github.com/voidbrain/gauntlet-protocol/pull/61) reconciles it; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the roadmap request. |
+| PR / evidence | [PR #56](https://github.com/voidbrain/gauntlet-protocol/pull/56) implements T01; [PR #57](https://github.com/voidbrain/gauntlet-protocol/pull/57) reconciles it; [PR #58](https://github.com/voidbrain/gauntlet-protocol/pull/58) implements T02; [PR #59](https://github.com/voidbrain/gauntlet-protocol/pull/59) reconciles it; [PR #60](https://github.com/voidbrain/gauntlet-protocol/pull/60) implements T03; [PR #61](https://github.com/voidbrain/gauntlet-protocol/pull/61) reconciles it; [PR #62](https://github.com/voidbrain/gauntlet-protocol/pull/62) prepares release 0.8.0; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the roadmap request. |
 | Opened | 2026-11-13 |
-| Verification | T01 passed in PR #56 CI run 43621050710. T02 passed in PR #58 CI run 43621909103. T03 partial/conflict regression, typecheck and 64-test suite passed in PR #60 CI run 43622559868. |
+| Verification | T01 passed in PR #56 CI run 43621050710. T02 passed in PR #58 CI run 43621909103. T03 passed in PR #60 CI run 43622559868. Release PR #62 local package and 64-test checks pass; CI and tag pending. |
 | Reviewed | 2026-11-13 |
 
 </details>
