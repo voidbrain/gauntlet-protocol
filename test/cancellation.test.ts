@@ -102,11 +102,17 @@ test('an interrupted CLI run checkpoints and resumes only unfinished cases', asy
     `--cache-dir=${cache}`,
     `--source-key=${sourceKey}`,
     '--execute',
+    '--fresh',
   ];
   const host = spawn(process.execPath, args(interrupted), { stdio: 'ignore' });
   const until = Date.now() + 5000;
   while ((!existsSync(log) || readFileSync(log, 'utf8') !== 'first\nsecond\n') && Date.now() < until) await delay(10);
   assert.equal(readFileSync(log, 'utf8'), 'first\nsecond\n');
+  const checkpoint = JSON.parse(readFileSync(interrupted, 'utf8'));
+  assert.deepEqual(
+    checkpoint.results.map((result: { id: string; status: string }) => [result.id, result.status]),
+    [['first', 'passed']],
+  );
   host.kill('SIGTERM');
   await new Promise<void>((resolve) => host.once('close', () => resolve()));
   const partial = JSON.parse(readFileSync(interrupted, 'utf8'));
@@ -124,4 +130,38 @@ test('an interrupted CLI run checkpoints and resumes only unfinished cases', asy
     resumedReport.results.map(({ id, status }: { id: string; status: string }) => [id, status]),
     uninterruptedReport.results.map(({ id, status }: { id: string; status: string }) => [id, status]),
   );
+
+  const changedPack = join(root, 'changed-pack.json');
+  writeFileSync(changedPack, readFileSync(pack, 'utf8').replace('"version":"1.0.0"', '"version":"1.0.1"'));
+  const packMismatch = spawnSync(
+    process.execPath,
+    args(join(root, 'changed-pack-report.json'))
+      .map((arg) => (arg.startsWith('--pack=') ? `--pack=${changedPack}` : arg))
+      .concat(`--resume=${interrupted}`),
+    { encoding: 'utf8' },
+  );
+  assert.equal(packMismatch.status, 1);
+  assert.match(packMismatch.stderr, /does not match the current source, pack or identity/);
+  const changedSource = spawnSync(
+    process.execPath,
+    args(join(root, 'changed-source.json'))
+      .map((arg) => (arg.startsWith('--source-key=') ? `--source-key=${'e'.repeat(64)}` : arg))
+      .concat(`--resume=${interrupted}`),
+    { encoding: 'utf8' },
+  );
+  assert.equal(changedSource.status, 1);
+  assert.match(changedSource.stderr, /does not match the current source, pack or identity/);
+  const changedRegistry = join(root, 'changed-registry.json');
+  const registryValue = JSON.parse(readFileSync(registry, 'utf8'));
+  registryValue.runners.resume.args.push('changed-identity');
+  writeFileSync(changedRegistry, JSON.stringify(registryValue));
+  const identityMismatch = spawnSync(
+    process.execPath,
+    args(join(root, 'changed-identity.json'))
+      .map((arg) => (arg.startsWith('--registry=') ? `--registry=${changedRegistry}` : arg))
+      .concat(`--resume=${interrupted}`),
+    { encoding: 'utf8' },
+  );
+  assert.equal(identityMismatch.status, 1);
+  assert.match(identityMismatch.stderr, /does not match the current source, pack or identity/);
 });
