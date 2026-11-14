@@ -45,6 +45,7 @@
     "lint": "eslint .",
     "check:harness": "node tools/check-harness.mjs",
     "check:rules": "node tools/check-rules.mjs",
+    "check:rule-load": "node tools/rule-load.mjs --check",
     "check:maintenance": "node tools/maintenance.mjs check",
     "check:audits": "node tools/check-audits.mjs",
     "check:integrations": "node tools/mcp.mjs check",
