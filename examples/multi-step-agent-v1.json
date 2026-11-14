@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "multi-step-agent",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "inspect-then-update-regression",
+      "layer": "end-to-end",
+      "split": "regression",
+      "capabilities": ["tool-selection", "multi-step-agent"],
+      "critical": true,
+      "expensive": false,
+      "runner": "scripted-agent",
+      "area": "tools",
+      "requirements": ["scripted-environment", "step-limit-4"]
+    },
+    {
+      "id": "recover-observation-regression",
+      "layer": "end-to-end",
+      "split": "regression",
+      "capabilities": ["tool-selection", "multi-step-agent"],
+      "critical": true,
+      "expensive": false,
+      "runner": "scripted-agent",
+      "area": "tools",
+      "requirements": ["scripted-environment", "step-limit-4"]
+    },
+    {
+      "id": "inspect-then-update-holdout",
+      "layer": "end-to-end",
+      "split": "holdout",
+      "capabilities": ["tool-selection", "multi-step-agent"],
+      "critical": true,
+      "expensive": false,
+      "runner": "scripted-agent",
+      "area": "tools",
+      "requirements": ["scripted-environment", "step-limit-4"]
+    },
+    {
+      "id": "stop-at-limit-holdout",
+      "layer": "end-to-end",
+      "split": "holdout",
+      "capabilities": ["tool-selection", "multi-step-agent"],
+      "critical": true,
+      "expensive": false,
+      "runner": "scripted-agent",
+      "area": "tools",
+      "requirements": ["scripted-environment", "step-limit-4"]
+    }
+  ]
+}

@@ -59,6 +59,10 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [bilingual-it-en@1.0.0 / summarize-it-regression](../examples/bilingual-it-en-v1.json) | language-translation | language-control, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [bilingual-it-en@1.0.0 / clarify-en-holdout](../examples/bilingual-it-en-v1.json) | language-translation | language-control, clarification, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [bilingual-it-en@1.0.0 / clarify-it-holdout](../examples/bilingual-it-en-v1.json) | language-translation | language-control, clarification, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [multi-step-agent@1.0.0 / inspect-then-update-regression](../examples/multi-step-agent-v1.json) | tools | tool-selection, multi-step-agent | end-to-end / regression | true / false | registered:scripted-agent / scripted-environment, step-limit-4 | Unmeasured |
+| [multi-step-agent@1.0.0 / recover-observation-regression](../examples/multi-step-agent-v1.json) | tools | tool-selection, multi-step-agent | end-to-end / regression | true / false | registered:scripted-agent / scripted-environment, step-limit-4 | Unmeasured |
+| [multi-step-agent@1.0.0 / inspect-then-update-holdout](../examples/multi-step-agent-v1.json) | tools | tool-selection, multi-step-agent | end-to-end / holdout | true / false | registered:scripted-agent / scripted-environment, step-limit-4 | Unmeasured |
+| [multi-step-agent@1.0.0 / stop-at-limit-holdout](../examples/multi-step-agent-v1.json) | tools | tool-selection, multi-step-agent | end-to-end / holdout | true / false | registered:scripted-agent / scripted-environment, step-limit-4 | Unmeasured |
 
 ## Area coverage
 
@@ -73,7 +77,7 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 - estimation: 0 mapped cases
 - ci-operations: 0 mapped cases
 - research: 0 mapped cases
-- tools: 8 mapped cases
+- tools: 12 mapped cases
 - conversation-memory: 0 mapped cases
 - distributed-coordination: 0 mapped cases
 - ui-visual: 0 mapped cases

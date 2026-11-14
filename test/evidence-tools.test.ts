@@ -133,15 +133,17 @@ test('generated catalog maps cases and evidence without claiming unmeasured area
     expanded = validatePack(JSON.parse(readFileSync('examples/general-assistant-expanded-v1.json', 'utf8'))),
     structured = validatePack(JSON.parse(readFileSync('examples/structured-output-robustness-v1.json', 'utf8'))),
     tools = validatePack(JSON.parse(readFileSync('examples/tool-use-v1.json', 'utf8'))),
-    bilingual = validatePack(JSON.parse(readFileSync('examples/bilingual-it-en-v1.json', 'utf8')));
+    bilingual = validatePack(JSON.parse(readFileSync('examples/bilingual-it-en-v1.json', 'utf8'))),
+    multiStep = validatePack(JSON.parse(readFileSync('examples/multi-step-agent-v1.json', 'utf8')));
   assert.equal(
     generated,
-    catalogMarkdown(catalog([smoke, expanded, structured, tools, bilingual]), {
+    catalogMarkdown(catalog([smoke, expanded, structured, tools, bilingual, multiStep]), {
       'neutral-smoke': '../examples/smoke-v1.json',
       'general-assistant-expanded': '../examples/general-assistant-expanded-v1.json',
       'structured-output-robustness': '../examples/structured-output-robustness-v1.json',
       'tool-use': '../examples/tool-use-v1.json',
       'bilingual-it-en': '../examples/bilingual-it-en-v1.json',
+      'multi-step-agent': '../examples/multi-step-agent-v1.json',
     }),
   );
 });
