@@ -43,6 +43,7 @@ npm run check:backlog     # active record layout and lifecycle cues
 npm run format:check      # Prettier on src/, bin/ and test/; `npm run format` fixes it
 npm run lint              # ESLint with TypeScript rules
 npm run check:tooling     # a formatter check and a linter exist and run in CI (required for every stack)
+npm run code:map -- <path> # exports with line ranges: read those lines, not the whole file
 ```
 
 - Every project formats and lints its source, in CI too: `check:tooling` fails without both. A project with no source code records `tooling.exempt` with its reason in `.harness.json`.

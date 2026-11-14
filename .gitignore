@@ -6,3 +6,6 @@ coverage/
 .harness/
 *.tgz
 results/
+
+# The complete test report the quiet reporter pairs with (tools/quiet-reporter.mjs).
+.test-report.txt
