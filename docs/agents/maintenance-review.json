@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T14:22:12.940Z",
+  "reviewed": "2026-11-14T23:15:10.000Z",
   "policy": "c0fcc742add3a359ab8c07765e7e0857f990ac6f7db2831c521611452e4c68f6",
   "inputs": {
     "AGENTS.md": "a8bb18630d7905ad1f69262faeec5244adf96761aaf625131d69ef2ea0ca3d3e",
@@ -19,15 +19,15 @@
     "docs/agents/skills.md": "5d60223eccfaad88c7153f57316da5ca10bfdd9d58d3a8cebc1eef25b9f0d5f5",
     "docs/agents/solution-profile.md": "685d55612f55d157bf124e23115f95bd16fe4d4f8834a4e0e152a191e3cd45f8",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
-    "docs/agents/work-usage.md": "c79d6864f53100c691e30e411c203c00b20bf5bd7bc55bbcee5687e859edb543",
+    "docs/agents/work-usage.md": "5b10c5e8e9860fdd116b5cc789c2164e0678df96a475bf7b11ad5f9f99b1453e",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
     "tools/work-items.mjs": "4c343b171323754dca54f4d44c626e5e2d6f21d742cecd49a2ac7f144007c396",
-    "tools/work-usage.mjs": "828c8e64e20623a6dac5969bb46cb77f4f51972cfc142dad63d2f58f61b57e59"
+    "tools/work-usage.mjs": "65961d804edf9adc3f93a6b6ccfa04dfe9cf16275751f50247056ec3edf6589e"
   },
   "measurements": {
-    "samples": 6,
-    "latestAt": "2026-11-12T11:30:11.516Z",
+    "samples": 1,
+    "latestAt": "2026-11-14T23:11:15.990Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -53,25 +53,25 @@
         }
       },
       "reconciliation": {
-        "samples": 6,
+        "samples": 1,
         "durationMs": {
-          "observed": 6,
+          "observed": 1,
           "missing": 0,
-          "median": 68975
+          "median": 143
         },
         "conflicts": {
-          "observed": 2,
-          "missing": 4,
-          "median": 0
+          "observed": 0,
+          "missing": 1,
+          "median": null
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 6,
+          "missing": 1,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 6,
+          "missing": 1,
           "median": null
         }
       }
@@ -101,6 +101,18 @@
       "disposition": "implemented",
       "target": "AGENTS.md",
       "evidence": "Harness 8.14.1 reconciled (from 8.12.0): copied tools and guides updated, quiet-reporter/reconcile-draft/code-map adopted, .npmrc, record size rule; checks green."
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "tools/work-usage.mjs",
+      "evidence": "Harness 8.15.0 paused-time accounting copied byte-identically and covered by repository checks. The timed sample covers the final diff-verification boundary only; the reconciliation began before timing, so its full duration is unavailable and not inferred. Six earlier samples remain in git history because their worktree-local friction log is unavailable here; the receipt does not claim a speed-up."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "docs/backlog/estimates.md",
+      "evidence": "Harness 8.15.0 effective-elapsed estimate rule reconciled without removing safeguards."
     }
   ]
 }
