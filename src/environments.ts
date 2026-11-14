@@ -7,6 +7,7 @@ export interface MachineProfile {
   arch: string;
   cpu: string;
   memoryBytes: number;
+  accelerator?: 'cpu' | 'integrated-gpu' | 'discrete-gpu' | 'unified-memory-gpu' | 'other';
 }
 export interface LoadScenario {
   schemaVersion: 1;
@@ -40,7 +41,7 @@ function identity(value: Record<string, unknown>): void {
     throw Error('Invalid environment identity');
 }
 export function validateMachineProfile(input: unknown): MachineProfile {
-  const v = object(input, ['schemaVersion', 'id', 'version', 'platform', 'arch', 'cpu', 'memoryBytes']);
+  const v = object(input, ['schemaVersion', 'id', 'version', 'platform', 'arch', 'cpu', 'memoryBytes', 'accelerator']);
   identity(v);
   if (
     typeof v.platform !== 'string' ||
@@ -51,7 +52,9 @@ export function validateMachineProfile(input: unknown): MachineProfile {
     !v.cpu.trim() ||
     v.cpu.length > 200 ||
     !Number.isSafeInteger(v.memoryBytes) ||
-    (v.memoryBytes as number) < 1
+    (v.memoryBytes as number) < 1 ||
+    (v.accelerator !== undefined &&
+      !['cpu', 'integrated-gpu', 'discrete-gpu', 'unified-memory-gpu', 'other'].includes(String(v.accelerator)))
   )
     throw Error('Invalid machine profile');
   return v as unknown as MachineProfile;
@@ -91,6 +94,7 @@ export function inspectMachine(id: string, version = '1.0.0'): MachineProfile {
     arch: arch(),
     cpu: cpus()[0]?.model ?? 'unknown',
     memoryBytes: totalmem(),
+    accelerator: 'other',
   });
 }
 export function assertCurrentMachine(machine: MachineProfile): void {

@@ -69,7 +69,7 @@ const pack: Pack = {
   ],
 };
 
-test('profiles and environments declare host-fit inputs and plan rejects a memory misfit', () => {
+test('profiles and environments declare host-fit inputs and plan rejects a memory misfit', async () => {
   const sizedProfile = validateProfile({
       ...profile,
       weightsBytes: 8_000_000_000,
@@ -94,6 +94,30 @@ test('profiles and environments declare host-fit inputs and plan rejects a memor
   });
   assert.equal(result.cases[0].eligible, false);
   assert.equal(result.cases[0].reason, 'Profile does not fit the declared host memory');
+  let requests = 0;
+  const currentHost = validateExecutionEnvironment({
+    ...environment(),
+    machine: { ...environment().machine, accelerator: 'cpu' },
+  });
+  await assert.rejects(
+    run(
+      pack,
+      {
+        ...sizedProfile,
+        minimumMemoryBytes: currentHost.machine.memoryBytes + 1,
+      },
+      defaults,
+      {
+        execute: true,
+        allowModels: true,
+        environment: currentHost,
+        scenarioConfirmed: true,
+        fetch: provider(() => requests++).fetcher,
+      },
+    ),
+    /does not fit/,
+  );
+  assert.equal(requests, 0);
   assert.throws(() => validateProfile({ ...profile, weightsBytes: 0, minimumMemoryBytes: 1 }));
   assert.throws(() =>
     validateExecutionEnvironment({

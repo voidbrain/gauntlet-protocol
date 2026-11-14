@@ -4,7 +4,7 @@ Gauntlet owns reusable machine profiles, load-scenario definitions and their evi
 
 ## Machine profile
 
-`gauntlet machine --id=workstation` prints a versioned local evaluation-host profile: platform, architecture, CPU model and total memory bytes. No hostname, serial, paths, app titles or credentials are collected. Save the output privately and review its explicit ID/version before reuse. Machine IDs are owner labels, not authenticated device identities. Two equivalent machines can still have distinct host identity in the existing private cache key.
+`gauntlet machine --id=workstation` prints a versioned local evaluation-host profile: platform, architecture, CPU model, total memory bytes and an accelerator declaration. Inspection cannot identify every accelerator reliably, so it emits `other`; the owner reviews and may replace that value with `cpu`, `integrated-gpu`, `discrete-gpu` or `unified-memory-gpu`. No hostname, serial, paths, app titles or credentials are collected. Save the output privately and review its explicit ID/version before reuse. Machine IDs are owner labels, not authenticated device identities. Two equivalent machines can still have distinct host identity in the existing private cache key.
 
 The profile must match the current evaluation host before execution or cache lookup. This is a local hardware compatibility check, not remote-worker attestation, a device trust registry or an inference-host selector. A registered remote adapter still needs its own independently current runtime/execution identity; it cannot inherit remote trust from this profile.
 
@@ -23,6 +23,8 @@ gauntlet plan --pack=examples/smoke-v1.json --profile=examples/profiles/gemma4-1
 ```
 
 A separately authorized run uses the same arguments plus `--execute --allow-models --confirm-scenario --telemetry --fresh --out=<new-private-report.json>`. Case/model/expensive execution flags and budgets still apply; confirmation grants no tool/production permission. Invalid or wrong-host declarations fail before model metadata or execution. Mutation during preflight/generation invalidates the request/acceptance.
+
+Profiles may declare both `weightsBytes` and `minimumMemoryBytes`; they are an inseparable pair, and minimum memory cannot be smaller than the weights. When both a sized profile and an environment are supplied, `plan` reports `hostFit` as `fits` or `misfit`. Every case in a memory-misfit plan is ineligible, and direct execution rejects the same mismatch before any provider request. Legacy profiles without sizing remain valid but produce `hostFit: unknown`; this is not evidence that they fit.
 
 ## Reuse and comparison
 

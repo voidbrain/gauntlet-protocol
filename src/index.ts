@@ -26,6 +26,8 @@ export interface Profile {
   quantization: string;
   endpoint: string;
   context: number;
+  weightsBytes?: number;
+  minimumMemoryBytes?: number;
   maxOutputTokens: number;
   temperature: number | null;
   topP: number | null;
@@ -231,6 +233,8 @@ export function validateProfile(input: unknown): Profile {
     'quantization',
     'endpoint',
     'context',
+    'weightsBytes',
+    'minimumMemoryBytes',
     'maxOutputTokens',
     'temperature',
     'topP',
@@ -259,6 +263,15 @@ export function validateProfile(input: unknown): Profile {
     !v.cache
   )
     throw Error('Invalid profile identity');
+  if (
+    (v.weightsBytes !== undefined && !integer(v.weightsBytes, 1, Number.MAX_SAFE_INTEGER)) ||
+    (v.minimumMemoryBytes !== undefined && !integer(v.minimumMemoryBytes, 1, Number.MAX_SAFE_INTEGER)) ||
+    (v.weightsBytes === undefined) !== (v.minimumMemoryBytes === undefined) ||
+    (typeof v.weightsBytes === 'number' &&
+      typeof v.minimumMemoryBytes === 'number' &&
+      v.minimumMemoryBytes < v.weightsBytes)
+  )
+    throw Error('Invalid profile host requirements');
   if (
     (v.backend !== undefined && !['ollama', 'llama.cpp', 'mlx-lm'].includes(String(v.backend))) ||
     (v.residency !== undefined && !['case', 'suite'].includes(String(v.residency)))
@@ -479,29 +492,58 @@ export function plan(
   } = {},
 ) {
   if (options.environment) validateExecutionEnvironment(options.environment);
+  const hostFit = profileHostFit(profile, options.environment);
   return {
     ...(options.environment ? { environment: options.environment, environmentVerified: false } : {}),
     pack: pack.id,
     profile: profile?.id ?? null,
     limits,
     modelCallsAuthorized: !!options.allowModels,
+    hostFit,
     cases: pack.cases.slice(0, limits.maxCases).map((c) => ({
       id: c.id,
       layer: c.layer,
       runner: c.runner ?? null,
       responseFormat:
         c.responseFormat === undefined ? 'unconstrained' : c.responseFormat === 'json' ? 'json' : 'schema',
-      eligible: (!c.expensive || !!options.allowExpensive) && (c.layer === 'system' || !!options.allowModels),
+      eligible:
+        hostFit.status !== 'misfit' &&
+        (!c.expensive || !!options.allowExpensive) &&
+        (c.layer === 'system' || !!options.allowModels),
       reason:
-        c.expensive && !options.allowExpensive
-          ? 'Expensive case requires explicit opt-in'
-          : c.layer !== 'system' && !options.allowModels
-            ? 'Model/agent execution requires explicit opt-in'
-            : null,
+        hostFit.status === 'misfit'
+          ? 'Profile does not fit the declared host memory'
+          : c.expensive && !options.allowExpensive
+            ? 'Expensive case requires explicit opt-in'
+            : c.layer !== 'system' && !options.allowModels
+              ? 'Model/agent execution requires explicit opt-in'
+              : null,
     })),
     notSelected: pack.cases.slice(limits.maxCases).map((c) => c.id),
     promotion: false,
   };
+}
+
+export interface HostFit {
+  status: 'fits' | 'misfit' | 'unknown';
+  reason: string;
+}
+
+export function profileHostFit(profile: Profile | null, environment: ExecutionEnvironment | undefined): HostFit {
+  if (!profile) return { status: 'unknown', reason: 'No model profile selected' };
+  if (!environment) return { status: 'unknown', reason: 'No host environment declared' };
+  if (profile.minimumMemoryBytes === undefined)
+    return { status: 'unknown', reason: 'Profile does not declare host memory requirements' };
+  const available = environment.machine.memoryBytes;
+  return available < profile.minimumMemoryBytes
+    ? {
+        status: 'misfit',
+        reason: `Profile requires ${profile.minimumMemoryBytes} bytes but host declares ${available} bytes`,
+      }
+    : {
+        status: 'fits',
+        reason: `Profile requires ${profile.minimumMemoryBytes} bytes and host declares ${available} bytes`,
+      };
 }
 async function boundedJSON(response: Response, maxBytes: number): Promise<unknown> {
   if (!response.ok) throw Error('Adapter HTTP status ' + response.status);
@@ -717,6 +759,8 @@ export async function run(
   if (pack.cases.some((c) => c.responseFormat !== undefined) && profile?.backend && profile.backend !== 'ollama')
     throw Error('Response format currently requires Ollama');
   if (options.execute !== true) throw Error('Run requires explicit execution');
+  const hostFit = profileHostFit(profile, options.environment);
+  if (hostFit.status === 'misfit') throw Error('Profile does not fit the declared host memory: ' + hostFit.reason);
   admitEnvironment(options.environment, options.scenarioConfirmed);
   const environment = options.environment ? structuredClone(options.environment) : undefined,
     environmentBefore = hash(environment ?? null);
