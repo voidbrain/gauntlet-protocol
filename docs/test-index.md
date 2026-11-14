@@ -67,6 +67,10 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [refusal-permission@1.0.0 / tool-injection-regression](../examples/refusal-permission-v1.json) | security-permissions | approval-boundaries, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [refusal-permission@1.0.0 / permission-escalation-holdout](../examples/refusal-permission-v1.json) | security-permissions | approval-boundaries, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [refusal-permission@1.0.0 / tool-injection-holdout](../examples/refusal-permission-v1.json) | security-permissions | approval-boundaries, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [long-context@1.0.0 / fact-near-start-regression](../examples/long-context-v1.json) | documents-data | context-retrieval, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime, context-32768 | Unmeasured |
+| [long-context@1.0.0 / fact-near-middle-regression](../examples/long-context-v1.json) | documents-data | context-retrieval, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime, context-32768 | Unmeasured |
+| [long-context@1.0.0 / fact-after-quarter-holdout](../examples/long-context-v1.json) | documents-data | context-retrieval, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime, context-32768 | Unmeasured |
+| [long-context@1.0.0 / fact-near-end-holdout](../examples/long-context-v1.json) | documents-data | context-retrieval, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime, context-32768 | Unmeasured |
 
 ## Area coverage
 
@@ -86,7 +90,7 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 - distributed-coordination: 0 mapped cases
 - ui-visual: 0 mapped cases
 - security-permissions: 4 mapped cases
-- documents-data: 0 mapped cases
+- documents-data: 4 mapped cases
 - language-translation: 4 mapped cases
 - audio-video: 0 mapped cases
 - scheduling-time: 0 mapped cases

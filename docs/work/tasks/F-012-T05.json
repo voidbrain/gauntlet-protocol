@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-012-T05",
   "parent": "F-012",
-  "status": "ready",
+  "status": "closed",
   "title": "Refusal and permission escalation pack",
   "goal": "Refusal and permission escalation pack",
   "acceptance": [
@@ -35,11 +35,13 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h agent",
-    "basis": "Estimated 2026-11-13 at the harness 8.5.0 initial size for a scoped single-PR agent step (0.25–0.5 h); first plan said 1–2 h. Not a measurement.",
-    "reviewed": "2026-11-13",
-    "agentHours": 0.5,
+    "estimate": "0 remaining",
+    "basis": "Implemented in PR #68; CI run 43648387384 passed before merge on 2026-11-14. Work-usage elapsed time rounds to the recorded quarter-hour actual.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
-    "estimateAgentHours": 0.5
+    "estimateAgentHours": 0.5,
+    "actualAgentHours": 0.25,
+    "actualSource": "measured"
   }
 }
