@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "long-context",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "fact-near-start-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["context-retrieval", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "TARGET: the access code is amber-17. Read the following neutral archive and return only JSON with the access code. Archive block 01 records a blue folder, a square table, and a routine inventory with no access code. Archive block 02 records a green folder, a round table, and a routine inventory with no access code. Archive block 03 records a red folder, a tall shelf, and a routine inventory with no access code. Archive block 04 records a white folder, a short shelf, and a routine inventory with no access code. Archive block 05 records a grey folder, a wide desk, and a routine inventory with no access code. Archive block 06 records a black folder, a narrow desk, and a routine inventory with no access code. Archive block 07 records a yellow folder, a low cabinet, and a routine inventory with no access code. Archive block 08 records a violet folder, a high cabinet, and a routine inventory with no access code. Archive block 09 records an orange folder, a small chair, and a routine inventory with no access code. Archive block 10 records a silver folder, a large chair, and a routine inventory with no access code. Archive block 11 records a bronze folder, a plain lamp, and a routine inventory with no access code. Archive block 12 records a copper folder, a desk lamp, and a routine inventory with no access code." }],
+      "expected": { "kind": "json", "value": { "accessCode": "amber-17" } },
+      "area": "documents-data",
+      "requirements": ["local-model-runtime", "context-32768"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "fact-near-middle-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["context-retrieval", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Read the neutral archive and return only JSON with the destination. Archive block 01 records a blue folder, a square table, and a routine inventory with no destination. Archive block 02 records a green folder, a round table, and a routine inventory with no destination. Archive block 03 records a red folder, a tall shelf, and a routine inventory with no destination. Archive block 04 records a white folder, a short shelf, and a routine inventory with no destination. Archive block 05 records a grey folder, a wide desk, and a routine inventory with no destination. Archive block 06 records a black folder, a narrow desk, and a routine inventory with no destination. TARGET: the destination is Cedar Room. Archive block 07 records a yellow folder, a low cabinet, and a routine inventory with no destination. Archive block 08 records a violet folder, a high cabinet, and a routine inventory with no destination. Archive block 09 records an orange folder, a small chair, and a routine inventory with no destination. Archive block 10 records a silver folder, a large chair, and a routine inventory with no destination. Archive block 11 records a bronze folder, a plain lamp, and a routine inventory with no destination. Archive block 12 records a copper folder, a desk lamp, and a routine inventory with no destination." }],
+      "expected": { "kind": "json", "value": { "destination": "Cedar Room" } },
+      "area": "documents-data",
+      "requirements": ["local-model-runtime", "context-32768"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "fact-after-quarter-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["context-retrieval", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Read the neutral archive and return only JSON with the owner. Archive block 01 records a blue folder, a square table, and a routine inventory with no owner. Archive block 02 records a green folder, a round table, and a routine inventory with no owner. Archive block 03 records a red folder, a tall shelf, and a routine inventory with no owner. TARGET: the owner is Mira. Archive block 04 records a white folder, a short shelf, and a routine inventory with no owner. Archive block 05 records a grey folder, a wide desk, and a routine inventory with no owner. Archive block 06 records a black folder, a narrow desk, and a routine inventory with no owner. Archive block 07 records a yellow folder, a low cabinet, and a routine inventory with no owner. Archive block 08 records a violet folder, a high cabinet, and a routine inventory with no owner. Archive block 09 records an orange folder, a small chair, and a routine inventory with no owner. Archive block 10 records a silver folder, a large chair, and a routine inventory with no owner. Archive block 11 records a bronze folder, a plain lamp, and a routine inventory with no owner. Archive block 12 records a copper folder, a desk lamp, and a routine inventory with no owner." }],
+      "expected": { "kind": "json", "value": { "owner": "Mira" } },
+      "area": "documents-data",
+      "requirements": ["local-model-runtime", "context-32768"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "fact-near-end-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["context-retrieval", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Read the neutral archive and return only JSON with the revision. Archive block 01 records a blue folder, a square table, and a routine inventory with no revision. Archive block 02 records a green folder, a round table, and a routine inventory with no revision. Archive block 03 records a red folder, a tall shelf, and a routine inventory with no revision. Archive block 04 records a white folder, a short shelf, and a routine inventory with no revision. Archive block 05 records a grey folder, a wide desk, and a routine inventory with no revision. Archive block 06 records a black folder, a narrow desk, and a routine inventory with no revision. Archive block 07 records a yellow folder, a low cabinet, and a routine inventory with no revision. Archive block 08 records a violet folder, a high cabinet, and a routine inventory with no revision. Archive block 09 records an orange folder, a small chair, and a routine inventory with no revision. Archive block 10 records a silver folder, a large chair, and a routine inventory with no revision. Archive block 11 records a bronze folder, a plain lamp, and a routine inventory with no revision. Archive block 12 records a copper folder, a desk lamp, and a routine inventory with no revision. TARGET: the revision is R-204." }],
+      "expected": { "kind": "json", "value": { "revision": "R-204" } },
+      "area": "documents-data",
+      "requirements": ["local-model-runtime", "context-32768"],
+      "responseFormat": "json"
+    }
+  ]
+}

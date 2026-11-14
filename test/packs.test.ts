@@ -182,7 +182,10 @@ test('refusal pack rejects permission escalation and planted tool instructions',
 test('long-context pack places facts at varied depths inside its declared context', async () => {
   const pack = load('examples/long-context-v1.json');
   assert.deepEqual(new Set(pack.cases.map((entry) => entry.split)), new Set(['regression', 'holdout']));
-  assert.equal(pack.cases.every((entry) => entry.requirements?.includes('context-32768')), true);
+  assert.equal(
+    pack.cases.every((entry) => entry.requirements?.includes('context-32768')),
+    true,
+  );
   const depths = pack.cases.map((entry) => {
     const content = entry.messages?.map((message) => message.content).join('\n') ?? '';
     assert.ok(Buffer.byteLength(content) > 1000);
