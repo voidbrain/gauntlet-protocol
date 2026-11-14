@@ -9,6 +9,7 @@ import {
   defaults,
   emptyLedger,
   recordRun,
+  mergeRun,
   pendingCases,
   validateLedger,
   caseHash,
@@ -139,6 +140,28 @@ test('ledger: refuses a report of another pack definition and a tampered ledger'
   assert.throws(() => validateLedger({ ...ledger, entries: [{ ...ledger.entries[0], output: 'x' }] }), /entry/);
   // Recording the same report twice is idempotent.
   assert.deepEqual(recordRun(ledger, report, smoke), ledger);
+});
+
+test('ledger: partial merges retain other cases and report newer conflicts', async () => {
+  const smoke = pack('smoke', modelCase('a'), modelCase('b'));
+  const original = await execute(smoke);
+  const ledger = recordRun(emptyLedger(), original, smoke);
+  const partial = validateReport({
+    ...original,
+    id: 'partial-newer',
+    finished: new Date(Date.parse(original.finished) + 1000).toISOString(),
+    results: [original.results[0]],
+    complete: false,
+    passed: false,
+  });
+  const newer = mergeRun(ledger, partial, smoke);
+  assert.equal(newer.ledger.entries.length, 2);
+  assert.deepEqual(newer.changes.map((change) => [change.case, change.outcome]), [['a', 'replaced']]);
+  assert.equal(newer.ledger.entries.find((entry) => entry.case === 'b')?.reportHash, ledger.entries[1].reportHash);
+
+  const older = mergeRun(newer.ledger, original, smoke);
+  assert.deepEqual(older.ledger, newer.ledger);
+  assert.deepEqual(older.changes.map((change) => [change.case, change.outcome]), [['a', 'kept-newer'], ['b', 'unchanged']]);
 });
 
 test('ledger: only graded runs cover; repeats, newer runs and ties are deterministic', async () => {
