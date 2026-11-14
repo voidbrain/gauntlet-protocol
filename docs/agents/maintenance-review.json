@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T07:25:18.413Z",
+  "reviewed": "2026-11-14T07:28:04.660Z",
   "policy": "18c0059e726d071aefd8c71b9a5d27b54b923320af6b34567c262491c7c1c9bb",
   "inputs": {
     "AGENTS.md": "83c67b0136bb332035247fdc4081ffef7a82d7ae3626ca518c1661bbc13350e4",
-    "docs/BACKLOG-RULES.md": "3cf543b629a68d9321b5d8b40f0b27402b044ece911d60bae887ea7fb64e9442",
+    "docs/BACKLOG-RULES.md": "05b87977b544c96562774ce085e9bd1df58424542fd5228be66c554c1579c2d9",
     "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
     "docs/agents/areas.md": "171636323e1cd991b33d5b723329d14dd51919a24fd78778b33d8a2a17dde539",
     "docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",

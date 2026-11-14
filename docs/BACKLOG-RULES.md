@@ -1,6 +1,6 @@
 # Backlog maintenance rules
 
-This is the authoritative update and review procedure for the [{{PROJECT_NAME}} backlog](BACKLOG.md). AGENTS and README link here; keep procedural changes here rather than adding competing instructions elsewhere. The backlog's lifecycle table is the status quick reference. Archives and audits preserve dated evidence, not current state.
+This is the authoritative update and review procedure for the [Gauntlet Protocol backlog](BACKLOG.md). AGENTS and README link here; keep procedural changes here rather than adding competing instructions elsewhere. The backlog's lifecycle table is the status quick reference. Archives and audits preserve dated evidence, not current state.
 
 - [docs/BACKLOG.md](BACKLOG.md) is the current status ledger (with authoritative per-record sources when `workItems.enabled`; see [parallel work](agents/parallel-work.md)); [docs/BACKLOG-RULES.md](BACKLOG-RULES.md) is the procedure (statuses, human-action cues, record layout, CI reconciliation, closure and archives, documentation ownership and the consistency check every PR records). Update the affected records in the same PR as the change, and run `npm run check:backlog`. When `workItems.enabled`, prefer reading `docs/work/records/<ID>.md` and `docs/work/tasks/<ID>-T*.json` over loading `docs/BACKLOG.md`, and keep `effort.basis` concise (1–2 sentences) without repeating shared boilerplate across tasks.
 
