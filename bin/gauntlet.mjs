@@ -66,6 +66,9 @@ try {
       'confirm-scenario',
       'capture-failures',
       'only',
+      'pending',
+      'ledger',
+      'max-age-days',
     ],
     compare: ['reports'],
     ledger: ['ledger', 'report', 'pack', 'source-key'],
@@ -100,6 +103,7 @@ try {
       'telemetry',
       'confirm-scenario',
       'json',
+      'pending',
     ].includes(m[1]);
     if (boolean === !!m[2]) throw Error('Invalid argument value');
     options[m[1]] = boolean ? true : m[2];
@@ -254,6 +258,11 @@ try {
     else if (command === 'plan') console.log(JSON.stringify(plan(pack, profile, limits, flags), null, 2));
     else {
       if (!options.execute) throw Error('Execution is explicit: --execute --out=new.json');
+      if (!!options.pending !== !!options.ledger) throw Error('--pending and --ledger must be supplied together');
+      const pendingDays = options['max-age-days'];
+      if (pendingDays !== undefined && (!options.pending || !/^\d+$/.test(pendingDays)))
+        throw Error('Invalid --max-age-days');
+      const pendingLedgerPath = options.ledger ? resolve(options.ledger) : null;
       const result = await executeWithEvidence(pack, profile, limits, {
         ...flags,
         scenarioConfirmed: options['confirm-scenario'] === true,
@@ -267,6 +276,12 @@ try {
         sourceKey: options['source-key'],
         telemetry: !!options.telemetry,
         sampleMs: options['sample-ms'] ? Number(options['sample-ms']) : undefined,
+        ...(pendingLedgerPath
+          ? {
+              pendingLedger: existsSync(pendingLedgerPath) ? readJSON(pendingLedgerPath) : emptyLedger(),
+              ...(pendingDays === undefined ? {} : { pendingMaxAgeMs: Number(pendingDays) * 86400000 }),
+            }
+          : {}),
       });
       console.log(
         JSON.stringify({

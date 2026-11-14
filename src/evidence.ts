@@ -22,6 +22,7 @@ import {
   type Report,
 } from './index.ts';
 import { inspectRuntime, boundedJSON, type RuntimeIdentity } from './runtimes.ts';
+import { pendingCases, runtimeHash, scenarioHash } from './ledger.ts';
 import { serverProcessAsync } from './telemetry.ts';
 export interface EvidenceOptions {
   execute: boolean;
@@ -41,6 +42,8 @@ export interface EvidenceOptions {
   sourceKey?: string;
   /** Trusted owner-supplied environment attestation; primarily for controlled adapters and fixtures. */
   environmentKey?: string;
+  pendingLedger?: unknown;
+  pendingMaxAgeMs?: number;
 }
 export interface EvidenceResult {
   kind: 'executed' | 'reused';
@@ -134,12 +137,16 @@ export async function executeWithEvidence(
     throw Error('Invalid telemetry interval');
   const selected = pack.cases.slice(0, limits.maxCases);
   for (const c of selected) {
-    if (c.expensive && !options.allowExpensive) throw Error('Selected expensive case requires explicit opt-in');
-    if (c.layer !== 'system' && !options.allowModels) throw Error('Selected model/agent case requires explicit opt-in');
+    if (options.pendingLedger === undefined) {
+      if (c.expensive && !options.allowExpensive) throw Error('Selected expensive case requires explicit opt-in');
+      if (c.layer !== 'system' && !options.allowModels)
+        throw Error('Selected model/agent case requires explicit opt-in');
+    }
     if (c.runner) {
       const runner = options.registry?.runners[c.runner];
       if (!runner || !runner.layers.includes(c.layer)) throw Error('Selected runner not registered for layer');
-      if (runner.allowModels && !options.allowModels) throw Error('Selected runner requires model opt-in');
+      if (options.pendingLedger === undefined && runner.allowModels && !options.allowModels)
+        throw Error('Selected runner requires model opt-in');
     }
   }
   const directModel = !!profile && selected.some((c) => !c.runner && c.layer === 'model');
@@ -200,6 +207,40 @@ export async function executeWithEvidence(
         signal: AbortSignal.any([controller.signal, AbortSignal.timeout(remaining())]),
       });
     }
+    const pending =
+      options.pendingLedger === undefined
+        ? null
+        : pendingCases([pack], options.pendingLedger, {
+            profile,
+            ...(options.pendingMaxAgeMs === undefined ? {} : { maxAgeMs: options.pendingMaxAgeMs }),
+            ...(identity
+              ? {
+                  modelDigest: identity.modelDigest,
+                  runtimeHash: runtimeHash({
+                    identity,
+                    runtime: {
+                      provider: identity.provider,
+                      node: process.version,
+                      platform: process.platform,
+                      arch: process.arch,
+                    },
+                  }),
+                }
+              : {}),
+            scenarioHash: scenarioHash(executionEnvironment),
+            ...(options.sourceKey === undefined ? {} : { sourceKey: options.sourceKey }),
+          });
+    const pendingIds = pending ? new Set(pending.map((entry) => entry.case)) : null;
+    const skipCurrent = pendingIds ? selected.filter((c) => !pendingIds.has(c.id)).map((c) => c.id) : [];
+    const executing = pendingIds ? selected.filter((c) => pendingIds.has(c.id)) : selected;
+    if (options.pendingLedger !== undefined)
+      for (const c of executing) {
+        if (c.expensive && !options.allowExpensive) throw Error('Selected expensive case requires explicit opt-in');
+        if (c.layer !== 'system' && !options.allowModels)
+          throw Error('Selected model/agent case requires explicit opt-in');
+        if (c.runner && options.registry?.runners[c.runner]?.allowModels && !options.allowModels)
+          throw Error('Selected runner requires model opt-in');
+      }
     const server =
       directModel && profile
         ? await serverProcessAsync(new URL(profile.endpoint).port || '80', controller.signal, remaining())
@@ -236,7 +277,7 @@ export async function executeWithEvidence(
       telemetry: options.telemetry ?? false,
       sampleMs: options.sampleMs ?? 500,
     });
-    if (!options.forceFresh && environment && existsSync(directory)) {
+    if (!options.forceFresh && options.pendingLedger === undefined && environment && existsSync(directory)) {
       const files = readdirSync(directory)
         .filter((n) => /^evidence-[a-f0-9-]+\.json$/.test(n))
         .sort()
@@ -290,6 +331,7 @@ export async function executeWithEvidence(
     remaining();
     const report = await run(pack, profile, limits, {
       ...options,
+      skipCurrent,
       environment: executionEnvironment,
       deadline,
       signal: controller.signal,
@@ -318,7 +360,13 @@ export async function executeWithEvidence(
     }
     report.finished = new Date().toISOString();
     writeEvidence(output, report);
-    if (report.passed && report.complete && environment && !options.captureFailures) {
+    if (
+      report.passed &&
+      report.complete &&
+      report.results.every((result) => result.status === 'passed') &&
+      environment &&
+      !options.captureFailures
+    ) {
       mkdirSync(directory, { recursive: true, mode: 0o700 });
       writeEvidence(join(directory, 'evidence-' + Date.parse(report.finished) + '-' + report.id + '.json'), {
         schemaVersion: 1,

@@ -12,6 +12,7 @@ import {
   pendingCases,
   validateLedger,
   caseHash,
+  validateReport,
   type Pack,
   type Profile,
   type Report,
@@ -312,17 +313,16 @@ test('ledger: run --pending executes pending cases and neutrally lists current c
   const cli = (...args: string[]) => spawnSync(process.execPath, ['bin/gauntlet.mjs', ...args], { encoding: 'utf8' });
   const sourceKey = 'c'.repeat(64);
   const common = [`--registry=${files.registry}`, '--execute', `--source-key=${sourceKey}`];
-  const full = cli(
-    'run',
-    `--pack=${files.current}`,
-    `--out=${files.full}`,
-    `--cache-dir=${files.cache}`,
-    ...common,
-  );
+  const full = cli('run', `--pack=${files.current}`, `--out=${files.full}`, `--cache-dir=${files.cache}`, ...common);
   assert.equal(full.status, 0, full.stderr);
   assert.equal(
-    cli('ledger', `--ledger=${files.ledger}`, `--report=${files.full}`, `--pack=${files.current}`, `--source-key=${sourceKey}`)
-      .status,
+    cli(
+      'ledger',
+      `--ledger=${files.ledger}`,
+      `--report=${files.full}`,
+      `--pack=${files.current}`,
+      `--source-key=${sourceKey}`,
+    ).status,
     0,
   );
 
