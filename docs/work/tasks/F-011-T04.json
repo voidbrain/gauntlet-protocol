@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-011-T04",
   "parent": "F-011",
-  "status": "ready",
+  "status": "closed",
   "title": "Release with a per-pack list of added and changed cases",
   "goal": "Release with a per-pack list of added and changed cases",
   "acceptance": [
@@ -35,11 +35,13 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h agent",
-    "basis": "Estimated 2026-11-13 at the harness 8.5.0 initial size for a scoped single-PR agent step (0.25–0.5 h); first plan said 1–2 h. Not a measurement.",
-    "reviewed": "2026-11-13",
-    "agentHours": 0.25,
+    "estimate": "0 remaining",
+    "basis": "Release 0.8.0 was prepared in PR #62, passed CI run 43623044929, and was published on 2026-11-14. Work-usage elapsed time rounds to the recorded quarter-hour actual.",
+    "reviewed": "2026-11-14",
+    "agentHours": 0,
     "baselineAgentHours": 0.25,
-    "estimateAgentHours": 0.25
+    "estimateAgentHours": 0.25,
+    "actualAgentHours": 0.25,
+    "actualSource": "measured"
   }
 }

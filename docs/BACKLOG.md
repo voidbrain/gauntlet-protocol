@@ -4,54 +4,13 @@ Current work ledger, reviewed 14 November 2026 against main `ea71bef`. Harness 8
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 4.5 h across 10 open steps of 3 features. 0.5 h of actual effort recorded on 2 steps. Generated from the task files.
+**Remaining effort:** 4.25 h across 9 open steps of 2 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="f-011"></a>[✨ F-011](#top)
-
-**Incremental runs: only what changed, resumable**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** F-011-T04.
-
-| | |
-|---|---|
-| **Issue** | Every campaign reruns all selected cases, even when `pending` already knows most are current; an interrupted local-model campaign starts over. Slow models on small hosts make this costly. |
-| **Reproduce** | Run a pack, change one case, run again: every case runs. Interrupt a run: nothing is reusable. |
-| **Check** | Only pending cases run; an interrupted run resumes to the same result; partial runs merge into the ledger; releases list changed cases per pack. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-011-t04"></a>F-011-T04 — Release with a per-pack list of added and changed cases | 0.25 h | 0 h | 0.25 h | Ready |
-| — | <a id="f-011-t01"></a>F-011-T01 — Run only pending cases | 0.5 h | 0 h | 0 h | Completed |
-| — | <a id="f-011-t02"></a>F-011-T02 — Resume an interrupted campaign | 0.5 h | 0.25 h (measured) | 0 h | Completed |
-| — | <a id="f-011-t03"></a>F-011-T03 — Merge partial runs into the ledger | 0.5 h | 0.25 h (measured) | 0 h | Completed |
-| 🟢 Small | **Total** | 1.75 h | 0.5 h (2 of 4 steps recorded) | 0.25 h | 3 of 4 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-011.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [PR #56](https://github.com/voidbrain/gauntlet-protocol/pull/56) implements T01; [PR #57](https://github.com/voidbrain/gauntlet-protocol/pull/57) reconciles it; [PR #58](https://github.com/voidbrain/gauntlet-protocol/pull/58) implements T02; [PR #59](https://github.com/voidbrain/gauntlet-protocol/pull/59) reconciles it; [PR #60](https://github.com/voidbrain/gauntlet-protocol/pull/60) implements T03; [PR #61](https://github.com/voidbrain/gauntlet-protocol/pull/61) reconciles it; [PR #62](https://github.com/voidbrain/gauntlet-protocol/pull/62) prepares release 0.8.0; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the roadmap request. |
-| Opened | 2026-11-13 |
-| Verification | T01 passed in PR #56 CI run 43621050710. T02 passed in PR #58 CI run 43621909103. T03 passed in PR #60 CI run 43622559868. Release PR #62 local package and 64-test checks pass; CI and tag pending. |
-| Reviewed | 2026-11-13 |
-
-</details>
-
----
 ### <a id="f-012"></a>[✨ F-012](#top)
 
 **Six new packs: structured output, tools, bilingual, multi-step, refusal, long context**
