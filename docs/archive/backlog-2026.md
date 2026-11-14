@@ -470,7 +470,7 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #62](https://github.com/voidbrain/gauntlet-protocol/pull/62) release; [PR #60](https://github.com/voidbrain/gauntlet-protocol/pull/60) partial ledger merges; [PR #58](https://github.com/voidbrain/gauntlet-protocol/pull/58) checkpoint/resume; [PR #56](https://github.com/voidbrain/gauntlet-protocol/pull/56) pending-only runs; reconciliation PRs #57, #59 and #61; roadmap request PR #42. |
+| PR / evidence | [PR #63](https://github.com/voidbrain/gauntlet-protocol/pull/63) closure; [PR #62](https://github.com/voidbrain/gauntlet-protocol/pull/62) release; [PR #60](https://github.com/voidbrain/gauntlet-protocol/pull/60) partial ledger merges; [PR #58](https://github.com/voidbrain/gauntlet-protocol/pull/58) checkpoint/resume; [PR #56](https://github.com/voidbrain/gauntlet-protocol/pull/56) pending-only runs; reconciliation PRs #57, #59 and #61; roadmap request PR #42. |
 | Opened | 2026-11-13 |
 | Closed | 2026-11-14 |
 | Verification | PR #56 CI 43621050710, PR #58 CI 43621909103, PR #60 CI 43622559868 and release PR #62 CI 43623044929 passed typecheck, build, deterministic tests and required repository checks. Package 0.8.0 and its GitHub release are published; no real-model qualification claimed. |
