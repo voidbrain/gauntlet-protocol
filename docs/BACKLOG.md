@@ -47,9 +47,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42); owner request 2026-11-13: incremental runs, more packs, small-model hosts. |
+| PR / evidence | [PR #64](https://github.com/voidbrain/gauntlet-protocol/pull/64) implements F-012-T01; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the owner's roadmap request. |
 | Opened | 2026-11-13 |
-| Verification | Pending. |
+| Verification | F-012-T01 deterministic pack fixture and 65-test suite pass locally; PR #64 CI pending. |
 | Reviewed | 2026-11-13 |
 
 </details>
