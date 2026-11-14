@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 14 November 2026 against main `db7307a`. PRs #48–#52 (harness 8.9.0–8.12.0 reconciles) merged on green CI. Harness 8.14.1 reconciled: quiet outputs, reconcile:draft, work:next, code:map, record size budget.
+Current work ledger, reviewed 14 November 2026 against main `87473b1`. Harness 8.14.2 reconciled: tools/rule-load.mjs (B-025, escaping found by CodeQL in NERV). #53 (harness 8.14.1) merged on green CI.
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->

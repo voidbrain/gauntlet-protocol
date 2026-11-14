@@ -2,6 +2,10 @@
 
 Dated reconciliation entries, newest by date. The backlog header is generated from the newest `## <date> — <branch> `<sha>`` entry (harness 8.4.0); its first paragraph stays under 300 characters.
 
+## 2026-11-14 — main `87473b1`
+
+Harness 8.14.2 reconciled: tools/rule-load.mjs (B-025, escaping found by CodeQL in NERV). #53 (harness 8.14.1) merged on green CI.
+
 ## 2026-11-14 — main `db7307a`
 
 PRs #48–#52 (harness 8.9.0–8.12.0 reconciles) merged on green CI. Harness 8.14.1 reconciled: quiet outputs, reconcile:draft, work:next, code:map, record size budget.
