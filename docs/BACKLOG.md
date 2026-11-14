@@ -44,9 +44,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #56](https://github.com/voidbrain/gauntlet-protocol/pull/56) implements F-011-T01; [PR #57](https://github.com/voidbrain/gauntlet-protocol/pull/57) reconciles its verified task state and docs; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the owner's roadmap request. |
+| PR / evidence | [PR #56](https://github.com/voidbrain/gauntlet-protocol/pull/56) implements F-011-T01; [PR #57](https://github.com/voidbrain/gauntlet-protocol/pull/57) reconciles its verified task state and docs; [PR #58](https://github.com/voidbrain/gauntlet-protocol/pull/58) implements F-011-T02; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the owner's roadmap request. |
 | Opened | 2026-11-13 |
-| Verification | F-011-T01 regression, typecheck and 62-test suite passed locally and in PR #56 CI run 43621050710. |
+| Verification | F-011-T01 passed in PR #56 CI run 43621050710. F-011-T02 midpoint checkpoint/resume regression, typecheck and 63-test suite pass locally; PR #58 CI pending. |
 | Reviewed | 2026-11-13 |
 
 </details>

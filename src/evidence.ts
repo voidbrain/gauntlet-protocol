@@ -1,8 +1,8 @@
 import { failureDestination } from './failures.ts';
 import { admitEnvironment, type ExecutionEnvironment } from './environments.ts';
 import { engineIdentity } from './engine.ts';
-import { readdirSync, existsSync, mkdirSync, lstatSync } from 'node:fs';
-import { resolve, join, basename } from 'node:path';
+import { readdirSync, existsSync, mkdirSync, lstatSync, writeFileSync, renameSync } from 'node:fs';
+import { resolve, join, basename, dirname } from 'node:path';
 import { arch, platform, hostname, totalmem, cpus, homedir } from 'node:os';
 import {
   hash,
@@ -44,6 +44,7 @@ export interface EvidenceOptions {
   environmentKey?: string;
   pendingLedger?: unknown;
   pendingMaxAgeMs?: number;
+  resume?: Report;
 }
 export interface EvidenceResult {
   kind: 'executed' | 'reused';
@@ -241,6 +242,49 @@ export async function executeWithEvidence(
         if (c.runner && options.registry?.runners[c.runner]?.allowModels && !options.allowModels)
           throw Error('Selected runner requires model opt-in');
       }
+    const resume = options.resume;
+    if (resume) {
+      const cases = new Map(pack.cases.map((testCase) => [testCase.id, testCase]));
+      const expectedRuntime = identity
+        ? {
+            provider: identity.provider,
+            node: process.version,
+            platform: process.platform,
+            arch: process.arch,
+          }
+        : null;
+      if (
+        !resume.sourceStable ||
+        resume.diagnostics ||
+        resume.packHash !== hash(pack) ||
+        resume.pack !== pack.id ||
+        resume.packVersion !== pack.version ||
+        resume.engineHash !== engineIdentity() ||
+        resume.protocolVersion !== '0.4.0' ||
+        resume.profileHash !== (profile ? hash(evidenceProfile(profile)) : null) ||
+        hash(resume.limits) !== hash(limits) ||
+        resume.registryHash !== (options.registry ? hash(options.registry) : null) ||
+        hash(resume.environment ?? null) !== hash(executionEnvironment ?? null) ||
+        (resume.sourceKey ?? null) !== (options.sourceKey ?? null) ||
+        resume.caseCount !== pack.cases.length ||
+        resume.results.some((result) => {
+          const testCase = cases.get(result.id);
+          return (
+            !testCase ||
+            result.layer !== testCase.layer ||
+            result.split !== testCase.split ||
+            result.critical !== testCase.critical ||
+            hash(result.capabilities) !== hash(testCase.capabilities) ||
+            (!!testCase.messages && result.fixtureHash !== hash(testCase.messages))
+          );
+        }) ||
+        (identity !== undefined &&
+          (hash(resume.identity ?? null) !== hash(identity) ||
+            resume.modelDigest !== identity.modelDigest ||
+            hash(resume.runtime) !== hash(expectedRuntime)))
+      )
+        throw Error('Resume report does not match the current source, pack or identity');
+    }
     const server =
       directModel && profile
         ? await serverProcessAsync(new URL(profile.endpoint).port || '80', controller.signal, remaining())
@@ -329,15 +373,29 @@ export async function executeWithEvidence(
         }
     }
     remaining();
+    mkdirSync(dirname(output), { recursive: true, mode: 0o700 });
+    const checkpoint = (report: Report) => {
+      const temporary = output + '.' + process.pid + '.checkpoint';
+      writeFileSync(temporary, JSON.stringify(report, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
+      renameSync(temporary, output);
+    };
     const report = await run(pack, profile, limits, {
       ...options,
       skipCurrent,
+      sourceKey: options.sourceKey,
+      ...(resume
+        ? {
+            resumeResults: resume.results.filter((result) => result.status === 'passed' || result.status === 'failed'),
+            resumedStarted: resume.started,
+          }
+        : {}),
+      checkpoint,
       environment: executionEnvironment,
       deadline,
       signal: controller.signal,
     });
     // Preflight identity must survive actual execution before evidence enters the cache.
-    report.started = campaignStarted;
+    report.started = resume?.started ?? campaignStarted;
     const serverAfter =
       directModel && profile
         ? await serverProcessAsync(
@@ -359,7 +417,7 @@ export async function executeWithEvidence(
       report.passed = false;
     }
     report.finished = new Date().toISOString();
-    writeEvidence(output, report);
+    checkpoint(report);
     if (
       report.passed &&
       report.complete &&

@@ -124,6 +124,7 @@ export interface Report {
   started: string;
   finished: string;
   sourceStable: boolean;
+  sourceKey?: string;
   limits: Limits;
   results: Result[];
   passed: boolean;
@@ -704,6 +705,10 @@ export async function run(
     signal?: AbortSignal;
     captureFailures?: string;
     skipCurrent?: string[];
+    resumeResults?: Result[];
+    resumedStarted?: string;
+    sourceKey?: string;
+    checkpoint?: (report: Report) => void;
   },
 ): Promise<Report> {
   validatePack(pack);
@@ -725,6 +730,19 @@ export async function run(
     [...skipCurrent].some((caseId) => !pack.cases.some((c) => c.id === caseId))
   )
     throw Error('Invalid current-case selection');
+  const resumed = new Map(
+    (options.resumeResults ?? []).map((result) => [`${result.id}:${result.iteration}`, structuredClone(result)]),
+  );
+  if (
+    resumed.size !== (options.resumeResults?.length ?? 0) ||
+    [...resumed.values()].some(
+      (result) =>
+        !pack.cases.some((c) => c.id === result.id) ||
+        result.iteration > limits.repeat ||
+        !['passed', 'failed'].includes(result.status),
+    )
+  )
+    throw Error('Invalid resumed results');
   const captures = options.captureFailures === undefined ? undefined : new FailureCapture(options.captureFailures);
   const reportId = randomUUID();
   const cancellation = new AbortController();
@@ -775,15 +793,58 @@ export async function run(
     const evaluatorBefore = engineIdentity();
     const before = hash(pack),
       profileBefore = profile ? hash(profile) : null,
-      started = new Date().toISOString(),
+      started = options.resumedStarted ?? new Date().toISOString(),
       deadline = Math.min(Date.now() + limits.suiteMs, options.deadline ?? Number.MAX_SAFE_INTEGER),
       results: Result[] = [];
-    let tokens = 0,
-      known = true,
+    let tokens = [...resumed.values()].reduce((sum, result) => sum + (result.tokens ?? 0), 0),
+      known = [...resumed.values()].every((result) => result.layer === 'system' || result.tokens !== null),
       digest: string | null = null,
       modelReady = false,
       providerIdentity: string | null = null;
     let caseDeadline = 0;
+    const report = (): Report => {
+      const sourceStable =
+          environmentBefore === hash(options.environment ?? null) &&
+          evaluatorBefore === engineIdentity() &&
+          before === hash(pack) &&
+          profileBefore === (profile ? hash(profile) : null),
+        complete =
+          results.length === pack.cases.length * limits.repeat &&
+          results.every((x) => (x.status !== 'not-run' || x.reason === 'skipped-current') && x.status !== 'error');
+      return {
+        schemaVersion: 1,
+        id: reportId,
+        protocolVersion: '0.4.0',
+        engineHash: evaluatorBefore,
+        ...(captures ? { diagnostics: { failureCaptures: true as const } } : {}),
+        ...(environment ? { environment } : {}),
+        residencyCleanup,
+        ...(resources ? { resources } : {}),
+        ...(runtimeIdentity ? { identity: runtimeIdentity } : {}),
+        pack: pack.id,
+        packVersion: pack.version,
+        caseCount: pack.cases.length,
+        packHash: before,
+        registryHash: options.registry ? hash(options.registry) : null,
+        profile: profile ? evidenceProfile(profile) : null,
+        profileHash: profile ? hash(evidenceProfile(profile)) : null,
+        modelDigest: digest,
+        started,
+        finished: new Date().toISOString(),
+        sourceStable,
+        ...(options.sourceKey === undefined ? {} : { sourceKey: options.sourceKey }),
+        limits,
+        results: structuredClone(results),
+        passed:
+          sourceStable &&
+          complete &&
+          results.every((x) => x.status === 'passed' || (x.status === 'not-run' && x.reason === 'skipped-current')),
+        complete,
+        promotion: false,
+        usage: { outputTokens: known ? tokens : null },
+        runtime: { provider: providerIdentity, node: process.version, platform: process.platform, arch: process.arch },
+      };
+    };
     const remaining = () => {
       if (cancellation.signal.aborted) throw Error('Campaign cancelled');
       const ms = Math.min(caseDeadline, deadline) - Date.now();
@@ -859,6 +920,11 @@ export async function run(
     }
     for (let iteration = 1; iteration <= limits.repeat; iteration++)
       for (const c of pack.cases.slice(0, limits.maxCases)) {
+        const prior = resumed.get(`${c.id}:${iteration}`);
+        if (prior) {
+          results.push(structuredClone(prior));
+          continue;
+        }
         const begin = performance.now(),
           r: Result = {
             id: c.id,
@@ -1128,6 +1194,7 @@ export async function run(
         } finally {
           r.durationMs = Math.round(performance.now() - begin);
           if (monitor) await monitor.sample();
+          options.checkpoint?.(report());
         }
       }
     await releaseOwnedModel();
@@ -1135,46 +1202,7 @@ export async function run(
       resources = await monitor.stop();
       monitor = null;
     }
-    const sourceStable =
-        environmentBefore === hash(options.environment ?? null) &&
-        evaluatorBefore === engineIdentity() &&
-        before === hash(pack) &&
-        profileBefore === (profile ? hash(profile) : null),
-      complete =
-        results.length === pack.cases.length * limits.repeat &&
-        results.every((x) => (x.status !== 'not-run' || x.reason === 'skipped-current') && x.status !== 'error');
-    return {
-      schemaVersion: 1,
-      id: reportId,
-      protocolVersion: '0.4.0',
-      engineHash: evaluatorBefore,
-      ...(captures ? { diagnostics: { failureCaptures: true as const } } : {}),
-      ...(environment ? { environment } : {}),
-      residencyCleanup,
-      ...(resources ? { resources } : {}),
-      ...(runtimeIdentity ? { identity: runtimeIdentity } : {}),
-      pack: pack.id,
-      packVersion: pack.version,
-      caseCount: pack.cases.length,
-      packHash: before,
-      registryHash: options.registry ? hash(options.registry) : null,
-      profile: profile ? evidenceProfile(profile) : null,
-      profileHash: profile ? hash(evidenceProfile(profile)) : null,
-      modelDigest: digest,
-      started,
-      finished: new Date().toISOString(),
-      sourceStable,
-      limits,
-      results,
-      passed:
-        sourceStable &&
-        complete &&
-        results.every((x) => x.status === 'passed' || (x.status === 'not-run' && x.reason === 'skipped-current')),
-      complete,
-      promotion: false,
-      usage: { outputTokens: known ? tokens : null },
-      runtime: { provider: providerIdentity, node: process.version, platform: process.platform, arch: process.arch },
-    };
+    return report();
   } finally {
     await releaseOwnedModel();
     if (monitor) await monitor.stop();
@@ -1364,6 +1392,7 @@ export function validateReport(input: unknown): Report {
     'started',
     'finished',
     'sourceStable',
+    'sourceKey',
     'limits',
     'results',
     'passed',
@@ -1500,6 +1529,8 @@ export function validateReport(input: unknown): Report {
     if (v.profileHash !== hash(p)) throw Error('Configuration hash mismatch');
   } else if (v.profileHash !== null) throw Error('Unexpected configuration hash');
   if (v.modelDigest !== null && !digest(v.modelDigest)) throw Error('Invalid model digest');
+  if (v.sourceKey !== undefined && (typeof v.sourceKey !== 'string' || !/^[a-f0-9]{64}$/.test(v.sourceKey)))
+    throw Error('Invalid source fingerprint');
   if (!Array.isArray(v.results) || !v.results.length || v.results.length > limits.maxCases * limits.repeat)
     throw Error('Invalid result count');
   const seen = new Set<string>();

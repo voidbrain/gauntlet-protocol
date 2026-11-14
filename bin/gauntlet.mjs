@@ -69,6 +69,7 @@ try {
       'pending',
       'ledger',
       'max-age-days',
+      'resume',
     ],
     compare: ['reports'],
     ledger: ['ledger', 'report', 'pack', 'source-key'],
@@ -282,6 +283,7 @@ try {
               ...(pendingDays === undefined ? {} : { pendingMaxAgeMs: Number(pendingDays) * 86400000 }),
             }
           : {}),
+        ...(options.resume ? { resume: readEvidence(resolve(options.resume)) } : {}),
       });
       console.log(
         JSON.stringify({
