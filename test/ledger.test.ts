@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync, writeFileSync, readFileSync, symlinkSync } from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync, readFileSync, symlinkSync, realpathSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
@@ -266,5 +266,84 @@ test('ledger: the CLI records a saved report and lists pending cases with exit 1
   assert.equal(
     cli('ledger', `--ledger=${join(dir, 'link.json')}`, `--report=${files.report}`, `--pack=${files.smoke}`).status,
     2,
+  );
+});
+
+test('ledger: run --pending executes pending cases and neutrally lists current cases', async (t) => {
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), 'gauntlet-incremental-')));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const systemCase = (id: string): Pack['cases'][number] => ({
+    id,
+    layer: 'system',
+    split: 'regression',
+    capabilities: ['policy'],
+    critical: true,
+    expensive: false,
+    runner: 'policy',
+  });
+  const current = pack('incremental', systemCase('current'));
+  const expanded = pack('incremental', systemCase('current'), systemCase('new'));
+  const files = {
+    current: join(dir, 'current.json'),
+    expanded: join(dir, 'expanded.json'),
+    registry: join(dir, 'registry.json'),
+    full: join(dir, 'full.json'),
+    incremental: join(dir, 'incremental.json'),
+    ledger: join(dir, 'ledger.json'),
+    cache: join(dir, 'cache'),
+  };
+  writeFileSync(files.current, JSON.stringify(current));
+  writeFileSync(files.expanded, JSON.stringify(expanded));
+  writeFileSync(
+    files.registry,
+    JSON.stringify({
+      schemaVersion: 1,
+      runners: {
+        policy: {
+          command: process.execPath,
+          args: [join(process.cwd(), 'test/fixtures/runner.mjs'), 'pass', '{report}'],
+          cwd: process.cwd(),
+          layers: ['system'],
+          allowModels: false,
+        },
+      },
+    }),
+  );
+  const cli = (...args: string[]) => spawnSync(process.execPath, ['bin/gauntlet.mjs', ...args], { encoding: 'utf8' });
+  const sourceKey = 'c'.repeat(64);
+  const common = [`--registry=${files.registry}`, '--execute', `--source-key=${sourceKey}`];
+  const full = cli(
+    'run',
+    `--pack=${files.current}`,
+    `--out=${files.full}`,
+    `--cache-dir=${files.cache}`,
+    ...common,
+  );
+  assert.equal(full.status, 0, full.stderr);
+  assert.equal(
+    cli('ledger', `--ledger=${files.ledger}`, `--report=${files.full}`, `--pack=${files.current}`, `--source-key=${sourceKey}`)
+      .status,
+    0,
+  );
+
+  const incremental = cli(
+    'run',
+    `--pack=${files.expanded}`,
+    `--out=${files.incremental}`,
+    `--cache-dir=${files.cache}`,
+    `--ledger=${files.ledger}`,
+    '--pending',
+    ...common,
+  );
+  assert.equal(incremental.status, 0, incremental.stderr);
+  const report = validateReport(JSON.parse(readFileSync(files.incremental, 'utf8')));
+  assert.equal(report.complete, true);
+  assert.equal(report.passed, true);
+  assert.deepEqual(
+    report.results.map((result) => [result.id, result.status, result.reason]),
+    [
+      ['current', 'not-run', 'skipped-current'],
+      ['new', 'passed', null],
+    ],
   );
 });
