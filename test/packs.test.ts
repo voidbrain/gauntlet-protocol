@@ -53,7 +53,10 @@ test('structured-output robustness pack has both splits and deterministic semant
     new Set(pack.cases.flatMap((entry) => entry.capabilities)),
     new Set(['intent-resolution', 'structured-output', 'tool-selection', 'clarification']),
   );
-  assert.equal(pack.cases.every((entry) => entry.responseFormat !== undefined), true);
+  assert.equal(
+    pack.cases.every((entry) => entry.responseFormat !== undefined),
+    true,
+  );
   const passing = await run(pack, profile, defaults, {
     execute: true,
     allowModels: true,

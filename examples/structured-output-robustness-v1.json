@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "id": "structured-output-robustness",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "change-mind-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["intent-resolution", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "First create a neutral reminder, then cancel that request. Return only JSON naming the final action." }],
+      "expected": { "kind": "json", "value": { "action": "cancel" } },
+      "area": "general-assistant",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "change-mind-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["intent-resolution", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Draft a note. Correction: discard it instead. Return only JSON naming the final action." }],
+      "expected": { "kind": "json", "value": { "action": "discard" } },
+      "area": "general-assistant",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "tool-choice-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["tool-selection", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Available tools are read_note and write_note. Inspect note 7 without changing it. Return only JSON with action and tool." }],
+      "expected": { "kind": "json", "value": { "action": "use-tool", "tool": "read_note" } },
+      "area": "tools",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "tool-choice-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["tool-selection", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Available tools are list_files and delete_file. Show the filenames without modifying them. Return only JSON with action and tool." }],
+      "expected": { "kind": "json", "value": { "action": "use-tool", "tool": "list_files" } },
+      "area": "tools",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "missing-input-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["clarification", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Schedule a reminder, but no time is supplied. Return only JSON naming the action and missing field." }],
+      "expected": { "kind": "json", "value": { "action": "clarify", "missing": "time" } },
+      "area": "general-assistant",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "missing-input-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["clarification", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "Send a neutral package, but no destination is supplied. Return only JSON naming the action and missing field." }],
+      "expected": { "kind": "json", "value": { "action": "clarify", "missing": "destination" } },
+      "area": "general-assistant",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    }
+  ]
+}

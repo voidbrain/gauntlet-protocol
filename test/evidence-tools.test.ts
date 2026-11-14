@@ -130,12 +130,14 @@ test('generated catalog maps cases and evidence without claiming unmeasured area
   assert.throws(() => validatePack({ ...pack, cases: [{ ...pack.cases[0], area: 'made-up' }] }));
   const generated = readFileSync('docs/test-index.md', 'utf8');
   const smoke = validatePack(JSON.parse(readFileSync('examples/smoke-v1.json', 'utf8'))),
-    expanded = validatePack(JSON.parse(readFileSync('examples/general-assistant-expanded-v1.json', 'utf8')));
+    expanded = validatePack(JSON.parse(readFileSync('examples/general-assistant-expanded-v1.json', 'utf8'))),
+    structured = validatePack(JSON.parse(readFileSync('examples/structured-output-robustness-v1.json', 'utf8')));
   assert.equal(
     generated,
-    catalogMarkdown(catalog([smoke, expanded]), {
+    catalogMarkdown(catalog([smoke, expanded, structured]), {
       'neutral-smoke': '../examples/smoke-v1.json',
       'general-assistant-expanded': '../examples/general-assistant-expanded-v1.json',
+      'structured-output-robustness': '../examples/structured-output-robustness-v1.json',
     }),
   );
 });
