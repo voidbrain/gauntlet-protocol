@@ -47,7 +47,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #64](https://github.com/voidbrain/gauntlet-protocol/pull/64) implements T01; [PR #65](https://github.com/voidbrain/gauntlet-protocol/pull/65) implements T02; [PR #66](https://github.com/voidbrain/gauntlet-protocol/pull/66) implements T03; [PR #67](https://github.com/voidbrain/gauntlet-protocol/pull/67) implements T04; [PR #68](https://github.com/voidbrain/gauntlet-protocol/pull/68) implements T05; [PR #69](https://github.com/voidbrain/gauntlet-protocol/pull/69) implements T06; [PR #70](https://github.com/voidbrain/gauntlet-protocol/pull/70) readies the release; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the roadmap request. |
+| PR / evidence | [PR #64](https://github.com/voidbrain/gauntlet-protocol/pull/64) implements T01; [PR #65](https://github.com/voidbrain/gauntlet-protocol/pull/65) implements T02; [PR #66](https://github.com/voidbrain/gauntlet-protocol/pull/66) implements T03; [PR #67](https://github.com/voidbrain/gauntlet-protocol/pull/67) implements T04; [PR #68](https://github.com/voidbrain/gauntlet-protocol/pull/68) implements T05; [PR #69](https://github.com/voidbrain/gauntlet-protocol/pull/69) implements T06; [PR #70](https://github.com/voidbrain/gauntlet-protocol/pull/70) readies the release; [PR #71](https://github.com/voidbrain/gauntlet-protocol/pull/71) prepares release 0.9.0; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the roadmap request. |
 | Opened | 2026-11-13 |
 | Verification | T01–T05 passed in PR #64–#68 CI. T06 passed in PR #69 CI run 43648766199. |
 | Reviewed | 2026-11-13 |
