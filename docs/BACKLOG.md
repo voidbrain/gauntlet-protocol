@@ -4,7 +4,7 @@ Current work ledger, reviewed 14 November 2026 against main `ea71bef`. Harness 8
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 6 h across 13 open steps of 3 features. Generated from the task files.
+**Remaining effort:** 5.5 h across 13 open steps of 3 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -17,9 +17,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.75 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.25 h | — | — | 🤖 | — | — |
 
-💻 **→** F-011-T01.
+💻 **→** F-011-T02.
 
 | | |
 |---|---|
@@ -31,11 +31,11 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="f-011-t01"></a>F-011-T01 — Run only pending cases | 0.5 h | 0 h | 0.5 h | Ready |
-| 🟢 Small | <a id="f-011-t02"></a>F-011-T02 — Resume an interrupted campaign | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-011-T01](#f-011-t01) |
+| 🟢 Small | <a id="f-011-t02"></a>F-011-T02 — Resume an interrupted campaign | 0.5 h | 0 h | 0.5 h | Ready |
 | 🟢 Small | <a id="f-011-t03"></a>F-011-T03 — Merge partial runs into the ledger | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-011-T02](#f-011-t02) |
 | 🟢 Small | <a id="f-011-t04"></a>F-011-T04 — Release with a per-pack list of added and changed cases | 0.25 h | 0 h | 0.25 h | Planned · waits on [F-011-T03](#f-011-t03) |
-| 🟡 Medium | **Total** | 1.75 h | 0 h (0 of 4 steps recorded) | 1.75 h | 0 of 4 completed |
+| 🟢 Small | <a id="f-011-t01"></a>F-011-T01 — Run only pending cases | 0.5 h | 0 h | 0 h | Verified |
+| 🟡 Medium | **Total** | 1.75 h | 0 h (0 of 4 steps recorded) | 1.25 h | 0 of 4 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -46,7 +46,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | [PR #56](https://github.com/voidbrain/gauntlet-protocol/pull/56) implements F-011-T01; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the owner's roadmap request. |
 | Opened | 2026-11-13 |
-| Verification | F-011-T01 regression, typecheck and 62-test suite pass locally; PR #56 CI pending. |
+| Verification | F-011-T01 regression, typecheck and 62-test suite passed locally and in PR #56 CI run 43621050710. |
 | Reviewed | 2026-11-13 |
 
 </details>
