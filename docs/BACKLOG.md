@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 15 November 2026 against codex/harness-8.15.0 `9387e82`. PRs #56–#76 merged with green CI and closed F-011–F-013. Harness 8.15.0 reconciled: paused-time usage accounting and effective-elapsed estimates; no open steps need re-estimation. This update is PR #77.
+Current work ledger, reviewed 15 November 2026 against codex/harness-8.15.0 `9387e82`. PRs #56–#76 merged with green CI and closed F-011–F-013. Harness 8.15.0 reconciled: paused-time usage accounting and effective-elapsed estimates; no open steps need re-estimation. This update is [PR #77](https://github.com/voidbrain/gauntlet-protocol/pull/77).
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->

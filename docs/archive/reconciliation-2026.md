@@ -4,7 +4,7 @@ Dated reconciliation entries, newest by date. The backlog header is generated fr
 
 ## 2026-11-15 — codex/harness-8.15.0 `9387e82`
 
-PRs #56–#76 merged with green CI and closed F-011–F-013. Harness 8.15.0 reconciled: paused-time usage accounting and effective-elapsed estimates; no open steps need re-estimation. This update is PR #77.
+PRs #56–#76 merged with green CI and closed F-011–F-013. Harness 8.15.0 reconciled: paused-time usage accounting and effective-elapsed estimates; no open steps need re-estimation. This update is [PR #77](https://github.com/voidbrain/gauntlet-protocol/pull/77).
 
 Calibration triggered on 12 closed steps (median actual/baseline 0.5; F-012-T03 9×). With no open steps to revise, `workItems.estimation.since` moves to 2026-11-15. F-012-T03 predates pause accounting, so its old-method measured actual remains historical evidence rather than being guessed downward.
 
