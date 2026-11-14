@@ -1,5 +1,15 @@
 # Releases
 
+## 0.8.0 — incremental runs
+
+Incremental campaigns (F-011): `run --pending --ledger=<file>` executes new, changed, stale or identity-mismatched cases while listing ledger-current cases as the neutral `not-run / skipped-current`; ordinary report shape and pass/fail exit semantics remain intact. Private run reports are atomically checkpointed after each finished case, and `run --resume=<report>` carries forward only graded results when the source, pack, evaluator, configuration, registry, scenario and available runtime/model identity still match. Partial and resumed reports merge only their graded cases into a ledger; the API and CLI report `added`, `replaced`, `kept-newer` or `unchanged`, with newer evidence and a deterministic equal-time report-hash tie-breaker winning conflicts. The engine hash changes, so automatic cache reuse requires 0.8.0 evidence. No real-model run.
+
+Pack case changes since 0.7.1:
+
+- `general-assistant-expanded@1.0.0`: added none; changed none; removed none.
+- `neutral-smoke-schema@1.0.0`: added none; changed none; removed none.
+- `neutral-smoke@1.1.0`: added none; changed none; removed none.
+
 ## 0.7.1
 
 Development harness reconciled to 5.4.0 (effort totals, estimate calibration reminder, actual effort column, queue-ordered backlog). No package code, protocol, grading or evidence change; the engine hash is unchanged. No real-model run.
