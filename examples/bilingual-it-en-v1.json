@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "bilingual-it-en",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "summarize-en-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["language-control", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "In English, summarize: The neutral meeting moved from Monday to Tuesday. Return only JSON." }],
+      "expected": { "kind": "json", "value": { "intent": "summarize", "language": "en", "reply": "The meeting moved to Tuesday." } },
+      "area": "language-translation",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "summarize-it-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["language-control", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "In italiano, riassumi: La riunione neutrale è stata spostata da lunedì a martedì. Restituisci solo JSON." }],
+      "expected": { "kind": "json", "value": { "intent": "summarize", "language": "it", "reply": "La riunione è stata spostata a martedì." } },
+      "area": "language-translation",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "clarify-en-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["language-control", "clarification", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "In English, ask which file I mean because I only said 'open it'. Return only JSON." }],
+      "expected": { "kind": "json", "value": { "intent": "clarify", "language": "en", "reply": "Which file should I open?" } },
+      "area": "language-translation",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "clarify-it-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["language-control", "clarification", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [{ "role": "user", "content": "In italiano, chiedi quale file intendo perché ho detto solo 'aprilo'. Restituisci solo JSON." }],
+      "expected": { "kind": "json", "value": { "intent": "clarify", "language": "it", "reply": "Quale file devo aprire?" } },
+      "area": "language-translation",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    }
+  ]
+}

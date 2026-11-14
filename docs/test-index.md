@@ -55,6 +55,10 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [tool-use@1.0.0 / choose-tool-holdout](../examples/tool-use-v1.json) | tools | tool-selection, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [tool-use@1.0.0 / unknown-tool-holdout](../examples/tool-use-v1.json) | tools | tool-selection, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [tool-use@1.0.0 / arguments-holdout](../examples/tool-use-v1.json) | tools | tool-selection, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [bilingual-it-en@1.0.0 / summarize-en-regression](../examples/bilingual-it-en-v1.json) | language-translation | language-control, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [bilingual-it-en@1.0.0 / summarize-it-regression](../examples/bilingual-it-en-v1.json) | language-translation | language-control, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [bilingual-it-en@1.0.0 / clarify-en-holdout](../examples/bilingual-it-en-v1.json) | language-translation | language-control, clarification, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [bilingual-it-en@1.0.0 / clarify-it-holdout](../examples/bilingual-it-en-v1.json) | language-translation | language-control, clarification, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 
 ## Area coverage
 
@@ -75,6 +79,6 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 - ui-visual: 0 mapped cases
 - security-permissions: 0 mapped cases
 - documents-data: 0 mapped cases
-- language-translation: 0 mapped cases
+- language-translation: 4 mapped cases
 - audio-video: 0 mapped cases
 - scheduling-time: 0 mapped cases

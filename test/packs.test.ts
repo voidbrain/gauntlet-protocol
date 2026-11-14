@@ -95,3 +95,28 @@ test('tool-use pack covers selection, refusal and schema-shaped arguments', asyn
   });
   assert.equal(failing.results[1].status, 'failed');
 });
+
+test('bilingual pack keeps paired intents and follows the request language', async () => {
+  const pack = load('examples/bilingual-it-en-v1.json');
+  assert.deepEqual(new Set(pack.cases.map((entry) => entry.split)), new Set(['regression', 'holdout']));
+  assert.equal(pack.cases.length % 2, 0);
+  const values = expected(pack) as { intent: string; language: string; reply: string }[];
+  for (let index = 0; index < values.length; index += 2) {
+    assert.equal(values[index].intent, values[index + 1].intent);
+    assert.deepEqual(new Set([values[index].language, values[index + 1].language]), new Set(['en', 'it']));
+  }
+  const passing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    fetch: provider(values),
+  });
+  assert.equal(passing.passed, true);
+  const wrong = structuredClone(values);
+  wrong[1].language = 'en';
+  const failing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    fetch: provider(wrong),
+  });
+  assert.equal(failing.results[1].status, 'failed');
+});

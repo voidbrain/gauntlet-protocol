@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-012-T04",
   "parent": "F-012",
-  "status": "planned",
+  "status": "ready",
   "title": "Multi-step agent pack",
   "goal": "Multi-step agent pack",
   "acceptance": [

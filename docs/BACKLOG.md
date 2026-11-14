@@ -4,7 +4,7 @@ Current work ledger, reviewed 14 November 2026 against main `ea71bef`. Harness 8
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 3.75 h across 8 open steps of 2 features. 0.25 h of actual effort recorded on 1 step. Generated from the task files.
+**Remaining effort:** 3.25 h across 7 open steps of 2 features. 0.5 h of actual effort recorded on 2 steps. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -17,9 +17,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.75 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.25 h | — | — | 🤖 | — | — |
 
-💻 **→** F-012-T02, F-012-T03 or F-012-T06 (independent).
+💻 **→** F-012-T03, F-012-T04, F-012-T05 or F-012-T06 (independent).
 
 | | |
 |---|---|
@@ -31,14 +31,14 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="f-012-t02"></a>F-012-T02 — Tool use pack | 0.5 h | 0 h | 0.5 h | Ready |
 | 🟢 Small | <a id="f-012-t03"></a>F-012-T03 — Bilingual (Italian and English) pack | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="f-012-t04"></a>F-012-T04 — Multi-step agent pack | 0.5 h | 0 h | 0.5 h | Ready |
+| 🟢 Small | <a id="f-012-t05"></a>F-012-T05 — Refusal and permission escalation pack | 0.5 h | 0 h | 0.5 h | Ready |
 | 🟢 Small | <a id="f-012-t06"></a>F-012-T06 — Long context pack | 0.5 h | 0 h | 0.5 h | Ready |
-| 🟢 Small | <a id="f-012-t04"></a>F-012-T04 — Multi-step agent pack | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-012-T02](#f-012-t02) |
-| 🟢 Small | <a id="f-012-t05"></a>F-012-T05 — Refusal and permission escalation pack | 0.5 h | 0 h | 0.5 h | Planned · waits on [F-012-T02](#f-012-t02) |
-| 🟢 Small | <a id="f-012-t07"></a>F-012-T07 — Release the new packs | 0.25 h | 0 h | 0.25 h | Planned · waits on [F-012-T02](#f-012-t02), [F-012-T03](#f-012-t03), [F-012-T04](#f-012-t04), [F-012-T05](#f-012-t05), [F-012-T06](#f-012-t06) |
+| 🟢 Small | <a id="f-012-t07"></a>F-012-T07 — Release the new packs | 0.25 h | 0 h | 0.25 h | Planned · waits on [F-012-T03](#f-012-t03), [F-012-T04](#f-012-t04), [F-012-T05](#f-012-t05), [F-012-T06](#f-012-t06) |
 | — | <a id="f-012-t01"></a>F-012-T01 — Structured-output robustness pack | 0.5 h | 0.25 h (measured) | 0 h | Completed |
-| 🟡 Medium | **Total** | 3.25 h | 0.25 h (1 of 7 steps recorded) | 2.75 h | 1 of 7 completed |
+| — | <a id="f-012-t02"></a>F-012-T02 — Tool use pack | 0.5 h | 0.25 h (measured) | 0 h | Completed |
+| 🟡 Medium | **Total** | 3.25 h | 0.5 h (2 of 7 steps recorded) | 2.25 h | 2 of 7 completed |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -47,9 +47,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #64](https://github.com/voidbrain/gauntlet-protocol/pull/64) implements F-012-T01; [PR #65](https://github.com/voidbrain/gauntlet-protocol/pull/65) implements F-012-T02; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the owner's roadmap request. |
+| PR / evidence | [PR #64](https://github.com/voidbrain/gauntlet-protocol/pull/64) implements T01; [PR #65](https://github.com/voidbrain/gauntlet-protocol/pull/65) implements T02; [PR #66](https://github.com/voidbrain/gauntlet-protocol/pull/66) implements T03; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the roadmap request. |
 | Opened | 2026-11-13 |
-| Verification | F-012-T01 passed in PR #64 CI run 43623842390. F-012-T02 deterministic pack fixture and 66-test suite pass locally; PR #65 CI pending. |
+| Verification | T01 passed in PR #64 CI run 43623842390. T02 passed in PR #65 CI run 43624148618. T03 bilingual fixture and 67-test suite pass locally; PR #66 CI pending. |
 | Reviewed | 2026-11-13 |
 
 </details>
