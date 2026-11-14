@@ -703,6 +703,7 @@ export async function run(
     deadline?: number;
     signal?: AbortSignal;
     captureFailures?: string;
+    skipCurrent?: string[];
   },
 ): Promise<Report> {
   validatePack(pack);
@@ -718,6 +719,12 @@ export async function run(
     throw Error('Invalid telemetry interval');
   if (options.deadline !== undefined && (!Number.isSafeInteger(options.deadline) || options.deadline < 0))
     throw Error('Invalid campaign deadline');
+  const skipCurrent = new Set(options.skipCurrent ?? []);
+  if (
+    skipCurrent.size !== (options.skipCurrent?.length ?? 0) ||
+    [...skipCurrent].some((caseId) => !pack.cases.some((c) => c.id === caseId))
+  )
+    throw Error('Invalid current-case selection');
   const captures = options.captureFailures === undefined ? undefined : new FailureCapture(options.captureFailures);
   const reportId = randomUUID();
   const cancellation = new AbortController();
@@ -866,6 +873,10 @@ export async function run(
             reason: null,
           };
         results.push(r);
+        if (skipCurrent.has(c.id)) {
+          r.reason = 'skipped-current';
+          continue;
+        }
         if (cancellation.signal.aborted) {
           r.reason = 'Campaign cancelled';
           continue;
@@ -1131,7 +1142,7 @@ export async function run(
         profileBefore === (profile ? hash(profile) : null),
       complete =
         results.length === pack.cases.length * limits.repeat &&
-        results.every((x) => x.status !== 'not-run' && x.status !== 'error');
+        results.every((x) => (x.status !== 'not-run' || x.reason === 'skipped-current') && x.status !== 'error');
     return {
       schemaVersion: 1,
       id: reportId,
@@ -1155,7 +1166,10 @@ export async function run(
       sourceStable,
       limits,
       results,
-      passed: sourceStable && complete && results.every((x) => x.status === 'passed'),
+      passed:
+        sourceStable &&
+        complete &&
+        results.every((x) => x.status === 'passed' || (x.status === 'not-run' && x.reason === 'skipped-current')),
       complete,
       promotion: false,
       usage: { outputTokens: known ? tokens : null },
@@ -1564,9 +1578,25 @@ export function validateReport(input: unknown): Report {
   if (v.complete && usage.outputTokens !== null && (usage.outputTokens as number) > limits.outputTokens)
     throw Error('Complete evidence exceeds token budget');
   if (v.complete && v.results.length !== v.caseCount * limits.repeat) throw Error('Missing declared cases');
-  if (v.complete && v.results.some((x) => ['error', 'not-run'].includes(String(record(x).status))))
+  if (
+    v.complete &&
+    v.results.some((x) => {
+      const result = record(x);
+      return result.status === 'error' || (result.status === 'not-run' && result.reason !== 'skipped-current');
+    })
+  )
     throw Error('Incomplete evidence marked complete');
-  if (v.passed !== !!(v.sourceStable && v.complete && v.results.every((x) => record(x).status === 'passed')))
+  if (
+    v.passed !==
+    !!(
+      v.sourceStable &&
+      v.complete &&
+      v.results.every((x) => {
+        const result = record(x);
+        return result.status === 'passed' || (result.status === 'not-run' && result.reason === 'skipped-current');
+      })
+    )
+  )
     throw Error('Inconsistent pass flag');
   const runtime = record(v.runtime);
   fields(runtime, ['provider', 'node', 'platform', 'arch']);
