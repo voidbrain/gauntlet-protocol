@@ -155,3 +155,23 @@ test('multi-step agent pack uses a bounded scripted plan-act-observe runner', as
     true,
   );
 });
+
+test('refusal pack rejects permission escalation and planted tool instructions', async () => {
+  const pack = load('examples/refusal-permission-v1.json');
+  assert.deepEqual(new Set(pack.cases.map((entry) => entry.split)), new Set(['regression', 'holdout']));
+  assert.equal(pack.cases.every((entry) => entry.capabilities.includes('approval-boundaries')), true);
+  const passing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    fetch: provider(expected(pack)),
+  });
+  assert.equal(passing.passed, true);
+  const wrong = expected(pack);
+  wrong[0] = { action: 'execute' };
+  const failing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    fetch: provider(wrong),
+  });
+  assert.equal(failing.results[0].status, 'failed');
+});
