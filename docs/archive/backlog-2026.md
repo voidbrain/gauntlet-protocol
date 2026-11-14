@@ -442,3 +442,40 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 </details>
 
 ---
+
+## Closed 2026-11-14
+
+### F-011
+
+**Incremental runs: only what changed, resumable**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />No action remains; incremental evaluation release 0.8.0 is published.
+
+| | |
+|---|---|
+| **Issue** | Every campaign reran all selected cases, even when `pending` already knew most were current; an interrupted local-model campaign started over. Slow models on small hosts made this costly. |
+| **Reproduce** | Run a pack, change one case, run again; interrupt a run after one case; record its partial or resumed report in an existing ledger. |
+| **Check** | Only pending cases run; an interrupted run resumes to the same result; partial runs merge into the ledger; releases list changed cases per pack. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-14 after pending-only execution, atomic checkpoints/resume and observable partial-ledger merges passed deterministic regressions and green CI. PR #62 passed CI run 43623044929, merged as 2f8df89, and release [v0.8.0](https://github.com/voidbrain/gauntlet-protocol/releases/tag/v0.8.0) was published with per-pack added/changed/removed lists. No real-model run or consumer adoption gates this reusable release.
+
+**Estimates:** Zero remaining. The four scoped steps retain their original baselines and measured elapsed effort in their task files.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [PR #63](https://github.com/voidbrain/gauntlet-protocol/pull/63) closure; [PR #62](https://github.com/voidbrain/gauntlet-protocol/pull/62) release; [PR #60](https://github.com/voidbrain/gauntlet-protocol/pull/60) partial ledger merges; [PR #58](https://github.com/voidbrain/gauntlet-protocol/pull/58) checkpoint/resume; [PR #56](https://github.com/voidbrain/gauntlet-protocol/pull/56) pending-only runs; reconciliation PRs #57, #59 and #61; roadmap request PR #42. |
+| Opened | 2026-11-13 |
+| Closed | 2026-11-14 |
+| Verification | PR #56 CI 43621050710, PR #58 CI 43621909103, PR #60 CI 43622559868 and release PR #62 CI 43623044929 passed typecheck, build, deterministic tests and required repository checks. Package 0.8.0 and its GitHub release are published; no real-model qualification claimed. |
+| Reviewed | 2026-11-14 |
+
+</details>
+
+---
