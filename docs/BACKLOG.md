@@ -47,9 +47,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | [PR #64](https://github.com/voidbrain/gauntlet-protocol/pull/64) implements F-012-T01; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the owner's roadmap request. |
+| PR / evidence | [PR #64](https://github.com/voidbrain/gauntlet-protocol/pull/64) implements F-012-T01; [PR #65](https://github.com/voidbrain/gauntlet-protocol/pull/65) implements F-012-T02; [PR #42](https://github.com/voidbrain/gauntlet-protocol/pull/42) records the owner's roadmap request. |
 | Opened | 2026-11-13 |
-| Verification | F-012-T01 deterministic pack fixture and 65-test suite passed in PR #64 CI run 43623842390. |
+| Verification | F-012-T01 passed in PR #64 CI run 43623842390. F-012-T02 deterministic pack fixture and 66-test suite pass locally; PR #65 CI pending. |
 | Reviewed | 2026-11-13 |
 
 </details>
