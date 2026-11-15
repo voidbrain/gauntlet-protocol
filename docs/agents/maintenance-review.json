@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-14T23:15:10.000Z",
+  "reviewed": "2026-11-15T21:05:11.082Z",
   "policy": "c0fcc742add3a359ab8c07765e7e0857f990ac6f7db2831c521611452e4c68f6",
   "inputs": {
     "AGENTS.md": "a8bb18630d7905ad1f69262faeec5244adf96761aaf625131d69ef2ea0ca3d3e",
@@ -19,11 +19,11 @@
     "docs/agents/skills.md": "5d60223eccfaad88c7153f57316da5ca10bfdd9d58d3a8cebc1eef25b9f0d5f5",
     "docs/agents/solution-profile.md": "685d55612f55d157bf124e23115f95bd16fe4d4f8834a4e0e152a191e3cd45f8",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
-    "docs/agents/work-usage.md": "5b10c5e8e9860fdd116b5cc789c2164e0678df96a475bf7b11ad5f9f99b1453e",
+    "docs/agents/work-usage.md": "40e6b0b17fcc08bedb0ddbf405e232e2bebbca80e36e585334ecb9a2628631a7",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "4c343b171323754dca54f4d44c626e5e2d6f21d742cecd49a2ac7f144007c396",
-    "tools/work-usage.mjs": "65961d804edf9adc3f93a6b6ccfa04dfe9cf16275751f50247056ec3edf6589e"
+    "tools/work-items.mjs": "850ec6674088a9bb155680fffbb05d9585b5606409448e1806f0045c970a43ef",
+    "tools/work-usage.mjs": "09569f9b56bd6e403d4c235f980ba5fb03b2aff8fe56a28878cc298fe8a4b2af"
   },
   "measurements": {
     "samples": 1,
@@ -113,6 +113,12 @@
       "disposition": "implemented",
       "target": "docs/backlog/estimates.md",
       "evidence": "Harness 8.15.0 effective-elapsed estimate rule reconciled without removing safeguards."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": ".harness.json",
+      "evidence": "Reconciled harness 8.17.0 (suggestedPauses, done steps table, Who/Agent cells, empty backlog/roadmap prompt) and prepared 0.9.1."
     }
   ]
 }
