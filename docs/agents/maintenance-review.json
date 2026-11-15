@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-15T21:22:19.168Z",
+  "reviewed": "2026-11-15T22:51:22.230Z",
   "policy": "c0fcc742add3a359ab8c07765e7e0857f990ac6f7db2831c521611452e4c68f6",
   "inputs": {
-    "AGENTS.md": "49f2a8454892cffe7ca7d45a194a25498e837be2966358f2362b9b3d925c7570",
+    "AGENTS.md": "9bf7ccf277998e924068e07316d70125c6306398f60c7625879f7bbda9b75416",
     "docs/BACKLOG-RULES.md": "05b87977b544c96562774ce085e9bd1df58424542fd5228be66c554c1579c2d9",
-    "docs/agents/architecture-review.md": "c77b1d5736bf1d64231dab90241f5c583bca89ed756ede5bdfb84756f2d60e42",
+    "docs/agents/architecture-review.md": "5d967314854912b1a5f1446aeab309763b14f9856bceb3c82df5c6c25c166526",
     "docs/agents/areas.md": "171636323e1cd991b33d5b723329d14dd51919a24fd78778b33d8a2a17dde539",
     "docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "docs/agents/change-impact.md": "dc1c473e274f76bd70a87ff57bbc53fc75dc75a35d121cf67baf163a2fd2e975",
     "docs/agents/coverage-guide.md": "3d539eb8beedfa101a5e47d9973cdf85dce197436fab2ab096f760e12d208106",
-    "docs/agents/maintenance.md": "d8a4427571fd395293b5892203bdd46db3930da62cccf7d1bfccafd577ef7a24",
+    "docs/agents/maintenance.md": "4f607f475f902d4bb905fc201a9a02f9a2280f1d105cdbaebaa03e0080eb0a58",
     "docs/agents/mcp.md": "06efbb58a50f9236506ca0afa9a79bb1d42c12ca380a29ed0254bf0a537f860d",
     "docs/agents/parallel-work-plans.md": "d171d89ec5431668ff770e5fcb0098ad518da6289a0d12a56aafdae60930d567",
     "docs/agents/parallel-work.md": "28608637b73e16f1e1664af8a16047849eea464a14cdaada4d54d7a4094d83ef",
@@ -22,7 +22,7 @@
     "docs/agents/work-usage.md": "40e6b0b17fcc08bedb0ddbf405e232e2bebbca80e36e585334ecb9a2628631a7",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "850ec6674088a9bb155680fffbb05d9585b5606409448e1806f0045c970a43ef",
+    "tools/work-items.mjs": "e2b205ff58444dc414cf247c66a304b8fe77112d56d018c93ab61ed522eec9fa",
     "tools/work-usage.mjs": "09569f9b56bd6e403d4c235f980ba5fb03b2aff8fe56a28878cc298fe8a4b2af"
   },
   "measurements": {
@@ -125,6 +125,12 @@
       "disposition": "implemented",
       "target": "tools/check-freshness.mjs",
       "evidence": "Reconciled with project-harness v8.18.0: periodic review cadences (reviews.token.days=30, reviews.architecture.days=30), token review in rule-review.md, outside-landscape comparison in architecture-review.md"
+    },
+    {
+      "kind": "tool",
+      "disposition": "implemented",
+      "target": "tools/work-items.mjs",
+      "evidence": "Reconciled with project-harness v9.0.0: B-043–B-046, F-083-T03, F-084-T02"
     }
   ]
 }
