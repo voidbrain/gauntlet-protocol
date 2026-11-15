@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-15T21:05:11.082Z",
+  "reviewed": "2026-11-15T21:22:19.168Z",
   "policy": "c0fcc742add3a359ab8c07765e7e0857f990ac6f7db2831c521611452e4c68f6",
   "inputs": {
-    "AGENTS.md": "a8bb18630d7905ad1f69262faeec5244adf96761aaf625131d69ef2ea0ca3d3e",
+    "AGENTS.md": "49f2a8454892cffe7ca7d45a194a25498e837be2966358f2362b9b3d925c7570",
     "docs/BACKLOG-RULES.md": "05b87977b544c96562774ce085e9bd1df58424542fd5228be66c554c1579c2d9",
-    "docs/agents/architecture-review.md": "6a85ce0493f103f56cd75dbcfeb08836dc2b71515dde0da10277fd8422a75177",
+    "docs/agents/architecture-review.md": "c77b1d5736bf1d64231dab90241f5c583bca89ed756ede5bdfb84756f2d60e42",
     "docs/agents/areas.md": "171636323e1cd991b33d5b723329d14dd51919a24fd78778b33d8a2a17dde539",
     "docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
     "docs/agents/change-impact.md": "dc1c473e274f76bd70a87ff57bbc53fc75dc75a35d121cf67baf163a2fd2e975",
     "docs/agents/coverage-guide.md": "3d539eb8beedfa101a5e47d9973cdf85dce197436fab2ab096f760e12d208106",
-    "docs/agents/maintenance.md": "cf1fe2a1c06500c33096542f2385dfce1087bcc4c383d32e06ac907b816cf72e",
+    "docs/agents/maintenance.md": "d8a4427571fd395293b5892203bdd46db3930da62cccf7d1bfccafd577ef7a24",
     "docs/agents/mcp.md": "06efbb58a50f9236506ca0afa9a79bb1d42c12ca380a29ed0254bf0a537f860d",
     "docs/agents/parallel-work-plans.md": "d171d89ec5431668ff770e5fcb0098ad518da6289a0d12a56aafdae60930d567",
     "docs/agents/parallel-work.md": "28608637b73e16f1e1664af8a16047849eea464a14cdaada4d54d7a4094d83ef",
@@ -119,6 +119,12 @@
       "disposition": "implemented",
       "target": ".harness.json",
       "evidence": "Reconciled harness 8.17.0 (suggestedPauses, done steps table, Who/Agent cells, empty backlog/roadmap prompt) and prepared 0.9.1."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "tools/check-freshness.mjs",
+      "evidence": "Reconciled with project-harness v8.18.0: periodic review cadences (reviews.token.days=30, reviews.architecture.days=30), token review in rule-review.md, outside-landscape comparison in architecture-review.md"
     }
   ]
 }
