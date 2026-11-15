@@ -3,7 +3,7 @@
     "path": "../project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "8.15.0",
+  "version": "8.17.0",
   "stacks": [
     "core"
   ],
@@ -218,6 +218,7 @@
     }
   },
   "workUsage": {
-    "enabled": true
+    "enabled": true,
+    "pauseGapMinutes": 15
   }
 }

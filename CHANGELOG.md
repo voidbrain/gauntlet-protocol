@@ -1,5 +1,9 @@
 # Releases
 
+## 0.9.1 — harness 8.17.0
+
+Development harness reconciled to `8.17.0` (suggested pauses in `work-usage`, done-steps table and Who/Agent cell rules, and `check:freshness` empty-backlog milestone prompt). No package code, protocol, grading or evidence change; the engine hash is unchanged. No real-model run.
+
 ## 0.9.0 — focused evaluation packs
 
 Six independently versioned packs add focused regression and holdout coverage: `structured-output-robustness@1.0.0` (six constrained JSON/schema cases), `tool-use@1.0.0` (six selection/argument cases), `bilingual-it-en@1.0.0` (four Italian/English cases), `multi-step-agent@1.0.0` (four deterministic scripted-runner cases), `refusal-permission@1.0.0` (four refusal/permission cases) and `long-context@1.0.0` (four varied-depth retrieval cases). The generated catalog contains all 66 cases. Existing pack definitions, grading and evidence remain unchanged. No real-model run.
