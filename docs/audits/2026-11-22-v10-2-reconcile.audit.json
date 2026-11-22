@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "kind": "full",
+  "reviewed": "2026-11-22T22:34:00.000Z",
+  "baseline": "43f914cc375c702fdc027f595f7cf1f0064e1037",
+  "report": "docs/audits/2026-11-22-v10-2-reconcile.md",
+  "areas": {
+    "code": {
+      "result": "checked",
+      "evidence": "npm run build, npm run lint, and npm run format:check pass with zero errors.",
+      "limits": "No new protocol code added in this reconciliation."
+    },
+    "logic": {
+      "result": "checked",
+      "evidence": "All 72 deterministic tests pass after build.",
+      "limits": "Fixture-based test suite."
+    },
+    "tests": {
+      "result": "checked",
+      "evidence": "72/72 tests pass in test/*.test.ts via npm test.",
+      "limits": "Neutral fixtures; no live LLM execution."
+    },
+    "documentation": {
+      "result": "checked",
+      "evidence": "Reconciled docs/backlog/{ordering,steps,feature-plans}.md and docs/agents/pull-requests.md with v10.2.0; backlog reconciled against 43f914c.",
+      "limits": "None."
+    },
+    "harness": {
+      "result": "checked",
+      "evidence": "Updated to project-harness v10.2.0; tools/merge-when-green.mjs and tools/work-items.mjs match template; check:harness, check:rules, check:rule-load, check:tooling pass.",
+      "limits": "None."
+    },
+    "security": {
+      "result": "checked",
+      "evidence": "No secrets or personal data; eslint and CI checks intact.",
+      "limits": "Dependency audit via npm ci / SBOM in CI."
+    },
+    "delivery": {
+      "result": "checked",
+      "evidence": "PRs #78, #79, #80 verified green via ci:status; package version 0.9.1 ready for tarball pack.",
+      "limits": "Downstream NERV update follows merge."
+    },
+    "backlog": {
+      "result": "checked",
+      "evidence": "docs/BACKLOG.md rebuilt via work:build against 43f914c with PRs #78-#80 reconciled.",
+      "limits": "No open backlog items; next milestone awaits owner."
+    }
+  }
+}

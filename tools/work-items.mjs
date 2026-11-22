@@ -482,17 +482,6 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
     closed: 'Completed',
   };
   for (const t of steps) validateEffort(t.effort, t.status);
-  // F-066: the next action of a 💻 record whose line says "Next: from tasks." is the first open step whose
-  // prerequisites are done (closed or verified), else the first open step, else a prompt to close the record.
-  if (NEXT_FROM_TASKS.test(text)) {
-    const done = new Set(tasks.filter((t) => ['closed', 'verified'].includes(t.status)).map((t) => t.id));
-    const open = steps.filter((t) => !done.has(t.id));
-    const next = open.find((t) => t.dependsOn.every((d) => done.has(d))) ?? open[0];
-    text = text.replace(
-      NEXT_FROM_TASKS,
-      `$1Next: ${next ? `${next.id} — ${cell(next.title)} (${states[next.status]})` : 'all steps closed; verify and close the record'}.`,
-    );
-  }
   // F-066: a step's PRs and review live in its task file; they lead the record's PR / evidence cell.
   const evidenced = steps.filter((t) => t.prs?.length || t.review);
   if (evidenced.length) {
@@ -508,13 +497,13 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
   }
   const evidence = steps.some((t) => t.prs?.length);
   // F-071: Procedure and Decision columns when a step asks for owner work, linked to the step's ownerLink page;
-  // a step waiting on an open step of another record names it in its status.
+  // a step waiting on an open step of another record names it in its Depends on cell (F-085).
   const owners = steps.some(
     (t) => t.effort?.ownerKind || (t.status === 'implemented' && (t.effort?.ownerHours ?? 0) > 0),
   );
   const finished = new Set(tasks.filter((t) => ['closed', 'verified'].includes(t.status)).map((t) => t.id));
   // F-072 (8.9.0): an owner step whose prerequisites are not all verified or closed is not the owner's turn yet: ⏳
-  // in its owner column and the steps it waits on in its status; 🤖 marks a step with agent work.
+  // in its owner column and the steps it waits on in its Depends on cell; 🤖 marks a step with agent work.
   const unmet = (t) => (['planned', 'ready'].includes(t.status) ? t.dependsOn.filter((d) => !finished.has(d)) : []);
   // F-074 (8.11.0): one Who cell per step, since a step has one actor (8.10.0): 🤖 agent work, 🧑‍🔧 / 🤔 the owner's
   // procedure or decision linked to its page, ⏳ before the face while the step still waits (agent or owner). A step not yet
@@ -541,16 +530,38 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
       .filter(Boolean)
       .join(' ');
   };
-  // F-074 (8.11.0): every open prerequisite is named and linked to its row.
-  const status = (t) => {
-    const waits = unmet(t);
-    return (
-      states[t.status] +
-      (waits.length
-        ? ` · waits on ${waits.map((d) => `[${d}](${ownerHref('docs/BACKLOG.md')}#${d.toLowerCase()})`).join(', ')}`
-        : '')
+  // F-066: the next action of a 💻 record whose line says "Next: from tasks." is the first open step whose
+  // prerequisites are done (closed or verified), an agent one first, else the first open step, else a prompt to close.
+  // When that step is the owner's turn (its Who cell names only the owner, nothing waiting), the line says 🧑 with the
+  // kind of the step and leads with its linked face, so an owner step never hides behind 💻.
+  if (NEXT_FROM_TASKS.test(text)) {
+    const done = new Set(tasks.filter((t) => ['closed', 'verified'].includes(t.status)).map((t) => t.id));
+    const open = steps.filter((t) => !done.has(t.id));
+    const runnable = open.filter((t) => t.dependsOn.every((d) => done.has(d)));
+    // An agent step that can start comes first, so a record with agent work stays among the agent candidates.
+    const next = runnable.find((t) => who(t).split(' ').includes(AGENT)) ?? runnable[0] ?? open[0];
+    const face = next ? who(next) : '';
+    const owner = face && !face.includes(AGENT) && !face.startsWith(WAITING);
+    const kind = { decision: 'Decision', both: 'Both' }[next?.effort?.ownerKind] ?? 'Procedure';
+    text = text.replace(
+      NEXT_FROM_TASKS,
+      `${owner ? `🧑 **→ Human action required: ${kind}**<br />` : '$1'}Next: ${owner ? face + ' ' : ''}${next ? `${next.id} — ${cell(next.title)} (${states[next.status]})` : 'all steps closed; verify and close the record'}.`,
     );
-  };
+  }
+  // F-085 (10.1.0): every open step shows its open prerequisites (Depends on) and the open steps that wait on it
+  // (Unlocks), in any record, each linked to its row; verified and closed steps are not shown. The columns appear when
+  // some open step of the record has one. Before, a waiting step's Status named its prerequisites (F-074, 8.11.0).
+  const stepRef = (d) => `[${d}](${ownerHref('docs/BACKLOG.md')}#${d.toLowerCase()})`;
+  const pending = (t) => !finished.has(t.id);
+  const dependsCell = (t) => t.dependsOn.filter((d) => !finished.has(d));
+  const unlocksCell = (t) =>
+    tasks
+      .filter((u) => pending(u) && u.dependsOn.includes(t.id))
+      .map((u) => u.id)
+      .sort();
+  const linked = steps.some((t) => pending(t) && (dependsCell(t).length || unlocksCell(t).length));
+  const refs = (ids) => ids.map(stepRef).join(', ') || '—';
+  const status = (t) => states[t.status] + (linked ? ` | ${refs(dependsCell(t))} | ${refs(unlocksCell(t))}` : '');
   // F-074: rows in the order work can happen: steps that can move now (open, every prerequisite verified or closed),
   // then waiting steps, each below every prerequisite it has in this record, then verified and closed steps; ties by ID.
   const done = (t) => ['verified', 'closed'].includes(t.status);
@@ -582,7 +593,7 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
       '\n\n</details>\n\n'
     : '';
   const table =
-    `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}**\n\n| Effort | Step | Estimate | Actual | Remaining | Status |${owners ? ' Who |' : ''}${evidence ? ' PRs |' : ''}\n|---|---|---|---|---|---|${owners ? ':---:|' : ''}${evidence ? '---|' : ''}\n` +
+    `**${id.startsWith('F-') ? 'Feature steps' : 'Steps'}**\n\n| Effort | Step | Estimate | Actual | Remaining | Status |${linked ? ' Depends on | Unlocks |' : ''}${owners ? ' Who |' : ''}${evidence ? ' PRs |' : ''}\n|---|---|---|---|---|---|${linked ? '---|---|' : ''}${owners ? ':---:|' : ''}${evidence ? '---|' : ''}\n` +
     ordered
       .filter((t) => !done(t))
       .map(
@@ -591,6 +602,7 @@ function featurePlan(text, id, tasks, repository, ownerHref = (link) => link) {
       )
       .join('') + // B-043: no row line when every step is done, so the Total row follows the header
     totalRow(steps) +
+    (linked ? ' | |' : '') +
     (owners ? ' |' : '') +
     (evidence ? ' |' : '') +
     '\n\n' +
@@ -1256,15 +1268,16 @@ export function checkWorkItems(root = process.cwd()) {
   }
   // F-071: open owner steps without a page to follow, and authored record-level dependencies that name no step.
   // F-072: only owner steps that are the owner's turn (every prerequisite verified or closed) need their page now; a
-  // waiting step's page is written by the step that makes it runnable.
+  // waiting step's page is written by the step that makes it runnable. An implemented step still owing owner work is
+  // the owner's turn too, and a missing page fails check:work (it was a warning that let unlinked steps through).
   const settled = new Set(catalog.tasks.filter((t) => ['verified', 'closed'].includes(t.status)).map((t) => t.id));
   const ownerStepsWithoutLink = catalog.tasks
     .filter(
       (t) =>
-        ['planned', 'ready'].includes(t.status) &&
         t.effort?.ownerKind &&
         !t.ownerLink &&
-        t.dependsOn.every((d) => settled.has(d)),
+        ((['planned', 'ready'].includes(t.status) && t.dependsOn.every((d) => settled.has(d))) ||
+          (t.status === 'implemented' && (t.effort.ownerHours ?? 0) > 0)),
     )
     .map((t) => t.id);
   // B-045: open steps whose turn it is with ownerHours > 0 and no ownerKind have no page and must be classified or split.
@@ -1297,6 +1310,34 @@ export function checkWorkItems(root = process.cwd()) {
           .map((m) => `${id} → ${m[1]}`)
       : [];
   });
+  // F-085: a blocker named only in prose. A record whose newest Next action entry or Check row names another active
+  // record next to waiting words, while none of its open steps depends on a step of that record, is reported: the
+  // ledger and work:next cannot see it. A warning, not a failure: prose can name a record for other reasons.
+  const WAITING_WORDS = /\b(?:wait(?:s|ed|ing)? (?:on|for)|blocked (?:by|on)|depends on|until|needs?|requires?)\b/i;
+  const stepsOf = new Map();
+  for (const t of catalog.tasks) stepsOf.set(t.parent, [...(stepsOf.get(t.parent) ?? []), t]);
+  const proseBlockers = [...active].sort().flatMap((id) => {
+    const text = readFileSync(join(recordsDir, id + '.md'), 'utf8');
+    const next = /^\*\*Next action \/ closure evidence:\*\* *(.*)$/m.exec(text)?.[1] ?? '';
+    // The newest entry, so history is not read as current: entries start with a date ("YYYY-MM-DD:", "**YYYY-MM-DD:**"
+    // or "YYYY-MM-DD —"); the entry with the latest date counts, wherever it stands. Undated text counts whole.
+    const dated = [...next.matchAll(/(?:^|\s)\**(\d{4}-\d{2}-\d{2})(?::\**| —)/g)];
+    const entries = dated.map((m, i) => ({ date: m[1], text: next.slice(m.index, dated[i + 1]?.index) }));
+    const newest = entries.length ? entries.reduce((a, b) => (b.date > a.date ? b : a)).text : next;
+    const check = /^\| \*\*Check\*\* \| (.*) \|$/m.exec(text)?.[1] ?? '';
+    const open = (stepsOf.get(id) ?? []).filter((t) => !settled.has(t.id));
+    if (!open.length) return [];
+    const named = new Set();
+    for (const sentence of `${newest} ${check}`.split(/(?<=[.;])\s+/))
+      if (WAITING_WORDS.test(sentence) && !/\bno longer\b/i.test(sentence))
+        // A step ID (F-001-T02) names its record.
+        for (const m of sentence.matchAll(/\b([BF]-\d{3})(?:-T\d+)?\b/g))
+          if (m[1] !== id && active.has(m[1])) named.add(m[1]);
+    return [...named]
+      .sort()
+      .filter((other) => !open.some((t) => t.dependsOn.some((d) => d.startsWith(other + '-T'))))
+      .map((other) => `${id} → ${other}`);
+  });
   return {
     enabled: true,
     records: (actual.match(/^### (?:<a id="[fb]-\d+"><\/a>)?(?:\[(?:✨|🐞) )?([BF]-\d{3})(?:\]\(#top\))?$/gm) || [])
@@ -1309,6 +1350,7 @@ export function checkWorkItems(root = process.cwd()) {
     ...(ownerStepsWithoutKind.length ? { ownerStepsWithoutKind } : {}),
     ...(mixedSteps.length ? { mixedSteps } : {}),
     ...(recordLevelDependencies.length ? { recordLevelDependencies } : {}),
+    ...(proseBlockers.length ? { proseBlockers } : {}),
   };
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -1341,10 +1383,12 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
         console.warn(
           `! ${result.withoutDays.length} open step(s) have no remaining estimate (effort.agentHours/ownerHours, or days), so totals count them as unknown: ${result.withoutDays.slice(0, 10).join(', ')}${result.withoutDays.length > 10 ? ` and ${result.withoutDays.length - 10} more` : ''}`,
         );
-      if (result.ownerStepsWithoutLink)
-        console.warn(
-          `! ${result.ownerStepsWithoutLink.length} open owner step(s) have no ownerLink to the procedure or decision page: ${result.ownerStepsWithoutLink.join(', ')}`,
+      if (result.ownerStepsWithoutLink) {
+        console.error(
+          `✗ ${result.ownerStepsWithoutLink.length} owner step(s) whose turn it is have no ownerLink to the procedure or decision page: ${result.ownerStepsWithoutLink.join(', ')}`,
         );
+        process.exitCode = 1;
+      }
       if (result.ownerStepsWithoutKind)
         console.warn(
           `! ${result.ownerStepsWithoutKind.length} open step(s) whose turn it is owe ownerHours without effort.ownerKind (and so have no page); classify with ownerKind or split: ${result.ownerStepsWithoutKind.join(', ')}`,
@@ -1356,6 +1400,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       if (result.recordLevelDependencies)
         console.warn(
           `! ${result.recordLevelDependencies.length} record-level dependencies name no step; where one step is enough, make the waiting step depend on it (dependsOn) and drop the row: ${result.recordLevelDependencies.join(', ')}`,
+        );
+      if (result.proseBlockers)
+        console.warn(
+          `! ${result.proseBlockers.length} record(s) name a blocker in their Next action or Check that no open step depends on; if it is one, add the blocking step to the waiting step's dependsOn: ${result.proseBlockers.join(', ')}`,
         );
       if (result.allStepsClosed)
         console.warn(

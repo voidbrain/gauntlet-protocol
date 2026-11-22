@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-15T22:51:22.230Z",
+  "reviewed": "2026-11-22T22:34:05.708Z",
   "policy": "c0fcc742add3a359ab8c07765e7e0857f990ac6f7db2831c521611452e4c68f6",
   "inputs": {
     "AGENTS.md": "9bf7ccf277998e924068e07316d70125c6306398f60c7625879f7bbda9b75416",
@@ -22,12 +22,12 @@
     "docs/agents/work-usage.md": "40e6b0b17fcc08bedb0ddbf405e232e2bebbca80e36e585334ecb9a2628631a7",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "e2b205ff58444dc414cf247c66a304b8fe77112d56d018c93ab61ed522eec9fa",
+    "tools/work-items.mjs": "c7b3afd5f6146f9d059ffd4a65cc6e744fdf02c32ec080a40f5d1dec881b2c4c",
     "tools/work-usage.mjs": "09569f9b56bd6e403d4c235f980ba5fb03b2aff8fe56a28878cc298fe8a4b2af"
   },
   "measurements": {
     "samples": 1,
-    "latestAt": "2026-11-14T23:11:15.990Z",
+    "latestAt": "2026-11-22T22:34:05.659Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -57,7 +57,7 @@
         "durationMs": {
           "observed": 1,
           "missing": 0,
-          "median": 143
+          "median": 45
         },
         "conflicts": {
           "observed": 0,
@@ -79,58 +79,11 @@
   },
   "outcomes": [
     {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "AGENTS.md",
-      "evidence": "Harness v8.12.0 reconcile: PR workflow, session start, task context and job usage moved to procedures with table rows; Gauntlet project lines kept."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "docs/BACKLOG-RULES.md",
-      "evidence": "Harness v8.12.0 reconcile: index of docs/backlog/ trigger files; Gauntlet had no project lines in BACKLOG-RULES."
-    },
-    {
       "kind": "tool",
-      "disposition": "implemented",
-      "target": "tools/rule-load.mjs",
-      "evidence": "Harness v8.12.0 reconcile: check:rule-load in package.json and CI; Gauntlet within budgets."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "AGENTS.md",
-      "evidence": "Harness 8.14.1 reconciled (from 8.12.0): copied tools and guides updated, quiet-reporter/reconcile-draft/code-map adopted, .npmrc, record size rule; checks green."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "tools/work-usage.mjs",
-      "evidence": "Harness 8.15.0 paused-time accounting copied byte-identically and covered by repository checks. The timed sample covers the final diff-verification boundary only; the reconciliation began before timing, so its full duration is unavailable and not inferred. Six earlier samples remain in git history because their worktree-local friction log is unavailable here; the receipt does not claim a speed-up."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "docs/backlog/estimates.md",
-      "evidence": "Harness 8.15.0 effective-elapsed estimate rule reconciled without removing safeguards."
-    },
-    {
-      "kind": "rule",
+      "summary": "Reconciled project-harness v10.2.0 and refreshed audits/reviews",
       "disposition": "implemented",
       "target": ".harness.json",
-      "evidence": "Reconciled harness 8.17.0 (suggestedPauses, done steps table, Who/Agent cells, empty backlog/roadmap prompt) and prepared 0.9.1."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "tools/check-freshness.mjs",
-      "evidence": "Reconciled with project-harness v8.18.0: periodic review cadences (reviews.token.days=30, reviews.architecture.days=30), token review in rule-review.md, outside-landscape comparison in architecture-review.md"
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "tools/work-items.mjs",
-      "evidence": "Reconciled with project-harness v9.0.0: B-043–B-046, F-083-T03, F-084-T02"
+      "evidence": "npm test (72/72), check:harness, check:rules, check:rule-load, check:audits pass"
     }
   ]
 }

@@ -2,6 +2,10 @@
 
 Dated reconciliation entries, newest by date. The backlog header is generated from the newest `## <date> — <branch> `<sha>`` entry (harness 8.4.0); its first paragraph stays under 300 characters.
 
+## 2026-11-22 — main `43f914c`
+
+PRs [#78](https://github.com/voidbrain/gauntlet-protocol/pull/78)–[#80](https://github.com/voidbrain/gauntlet-protocol/pull/80) merged on green CI. Reconciled `project-harness v10.2.0` (`merge-when-green`, `work-items`, backlog & PR guides), full 8-area audit, token/architecture reviews.
+
 ## 2026-11-15 — main `4a424b8`
 
 [PR #77](https://github.com/voidbrain/gauntlet-protocol/pull/77) (harness 8.15.0) merged on green CI. Harness 8.17.0 reconciled: `check-backlog`, `check-freshness`, `work-items`, `work-usage`, `steps`, `feature-plans`, and `0.9.1` release prep.
