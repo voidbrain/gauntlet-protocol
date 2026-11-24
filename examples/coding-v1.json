@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "coding",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "parse-duration-regression",
+      "layer": "coding",
+      "split": "regression",
+      "capabilities": ["code-generation", "python"],
+      "critical": true,
+      "expensive": false,
+      "runner": "coding-reference",
+      "area": "coding",
+      "requirements": ["coding-sandbox", "python3"]
+    },
+    {
+      "id": "slugify-regression",
+      "layer": "coding",
+      "split": "regression",
+      "capabilities": ["code-generation", "typescript"],
+      "critical": true,
+      "expensive": false,
+      "runner": "coding-reference",
+      "area": "coding",
+      "requirements": ["coding-sandbox", "node-24"]
+    },
+    {
+      "id": "merge-intervals-holdout",
+      "layer": "coding",
+      "split": "holdout",
+      "capabilities": ["code-generation", "python"],
+      "critical": true,
+      "expensive": false,
+      "runner": "coding-reference",
+      "area": "coding",
+      "requirements": ["coding-sandbox", "python3"]
+    },
+    {
+      "id": "dependency-order-holdout",
+      "layer": "coding",
+      "split": "holdout",
+      "capabilities": ["code-generation", "typescript"],
+      "critical": true,
+      "expensive": false,
+      "runner": "coding-reference",
+      "area": "coding",
+      "requirements": ["coding-sandbox", "node-24"]
+    }
+  ]
+}

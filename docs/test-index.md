@@ -71,12 +71,16 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [long-context@1.0.0 / fact-near-middle-regression](../examples/long-context-v1.json) | documents-data | context-retrieval, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime, context-32768 | Unmeasured |
 | [long-context@1.0.0 / fact-after-quarter-holdout](../examples/long-context-v1.json) | documents-data | context-retrieval, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime, context-32768 | Unmeasured |
 | [long-context@1.0.0 / fact-near-end-holdout](../examples/long-context-v1.json) | documents-data | context-retrieval, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime, context-32768 | Unmeasured |
+| [coding@1.0.0 / parse-duration-regression](../examples/coding-v1.json) | coding | code-generation, python | coding / regression | true / false | registered:coding-reference / coding-sandbox, python3 | Unmeasured |
+| [coding@1.0.0 / slugify-regression](../examples/coding-v1.json) | coding | code-generation, typescript | coding / regression | true / false | registered:coding-reference / coding-sandbox, node-24 | Unmeasured |
+| [coding@1.0.0 / merge-intervals-holdout](../examples/coding-v1.json) | coding | code-generation, python | coding / holdout | true / false | registered:coding-reference / coding-sandbox, python3 | Unmeasured |
+| [coding@1.0.0 / dependency-order-holdout](../examples/coding-v1.json) | coding | code-generation, typescript | coding / holdout | true / false | registered:coding-reference / coding-sandbox, node-24 | Unmeasured |
 
 ## Area coverage
 
 - unclassified: 0 mapped cases
 - general-assistant: 42 mapped cases
-- coding: 0 mapped cases
+- coding: 4 mapped cases
 - code-review: 0 mapped cases
 - math: 0 mapped cases
 - logic-planning: 0 mapped cases
