@@ -75,6 +75,14 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [coding@1.0.0 / slugify-regression](../examples/coding-v1.json) | coding | code-generation, typescript | coding / regression | true / false | registered:coding-reference / coding-sandbox, node-24 | Unmeasured |
 | [coding@1.0.0 / merge-intervals-holdout](../examples/coding-v1.json) | coding | code-generation, python | coding / holdout | true / false | registered:coding-reference / coding-sandbox, python3 | Unmeasured |
 | [coding@1.0.0 / dependency-order-holdout](../examples/coding-v1.json) | coding | code-generation, typescript | coding / holdout | true / false | registered:coding-reference / coding-sandbox, node-24 | Unmeasured |
+| [logic-math@1.0.0 / jars-total-regression](../examples/logic-math-v1.json) | math | arithmetic, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [logic-math@1.0.0 / price-change-regression](../examples/logic-math-v1.json) | math | arithmetic, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [logic-math@1.0.0 / multiples-sum-holdout](../examples/logic-math-v1.json) | math | arithmetic, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [logic-math@1.0.0 / fraction-sum-holdout](../examples/logic-math-v1.json) | math | arithmetic, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [logic-math@1.0.0 / race-order-regression](../examples/logic-math-v1.json) | logic-planning | logic-reasoning, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [logic-math@1.0.0 / task-schedule-regression](../examples/logic-math-v1.json) | logic-planning | planning, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [logic-math@1.0.0 / digit-swap-holdout](../examples/logic-math-v1.json) | logic-planning | logic-reasoning, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [logic-math@1.0.0 / key-box-holdout](../examples/logic-math-v1.json) | logic-planning | logic-reasoning, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 
 ## Area coverage
 
@@ -82,8 +90,8 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 - general-assistant: 42 mapped cases
 - coding: 4 mapped cases
 - code-review: 0 mapped cases
-- math: 0 mapped cases
-- logic-planning: 0 mapped cases
+- math: 4 mapped cases
+- logic-planning: 4 mapped cases
 - cad-3d: 0 mapped cases
 - backlog-management: 0 mapped cases
 - estimation: 0 mapped cases

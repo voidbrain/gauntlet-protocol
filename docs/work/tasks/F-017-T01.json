@@ -2,13 +2,13 @@
   "version": 1,
   "id": "F-017-T01",
   "parent": "F-017",
-  "status": "planned",
+  "status": "implemented",
   "title": "Logic and math pack with exact answers",
   "goal": "Logic and math pack with exact answers",
   "acceptance": [
     "examples/logic-math-v1.json: puzzles, arithmetic and constraint problems with one exact JSON answer each",
     "Areas logic-planning and math, regression and holdout splits in each",
-    "Passing and wrong fixtures prove exact grading; index entry regenerated"
+    "Passing and wrong fixtures prove exact grading; index entry regenerated; public holdouts documented as exposed (owner decision H1, 2026-11-25)"
   ],
   "dependsOn": [],
   "resources": [
@@ -34,10 +34,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
-    "reviewed": "2026-11-24",
-    "agentHours": 1,
+    "estimate": "0.25 h agent",
+    "basis": "Implemented 2026-11-25: eight exact-answer cases, test and index; CI and merge remain. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.25,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   }

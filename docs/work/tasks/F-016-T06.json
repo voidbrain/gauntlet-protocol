@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "id": "F-016-T06",
+  "parent": "F-016",
+  "status": "planned",
+  "title": "Install arduino-cli and the pinned cores on the evaluation machine",
+  "goal": "Install arduino-cli and the pinned cores on the evaluation machine",
+  "acceptance": [
+    "arduino-cli with arduino:avr 1.8.6 and esp32:esp32 3.0.7 installed on the evaluation machine",
+    "A test sketch compiles for arduino:avr:uno and esp32:esp32:esp32"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "docs/**",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "owner-procedure"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "The commands on the linked page give their expected results"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "ownerLink": "docs/guides/arduino-cli.md",
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h owner",
+    "basis": "Added 2026-11-25 at the coordinator's request after the owner chose arduino-cli: F-016-T02 cannot be developed or checked without it. Owner time only.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0,
+    "ownerHours": 0.25,
+    "ownerKind": "procedure"
+  }
+}

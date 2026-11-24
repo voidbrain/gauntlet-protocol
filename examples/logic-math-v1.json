@@ -1,0 +1,236 @@
+{
+  "schemaVersion": 1,
+  "id": "logic-math",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "jars-total-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "arithmetic",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "A full crate holds 24 jars. A shop has 7 full crates and one crate holding 15 jars. How many jars does it have? The answer is an integer. Return only JSON of the form {\"answer\": ...}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": 183
+        }
+      },
+      "area": "math",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    },
+    {
+      "id": "price-change-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "arithmetic",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "A price of 80 is reduced by 15 percent, and the reduced price is then raised by 10 percent. What is the final price? The answer is a number. Return only JSON of the form {\"answer\": ...}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": 74.8
+        }
+      },
+      "area": "math",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    },
+    {
+      "id": "multiples-sum-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "arithmetic",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the sum of all whole numbers from 1 to 40 that are divisible by 3? The answer is an integer. Return only JSON of the form {\"answer\": ...}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": 273
+        }
+      },
+      "area": "math",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    },
+    {
+      "id": "fraction-sum-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "arithmetic",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Add 3/8 and 5/12. Give the result as a fully reduced fraction in a string such as \"2/3\". Return only JSON of the form {\"answer\": ...}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": "19/24"
+        }
+      },
+      "area": "math",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    },
+    {
+      "id": "race-order-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "logic-reasoning",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Ana, Bo, Cy and Di ran a race with no ties. Bo finished before Cy. Di finished immediately after Ana. Cy was not last. Ana was not first. Give the finishing order from first to last as an array of names. Return only JSON of the form {\"answer\": ...}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": [
+            "Bo",
+            "Cy",
+            "Ana",
+            "Di"
+          ]
+        }
+      },
+      "area": "logic-planning",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    },
+    {
+      "id": "task-schedule-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "planning",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Four tasks: A takes 3 hours; B takes 2 hours and starts after A ends; C takes 4 hours; D takes 1 hour and starts after both B and C end. Any number of tasks can run at once. What is the shortest total time in hours to finish all four? The answer is an integer. Return only JSON of the form {\"answer\": ...}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": 6
+        }
+      },
+      "area": "logic-planning",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    },
+    {
+      "id": "digit-swap-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "logic-reasoning",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "A two-digit number has digits that add up to 11. Swapping its two digits gives a number that is 27 larger. What is the number? The answer is an integer. Return only JSON of the form {\"answer\": ...}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": 47
+        }
+      },
+      "area": "logic-planning",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    },
+    {
+      "id": "key-box-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "logic-reasoning",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "A key is in exactly one of three boxes: red, blue or green. Exactly one of these statements is true: (1) The key is in the red box. (2) The key is not in the blue box. (3) The key is not in the red box. Which box holds the key? The answer is the colour as a lower-case string. Return only JSON of the form {\"answer\": ...}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": "blue"
+        }
+      },
+      "area": "logic-planning",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    }
+  ]
+}

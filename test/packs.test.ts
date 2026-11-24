@@ -415,3 +415,38 @@ test('coding grader refuses symlinked, oversized and wrong-length results', asyn
     assert.deepEqual([graded.status, graded.reason], ['failed', reason], name);
   }
 });
+
+test('logic-math pack has exact answers for math and logic in both splits', async () => {
+  const pack = load('examples/logic-math-v1.json');
+  for (const area of ['math', 'logic-planning'])
+    assert.deepEqual(
+      new Set(pack.cases.filter((entry) => entry.area === area).map((entry) => entry.split)),
+      new Set(['regression', 'holdout']),
+      area,
+    );
+  assert.equal(
+    pack.cases.every((entry) => entry.layer === 'model' && entry.expected?.kind === 'json'),
+    true,
+  );
+  const passing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    fetch: provider(expected(pack)),
+  });
+  assert.equal(passing.passed, true);
+  const wrong = expected(pack).map((value) => {
+    const answer = (value as { answer: unknown }).answer;
+    return {
+      answer: typeof answer === 'number' ? answer + 1 : Array.isArray(answer) ? [...answer].reverse() : 'other',
+    };
+  });
+  const failing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    fetch: provider(wrong),
+  });
+  assert.equal(
+    failing.results.every((result) => result.status === 'failed'),
+    true,
+  );
+});

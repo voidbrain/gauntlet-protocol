@@ -4,7 +4,7 @@ Current work ledger, reviewed 25 November 2026 against main `c38f4a7`. [PR #87](
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 28 h agent + 2.75 h owner across 26 open steps of 8 features. Generated from the task files.
+**Remaining effort:** 27.25 h agent + 3 h owner across 27 open steps of 8 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -17,9 +17,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 1 h agent + 0.25 h owner | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h agent + 0.25 h owner | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-017-T01 — Logic and math pack with exact answers (Planned).
+💻 **→** Next: F-017-T01 — Logic and math pack with exact answers (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -31,9 +31,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-017-t01"></a>F-017-T01 — Logic and math pack with exact answers | 1 h | 0 h | 1 h | Planned | — | [F-017-T02](#f-017-t02) | 🤖 |
+| 🟢 Small | <a id="f-017-t01"></a>F-017-T01 — Logic and math pack with exact answers | 1 h | 0 h | 0.25 h | Implemented; verification pending | — | [F-017-T02](#f-017-t02) | 🤖 |
 | 🟢 Small | <a id="f-017-t02"></a>F-017-T02 — Release logic-math-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-017-T01](#f-017-t01) | — | ⏳ 🧑‍🔧 |
-| 🟢 Small | **Total** | 1 h (1 of 2 steps) | 0 h (0 of 2 steps recorded) | 1 h agent + 0.25 h owner | 0 of 2 completed | | | |
+| 🟢 Small | **Total** | 1 h (1 of 2 steps) | 0 h (0 of 2 steps recorded) | 0.25 h agent + 0.25 h owner | 0 of 2 completed | | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -42,7 +42,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85) |
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#89](https://github.com/voidbrain/gauntlet-protocol/pull/89) |
 | Opened | 2026-11-24 |
 | Verification | Pending. |
 | Reviewed | 2026-11-24 |
@@ -226,9 +226,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 5.5 h agent + 0.25 h owner | [F-015-T03](#f-015-t03) | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 5.5 h agent + 0.5 h owner | [F-015-T03](#f-015-t03) | — | 🤖 | 🧑‍🔧 | — |
 
-💻 **→** Next: F-016-T02 — Arduino and ESP32 sketch tasks graded by compile (Planned).
+💻 **→** Next: F-016-T03 — Raspberry Pi Python tasks graded by static checks (Planned).
 
 | | |
 |---|---|
@@ -240,11 +240,12 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟡 Medium | <a id="f-016-t02"></a>F-016-T02 — Arduino and ESP32 sketch tasks graded by compile | 2.5 h | 0 h | 2.5 h | Planned | — | [F-016-T04](#f-016-t04) | 🤖 |
 | 🟡 Medium | <a id="f-016-t03"></a>F-016-T03 — Raspberry Pi Python tasks graded by static checks | 1.5 h | 0 h | 1.5 h | Planned | — | [F-016-T04](#f-016-t04) | 🤖 |
+| 🟢 Small | <a id="f-016-t06"></a>F-016-T06 — Install arduino-cli and the pinned cores on the evaluation machine | — | 0 h | 0 h agent + 0.25 h owner | Planned | — | [F-016-T02](#f-016-t02) | [🧑‍🔧](guides/arduino-cli.md) |
+| 🟡 Medium | <a id="f-016-t02"></a>F-016-T02 — Arduino and ESP32 sketch tasks graded by compile | 2.5 h | 0 h | 2.5 h | Planned | [F-016-T06](#f-016-t06) | [F-016-T04](#f-016-t04) | ⏳ 🤖 |
 | 🟡 Medium | <a id="f-016-t04"></a>F-016-T04 — Embedded runner, pack and index entry | 1.5 h | 0 h | 1.5 h | Planned | [F-016-T02](#f-016-t02), [F-016-T03](#f-016-t03), [F-015-T03](#f-015-t03) | [F-016-T05](#f-016-t05) | ⏳ 🤖 |
 | 🟢 Small | <a id="f-016-t05"></a>F-016-T05 — Release embedded-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-016-T04](#f-016-t04) | — | ⏳ 🧑‍🔧 |
-| 🔴 Large | **Total** | 5.5 h (3 of 5 steps) | 0 h (0 of 5 steps recorded) | 5.5 h agent + 0.25 h owner | 1 of 5 completed | | | |
+| 🔴 Large | **Total** | 5.5 h (3 of 6 steps) | 0 h (0 of 6 steps recorded) | 5.5 h agent + 0.5 h owner | 1 of 6 completed | | | |
 
 <details><summary>Done steps (1)</summary>
 
@@ -261,7 +262,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87) |
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87); [#89](https://github.com/voidbrain/gauntlet-protocol/pull/89) |
 | Opened | 2026-11-24 |
 | Verification | Pending. |
 | Reviewed | 2026-11-24 |

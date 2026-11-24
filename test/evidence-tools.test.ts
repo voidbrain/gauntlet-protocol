@@ -137,20 +137,25 @@ test('generated catalog maps cases and evidence without claiming unmeasured area
     multiStep = validatePack(JSON.parse(readFileSync('examples/multi-step-agent-v1.json', 'utf8'))),
     refusal = validatePack(JSON.parse(readFileSync('examples/refusal-permission-v1.json', 'utf8'))),
     longContext = validatePack(JSON.parse(readFileSync('examples/long-context-v1.json', 'utf8'))),
-    coding = validatePack(JSON.parse(readFileSync('examples/coding-v1.json', 'utf8')));
+    coding = validatePack(JSON.parse(readFileSync('examples/coding-v1.json', 'utf8'))),
+    logicMath = validatePack(JSON.parse(readFileSync('examples/logic-math-v1.json', 'utf8')));
   assert.equal(
     generated,
-    catalogMarkdown(catalog([smoke, expanded, structured, tools, bilingual, multiStep, refusal, longContext, coding]), {
-      'neutral-smoke': '../examples/smoke-v1.json',
-      'general-assistant-expanded': '../examples/general-assistant-expanded-v1.json',
-      'structured-output-robustness': '../examples/structured-output-robustness-v1.json',
-      'tool-use': '../examples/tool-use-v1.json',
-      'bilingual-it-en': '../examples/bilingual-it-en-v1.json',
-      'multi-step-agent': '../examples/multi-step-agent-v1.json',
-      'refusal-permission': '../examples/refusal-permission-v1.json',
-      'long-context': '../examples/long-context-v1.json',
-      coding: '../examples/coding-v1.json',
-    }),
+    catalogMarkdown(
+      catalog([smoke, expanded, structured, tools, bilingual, multiStep, refusal, longContext, coding, logicMath]),
+      {
+        'neutral-smoke': '../examples/smoke-v1.json',
+        'general-assistant-expanded': '../examples/general-assistant-expanded-v1.json',
+        'structured-output-robustness': '../examples/structured-output-robustness-v1.json',
+        'tool-use': '../examples/tool-use-v1.json',
+        'bilingual-it-en': '../examples/bilingual-it-en-v1.json',
+        'multi-step-agent': '../examples/multi-step-agent-v1.json',
+        'refusal-permission': '../examples/refusal-permission-v1.json',
+        'long-context': '../examples/long-context-v1.json',
+        coding: '../examples/coding-v1.json',
+        'logic-math': '../examples/logic-math-v1.json',
+      },
+    ),
   );
 });
 test('exact fresh evidence skips generation; changed runtime, profile, pack, age and explicit fresh do not', async () => {
