@@ -2,6 +2,10 @@
 
 Dated reconciliation entries, newest by date. The backlog header is generated from the newest `## <date> — <branch> `<sha>`` entry (harness 8.4.0); its first paragraph stays under 300 characters.
 
+## 2026-11-25 — main `c38f4a7`
+
+[PR #87](https://github.com/voidbrain/gauntlet-protocol/pull/87) (owner decisions) and [PR #86](https://github.com/voidbrain/gauntlet-protocol/pull/86) (coding-v1 pack, out-of-process grader) merged on green CI; F-015-T01 closed. Holdout decision H1 recorded (F-015-T05 closed).
+
 ## 2026-11-24 — main `d6fd4ba`
 
 [PR #85](https://github.com/voidbrain/gauntlet-protocol/pull/85) (Domain packs plan, F-015 to F-022) merged on green CI. Owner decisions recorded: F-015-T02 containers, F-016-T01 embedded area and arduino-cli; holdout store split to F-015-T05.

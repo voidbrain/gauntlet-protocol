@@ -46,6 +46,8 @@ Raspberry Pi cases need neither: they are byte-compiled and checked statically, 
 
 ## Holdout expectations
 
+**Decided 2026-11-25 by the owner: H1**, "keep holdout expectations public in the repo; the public holdouts are exposed examples, not real holdouts". H2 (an owner-held private store) can be revisited when holdout scores are used to choose models.
+
 **Question.** Where do the coding pack's holdout expectations live? The tasks, expected values and reference solutions are public, so a model trained after their publication may have seen them; today the pack reports its holdout cases as contamination-exposed.
 
 | Option | Effect |
