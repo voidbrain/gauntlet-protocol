@@ -60,6 +60,7 @@
     "work:tasks": "node tools/work-items.mjs tasks",
     "work:next": "node tools/work-items.mjs next",
     "work:close": "node tools/work-items.mjs close",
+    "work:pr": "node tools/work-items.mjs pr",
     "work:launch": "node tools/usage-launch.mjs",
     "check:impact": "node tools/impact-map.mjs && git diff --exit-code -- docs/agents/impact-map.md"
   },

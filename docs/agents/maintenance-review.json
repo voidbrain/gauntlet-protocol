@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-24T00:23:45.113Z",
+  "reviewed": "2026-11-24T07:14:18.936Z",
   "policy": "7369979fefe5ef15aa6d7125e89fc81e163c87bd304f4493269712e8fc74a841",
   "inputs": {
     "AGENTS.md": "1b85ac2b42a996403802598485b0f6bdd7d75beb5d86ebecc4f251aec358700f",
@@ -24,7 +24,7 @@
     "docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "c494fc066c6addc602cb3b4e4761c69ff3f70f7d71074678b5f1a7126abb4dcd",
+    "tools/work-items.mjs": "e33cd1d21a381f7127aaccf9a8ba189c6d0414ba7af4af5bb121c29c4f79aa93",
     "tools/work-usage.mjs": "09569f9b56bd6e403d4c235f980ba5fb03b2aff8fe56a28878cc298fe8a4b2af"
   },
   "measurements": {
@@ -81,22 +81,10 @@
   },
   "outcomes": [
     {
-      "kind": "rule",
+      "kind": "tool",
       "disposition": "implemented",
-      "target": "AGENTS.md",
-      "evidence": "Harness 10.8.0 reconcile: job-usage row names the launch child; evaluation-pack recipe added to Adding things as a project line from the first skill discovery review (F-014); check:rules and check:rule-load pass."
-    },
-    {
-      "kind": "rule",
-      "disposition": "implemented",
-      "target": "docs/agents/skills.md",
-      "evidence": "Harness 10.8.0 (F-093): skills.md, work-usage.md, backlog records/review split into base and child files copied or adapted from the template; check:rule-load now within budgets (was 2,073 tokens over 2,000 for skills.md)."
-    },
-    {
-      "kind": "skill",
-      "disposition": "implemented",
-      "target": "docs/reviews/skills/2026-11-24.md",
-      "evidence": "reviews.skills.days set to 30; first review records every candidate: pack recipe in AGENTS, PR-naming helper proposed to the template owner, no new skill."
+      "target": "tools/work-items.mjs",
+      "evidence": "Harness 10.9.0 reconcile: work:pr (from this project's F-014 skills review proposal) copied byte-identically with its script; also carries 10.8.1 (work:close without a tasks folder). PR guide and review step 7 carry the template sentence."
     }
   ]
 }
