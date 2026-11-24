@@ -1,16 +1,54 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 24 November 2026 against main `ad33d80`. [PR #81](https://github.com/voidbrain/gauntlet-protocol/pull/81) (harness 10.2.0 reconcile, maintenance-only, no record) merged on green CI. Reconciled `project-harness v10.7.0`: lean AGENTS, landing queue, `work:close`, friction in primary checkout, skills guide.
+Current work ledger, reviewed 24 November 2026 against main `49d7d91`. [PR #82](https://github.com/voidbrain/gauntlet-protocol/pull/82) (harness 10.7.0) merged on green CI. Reconciled `project-harness v10.8.0` (procedures split into base and child files); skill discovery review on, first run F-014.
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** no open steps. Generated from the task files.
+**Remaining effort:** 0.25 h across 1 open step of 1 feature. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="f-014"></a>[✨ F-014](#top)
+
+**First skill discovery review**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟡 Implemented | 🔹 P3 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-014-T01 — First skill discovery review (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | The owner turned on the periodic skill discovery review (`reviews.skills.days`: 30) on 2026-11-24; the first run is due. |
+| **Reproduce** | `npm run check:freshness` warns that `docs/reviews/skills/<date>.md` is missing. |
+| **Check** | [docs/reviews/skills/2026-11-24.md](reviews/skills/2026-11-24.md) records the sources read and an outcome for every candidate; each implemented outcome is in the repository; `check:freshness` no longer asks for the review. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-014-t01"></a>F-014-T01 — First skill discovery review | 0.5 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-014.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | — |
+| Opened | 2026-11-24 |
+| Verification | Pending: CI |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---
 
 ## Other changes
 

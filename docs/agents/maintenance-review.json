@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-24T00:01:15.985Z",
-  "policy": "c0fcc742add3a359ab8c07765e7e0857f990ac6f7db2831c521611452e4c68f6",
+  "reviewed": "2026-11-24T00:21:01.763Z",
+  "policy": "7369979fefe5ef15aa6d7125e89fc81e163c87bd304f4493269712e8fc74a841",
   "inputs": {
-    "AGENTS.md": "30c05afecfc6ee4a427fe58f7ddedf131a9f7568e8e3d0bb693370caabce654e",
-    "docs/BACKLOG-RULES.md": "05b87977b544c96562774ce085e9bd1df58424542fd5228be66c554c1579c2d9",
+    "AGENTS.md": "32a85268507f8d21d425e8329e336f4c9df20711477685b5d8e248f0fd82324c",
+    "docs/BACKLOG-RULES.md": "1bf6cc5b1ffdf6c94d99b9c3234cd994eb3a72994fd2c8977e70d185ffa16d4b",
     "docs/agents/architecture-review.md": "5d967314854912b1a5f1446aeab309763b14f9856bceb3c82df5c6c25c166526",
     "docs/agents/areas.md": "171636323e1cd991b33d5b723329d14dd51919a24fd78778b33d8a2a17dde539",
     "docs/agents/audit.md": "e58480c21e8afe9a825df4726fa93b8a7f841557f4267f1fc2c61ac3dac8f642",
@@ -14,20 +14,22 @@
     "docs/agents/mcp.md": "06efbb58a50f9236506ca0afa9a79bb1d42c12ca380a29ed0254bf0a537f860d",
     "docs/agents/parallel-work-plans.md": "d171d89ec5431668ff770e5fcb0098ad518da6289a0d12a56aafdae60930d567",
     "docs/agents/parallel-work.md": "e460a7ef54aa1ce270e9c8d87a8da85680182d2adec3cafbbf7ad0af5b75439c",
-    "docs/agents/procedures.md": "d53486efdf0fdb64f4285941b8701e3bec5722671208e17e502b59bfeafc3b17",
+    "docs/agents/procedures.md": "60d1502790439ed68796d632456cd5bd8ad2634abfaa9d12e4fe88aa65c376e3",
     "docs/agents/prompt-caching.md": "3b8962bd4f2f713d5730e999e65338ebdd90347ee09dffbd9c8da98e2405a21e",
-    "docs/agents/skills.md": "6b00029e8c496f17097c52fdbeb91a237932e1406ac269e0031c46cd04fd3af1",
+    "docs/agents/skills-discovery.md": "ad322a2b93f2dc1b8f27d0b052248d57c050ca852077589ba889447577357057",
+    "docs/agents/skills.md": "7da9fc43bd0886b06580cc15b9a45e47d097c6fa7fca627bf7ed0f0202a409a1",
     "docs/agents/solution-profile.md": "685d55612f55d157bf124e23115f95bd16fe4d4f8834a4e0e152a191e3cd45f8",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
-    "docs/agents/work-usage.md": "d4063b0cb1f484ae7957c34dbf4015ffbe37f71eca5ce5909575e46a4873c5ad",
+    "docs/agents/work-usage-launch.md": "3225858b8b840322d2bb073f30659c376826eea3d1f772df8582fb37eef74465",
+    "docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
     "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
     "tools/work-items.mjs": "c494fc066c6addc602cb3b4e4761c69ff3f70f7d71074678b5f1a7126abb4dcd",
     "tools/work-usage.mjs": "09569f9b56bd6e403d4c235f980ba5fb03b2aff8fe56a28878cc298fe8a4b2af"
   },
   "measurements": {
-    "samples": 7,
-    "latestAt": "2026-11-24T00:01:15.912Z",
+    "samples": 8,
+    "latestAt": "2026-11-24T00:21:01.686Z",
     "operations": {
       "adoption": {
         "samples": 0,
@@ -53,25 +55,25 @@
         }
       },
       "reconciliation": {
-        "samples": 7,
+        "samples": 8,
         "durationMs": {
-          "observed": 7,
+          "observed": 8,
           "missing": 0,
-          "median": 57041
+          "median": 53240
         },
         "conflicts": {
           "observed": 2,
-          "missing": 5,
+          "missing": 6,
           "median": 0
         },
         "unnecessaryPrompts": {
           "observed": 0,
-          "missing": 7,
+          "missing": 8,
           "median": null
         },
         "repeatedContextLoads": {
           "observed": 0,
-          "missing": 7,
+          "missing": 8,
           "median": null
         }
       }
@@ -82,25 +84,19 @@
       "kind": "rule",
       "disposition": "implemented",
       "target": "AGENTS.md",
-      "evidence": "Harness 10.7.0 reconcile (from 10.2.0): AGENTS re-adapted from lean core/AGENTS.md (10.5.0) with landing-queue line (10.4.0); safety block template-identical; Documentation section moved to docs/backlog/documentation.md 'Top-level documents'; all <!-- project --> lines kept; check:rules and check:rule-load pass."
-    },
-    {
-      "kind": "tool",
-      "disposition": "implemented",
-      "target": "tools/work-items.mjs",
-      "evidence": "Copied byte-identically from v10.7.0 (work:close, F-091); work:close script added; check:work, check:backlog and 72 tests pass."
+      "evidence": "Harness 10.8.0 reconcile: job-usage row names the launch child; evaluation-pack recipe added to Adding things as a project line from the first skill discovery review (F-014); check:rules and check:rule-load pass."
     },
     {
       "kind": "rule",
       "disposition": "implemented",
-      "target": "docs/agents/parallel-work.md",
-      "evidence": "Copied from v10.7.0: Landing queue section; claims.md links it."
+      "target": "docs/agents/skills.md",
+      "evidence": "Harness 10.8.0 (F-093): skills.md, work-usage.md, backlog records/review split into base and child files copied or adapted from the template; check:rule-load now within budgets (was 2,073 tokens over 2,000 for skills.md)."
     },
     {
-      "kind": "tool",
+      "kind": "skill",
       "disposition": "implemented",
-      "target": "tools/friction.mjs",
-      "evidence": "Copied from v10.7.0 (unchanged since 10.6.1, B-049): samples land in the primary checkout. Timed sample covers only the verification tail of this reconcile; the earlier steps were not timed and no duration is inferred."
+      "target": "docs/reviews/skills/2026-11-24.md",
+      "evidence": "reviews.skills.days set to 30; first review records every candidate: pack recipe in AGENTS, PR-naming helper proposed to the template owner, no new skill."
     }
   ]
 }

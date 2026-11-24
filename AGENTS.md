@@ -13,6 +13,7 @@ The project is **Gauntlet Protocol**, an independent Node 24 TypeScript evaluati
 ### Adding things
 
 - Protocol changes include contract tests, CLI examples and documentation. Real model calls, downloads and expensive campaigns require an explicit run request. <!-- project -->
+- **An evaluation pack**: a failing acceptance test in `test/packs.test.ts` first; the pack in `examples/<name>-v1.json`; its path in both `index:build` and `check:index` (`package.json`) and in the catalog test in `test/evidence-tools.test.ts`; then `npm run index:build` and `npm run check:index`. <!-- project -->
 
 ### Checks before you finish
 
@@ -65,7 +66,7 @@ Each procedure is binding when its trigger applies: read it before the task; a s
 | change tests or coverage | [coverage guide](docs/agents/coverage-guide.md) |
 | switch tasks or hand off context | [task context](docs/agents/task-context.md) |
 | work in parallel: claimed tasks, branches, model assignments | [parallel work](docs/agents/parallel-work.md) (claims inside) |
-| start, change the phase of or finish a job, when `workUsage.enabled` | [job usage](docs/agents/work-usage.md) (sources, effectiveness inside) |
+| start, change the phase of or finish a job, when `workUsage.enabled` | [job usage](docs/agents/work-usage.md) (sources, launch, effectiveness inside) |
 | reassess architecture or decisions | [architecture review](docs/agents/architecture-review.md) |
 | set up the project or change its stack or workflow (capability assessment) | [MCP guidance](docs/agents/mcp.md), "In short" |
 | add, configure or rely on an MCP connection, or edit MCP selections | [MCP guidance](docs/agents/mcp.md) (commands inside) |

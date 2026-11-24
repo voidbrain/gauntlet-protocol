@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "id": "F-014-T01",
+  "parent": "F-014",
+  "status": "implemented",
+  "title": "First skill discovery review",
+  "goal": "Record the first periodic skill discovery review and act on its outcomes",
+  "acceptance": [
+    "docs/reviews/skills/2026-11-24.md names its sources and an outcome for every candidate",
+    "Implemented outcomes are in the repository; proposals are named to the owner"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "AGENTS.md",
+    ".harness.json",
+    "docs/reviews/**",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Commit subjects and counts only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "npm run check:freshness; npm run check:backlog; CI"
+  ],
+  "escalation": [
+    "A candidate that needs a template change goes to the template owner, never edited here"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "under 1 h remaining",
+    "basis": "Estimated 2026-11-24 at agent speed; review written, CI remains.",
+    "reviewed": "2026-11-24",
+    "agentHours": 0.25,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  }
+}
