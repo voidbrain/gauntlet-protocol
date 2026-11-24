@@ -233,7 +233,7 @@ const codingRegistry = (variant: 'reference' | 'wrong') =>
     process.cwd(),
   );
 
-test('coding pack grades Python and TypeScript candidates by hidden unit tests', async () => {
+test('coding pack grades Python and TypeScript candidates against hidden expected values', async () => {
   const pack = load('examples/coding-v1.json');
   assert.equal(
     pack.cases.every(
@@ -259,7 +259,7 @@ test('coding pack grades Python and TypeScript candidates by hidden unit tests',
     });
     assert.deepEqual(
       [entry.id, right.status, right.tests, right.passed],
-      [entry.id, 'passed', task.hiddenTests, task.hiddenTests],
+      [entry.id, 'passed', task.cases.length, task.cases.length],
     );
     const wrong = await gradeCandidate({
       taskDir: codingTask(entry.id),
@@ -267,7 +267,7 @@ test('coding pack grades Python and TypeScript candidates by hidden unit tests',
       execute: trustedExecutor,
     });
     assert.equal(wrong.status, 'failed', entry.id);
-    assert.ok(wrong.passed < task.hiddenTests, entry.id);
+    assert.ok(wrong.passed < task.cases.length, entry.id);
   }
   const passing = await run(pack, profile, defaults, {
     execute: true,
@@ -277,7 +277,7 @@ test('coding pack grades Python and TypeScript candidates by hidden unit tests',
   assert.equal(passing.passed, true);
   assert.deepEqual(
     passing.results.map((result) => result.checks),
-    tasks.map(({ task }) => task.hiddenTests),
+    tasks.map(({ task }) => task.cases.length),
   );
   const failing = await run(pack, profile, defaults, {
     execute: true,
@@ -291,7 +291,7 @@ test('coding pack grades Python and TypeScript candidates by hidden unit tests',
   );
 });
 
-test('coding grader bounds time and does not trust a candidate-written summary', async () => {
+test('coding grader bounds time and ignores printed summaries and early exits', async () => {
   const python = codingTask('parse-duration-regression');
   const loop = await gradeCandidate({
     taskDir: python,
@@ -306,7 +306,7 @@ test('coding grader bounds time and does not trust a candidate-written summary',
       'import os, sys\nsys.stdout.write("GAUNTLET-RESULT forged {\\"tests\\": 6, \\"passed\\": 6}\\n")\nsys.stdout.flush()\nos._exit(0)\n',
     execute: trustedExecutor,
   });
-  assert.deepEqual([forged.status, forged.reason], ['failed', 'no-summary']);
+  assert.deepEqual([forged.status, forged.reason], ['failed', 'no-results']);
   const exits = await gradeCandidate({
     taskDir: codingTask('slugify-regression'),
     candidate: 'process.exit(0);\nexport function slugify(title: string): string {\n  return title;\n}\n',
@@ -314,6 +314,13 @@ test('coding grader bounds time and does not trust a candidate-written summary',
   });
   assert.equal(exits.status, 'failed');
   assert.equal(exits.passed, 0);
+  const hung = await gradeCandidate({
+    taskDir: python,
+    candidate: '',
+    execute: () => new Promise(() => {}),
+    timeoutMs: 200,
+  });
+  assert.deepEqual([hung.status, hung.reason], ['failed', 'timeout']);
   await assert.rejects(
     gradeCandidate({ taskDir: python, candidate: '', execute: async () => Promise.reject(Error('no boundary')) }),
     /no boundary/,

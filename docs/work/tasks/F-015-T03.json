@@ -8,7 +8,8 @@
   "acceptance": [
     "Registered runner generates the candidate through the configured local model profile and reports tokens, digests and hashes as PROTOCOL.md requires",
     "Candidate code runs only inside the chosen boundary: no network, wall-time, memory and process limits, writable scratch workspace only",
-    "Hidden tests enter the workspace only after the candidate is written; the grader runs outside candidate control",
+    "Grading stays out of process: the sandboxed process receives only the candidate, the driver and the inputs; the grader outside compares results with expectations it alone holds, as the coding-v1 grader does",
+    "Expected values never enter the sandbox; the grader's own files are not readable from it",
     "Contract tests show denied network, denied writes outside the workspace, a timeout and a memory kill; the runner refuses to run when the boundary is unavailable",
     "PROTOCOL.md coding section names what this runner enforces and what stays unverified"
   ],

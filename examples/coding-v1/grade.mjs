@@ -1,99 +1,129 @@
-// Deterministic hidden-test grader for the coding-v1 pack.
-// It never runs code itself: the caller supplies `execute`, which must run the command inside an enforced
-// boundary (no network, time, memory and process limits) whenever the candidate is untrusted. A process group
-// is not such a boundary. The grader decides only from a result line tagged with a fresh nonce and from the
-// number of hidden tests the task declares, so a candidate cannot pass by printing a summary or by exiting early.
-import { randomBytes, createHash } from 'node:crypto';
-import { cpSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+// Deterministic out-of-process grader for the coding-v1 pack.
+// The candidate's process (inside the runner's sandbox) receives only the candidate, a small driver and the case
+// inputs: no expected values, assertions or test framework. The driver writes what the candidate returned for each
+// input; this grader, outside that process, reads the results under a strict schema and size cap and compares them
+// with expectations only it holds. Tampering inside the candidate's process can change only the candidate's own answers.
+// The grader runs nothing itself: `execute` must run the driver inside an enforced boundary whenever the candidate
+// is untrusted. The grader bounds the wait itself and does not rely on the executor to do so.
+import { createHash } from 'node:crypto';
+import { cpSync, lstatSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isDeepStrictEqual } from 'node:util';
 
-const harness = join(dirname(fileURLToPath(import.meta.url)), 'harness');
+const drivers = join(dirname(fileURLToPath(import.meta.url)), 'driver');
 const languages = {
-  python: {
-    entry: 'solution.py',
-    tests: /^test_[a-z0-9_]+\.py$/,
-    runner: 'run_tests.py',
-    argv: ['python3', '-I', '-B', 'run_tests.py'],
-  },
-  typescript: {
-    entry: 'solution.ts',
-    tests: /^[a-z0-9-]+\.test\.ts$/,
-    runner: 'run-tests.mjs',
-    argv: ['node', 'run-tests.mjs'],
-  },
+  python: { entry: 'solution.py', driver: 'driver.py', argv: ['python3', '-I', '-B', 'driver.py'] },
+  typescript: { entry: 'solution.ts', driver: 'driver.mjs', argv: ['node', 'driver.mjs'] },
 };
+const maxResultBytes = 1_000_000;
+
+const plain = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
+const only = (value, keys) => plain(value) && Object.keys(value).every((key) => keys.includes(key));
 
 export function readTask(taskDir) {
   const task = JSON.parse(readFileSync(join(taskDir, 'task.json'), 'utf8'));
   const language = languages[task.language];
   if (
+    !only(task, ['schemaVersion', 'language', 'entry', 'function', 'prompt']) ||
     task.schemaVersion !== 1 ||
     !language ||
     task.entry !== language.entry ||
-    !Number.isInteger(task.hiddenTests) ||
-    task.hiddenTests < 1 ||
+    typeof task.function !== 'string' ||
+    !/^[A-Za-z_][A-Za-z0-9_]*$/.test(task.function) ||
     typeof task.prompt !== 'string' ||
     !task.prompt
   )
     throw Error('Invalid coding task');
-  const hidden = readdirSync(join(taskDir, 'hidden')).sort();
-  if (!hidden.length || hidden.some((name) => !language.tests.test(name))) throw Error('Invalid hidden tests');
-  return { ...task, hidden };
+  const { schemaVersion, cases } = JSON.parse(readFileSync(join(taskDir, 'cases.json'), 'utf8'));
+  if (
+    schemaVersion !== 1 ||
+    !Array.isArray(cases) ||
+    !cases.length ||
+    cases.some(
+      (c) =>
+        !only(c, ['input', 'expect']) ||
+        !Array.isArray(c.input) ||
+        !(
+          (only(c.expect, ['return']) && Object.hasOwn(c.expect, 'return')) ||
+          (only(c.expect, ['raises', 'messageIncludes']) &&
+            typeof c.expect.raises === 'string' &&
+            ['string', 'undefined'].includes(typeof c.expect.messageIncludes))
+        ),
+    )
+  )
+    throw Error('Invalid coding cases');
+  return { ...task, cases };
 }
 
-// Identity of everything the grader holds for a task: prompt, starter and hidden tests.
+// Identity of everything the grader holds for a task: prompt, starter and the input/expected cases.
 export function taskHash(taskDir) {
   const task = readTask(taskDir);
   const starter = 'starter' + task.entry.slice(task.entry.lastIndexOf('.'));
-  const files = [
-    ['task.json', 'task.json'],
-    [starter, starter],
-    ...task.hidden.map((name) => [name, join('hidden', name)]),
-  ];
   const digest = createHash('sha256');
-  for (const [name, path] of files) digest.update(name + '\0' + readFileSync(join(taskDir, path), 'utf8') + '\0');
+  for (const name of ['task.json', starter, 'cases.json'])
+    digest.update(name + '\0' + readFileSync(join(taskDir, name), 'utf8') + '\0');
   return digest.digest('hex');
 }
 
-// The candidate is written to an empty workspace first; hidden tests and the harness are copied in afterwards.
+const answer = (result) =>
+  (only(result, ['ok']) && Object.hasOwn(result, 'ok')) ||
+  (only(result, ['error', 'message']) &&
+    Array.isArray(result.error) &&
+    result.error.length <= 64 &&
+    result.error.every((kind) => typeof kind === 'string') &&
+    typeof result.message === 'string');
+
+const matches = (expect, result) =>
+  Object.hasOwn(expect, 'return')
+    ? Object.hasOwn(result, 'ok') && isDeepStrictEqual(result.ok, expect.return)
+    : Object.hasOwn(result, 'error') &&
+      result.error.includes(expect.raises) &&
+      (expect.messageIncludes === undefined || result.message.includes(expect.messageIncludes));
+
+// The candidate is written to an empty workspace first; the driver and the inputs are copied in afterwards.
 export async function gradeCandidate({ taskDir, candidate, execute, timeoutMs = 10000 }) {
   if (typeof candidate !== 'string' || typeof execute !== 'function')
     throw Error('Candidate source and executor required');
   const task = readTask(taskDir);
   const language = languages[task.language];
+  const tests = task.cases.length;
   const workspace = mkdtempSync(join(realpathSync(tmpdir()), 'gauntlet-coding-'));
+  let timer;
   try {
     writeFileSync(join(workspace, task.entry), candidate);
-    for (const name of task.hidden) cpSync(join(taskDir, 'hidden', name), join(workspace, name));
-    cpSync(join(harness, language.runner), join(workspace, language.runner));
-    const nonce = randomBytes(16).toString('hex');
-    const outcome = await execute({ argv: language.argv, cwd: workspace, env: { GAUNTLET_NONCE: nonce }, timeoutMs });
-    if (outcome.timedOut) return { status: 'failed', reason: 'timeout', tests: task.hiddenTests, passed: 0 };
-    const prefix = 'GAUNTLET-RESULT ' + nonce + ' ';
-    const lines = String(outcome.stdout)
-      .split('\n')
-      .filter((line) => line.startsWith(prefix));
-    let summary;
+    cpSync(join(drivers, language.driver), join(workspace, language.driver));
+    writeFileSync(
+      join(workspace, 'inputs.json'),
+      JSON.stringify({ function: task.function, inputs: task.cases.map((c) => c.input) }),
+    );
+    const deadline = new Promise((resolve) => {
+      timer = setTimeout(() => resolve({ timedOut: true }), timeoutMs);
+    });
+    const outcome = await Promise.race([
+      execute({ argv: language.argv, cwd: workspace, env: {}, timeoutMs }),
+      deadline,
+    ]);
+    if (outcome?.timedOut) return { status: 'failed', reason: 'timeout', tests, passed: 0 };
+    let results;
     try {
-      summary = lines.length === 1 ? JSON.parse(lines[0].slice(prefix.length)) : undefined;
+      const file = join(workspace, 'results.json');
+      const stat = lstatSync(file);
+      if (stat.isFile() && stat.size <= maxResultBytes) results = JSON.parse(readFileSync(file, 'utf8'));
     } catch {}
-    if (!summary || !Number.isInteger(summary.tests) || !Number.isInteger(summary.passed))
-      return { status: 'failed', reason: 'no-summary', tests: task.hiddenTests, passed: 0 };
-    const passed = summary.tests === task.hiddenTests ? Math.min(summary.passed, task.hiddenTests) : 0;
+    if (results === undefined) return { status: 'failed', reason: 'no-results', tests, passed: 0 };
+    if (!Array.isArray(results) || results.length !== tests || !results.every(answer))
+      return { status: 'failed', reason: 'malformed-results', tests, passed: 0 };
+    const passed = task.cases.filter((c, index) => matches(c.expect, results[index])).length;
     return {
-      status: outcome.code === 0 && passed === task.hiddenTests ? 'passed' : 'failed',
-      reason:
-        summary.tests === task.hiddenTests
-          ? passed === task.hiddenTests
-            ? 'all-passed'
-            : 'tests-failed'
-          : 'test-count',
-      tests: task.hiddenTests,
+      status: passed === tests ? 'passed' : 'failed',
+      reason: passed === tests ? 'all-passed' : 'wrong-answers',
+      tests,
       passed,
     };
   } finally {
+    clearTimeout(timer);
     rmSync(workspace, { recursive: true, force: true });
   }
 }

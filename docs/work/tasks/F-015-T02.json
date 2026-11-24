@@ -3,11 +3,12 @@
   "id": "F-015-T02",
   "parent": "F-015",
   "status": "planned",
-  "title": "Choose the reference runner's sandbox boundary",
-  "goal": "Choose the reference runner's sandbox boundary",
+  "title": "Choose the reference runner's sandbox boundary and where holdout expectations live",
+  "goal": "Choose the reference runner's sandbox boundary and where holdout expectations live",
   "acceptance": [
     "The owner picks the isolation boundary for model-written code (container, macOS sandbox profile, Linux namespaces) and accepts its local requirement",
-    "The choice and date are recorded in the record"
+    "The owner picks whether holdout expectations stay public (contamination-exposed) or move to a private store",
+    "The choices and date are recorded in the record"
   ],
   "dependsOn": [],
   "resources": [

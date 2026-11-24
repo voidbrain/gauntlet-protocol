@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "input": [
+        "Hello World"
+      ],
+      "expect": {
+        "return": "hello-world"
+      }
+    },
+    {
+      "input": [
+        "Ready,  set -- go!"
+      ],
+      "expect": {
+        "return": "ready-set-go"
+      }
+    },
+    {
+      "input": [
+        "Caffè già pronto"
+      ],
+      "expect": {
+        "return": "caffe-gia-pronto"
+      }
+    },
+    {
+      "input": [
+        "  --Version 2.0--  "
+      ],
+      "expect": {
+        "return": "version-2-0"
+      }
+    },
+    {
+      "input": [
+        "!!! ???"
+      ],
+      "expect": {
+        "return": ""
+      }
+    }
+  ]
+}

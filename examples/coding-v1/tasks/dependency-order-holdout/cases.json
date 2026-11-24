@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "input": [
+        {}
+      ],
+      "expect": {
+        "return": []
+      }
+    },
+    {
+      "input": [
+        {
+          "build": [
+            "fetch"
+          ],
+          "fetch": []
+        }
+      ],
+      "expect": {
+        "return": [
+          "fetch",
+          "build"
+        ]
+      }
+    },
+    {
+      "input": [
+        {
+          "deploy": [
+            "test",
+            "lint"
+          ],
+          "lint": [],
+          "test": [
+            "compile"
+          ],
+          "compile": []
+        }
+      ],
+      "expect": {
+        "return": [
+          "compile",
+          "lint",
+          "test",
+          "deploy"
+        ]
+      }
+    },
+    {
+      "input": [
+        {
+          "pack": [
+            "icons"
+          ]
+        }
+      ],
+      "expect": {
+        "return": [
+          "icons",
+          "pack"
+        ]
+      }
+    },
+    {
+      "input": [
+        {
+          "a": [
+            "b"
+          ],
+          "b": [
+            "c"
+          ],
+          "c": [
+            "a"
+          ]
+        }
+      ],
+      "expect": {
+        "raises": "Error",
+        "messageIncludes": "cycle"
+      }
+    }
+  ]
+}

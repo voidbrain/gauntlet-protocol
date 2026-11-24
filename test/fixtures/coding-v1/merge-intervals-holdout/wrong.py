@@ -1,5 +1,5 @@
 def merge_intervals(intervals):
-    # Seeded defects: sorts the input in place and does not merge touching intervals.
+    # Seeded defect: does not merge touching intervals.
     intervals.sort()
     merged = []
     for start, end in intervals:

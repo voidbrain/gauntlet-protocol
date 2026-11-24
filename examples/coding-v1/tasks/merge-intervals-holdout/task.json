@@ -2,6 +2,6 @@
   "schemaVersion": 1,
   "language": "python",
   "entry": "solution.py",
-  "hiddenTests": 6,
-  "prompt": "Complete solution.py. Implement merge_intervals(intervals): given a list of (start, end) integer pairs with start <= end, in any order, return a new list of (start, end) tuples sorted by start in which every overlapping or touching pair has been merged (a pair touches when one ends exactly where the next starts). Do not modify the input list. Raise ValueError for a pair whose start is greater than its end. Use only the Python standard library."
+  "function": "merge_intervals",
+  "prompt": "Complete solution.py. Implement merge_intervals(intervals): given a list of [start, end] integer pairs with start <= end, in any order, return a new list of [start, end] pairs (lists or tuples) sorted by start in which every overlapping or touching pair has been merged (a pair touches when one ends exactly where the next starts). Raise ValueError for a pair whose start is greater than its end. Use only the Python standard library."
 }

@@ -15,7 +15,7 @@ The generated [pack catalog](docs/test-index.md) also lists six focused 1.0.0 pa
 - `refusal-permission` — four refusal and permission-boundary cases;
 - `long-context` — four retrieval cases with facts at varied context depths.
 
-The `coding` pack holds four Python and TypeScript tasks graded by hidden unit tests on the coding layer. Running it needs a registered runner that supplies an enforced sandbox ([coding grader](docs/PROTOCOL.md#coding-pack-grader)).
+The `coding` pack holds four Python and TypeScript tasks on the coding layer, graded out of process against expected values the candidate never sees. Running it needs a registered runner that supplies an enforced sandbox; its public holdout cases are contamination-exposed ([coding grader](docs/PROTOCOL.md#coding-pack-grader)).
 
 The [run ledger](docs/LEDGER.md) lets a consumer list the cases of the packs it consumes that it has not run in their current definition, or under the model, runtime, machine scenario or consumer source it now intends (`pending`), without storing evidence.
 Use `run --pending --ledger=results/ledger.json` to execute only those cases while retaining the complete pack identity in the report; ledger-current cases are explicitly reported as `not-run / skipped-current`.

@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "input": [
+        "45s"
+      ],
+      "expect": {
+        "return": 45
+      }
+    },
+    {
+      "input": [
+        "2m"
+      ],
+      "expect": {
+        "return": 120
+      }
+    },
+    {
+      "input": [
+        "3h"
+      ],
+      "expect": {
+        "return": 10800
+      }
+    },
+    {
+      "input": [
+        "1h30m"
+      ],
+      "expect": {
+        "return": 5400
+      }
+    },
+    {
+      "input": [
+        "1h2m3s"
+      ],
+      "expect": {
+        "return": 3723
+      }
+    },
+    {
+      "input": [
+        "2h5s"
+      ],
+      "expect": {
+        "return": 7205
+      }
+    },
+    {
+      "input": [
+        "90m"
+      ],
+      "expect": {
+        "return": 5400
+      }
+    },
+    {
+      "input": [
+        "100s"
+      ],
+      "expect": {
+        "return": 100
+      }
+    },
+    {
+      "input": [
+        ""
+      ],
+      "expect": {
+        "raises": "ValueError"
+      }
+    },
+    {
+      "input": [
+        "h"
+      ],
+      "expect": {
+        "raises": "ValueError"
+      }
+    },
+    {
+      "input": [
+        "10"
+      ],
+      "expect": {
+        "raises": "ValueError"
+      }
+    },
+    {
+      "input": [
+        "5x"
+      ],
+      "expect": {
+        "raises": "ValueError"
+      }
+    },
+    {
+      "input": [
+        "1h 30m"
+      ],
+      "expect": {
+        "raises": "ValueError"
+      }
+    },
+    {
+      "input": [
+        "-5s"
+      ],
+      "expect": {
+        "raises": "ValueError"
+      }
+    },
+    {
+      "input": [
+        "1.5h"
+      ],
+      "expect": {
+        "raises": "ValueError"
+      }
+    },
+    {
+      "input": [
+        "1m1m"
+      ],
+      "expect": {
+        "raises": "ValueError"
+      }
+    },
+    {
+      "input": [
+        "30m1h"
+      ],
+      "expect": {
+        "raises": "ValueError"
+      }
+    },
+    {
+      "input": [
+        "5s2m"
+      ],
+      "expect": {
+        "raises": "ValueError"
+      }
+    }
+  ]
+}

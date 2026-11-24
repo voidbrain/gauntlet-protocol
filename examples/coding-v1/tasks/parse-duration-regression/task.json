@@ -2,6 +2,6 @@
   "schemaVersion": 1,
   "language": "python",
   "entry": "solution.py",
-  "hiddenTests": 6,
+  "function": "parse_duration",
   "prompt": "Complete solution.py. Implement parse_duration(text) returning the total number of seconds for a duration written as one or more groups of a positive integer followed by a unit: h (hours), m (minutes) or s (seconds), in that order, each unit at most once, with no spaces, for example \"1h30m\", \"45s\" or \"2h5s\". Raise ValueError for an empty string, an unknown unit, a repeated or out-of-order unit, a missing number or any other text. Use only the Python standard library."
 }

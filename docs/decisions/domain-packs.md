@@ -6,7 +6,9 @@ Design choices the [roadmap](../ROADMAP.md) "Domain packs" milestone needs from 
 
 **Question.** Which isolation boundary runs model-written code for the coding reference runner?
 
-Coding cases run code a model wrote, then hidden unit tests against it. PROTOCOL.md requires the runner to supply an enforced boundary; a POSIX process group bounds time and output but is not a sandbox. The boundary must give: no network; writes only to a scratch workspace; wall-time, memory and process-count limits; hidden tests unreadable while the candidate is produced; the grader outside the candidate's control. The runner refuses to run when the boundary is unavailable; it never falls back to running code unsandboxed.
+Coding cases run code a model wrote and compare what it returns with expected values. PROTOCOL.md requires the runner to supply an enforced boundary; a POSIX process group bounds time and output but is not a sandbox. The boundary must give: no network; writes only to a scratch workspace; wall-time, memory and process-count limits; hidden tests unreadable while the candidate is produced; the grader outside the candidate's control. The runner refuses to run when the boundary is unavailable; it never falls back to running code unsandboxed.
+
+The boundary protects the host; it does not make grading trustworthy on its own. A candidate that shares a process with the tests can patch the test framework or the assertions, whatever the sandbox. So grading stays out of process with every option below: the sandboxed process gets only the candidate, a driver and the inputs, and the grader outside it compares the returned values with expectations it alone holds. Both are required.
 
 | Option | What it is | Gives | Costs |
 |---|---|---|---|
@@ -16,6 +18,15 @@ Coding cases run code a model wrote, then hidden unit tests against it. PROTOCOL
 | **D. Interpreter flags only** | Node's permission model, `python3 -I` | Nothing to install | Rejected: neither is a security boundary against hostile code |
 
 **To answer:** reply `Coding sandbox: A` (or B, C), and say which engine the evaluation host will run for A.
+
+**Second question: where do holdout expectations live?** The coding tasks, expected values and reference solutions are public, so a model trained after their publication may have seen them; today the pack says its holdout cases are contamination-exposed.
+
+| Option | Effect |
+|---|---|
+| **H1. Keep them public** | Simple and reproducible by anyone; the holdout split stays an exposed example and qualification counts it as such |
+| **H2. Private holdout store** | Holdout `cases.json` files live outside the public repository (an owner-held directory the runner reads by path); the pack keeps public inputs and a hash of the private expectations so reports stay identifiable. Real holdouts, but only the owner can run or audit them |
+
+No recommendation yet: H2 needs a place and a backup for the private files. **To answer:** reply `Holdout expectations: H1` or `H2`.
 
 ## Embedded area
 
