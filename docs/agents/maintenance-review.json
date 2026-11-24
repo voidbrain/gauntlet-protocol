@@ -100,7 +100,7 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "tools/friction.mjs",
-      "evidence": "Copied from v10.6.1 (B-049): samples land in the primary checkout. Timed sample covers only the verification tail of this reconcile; the earlier steps were not timed and no duration is inferred."
+      "evidence": "Copied from v10.7.0 (unchanged since 10.6.1, B-049): samples land in the primary checkout. Timed sample covers only the verification tail of this reconcile; the earlier steps were not timed and no duration is inferred."
     }
   ]
 }
