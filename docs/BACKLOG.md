@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 24 November 2026 against main `aadb60e`. [PR #84](https://github.com/voidbrain/gauntlet-protocol/pull/84) (harness 10.9.0 reconcile, closes F-014) merged on green CI. Domain packs milestone planned at the owner's request: F-015 to F-022.
+Current work ledger, reviewed 24 November 2026 against main `d6fd4ba`. [PR #85](https://github.com/voidbrain/gauntlet-protocol/pull/85) (Domain packs plan, F-015 to F-022) merged on green CI. Owner decisions recorded: F-015-T02 containers, F-016-T01 embedded area and arduino-cli; holdout store split to F-015-T05.
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
@@ -17,7 +17,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 5 h agent + 0.5 h owner | — | [F-016-T02](#f-016-t02), [F-016-T03](#f-016-t03), [F-016-T04](#f-016-t04), [F-019-T02](#f-019-t02), [F-021-T03](#f-021-t03) | 🤖 | — | 🤔 |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 5 h agent + 0.75 h owner | — | [F-016-T02](#f-016-t02), [F-016-T03](#f-016-t03), [F-016-T04](#f-016-t04), [F-019-T02](#f-019-t02), [F-021-T03](#f-021-t03) | 🤖 | 🧑‍🔧 | 🤔 |
 
 💻 **→** Next: F-015-T01 — Coding tasks, hidden tests and deterministic grader (Planned).
 
@@ -32,10 +32,19 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
 | 🟡 Medium | <a id="f-015-t01"></a>F-015-T01 — Coding tasks, hidden tests and deterministic grader | 2 h | 0 h | 2 h | Planned | — | [F-015-T03](#f-015-t03), [F-016-T02](#f-016-t02), [F-016-T03](#f-016-t03) | 🤖 |
-| 🟢 Small | <a id="f-015-t02"></a>F-015-T02 — Choose the reference runner's sandbox boundary | — | 0 h | 0 h agent + 0.25 h owner | Planned | — | [F-015-T03](#f-015-t03) | [🤔](decisions/domain-packs.md#coding-sandbox) |
-| 🟡 Medium | <a id="f-015-t03"></a>F-015-T03 — Sandboxed reference coding runner | 3 h | 0 h | 3 h | Planned | [F-015-T01](#f-015-t01), [F-015-T02](#f-015-t02) | [F-015-T04](#f-015-t04), [F-016-T04](#f-016-t04), [F-019-T02](#f-019-t02), [F-021-T03](#f-021-t03) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-015-t05"></a>F-015-T05 — Decide where holdout expectations live | — | 0 h | 0 h agent + 0.25 h owner | Planned | — | — | [🤔](decisions/domain-packs.md#holdout-expectations) |
+| 🟢 Small | <a id="f-015-t06"></a>F-015-T06 — Run a container engine on the evaluation machine | — | 0 h | 0 h agent + 0.25 h owner | Planned | — | [F-015-T03](#f-015-t03) | [🧑‍🔧](guides/container-engine.md) |
+| 🟡 Medium | <a id="f-015-t03"></a>F-015-T03 — Sandboxed reference coding runner | 3 h | 0 h | 3 h | Planned | [F-015-T01](#f-015-t01), [F-015-T06](#f-015-t06) | [F-015-T04](#f-015-t04), [F-016-T04](#f-016-t04), [F-019-T02](#f-019-t02), [F-021-T03](#f-021-t03) | ⏳ 🤖 |
 | 🟢 Small | <a id="f-015-t04"></a>F-015-T04 — Release coding-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-015-T03](#f-015-t03) | — | ⏳ 🧑‍🔧 |
-| 🔴 Large | **Total** | 5 h (2 of 4 steps) | 0 h (0 of 4 steps recorded) | 5 h agent + 0.5 h owner | 0 of 4 completed | | | |
+| 🔴 Large | **Total** | 5 h (2 of 6 steps) | 0 h (0 of 6 steps recorded) | 5 h agent + 0.75 h owner | 1 of 6 completed | | | |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| — | <a id="f-015-t02"></a>F-015-T02 — Choose the reference runner's sandbox boundary | — | 0 h | Completed |
+
+</details>
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -44,7 +53,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85) |
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87) |
 | Opened | 2026-11-24 |
 | Verification | Pending. |
 | Reviewed | 2026-11-24 |
@@ -217,9 +226,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 5.5 h agent + 0.5 h owner | [F-015-T01](#f-015-t01), [F-015-T03](#f-015-t03) | — | ⏳ | — | 🤔 |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 5.5 h agent + 0.25 h owner | [F-015-T01](#f-015-t01), [F-015-T03](#f-015-t03) | — | ⏳ | — | — |
 
-🧑 **→** Next: [🤔](decisions/domain-packs.md#embedded-area) F-016-T01 — Choose the embedded area and toolchain (Planned).
+💻 **→** Next: F-016-T02 — Arduino and ESP32 sketch tasks graded by compile (Planned).
 
 | | |
 |---|---|
@@ -231,12 +240,19 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-016-t01"></a>F-016-T01 — Choose the embedded area and toolchain | — | 0 h | 0 h agent + 0.25 h owner | Planned | — | [F-016-T02](#f-016-t02), [F-016-T03](#f-016-t03) | [🤔](decisions/domain-packs.md#embedded-area) |
-| 🟡 Medium | <a id="f-016-t02"></a>F-016-T02 — Arduino and ESP32 sketch tasks graded by compile | 2.5 h | 0 h | 2.5 h | Planned | [F-016-T01](#f-016-t01), [F-015-T01](#f-015-t01) | [F-016-T04](#f-016-t04) | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-016-t03"></a>F-016-T03 — Raspberry Pi Python tasks graded by static checks | 1.5 h | 0 h | 1.5 h | Planned | [F-016-T01](#f-016-t01), [F-015-T01](#f-015-t01) | [F-016-T04](#f-016-t04) | ⏳ 🤖 |
+| 🟡 Medium | <a id="f-016-t02"></a>F-016-T02 — Arduino and ESP32 sketch tasks graded by compile | 2.5 h | 0 h | 2.5 h | Planned | [F-015-T01](#f-015-t01) | [F-016-T04](#f-016-t04) | ⏳ 🤖 |
+| 🟡 Medium | <a id="f-016-t03"></a>F-016-T03 — Raspberry Pi Python tasks graded by static checks | 1.5 h | 0 h | 1.5 h | Planned | [F-015-T01](#f-015-t01) | [F-016-T04](#f-016-t04) | ⏳ 🤖 |
 | 🟡 Medium | <a id="f-016-t04"></a>F-016-T04 — Embedded runner, pack and index entry | 1.5 h | 0 h | 1.5 h | Planned | [F-016-T02](#f-016-t02), [F-016-T03](#f-016-t03), [F-015-T03](#f-015-t03) | [F-016-T05](#f-016-t05) | ⏳ 🤖 |
 | 🟢 Small | <a id="f-016-t05"></a>F-016-T05 — Release embedded-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-016-T04](#f-016-t04) | — | ⏳ 🧑‍🔧 |
-| 🔴 Large | **Total** | 5.5 h (3 of 5 steps) | 0 h (0 of 5 steps recorded) | 5.5 h agent + 0.5 h owner | 0 of 5 completed | | | |
+| 🔴 Large | **Total** | 5.5 h (3 of 5 steps) | 0 h (0 of 5 steps recorded) | 5.5 h agent + 0.25 h owner | 1 of 5 completed | | | |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| — | <a id="f-016-t01"></a>F-016-T01 — Choose the embedded area and toolchain | — | 0 h | Completed |
+
+</details>
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -245,7 +261,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85) |
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87) |
 | Opened | 2026-11-24 |
 | Verification | Pending. |
 | Reviewed | 2026-11-24 |

@@ -6,7 +6,7 @@
   "title": "Arduino and ESP32 sketch tasks graded by compile",
   "goal": "Arduino and ESP32 sketch tasks graded by compile",
   "acceptance": [
-    "Sketch tasks compiled with the chosen pinned toolchain (arduino-cli or PlatformIO, ESP32 core) plus static checks; no hardware",
+    "Sketch tasks compiled with arduino-cli and a pinned ESP32 core (owner decision 2026-11-24) plus static checks; no hardware",
     "Compiling and non-compiling fixtures prove the grader deterministically",
     "Regression and holdout splits"
   ],
