@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "F-018-T02",
+  "parent": "F-018",
+  "status": "planned",
+  "title": "Italian summary, rewrite and register tasks",
+  "goal": "Italian summary, rewrite and register tasks",
+  "acceptance": [
+    "examples/italian-quality-v1.json: Italian-only tasks, area language-translation, capability italian-quality",
+    "References and rubrics per case; regression and holdout splits; passing and failing fixtures; index entry"
+  ],
+  "dependsOn": [
+    "F-018-T01"
+  ],
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "examples/**",
+    "docs/**",
+    "package.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Failing pack test first; fixture for each acceptance item; npm test; npm run check:index; CI"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

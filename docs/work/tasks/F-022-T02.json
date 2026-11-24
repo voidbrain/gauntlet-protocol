@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "id": "F-022-T02",
+  "parent": "F-022",
+  "status": "planned",
+  "title": "Decide packs or skips for the remaining areas",
+  "goal": "Decide packs or skips for the remaining areas",
+  "acceptance": [
+    "The owner chooses pack or skip per area; the choice and date are recorded"
+  ],
+  "dependsOn": [
+    "F-022-T01"
+  ],
+  "resources": [
+    "docs/**",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "owner-decision"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Owner answer recorded in the record"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h owner",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request); owner time only.",
+    "reviewed": "2026-11-24",
+    "agentHours": 0,
+    "ownerHours": 0.25,
+    "ownerKind": "decision"
+  }
+}

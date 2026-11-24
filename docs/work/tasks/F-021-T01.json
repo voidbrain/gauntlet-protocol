@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "id": "F-021-T01",
+  "parent": "F-021",
+  "status": "planned",
+  "title": "Draft the image-generation design decision",
+  "goal": "Draft the image-generation design decision",
+  "acceptance": [
+    "A decision page sets out the local generator runtime, the grader (VLM judge, similarity, structural checks), determinism and host cost, with a recommendation",
+    "It is the ownerLink of the decision step"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "examples/**",
+    "docs/**",
+    "package.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Page reviewed by the owner"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h agent",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

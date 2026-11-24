@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "F-018-T01",
+  "parent": "F-018",
+  "status": "planned",
+  "title": "Deterministic rubric grader",
+  "goal": "Deterministic rubric grader",
+  "acceptance": [
+    "A new expected kind checks free text against a rubric: required and forbidden terms, Italian-language share, length bounds, register markers",
+    "Same input always gives the same verdict; contract tests and PROTOCOL.md describe it"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "examples/**",
+    "docs/**",
+    "package.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Failing pack test first; fixture for each acceptance item; npm test; npm run check:index; CI"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2 h agent",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 2,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}
