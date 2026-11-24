@@ -7,7 +7,7 @@
   "goal": "Embedded runner, pack and index entry",
   "acceptance": [
     "examples/embedded-v1.json runs on the coding runner bridge with the compile and static graders",
-    "Index entry under the chosen area; test-index regenerated"
+    "New core area embedded in src/catalog.ts (owner decision 2026-11-24; minor protocol change) with a contract test; index entry under it; test-index regenerated"
   ],
   "dependsOn": [
     "F-016-T02",

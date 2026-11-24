@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-016-T01",
   "parent": "F-016",
-  "status": "planned",
+  "status": "closed",
   "title": "Choose the embedded area and toolchain",
   "goal": "Choose the embedded area and toolchain",
   "acceptance": [
@@ -28,11 +28,11 @@
   "ownerLink": "docs/decisions/domain-packs.md#embedded-area",
   "effort": {
     "size": "small",
-    "estimate": "0.25 h owner",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request); owner time only.",
+    "estimate": "0 remaining",
+    "basis": "Decided by the owner 2026-11-24: new core area embedded; arduino-cli with a pinned ESP32 core. No actual: owner time not measured.",
     "reviewed": "2026-11-24",
     "agentHours": 0,
-    "ownerHours": 0.25,
+    "ownerHours": 0,
     "ownerKind": "decision"
   }
 }
