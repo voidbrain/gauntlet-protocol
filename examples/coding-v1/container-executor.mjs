@@ -95,6 +95,8 @@ export function containerExecutor({ docker = 'docker', limits = defaultLimits } 
     const name = 'gauntlet-coding-' + randomBytes(8).toString('hex');
     const user = typeof process.getuid === 'function' ? process.getuid() + ':' + process.getgid() : '65534:65534';
     const seconds = Math.max(1, Math.ceil(timeoutMs / 1000));
+    // Kernel-enforced CPU time: a candidate can neither kill nor raise it.
+    const cpuSeconds = Math.min(seconds, limits.cpuSeconds ?? seconds);
     const args = [
       'run',
       '--rm',
@@ -120,6 +122,8 @@ export function containerExecutor({ docker = 'docker', limits = defaultLimits } 
       String(limits.pids),
       '--cpus',
       limits.cpus,
+      '--ulimit',
+      'cpu=' + cpuSeconds + ':' + cpuSeconds,
       '--cap-drop',
       'ALL',
       '--security-opt',
