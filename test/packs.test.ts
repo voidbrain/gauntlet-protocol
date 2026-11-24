@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { defaults, run, validatePack, validateRegistry, type Pack, type Profile } from '../src/index.ts';
 import { gradeCandidate, readTask } from '../examples/coding-v1/grade.mjs';
@@ -318,4 +318,37 @@ test('coding grader bounds time and does not trust a candidate-written summary',
     gradeCandidate({ taskDir: python, candidate: '', execute: async () => Promise.reject(Error('no boundary')) }),
     /no boundary/,
   );
+});
+
+test('coding grader is not fooled by a candidate that tampers with grading', async () => {
+  const attack = (name: string) => readFileSync(join('test/fixtures/coding-v1/attacks', name), 'utf8');
+  for (const [id, file] of [
+    ['parse-duration-regression', 'framework-patch.py'],
+    ['parse-duration-regression', 'summary-forgery.py'],
+    ['slugify-regression', 'assert-overwrite.ts'],
+  ]) {
+    const graded = await gradeCandidate({ taskDir: codingTask(id), candidate: attack(file), execute: trustedExecutor });
+    assert.equal(graded.status, 'failed', file);
+    assert.equal(graded.passed < graded.tests, true, file);
+  }
+});
+
+test('coding grader keeps expected values out of the candidate workspace', async () => {
+  for (const id of ['parse-duration-regression', 'slugify-regression']) {
+    const { entry } = readTask(codingTask(id));
+    const seen: string[] = [];
+    await gradeCandidate({
+      taskDir: codingTask(id),
+      candidate: codingCandidate(id, 'reference'),
+      execute: async (request: { cwd: string }) => {
+        for (const name of readdirSync(request.cwd).sort()) {
+          seen.push(name);
+          assert.doesNotMatch(readFileSync(join(request.cwd, name), 'utf8'), /expect|assert/i, name);
+        }
+        return trustedExecutor(request as Parameters<typeof trustedExecutor>[0]);
+      },
+    });
+    const driver = entry.endsWith('.py') ? 'driver.py' : 'driver.mjs';
+    assert.deepEqual(seen, [driver, 'inputs.json', entry].sort(), id);
+  }
 });
