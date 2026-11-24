@@ -4,7 +4,7 @@ Current work ledger, reviewed 25 November 2026 against main `c38f4a7`. [PR #87](
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 27.25 h agent + 3 h owner across 27 open steps of 8 features. Generated from the task files.
+**Remaining effort:** 25.5 h agent + 3 h owner across 27 open steps of 8 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -56,9 +56,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.5 h agent + 0.25 h owner | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.75 h agent + 0.25 h owner | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-018-T01 — Deterministic rubric grader (Planned).
+💻 **→** Next: F-018-T01 — Deterministic rubric grader (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -70,10 +70,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟡 Medium | <a id="f-018-t01"></a>F-018-T01 — Deterministic rubric grader | 2 h | 0 h | 2 h | Planned | — | [F-018-T02](#f-018-t02) | 🤖 |
+| 🟢 Small | <a id="f-018-t01"></a>F-018-T01 — Deterministic rubric grader | 2 h | 0 h | 0.25 h | Implemented; verification pending | — | [F-018-T02](#f-018-t02) | 🤖 |
 | 🟡 Medium | <a id="f-018-t02"></a>F-018-T02 — Italian summary, rewrite and register tasks | 1.5 h | 0 h | 1.5 h | Planned | [F-018-T01](#f-018-t01) | [F-018-T03](#f-018-t03) | ⏳ 🤖 |
 | 🟢 Small | <a id="f-018-t03"></a>F-018-T03 — Release italian-quality-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-018-T02](#f-018-t02) | — | ⏳ 🧑‍🔧 |
-| 🟡 Medium | **Total** | 3.5 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 3.5 h agent + 0.25 h owner | 0 of 3 completed | | | |
+| 🟡 Medium | **Total** | 3.5 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 1.75 h agent + 0.25 h owner | 0 of 3 completed | | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>

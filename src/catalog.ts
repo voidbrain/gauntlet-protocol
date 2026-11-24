@@ -62,7 +62,11 @@ export function catalog(packs: Pack[], reports: Report[] = []): CatalogEntry[] {
         split: c.split,
         critical: c.critical,
         expensive: c.expensive,
-        grader: c.runner ? 'registered:' + c.runner : 'exact-' + c.expected!.kind + '-v1',
+        grader: c.runner
+          ? 'registered:' + c.runner
+          : c.expected!.kind === 'rubric'
+            ? 'rubric-v1'
+            : 'exact-' + c.expected!.kind + '-v1',
         requirements: c.requirements ?? [],
         evidence: reports
           .filter((r) => r.packHash === packHash)

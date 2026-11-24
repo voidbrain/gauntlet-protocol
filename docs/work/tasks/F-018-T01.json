@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-018-T01",
   "parent": "F-018",
-  "status": "planned",
+  "status": "implemented",
   "title": "Deterministic rubric grader",
   "goal": "Deterministic rubric grader",
   "acceptance": [
@@ -33,10 +33,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "2 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
-    "reviewed": "2026-11-24",
-    "agentHours": 2,
+    "estimate": "0.25 h agent",
+    "basis": "Implemented 2026-11-25: src/rubric.ts, pack validation, run grading, catalog label, contract tests and PROTOCOL.md; CI and merge remain. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.25,
     "baselineAgentHours": 2,
     "estimateAgentHours": 2
   }

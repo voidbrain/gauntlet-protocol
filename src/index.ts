@@ -1,6 +1,7 @@
 import { FailureCapture, failureDestination, inspectFailures } from './failures.ts';
 import { validateExecutionEnvironment, admitEnvironment, type ExecutionEnvironment } from './environments.ts';
 import { engineIdentity } from './engine.ts';
+import { gradeRubric, validateRubric, type Rubric } from './rubric.ts';
 import { areas, type Area } from './catalog.ts';
 import {
   inspectRuntime,
@@ -57,7 +58,7 @@ export interface Case {
   }[];
   responseFormat?: 'json' | Record<string, unknown>;
   expected?: {
-    kind: 'text' | 'json';
+    kind: 'text' | 'json' | 'rubric';
     value: unknown;
   };
 }
@@ -412,11 +413,12 @@ export function validatePack(input: unknown): Pack {
       const e = record(c.expected);
       fields(e, ['kind', 'value']);
       if (
-        !['text', 'json'].includes(String(e.kind)) ||
+        !['text', 'json', 'rubric'].includes(String(e.kind)) ||
         !Object.hasOwn(e, 'value') ||
         (e.kind === 'text' && typeof e.value !== 'string')
       )
         throw Error('Invalid independent expectation');
+      if (e.kind === 'rubric') validateRubric(e.value);
     }
   }
   return v as unknown as Pack;
@@ -1217,8 +1219,14 @@ export async function run(
                 continue;
               }
             }
-            r.status = isDeepStrictEqual(observed, c.expected!.value) ? 'passed' : 'failed';
-            r.reason = r.status === 'passed' ? null : 'Independent acceptance mismatch';
+            if (c.expected!.kind === 'rubric') {
+              const graded = gradeRubric(message.content, c.expected!.value as Rubric);
+              r.status = graded.passed ? 'passed' : 'failed';
+              r.reason = graded.passed ? null : 'Rubric checks failed: ' + graded.failures.join(', ');
+            } else {
+              r.status = isDeepStrictEqual(observed, c.expected!.value) ? 'passed' : 'failed';
+              r.reason = r.status === 'passed' ? null : 'Independent acceptance mismatch';
+            }
             if (r.status === 'failed')
               captures?.add({
                 reportId,
@@ -1685,6 +1693,8 @@ export function validateReport(input: unknown): Report {
   return v as unknown as Report;
 }
 export { catalog, catalogMarkdown, areas } from './catalog.ts';
+export { gradeRubric, validateRubric } from './rubric.ts';
+export type { Rubric } from './rubric.ts';
 export { inspectRuntime, verifyArtifacts, validateManifest } from './runtimes.ts';
 export { serverProcess } from './telemetry.ts';
 export { executeWithEvidence, reuseValid, readEvidence, defaultEvidenceDirectory } from './evidence.ts';
