@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "language": "typescript",
+  "entry": "solution.ts",
+  "hiddenTests": 5,
+  "prompt": "Complete solution.ts. Export function slugify(title: string): string. Remove accents (decompose with Unicode NFKD and drop combining marks), lower-case the text, replace every run of characters other than a-z and 0-9 with one hyphen, and trim hyphens from both ends. Return an empty string when nothing remains. Use only TypeScript that Node 24 runs by stripping types (no enums, no namespaces, no parameter properties) and no imports."
+}

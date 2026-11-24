@@ -1,8 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 import { defaults, run, validatePack, validateRegistry, type Pack, type Profile } from '../src/index.ts';
+import { gradeCandidate, readTask } from '../examples/coding-v1/grade.mjs';
+import { trustedExecutor } from './fixtures/coding-trusted-executor.mjs';
 
 const profile: Profile = {
   schemaVersion: 1,
@@ -200,4 +202,120 @@ test('long-context pack places facts at varied depths inside its declared contex
     fetch: provider(expected(pack)),
   });
   assert.equal(passing.passed, true);
+});
+
+const codingTask = (id: string) => resolve('examples/coding-v1/tasks', id);
+const codingCandidate = (id: string, variant: 'reference' | 'wrong') => {
+  const { entry } = readTask(codingTask(id));
+  return readFileSync(join('test/fixtures/coding-v1', id, variant + entry.slice(entry.lastIndexOf('.'))), 'utf8');
+};
+const codingRegistry = (variant: 'reference' | 'wrong') =>
+  validateRegistry(
+    {
+      schemaVersion: 1,
+      runners: {
+        'coding-reference': {
+          command: process.execPath,
+          args: [
+            resolve('test/fixtures/coding-runner.mjs'),
+            '{report}',
+            '{configuration}',
+            '{budget}',
+            '{case}',
+            variant,
+          ],
+          cwd: process.cwd(),
+          layers: ['coding'],
+          allowModels: true,
+        },
+      },
+    },
+    process.cwd(),
+  );
+
+test('coding pack grades Python and TypeScript candidates by hidden unit tests', async () => {
+  const pack = load('examples/coding-v1.json');
+  assert.equal(
+    pack.cases.every(
+      (entry) =>
+        entry.layer === 'coding' &&
+        entry.runner === 'coding-reference' &&
+        entry.area === 'coding' &&
+        entry.requirements?.includes('coding-sandbox'),
+    ),
+    true,
+  );
+  const tasks = pack.cases.map((entry) => ({ entry, task: readTask(codingTask(entry.id)) }));
+  for (const language of ['python', 'typescript'])
+    assert.deepEqual(
+      new Set(tasks.filter(({ task }) => task.language === language).map(({ entry }) => entry.split)),
+      new Set(['regression', 'holdout']),
+    );
+  for (const { entry, task } of tasks) {
+    const right = await gradeCandidate({
+      taskDir: codingTask(entry.id),
+      candidate: codingCandidate(entry.id, 'reference'),
+      execute: trustedExecutor,
+    });
+    assert.deepEqual(
+      [entry.id, right.status, right.tests, right.passed],
+      [entry.id, 'passed', task.hiddenTests, task.hiddenTests],
+    );
+    const wrong = await gradeCandidate({
+      taskDir: codingTask(entry.id),
+      candidate: codingCandidate(entry.id, 'wrong'),
+      execute: trustedExecutor,
+    });
+    assert.equal(wrong.status, 'failed', entry.id);
+    assert.ok(wrong.passed < task.hiddenTests, entry.id);
+  }
+  const passing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    registry: codingRegistry('reference'),
+  });
+  assert.equal(passing.passed, true);
+  assert.deepEqual(
+    passing.results.map((result) => result.checks),
+    tasks.map(({ task }) => task.hiddenTests),
+  );
+  const failing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    registry: codingRegistry('wrong'),
+  });
+  assert.equal(failing.passed, false);
+  assert.equal(
+    failing.results.every((result) => result.status === 'failed'),
+    true,
+  );
+});
+
+test('coding grader bounds time and does not trust a candidate-written summary', async () => {
+  const python = codingTask('parse-duration-regression');
+  const loop = await gradeCandidate({
+    taskDir: python,
+    candidate: 'while True:\n    pass\n',
+    execute: trustedExecutor,
+    timeoutMs: 2000,
+  });
+  assert.deepEqual([loop.status, loop.reason], ['failed', 'timeout']);
+  const forged = await gradeCandidate({
+    taskDir: python,
+    candidate:
+      'import os, sys\nsys.stdout.write("GAUNTLET-RESULT forged {\\"tests\\": 6, \\"passed\\": 6}\\n")\nsys.stdout.flush()\nos._exit(0)\n',
+    execute: trustedExecutor,
+  });
+  assert.deepEqual([forged.status, forged.reason], ['failed', 'no-summary']);
+  const exits = await gradeCandidate({
+    taskDir: codingTask('slugify-regression'),
+    candidate: 'process.exit(0);\nexport function slugify(title: string): string {\n  return title;\n}\n',
+    execute: trustedExecutor,
+  });
+  assert.equal(exits.status, 'failed');
+  assert.equal(exits.passed, 0);
+  await assert.rejects(
+    gradeCandidate({ taskDir: python, candidate: '', execute: async () => Promise.reject(Error('no boundary')) }),
+    /no boundary/,
+  );
 });
