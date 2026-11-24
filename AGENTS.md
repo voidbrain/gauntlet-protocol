@@ -13,7 +13,7 @@ The project is **Gauntlet Protocol**, an independent Node 24 TypeScript evaluati
 ### Adding things
 
 - Protocol changes include contract tests, CLI examples and documentation. Real model calls, downloads and expensive campaigns require an explicit run request. <!-- project -->
-- **An evaluation pack**: a failing acceptance test in `test/packs.test.ts` first; the pack in `examples/<name>-v1.json`; its path in both `index:build` and `check:index` (`package.json`) and in the catalog test in `test/evidence-tools.test.ts`; then `npm run index:build` and `npm run check:index`. <!-- project -->
+- **An evaluation pack**: a failing acceptance test in `test/packs.test.ts` first; the pack in `examples/<name>-v1.json`; its path in both `index:build` and `check:index` (`package.json`) and in the catalog test in `test/evidence-tools.test.ts`; then `npm run index:build` (commit the regenerated `docs/test-index.md`) and `npm run check:index`. <!-- project -->
 
 ### Checks before you finish
 

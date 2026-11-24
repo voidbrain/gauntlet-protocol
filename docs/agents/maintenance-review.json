@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-24T00:21:01.763Z",
+  "reviewed": "2026-11-24T00:23:45.113Z",
   "policy": "7369979fefe5ef15aa6d7125e89fc81e163c87bd304f4493269712e8fc74a841",
   "inputs": {
-    "AGENTS.md": "32a85268507f8d21d425e8329e336f4c9df20711477685b5d8e248f0fd82324c",
+    "AGENTS.md": "1b85ac2b42a996403802598485b0f6bdd7d75beb5d86ebecc4f251aec358700f",
     "docs/BACKLOG-RULES.md": "1bf6cc5b1ffdf6c94d99b9c3234cd994eb3a72994fd2c8977e70d185ffa16d4b",
     "docs/agents/architecture-review.md": "5d967314854912b1a5f1446aeab309763b14f9856bceb3c82df5c6c25c166526",
     "docs/agents/areas.md": "171636323e1cd991b33d5b723329d14dd51919a24fd78778b33d8a2a17dde539",
