@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync } from 'node:fs';
+import { spawn } from 'node:child_process';
+import { mkdtempSync, readFileSync, readdirSync, realpathSync, symlinkSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { defaults, run, validatePack, validateRegistry, type Pack, type Profile } from '../src/index.ts';
 import { gradeCandidate, readTask } from '../examples/coding-v1/grade.mjs';
@@ -357,5 +359,56 @@ test('coding grader keeps expected values out of the candidate workspace', async
     });
     const driver = entry.endsWith('.py') ? 'driver.py' : 'driver.mjs';
     assert.deepEqual(seen, [driver, 'inputs.json', entry].sort(), id);
+  }
+});
+
+test('coding grader reports a timeout even while a leftover process keeps writing to the workspace', async () => {
+  let child: ReturnType<typeof spawn> | undefined;
+  try {
+    const graded = await gradeCandidate({
+      taskDir: codingTask('parse-duration-regression'),
+      candidate: '',
+      execute: ({ cwd }: { cwd: string }) => {
+        child = spawn(
+          'python3',
+          [
+            '-c',
+            'import os\nfor i in range(200000):\n  os.makedirs("d%d" % i, exist_ok=True)\n  open("d%d/f" % i, "w").write("x")',
+          ],
+          { cwd, stdio: 'ignore' },
+        );
+        return new Promise(() => {});
+      },
+      timeoutMs: 300,
+    });
+    assert.deepEqual([graded.status, graded.reason], ['failed', 'timeout']);
+  } finally {
+    child?.kill('SIGKILL');
+  }
+});
+
+test('coding grader refuses symlinked, oversized and wrong-length results', async () => {
+  const taskDir = codingTask('slugify-regression');
+  const cases = readTask(taskDir).cases.length;
+  const writing =
+    (write: (file: string) => void) =>
+    async ({ cwd }: { cwd: string }) => {
+      write(join(cwd, 'results.json'));
+      return { code: 0, stdout: '', timedOut: false };
+    };
+  const elsewhere = join(mkdtempSync(join(realpathSync(tmpdir()), 'coding-results-')), 'answers.json');
+  writeFileSync(elsewhere, JSON.stringify(Array(cases).fill({ ok: 'x' })));
+  for (const [name, write, reason] of [
+    ['symlink', (file: string) => symlinkSync(elsewhere, file), 'no-results'],
+    ['oversized', (file: string) => writeFileSync(file, '[' + ' '.repeat(1_000_001) + ']'), 'no-results'],
+    ['wrong length', (file: string) => writeFileSync(file, JSON.stringify([{ ok: 'x' }])), 'malformed-results'],
+    [
+      'extra key',
+      (file: string) => writeFileSync(file, JSON.stringify(Array(cases).fill({ ok: 'x', passed: true }))),
+      'malformed-results',
+    ],
+  ] as const) {
+    const graded = await gradeCandidate({ taskDir, candidate: '', execute: writing(write) });
+    assert.deepEqual([graded.status, graded.reason], ['failed', reason], name);
   }
 });
