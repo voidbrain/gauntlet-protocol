@@ -1,21 +1,21 @@
 // Deterministic out-of-process grader for the coding-v1 pack.
 // The candidate's process (inside the runner's sandbox) receives only the candidate, a small driver and the case
-// inputs: no expected values, assertions or test framework. The driver writes what the candidate returned for each
-// input; this grader, outside that process, reads the results under a strict schema and size cap and compares them
+// inputs: no expected values, assertions or test framework. The driver prints what the candidate returned for each
+// input as the last tagged stdout line; this grader, outside that process, reads it under a strict schema and size
+// cap and compares it
 // with expectations only it holds. Tampering inside the candidate's process can change only the candidate's own answers.
 // The grader runs nothing itself: `execute` must run the driver inside an enforced boundary whenever the candidate
-// is untrusted, and must have stopped every candidate process before it resolves. The grader bounds the wait
+// is untrusted, return the command's stdout, and have stopped every candidate process before it resolves; an
+// optional `execute.prepare(argv)` (engine checks, image pulls) is awaited before the case's time starts. The grader bounds the wait
 // itself and does not rely on the executor to do so; it reports a timeout even if cleanup then fails.
 import { createHash } from 'node:crypto';
 import {
-  closeSync,
-  constants,
+  chmodSync,
   cpSync,
-  fstatSync,
+  lstatSync,
   mkdtempSync,
-  openSync,
+  readdirSync,
   readFileSync,
-  readSync,
   realpathSync,
   rmSync,
   writeFileSync,
@@ -31,6 +31,7 @@ const languages = {
   typescript: { entry: 'solution.ts', driver: 'driver.mjs', argv: ['node', 'driver.mjs'] },
 };
 const maxResultBytes = 1_000_000;
+const resultPrefix = 'GAUNTLET-RESULTS ';
 
 const plain = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
 const only = (value, keys) => plain(value) && Object.keys(value).every((key) => keys.includes(key));
@@ -95,27 +96,19 @@ const matches = (expect, result) =>
       result.error.includes(expect.raises) &&
       (expect.messageIncludes === undefined || result.message.includes(expect.messageIncludes));
 
-// Opens without following a symlink or blocking on a FIFO, checks the opened file itself and reads at most the cap,
-// so a process still running in the workspace cannot swap the file between the check and the read.
-function readResults(file) {
-  const fd = openSync(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
-  try {
-    const stat = fstatSync(fd);
-    if (!stat.isFile() || stat.size > maxResultBytes) return undefined;
-    const buffer = Buffer.alloc(maxResultBytes + 1);
-    let length = 0;
-    for (let read; length <= maxResultBytes && (read = readSync(fd, buffer, length, buffer.length - length, null)) > 0;)
-      length += read;
-    return length > maxResultBytes ? undefined : JSON.parse(buffer.subarray(0, length).toString('utf8'));
-  } finally {
-    closeSync(fd);
-  }
-}
-
 // Best effort: a process the executor failed to stop may still be writing. The verdict never depends on cleanup.
 const leftoverWorkspaces = new Set();
+// A candidate can lock folders it created (chmod 0); unlock the tree, never following links, before removing it.
+function unlock(path) {
+  try {
+    if (!lstatSync(path).isDirectory()) return;
+    chmodSync(path, 0o700);
+    for (const name of readdirSync(path)) unlock(join(path, name));
+  } catch {}
+}
 function removeWorkspace(workspace) {
   try {
+    unlock(workspace);
     rmSync(workspace, { recursive: true, force: true, maxRetries: 3 });
     leftoverWorkspaces.delete(workspace);
   } catch {
@@ -146,6 +139,8 @@ export async function gradeCandidate({ taskDir, candidate, execute, timeoutMs = 
       join(workspace, 'inputs.json'),
       JSON.stringify({ function: task.function, inputs: task.cases.map((c) => c.input) }),
     );
+    // Engine checks and image pulls happen before the case's time starts.
+    await execute.prepare?.(language.argv);
     const deadline = new Promise((resolve) => {
       timer = setTimeout(() => resolve({ timedOut: true }), timeoutMs);
     });
@@ -154,9 +149,15 @@ export async function gradeCandidate({ taskDir, candidate, execute, timeoutMs = 
       deadline,
     ]);
     if (outcome?.timedOut) return { status: 'failed', reason: 'timeout', tests, passed: 0 };
+    // The driver prints its results as the last tagged line of stdout; anything the candidate prints is ignored.
+    const line = String(outcome?.stdout ?? '')
+      .split('\n')
+      .filter((text) => text.startsWith(resultPrefix))
+      .at(-1);
     let results;
     try {
-      results = readResults(join(workspace, 'results.json'));
+      if (line !== undefined && line.length - resultPrefix.length <= maxResultBytes)
+        results = JSON.parse(line.slice(resultPrefix.length));
     } catch {}
     if (results === undefined) return { status: 'failed', reason: 'no-results', tests, passed: 0 };
     if (!Array.isArray(results) || results.length !== tests || !results.every(answer))

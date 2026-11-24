@@ -12,7 +12,8 @@
     "The container never mounts the repository or the grader's directory, so expected values (cases.json) and grader files are not reachable by any path from inside it",
     "The runner stops every container process before it resolves (the grader's timeout does not stop them)",
     "Contract tests show denied network, denied writes outside the workspace, a timeout and a memory kill; the runner refuses to run when the boundary is unavailable",
-    "PROTOCOL.md coding section names what this runner enforces and what stays unverified"
+    "PROTOCOL.md coding section names what this runner enforces and what stays unverified",
+    "A SIGKILLed runner's container stops by itself at the case limit; stale labelled containers are swept; the workspace is read-only and the candidate cannot write to the host; image pulls happen before the case timer; the engine keeps no log"
   ],
   "dependsOn": [
     "F-015-T01",
@@ -43,7 +44,7 @@
   "effort": {
     "size": "medium",
     "estimate": "0.5 h agent",
-    "basis": "Implemented 2026-11-25: container executor, reference runner, contract tests; independent review (sandbox boundary), CI and merge remain. Not a measurement.",
+    "basis": "Implemented 2026-11-25; security review of #91 fixed the same day (in-container kill timer, stale sweep, read-only workspace with stdout results, pulls before the timer, no engine log). Re-review, CI and merge remain. Not a measurement.",
     "reviewed": "2026-11-25",
     "agentHours": 0.5,
     "baselineAgentHours": 3,

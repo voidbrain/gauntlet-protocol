@@ -1,7 +1,7 @@
 // Runs inside the candidate's sandbox. It holds no reference answers: it calls the candidate's function on each input
-// from inputs.json and writes what came back (or the error thrown) to results.json. Everything here is
+// from inputs.json and prints what came back (or the error thrown) as the last stdout line. Everything here is
 // candidate-controlled once the candidate is imported; the grader outside compares the results.
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -35,4 +35,4 @@ const results = spec.inputs.map((args) => {
     return failure(error);
   }
 });
-writeFileSync(join(here, 'results.json'), JSON.stringify(results));
+process.stdout.write('\nGAUNTLET-RESULTS ' + JSON.stringify(results) + '\n');

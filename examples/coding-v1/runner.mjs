@@ -30,10 +30,13 @@ const task = readTask(taskDir);
 const starter = readFileSync(join(taskDir, 'starter' + task.entry.slice(task.entry.lastIndexOf('.'))), 'utf8');
 
 const endpoint = new URL(profile.endpoint);
-if (!['127.0.0.1', 'localhost', '[::1]'].includes(endpoint.hostname)) throw Error('Model endpoint must be loopback');
+// Literal loopback addresses only: no name resolution, no proxy (Node's fetch ignores proxy variables), no redirects.
+if (!['127.0.0.1', '[::1]'].includes(endpoint.hostname))
+  throw Error('Model endpoint must be a literal loopback address');
 const call = async (path, body) => {
   const response = await fetch(new URL(path, endpoint), {
     method: body ? 'POST' : 'GET',
+    redirect: 'error',
     headers: body ? { 'content-type': 'application/json' } : undefined,
     body: body ? JSON.stringify(body) : undefined,
     signal: AbortSignal.timeout(Math.max(1000, budget.timeoutMs - (Date.now() - started) - 20000)),
