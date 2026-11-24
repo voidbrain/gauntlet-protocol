@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id": "F-015-T01",
+  "parent": "F-015",
+  "status": "planned",
+  "title": "Coding tasks, hidden tests and deterministic grader",
+  "goal": "Coding tasks, hidden tests and deterministic grader",
+  "acceptance": [
+    "examples/coding-v1.json: coding-layer cases on a registered runner, area coding, regression and holdout splits, Python and TypeScript",
+    "Each task has a prompt, a starter file and hidden unit tests kept apart from what the candidate sees",
+    "A deterministic grader counts hidden tests passed; a case passes only when every hidden test passes",
+    "Trusted reference and seeded-wrong candidates prove the grader in CI; no model and no untrusted code run",
+    "Index entry and test-index regenerated"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "examples/**",
+    "docs/**",
+    "package.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Failing pack test first; fixture for each acceptance item; npm test; npm run check:index; CI"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2 h agent",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 2,
+    "baselineAgentHours": 2,
+    "estimateAgentHours": 2
+  }
+}

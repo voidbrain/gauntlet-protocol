@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "id": "F-015-T03",
+  "parent": "F-015",
+  "status": "planned",
+  "title": "Sandboxed reference coding runner",
+  "goal": "Sandboxed reference coding runner",
+  "acceptance": [
+    "Registered runner generates the candidate through the configured local model profile and reports tokens, digests and hashes as PROTOCOL.md requires",
+    "Candidate code runs only inside the chosen boundary: no network, wall-time, memory and process limits, writable scratch workspace only",
+    "Hidden tests enter the workspace only after the candidate is written; the grader runs outside candidate control",
+    "Contract tests show denied network, denied writes outside the workspace, a timeout and a memory kill; the runner refuses to run when the boundary is unavailable",
+    "PROTOCOL.md coding section names what this runner enforces and what stays unverified"
+  ],
+  "dependsOn": [
+    "F-015-T01",
+    "F-015-T02"
+  ],
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "examples/**",
+    "docs/**",
+    "package.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Failing pack test first; fixture for each acceptance item; npm test; npm run check:index; CI"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "3 h agent",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 3,
+    "baselineAgentHours": 3,
+    "estimateAgentHours": 3
+  }
+}

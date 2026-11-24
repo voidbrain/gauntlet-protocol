@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "id": "F-016-T05",
+  "parent": "F-016",
+  "status": "planned",
+  "title": "Release embedded-v1",
+  "goal": "Release embedded-v1",
+  "acceptance": [
+    "Owner tags the release that ships embedded-v1 after green CI on main",
+    "CHANGELOG names the new cases; consumers adopt through their pin"
+  ],
+  "dependsOn": [
+    "F-016-T04"
+  ],
+  "resources": [
+    "docs/**",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "owner-release"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Tag pushed by the owner; consumers see the new cases as pending"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h owner",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request); owner time only.",
+    "reviewed": "2026-11-24",
+    "agentHours": 0,
+    "ownerHours": 0.25,
+    "ownerKind": "procedure"
+  }
+}

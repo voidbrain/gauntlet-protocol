@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id": "F-021-T03",
+  "parent": "F-021",
+  "status": "planned",
+  "title": "Image-generation runner",
+  "goal": "Image-generation runner",
+  "acceptance": [
+    "Registered runner drives the chosen local generator with fixed seed and size, inside the limits the decision names",
+    "Contract tests with a fixture generator; no real model in CI"
+  ],
+  "dependsOn": [
+    "F-021-T02",
+    "F-015-T03"
+  ],
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "examples/**",
+    "docs/**",
+    "package.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Failing pack test first; fixture for each acceptance item; npm test; npm run check:index; CI"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "3 h agent",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 3,
+    "baselineAgentHours": 3,
+    "estimateAgentHours": 3
+  }
+}

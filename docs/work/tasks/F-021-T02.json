@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "id": "F-021-T02",
+  "parent": "F-021",
+  "status": "planned",
+  "title": "Decide the image-generation design",
+  "goal": "Decide the image-generation design",
+  "acceptance": [
+    "The owner picks runtime and grader; the choice and date are recorded"
+  ],
+  "dependsOn": [
+    "F-021-T01"
+  ],
+  "resources": [
+    "docs/**",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "owner-decision"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Owner answer recorded in the record"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h owner",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request); owner time only.",
+    "reviewed": "2026-11-24",
+    "agentHours": 0,
+    "ownerHours": 0.5,
+    "ownerKind": "decision"
+  }
+}

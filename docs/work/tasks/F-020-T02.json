@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "F-020-T02",
+  "parent": "F-020",
+  "status": "planned",
+  "title": "Seeded-defect diff cases",
+  "goal": "Seeded-defect diff cases",
+  "acceptance": [
+    "examples/code-review-v1.json: invented diffs with seeded defects, area code-review",
+    "Regression and holdout splits; passing, missed-defect and noisy fixtures; index entry"
+  ],
+  "dependsOn": [
+    "F-020-T01"
+  ],
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "examples/**",
+    "docs/**",
+    "package.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Failing pack test first; fixture for each acceptance item; npm test; npm run check:index; CI"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "reviewed": "2026-11-24",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

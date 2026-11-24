@@ -2,6 +2,10 @@
 
 Dated reconciliation entries, newest by date. The backlog header is generated from the newest `## <date> — <branch> `<sha>`` entry (harness 8.4.0); its first paragraph stays under 300 characters.
 
+## 2026-11-24 — main `aadb60e`
+
+[PR #84](https://github.com/voidbrain/gauntlet-protocol/pull/84) (harness 10.9.0 reconcile, closes F-014) merged on green CI. Domain packs milestone planned at the owner's request: F-015 to F-022.
+
 ## 2026-11-24 — main `fcce779`
 
 [PR #83](https://github.com/voidbrain/gauntlet-protocol/pull/83) (harness 10.8.0, first skills review) merged on green CI; F-014 closed. Reconciled `project-harness v10.9.0`: `work:pr` names a PR in its records before it opens.
