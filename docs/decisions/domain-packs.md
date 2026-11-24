@@ -8,7 +8,9 @@ Design choices the [roadmap](../ROADMAP.md) "Domain packs" milestone needs from 
 
 **Question.** Which isolation boundary runs model-written code for the coding reference runner?
 
-Coding cases run code a model wrote, then hidden unit tests against it. PROTOCOL.md requires the runner to supply an enforced boundary; a POSIX process group bounds time and output but is not a sandbox. The boundary must give: no network; writes only to a scratch workspace; wall-time, memory and process-count limits; hidden tests unreadable while the candidate is produced; the grader outside the candidate's control. The runner refuses to run when the boundary is unavailable; it never falls back to running code unsandboxed.
+Coding cases run code a model wrote and compare what it returns with expected values. PROTOCOL.md requires the runner to supply an enforced boundary; a POSIX process group bounds time and output but is not a sandbox. The boundary must give: no network; writes only to a scratch workspace; wall-time, memory and process-count limits; hidden tests unreadable while the candidate is produced; the grader outside the candidate's control. The runner refuses to run when the boundary is unavailable; it never falls back to running code unsandboxed.
+
+The boundary protects the host; it does not make grading trustworthy on its own. A candidate that shares a process with the tests can patch the test framework or the assertions, whatever the sandbox. So grading stays out of process with every option below: the sandboxed process gets only the candidate, a driver and the inputs, and the grader outside it compares the returned values with expectations it alone holds. Both are required.
 
 | Option | What it is | Gives | Costs |
 |---|---|---|---|

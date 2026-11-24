@@ -8,7 +8,9 @@
   "acceptance": [
     "Registered runner generates the candidate through the configured local model profile and reports tokens, digests and hashes as PROTOCOL.md requires",
     "Candidate code runs only inside a throwaway container per case (owner decision 2026-11-24, option A): no network, wall-time, memory and process limits, writable scratch workspace only",
-    "Hidden tests enter the workspace only after the candidate is written; the grader runs outside candidate control",
+    "Grading stays out of process: the container receives only the candidate, the driver and the inputs; the grader outside compares results with expectations it alone holds, as the coding-v1 grader does",
+    "The container never mounts the repository or the grader's directory, so expected values (cases.json) and grader files are not reachable by any path from inside it",
+    "The runner stops every container process before it resolves (the grader's timeout does not stop them)",
     "Contract tests show denied network, denied writes outside the workspace, a timeout and a memory kill; the runner refuses to run when the boundary is unavailable",
     "PROTOCOL.md coding section names what this runner enforces and what stays unverified"
   ],

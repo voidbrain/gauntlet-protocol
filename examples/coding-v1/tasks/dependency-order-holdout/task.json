@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "language": "typescript",
+  "entry": "solution.ts",
+  "function": "dependencyOrder",
+  "prompt": "Complete solution.ts. Export function dependencyOrder(deps: Record<string, string[]>): string[]. Each key is a task and its array lists the tasks it depends on; a dependency that is not a key is still a task with no dependencies. Return every task exactly once so that each task comes after all of its dependencies; whenever several tasks are ready, take the alphabetically smallest first. Throw an Error whose message contains the word cycle when the dependencies form a cycle. Use only TypeScript that Node 24 runs by stripping types (no enums, no namespaces, no parameter properties) and no imports."
+}

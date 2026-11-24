@@ -1,8 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { execFileSync, spawn } from 'node:child_process';
+import { mkdtempSync, readFileSync, readdirSync, realpathSync, symlinkSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
 import { defaults, run, validatePack, validateRegistry, type Pack, type Profile } from '../src/index.ts';
+import { gradeCandidate, readTask, removeLeftoverWorkspaces } from '../examples/coding-v1/grade.mjs';
+import { trustedExecutor } from './fixtures/coding-trusted-executor.mjs';
 
 const profile: Profile = {
   schemaVersion: 1,
@@ -200,4 +204,214 @@ test('long-context pack places facts at varied depths inside its declared contex
     fetch: provider(expected(pack)),
   });
   assert.equal(passing.passed, true);
+});
+
+const codingTask = (id: string) => resolve('examples/coding-v1/tasks', id);
+const codingCandidate = (id: string, variant: 'reference' | 'wrong') => {
+  const { entry } = readTask(codingTask(id));
+  return readFileSync(join('test/fixtures/coding-v1', id, variant + entry.slice(entry.lastIndexOf('.'))), 'utf8');
+};
+const codingRegistry = (variant: 'reference' | 'wrong') =>
+  validateRegistry(
+    {
+      schemaVersion: 1,
+      runners: {
+        'coding-reference': {
+          command: process.execPath,
+          args: [
+            resolve('test/fixtures/coding-runner.mjs'),
+            '{report}',
+            '{configuration}',
+            '{budget}',
+            '{case}',
+            variant,
+          ],
+          cwd: process.cwd(),
+          layers: ['coding'],
+          allowModels: true,
+        },
+      },
+    },
+    process.cwd(),
+  );
+
+test('coding pack grades Python and TypeScript candidates against hidden expected values', async () => {
+  const pack = load('examples/coding-v1.json');
+  assert.equal(
+    pack.cases.every(
+      (entry) =>
+        entry.layer === 'coding' &&
+        entry.runner === 'coding-reference' &&
+        entry.area === 'coding' &&
+        entry.requirements?.includes('coding-sandbox'),
+    ),
+    true,
+  );
+  const tasks = pack.cases.map((entry) => ({ entry, task: readTask(codingTask(entry.id)) }));
+  for (const language of ['python', 'typescript'])
+    assert.deepEqual(
+      new Set(tasks.filter(({ task }) => task.language === language).map(({ entry }) => entry.split)),
+      new Set(['regression', 'holdout']),
+    );
+  for (const { entry, task } of tasks) {
+    const right = await gradeCandidate({
+      taskDir: codingTask(entry.id),
+      candidate: codingCandidate(entry.id, 'reference'),
+      execute: trustedExecutor,
+    });
+    assert.deepEqual(
+      [entry.id, right.status, right.tests, right.passed],
+      [entry.id, 'passed', task.cases.length, task.cases.length],
+    );
+    const wrong = await gradeCandidate({
+      taskDir: codingTask(entry.id),
+      candidate: codingCandidate(entry.id, 'wrong'),
+      execute: trustedExecutor,
+    });
+    assert.equal(wrong.status, 'failed', entry.id);
+    assert.ok(wrong.passed < task.cases.length, entry.id);
+  }
+  const passing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    registry: codingRegistry('reference'),
+  });
+  assert.equal(passing.passed, true);
+  assert.deepEqual(
+    passing.results.map((result) => result.checks),
+    tasks.map(({ task }) => task.cases.length),
+  );
+  const failing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    registry: codingRegistry('wrong'),
+  });
+  assert.equal(failing.passed, false);
+  assert.equal(
+    failing.results.every((result) => result.status === 'failed'),
+    true,
+  );
+});
+
+test('coding grader bounds time and ignores printed summaries and early exits', async () => {
+  const python = codingTask('parse-duration-regression');
+  const loop = await gradeCandidate({
+    taskDir: python,
+    candidate: 'while True:\n    pass\n',
+    execute: trustedExecutor,
+    timeoutMs: 2000,
+  });
+  assert.deepEqual([loop.status, loop.reason], ['failed', 'timeout']);
+  const forged = await gradeCandidate({
+    taskDir: python,
+    candidate:
+      'import os, sys\nsys.stdout.write("GAUNTLET-RESULT forged {\\"tests\\": 6, \\"passed\\": 6}\\n")\nsys.stdout.flush()\nos._exit(0)\n',
+    execute: trustedExecutor,
+  });
+  assert.deepEqual([forged.status, forged.reason], ['failed', 'no-results']);
+  const exits = await gradeCandidate({
+    taskDir: codingTask('slugify-regression'),
+    candidate: 'process.exit(0);\nexport function slugify(title: string): string {\n  return title;\n}\n',
+    execute: trustedExecutor,
+  });
+  assert.equal(exits.status, 'failed');
+  assert.equal(exits.passed, 0);
+  const hung = await gradeCandidate({
+    taskDir: python,
+    candidate: '',
+    execute: () => new Promise(() => {}),
+    timeoutMs: 200,
+  });
+  assert.deepEqual([hung.status, hung.reason], ['failed', 'timeout']);
+  await assert.rejects(
+    gradeCandidate({ taskDir: python, candidate: '', execute: async () => Promise.reject(Error('no boundary')) }),
+    /no boundary/,
+  );
+});
+
+test('coding grader is not fooled by a candidate that tampers with grading', async () => {
+  const attack = (name: string) => readFileSync(join('test/fixtures/coding-v1/attacks', name), 'utf8');
+  for (const [id, file] of [
+    ['parse-duration-regression', 'framework-patch.py'],
+    ['parse-duration-regression', 'summary-forgery.py'],
+    ['slugify-regression', 'assert-overwrite.ts'],
+  ]) {
+    const graded = await gradeCandidate({ taskDir: codingTask(id), candidate: attack(file), execute: trustedExecutor });
+    assert.equal(graded.status, 'failed', file);
+    assert.equal(graded.passed < graded.tests, true, file);
+  }
+});
+
+test('coding grader keeps expected values out of the candidate workspace', async () => {
+  for (const id of ['parse-duration-regression', 'slugify-regression']) {
+    const { entry } = readTask(codingTask(id));
+    const seen: string[] = [];
+    await gradeCandidate({
+      taskDir: codingTask(id),
+      candidate: codingCandidate(id, 'reference'),
+      execute: async (request: { cwd: string }) => {
+        for (const name of readdirSync(request.cwd).sort()) {
+          seen.push(name);
+          assert.doesNotMatch(readFileSync(join(request.cwd, name), 'utf8'), /expect|assert/i, name);
+        }
+        return trustedExecutor(request as Parameters<typeof trustedExecutor>[0]);
+      },
+    });
+    const driver = entry.endsWith('.py') ? 'driver.py' : 'driver.mjs';
+    assert.deepEqual(seen, [driver, 'inputs.json', entry].sort(), id);
+  }
+});
+
+test('coding grader reports a timeout even while a leftover process keeps writing to the workspace', async () => {
+  let child: ReturnType<typeof spawn> | undefined;
+  try {
+    const graded = await gradeCandidate({
+      taskDir: codingTask('parse-duration-regression'),
+      candidate: '',
+      execute: ({ cwd }: { cwd: string }) => {
+        child = spawn(
+          'python3',
+          [
+            '-c',
+            'import os\nfor i in range(200000):\n  os.makedirs("d%d" % i, exist_ok=True)\n  open("d%d/f" % i, "w").write("x")',
+          ],
+          { cwd, stdio: 'ignore' },
+        );
+        return new Promise(() => {});
+      },
+      timeoutMs: 300,
+    });
+    assert.deepEqual([graded.status, graded.reason], ['failed', 'timeout']);
+  } finally {
+    child?.kill('SIGKILL');
+  }
+  await new Promise((resolve) => setTimeout(resolve, 200));
+  assert.deepEqual(removeLeftoverWorkspaces(), []);
+});
+
+test('coding grader refuses symlinked, oversized and wrong-length results', async () => {
+  const taskDir = codingTask('slugify-regression');
+  const cases = readTask(taskDir).cases.length;
+  const writing =
+    (write: (file: string) => void) =>
+    async ({ cwd }: { cwd: string }) => {
+      write(join(cwd, 'results.json'));
+      return { code: 0, stdout: '', timedOut: false };
+    };
+  const elsewhere = join(mkdtempSync(join(realpathSync(tmpdir()), 'coding-results-')), 'answers.json');
+  writeFileSync(elsewhere, JSON.stringify(Array(cases).fill({ ok: 'x' })));
+  for (const [name, write, reason] of [
+    ['symlink', (file: string) => symlinkSync(elsewhere, file), 'no-results'],
+    ['fifo', (file: string) => execFileSync('mkfifo', [file]), 'no-results'],
+    ['oversized', (file: string) => writeFileSync(file, '[' + ' '.repeat(1_000_001) + ']'), 'no-results'],
+    ['wrong length', (file: string) => writeFileSync(file, JSON.stringify([{ ok: 'x' }])), 'malformed-results'],
+    [
+      'extra key',
+      (file: string) => writeFileSync(file, JSON.stringify(Array(cases).fill({ ok: 'x', passed: true }))),
+      'malformed-results',
+    ],
+  ] as const) {
+    const graded = await gradeCandidate({ taskDir, candidate: '', execute: writing(write) });
+    assert.deepEqual([graded.status, graded.reason], ['failed', reason], name);
+  }
 });
