@@ -4,6 +4,8 @@ Design choices the [roadmap](../ROADMAP.md) "Domain packs" milestone needs from 
 
 ## Coding sandbox
 
+**Decided 2026-11-24 by the owner: option A**, one throwaway container per case, with no network and memory, process and time limits. It protects the host; grading integrity stays out of process. The evaluation machine needs a running engine: [container engine steps](../guides/container-engine.md).
+
 **Question.** Which isolation boundary runs model-written code for the coding reference runner?
 
 Coding cases run code a model wrote and compare what it returns with expected values. PROTOCOL.md requires the runner to supply an enforced boundary; a POSIX process group bounds time and output but is not a sandbox. The boundary must give: no network; writes only to a scratch workspace; wall-time, memory and process-count limits; hidden tests unreadable while the candidate is produced; the grader outside the candidate's control. The runner refuses to run when the boundary is unavailable; it never falls back to running code unsandboxed.
@@ -19,16 +21,9 @@ The boundary protects the host; it does not make grading trustworthy on its own.
 
 **To answer:** reply `Coding sandbox: A` (or B, C), and say which engine the evaluation host will run for A.
 
-**Second question: where do holdout expectations live?** The coding tasks, expected values and reference solutions are public, so a model trained after their publication may have seen them; today the pack says its holdout cases are contamination-exposed.
-
-| Option | Effect |
-|---|---|
-| **H1. Keep them public** | Simple and reproducible by anyone; the holdout split stays an exposed example and qualification counts it as such |
-| **H2. Private holdout store** | Holdout `cases.json` files live outside the public repository (an owner-held directory the runner reads by path); the pack keeps public inputs and a hash of the private expectations so reports stay identifiable. Real holdouts, but only the owner can run or audit them |
-
-No recommendation yet: H2 needs a place and a backup for the private files. **To answer:** reply `Holdout expectations: H1` or `H2`.
-
 ## Embedded area
+
+**Decided 2026-11-24 by the owner:** area **A, a new core area `embedded`**; toolchain **A, arduino-cli with a pinned ESP32 core**.
 
 **Question 1.** Where do the Arduino, ESP32 and Raspberry Pi cases sit in the capability index?
 
@@ -48,3 +43,15 @@ No recommendation yet: H2 needs a place and a backup for the private files. **To
 Raspberry Pi cases need neither: they are byte-compiled and checked statically, never executed. Compiling is not executing: the grader controls the build files and the candidate supplies only source.
 
 **To answer:** reply `Embedded area: A` (or B, C) and `Embedded toolchain: A` (or B).
+
+## Holdout expectations
+
+**Question.** Where do the coding pack's holdout expectations live? The tasks, expected values and reference solutions are public, so a model trained after their publication may have seen them; today the pack reports its holdout cases as contamination-exposed.
+
+| Option | Effect |
+|---|---|
+| **H1. Keep them public** | Simple and reproducible by anyone; the holdout split stays an exposed example and qualification counts it as such |
+| **H2. Private holdout store** | Holdout `cases.json` files live outside the public repository (an owner-held directory the runner reads by path); the pack keeps public inputs and a hash of the private expectations so reports stay identifiable. Real holdouts, but only the owner can run or audit them |
+
+No recommendation yet: H2 needs a place and a backup for the private files. **To answer:** reply `Holdout expectations: H1` or `H2`.
+
