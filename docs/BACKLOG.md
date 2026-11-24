@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 22 November 2026 against main `43f914c`. PRs [#78](https://github.com/voidbrain/gauntlet-protocol/pull/78)–[#80](https://github.com/voidbrain/gauntlet-protocol/pull/80) merged on green CI. Reconciled `project-harness v10.2.0` (`merge-when-green`, `work-items`, backlog & PR guides), full 8-area audit, token/architecture reviews.
+Current work ledger, reviewed 24 November 2026 against main `ad33d80`. [PR #81](https://github.com/voidbrain/gauntlet-protocol/pull/81) (harness 10.2.0 reconcile, maintenance-only, no record) merged on green CI. Reconciled `project-harness v10.7.0`: lean AGENTS, landing queue, `work:close`, friction in primary checkout, skills guide.
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
