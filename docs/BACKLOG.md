@@ -1,66 +1,16 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 24 November 2026 against main `d6fd4ba`. [PR #85](https://github.com/voidbrain/gauntlet-protocol/pull/85) (Domain packs plan, F-015 to F-022) merged on green CI. Owner decisions recorded: F-015-T02 containers, F-016-T01 embedded area and arduino-cli; holdout store split to F-015-T05.
+Current work ledger, reviewed 25 November 2026 against main `c38f4a7`. [PR #87](https://github.com/voidbrain/gauntlet-protocol/pull/87) (owner decisions) and [PR #86](https://github.com/voidbrain/gauntlet-protocol/pull/86) (coding-v1 pack, out-of-process grader) merged on green CI; F-015-T01 closed. Holdout decision H1 recorded (F-015-T05 closed).
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 28.5 h agent + 3 h owner across 28 open steps of 8 features. Generated from the task files.
+**Remaining effort:** 28 h agent + 2.75 h owner across 26 open steps of 8 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="f-015"></a>[✨ F-015](#top)
-
-**coding-v1: coding pack and sandboxed reference runner**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 3.5 h agent + 0.75 h owner | — | [F-016-T02](#f-016-t02), [F-016-T03](#f-016-t03), [F-016-T04](#f-016-t04), [F-019-T02](#f-019-t02), [F-021-T03](#f-021-t03) | 🤖 | 🧑‍🔧 | 🤔 |
-
-💻 **→** Next: F-015-T01 — Coding tasks, hidden tests and deterministic grader (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The capability index maps 0 cases to the coding area. The coding layer exists only as a bridge (PROTOCOL.md, "Registered external runners"): no pack uses it and no runner meets its sandbox and candidate/test separation contract. |
-| **Reproduce** | `npm run index:build` reports `coding: 0 mapped cases`; `gauntlet packs` lists no coding-layer pack. |
-| **Check** | examples/coding-v1.json with Python and TypeScript tasks graded out of process against expected values the candidate never sees; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. A reference runner runs model-written code only inside the owner-chosen boundary (no network, time and memory limits) with contract tests proving each limit; grading stays outside the candidate's process. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
-|---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-015-t01"></a>F-015-T01 — Coding tasks, hidden tests and deterministic grader | 3 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-015-T03](#f-015-t03), [F-016-T02](#f-016-t02), [F-016-T03](#f-016-t03) | 🤖 |
-| 🟢 Small | <a id="f-015-t05"></a>F-015-T05 — Decide where holdout expectations live | — | 0 h | 0 h agent + 0.25 h owner | Planned | — | — | [🤔](decisions/domain-packs.md#holdout-expectations) |
-| 🟢 Small | <a id="f-015-t06"></a>F-015-T06 — Run a container engine on the evaluation machine | — | 0 h | 0 h agent + 0.25 h owner | Planned | — | [F-015-T03](#f-015-t03) | [🧑‍🔧](guides/container-engine.md) |
-| 🟡 Medium | <a id="f-015-t03"></a>F-015-T03 — Sandboxed reference coding runner | 3 h | 0 h | 3 h | Planned | [F-015-T01](#f-015-t01), [F-015-T06](#f-015-t06) | [F-015-T04](#f-015-t04), [F-016-T04](#f-016-t04), [F-019-T02](#f-019-t02), [F-021-T03](#f-021-t03) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-015-t04"></a>F-015-T04 — Release coding-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-015-T03](#f-015-t03) | — | ⏳ 🧑‍🔧 |
-| 🟡 Medium | **Total** | 6 h (2 of 6 steps) | 0 h (0 of 6 steps recorded) | 3.5 h agent + 0.75 h owner | 1 of 6 completed | | | |
-
-<details><summary>Done steps (1)</summary>
-
-| Effort | Step | Estimate | Actual | Status |
-|---|---|---|---|---|
-| — | <a id="f-015-t02"></a>F-015-T02 — Choose the reference runner's sandbox boundary | — | 0 h | Completed |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-015.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#86](https://github.com/voidbrain/gauntlet-protocol/pull/86); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87) |
-| Opened | 2026-11-24 |
-| Verification | Pending. |
-| Reviewed | 2026-11-24 |
-
-</details>
-
----
 ### <a id="f-017"></a>[✨ F-017](#top)
 
 **logic-math-v1: puzzles, arithmetic and constraints**
@@ -136,6 +86,56 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-24 |
 | Verification | Pending. |
 | Reviewed | 2026-11-24 |
+
+</details>
+
+---
+### <a id="f-015"></a>[✨ F-015](#top)
+
+**coding-v1: coding pack and sandboxed reference runner**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 3 h agent + 0.5 h owner | — | [F-016-T04](#f-016-t04), [F-019-T02](#f-019-t02), [F-021-T03](#f-021-t03) | ⏳ | 🧑‍🔧 | — |
+
+🧑 **→** Next: [🧑‍🔧](guides/container-engine.md) F-015-T06 — Run a container engine on the evaluation machine (Planned).
+
+| | |
+|---|---|
+| **Issue** | The capability index maps 0 cases to the coding area. The coding layer exists only as a bridge (PROTOCOL.md, "Registered external runners"): no pack uses it and no runner meets its sandbox and candidate/test separation contract. |
+| **Reproduce** | `npm run index:build` reports `coding: 0 mapped cases`; `gauntlet packs` lists no coding-layer pack. |
+| **Check** | examples/coding-v1.json with Python and TypeScript tasks graded out of process against expected values the candidate never sees; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. A reference runner runs model-written code only inside the owner-chosen boundary (no network, time and memory limits) with contract tests proving each limit; grading stays outside the candidate's process. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
+|---|---|---|---|---|---|---|---|:---:|
+| 🟢 Small | <a id="f-015-t06"></a>F-015-T06 — Run a container engine on the evaluation machine | — | 0 h | 0 h agent + 0.25 h owner | Planned | — | [F-015-T03](#f-015-t03) | [🧑‍🔧](guides/container-engine.md) |
+| 🟡 Medium | <a id="f-015-t03"></a>F-015-T03 — Sandboxed reference coding runner | 3 h | 0 h | 3 h | Planned | [F-015-T06](#f-015-t06) | [F-015-T04](#f-015-t04), [F-016-T04](#f-016-t04), [F-019-T02](#f-019-t02), [F-021-T03](#f-021-t03) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-015-t04"></a>F-015-T04 — Release coding-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-015-T03](#f-015-t03) | — | ⏳ 🧑‍🔧 |
+| 🟡 Medium | **Total** | 6 h (2 of 6 steps) | 0 h (0 of 6 steps recorded) | 3 h agent + 0.5 h owner | 3 of 6 completed | | | |
+
+<details><summary>Done steps (3)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| — | <a id="f-015-t01"></a>F-015-T01 — Coding tasks, hidden tests and deterministic grader | 3 h | 0 h | Completed |
+| — | <a id="f-015-t02"></a>F-015-T02 — Choose the reference runner's sandbox boundary | — | 0 h | Completed |
+| — | <a id="f-015-t05"></a>F-015-T05 — Decide where holdout expectations live | — | 0 h | Completed |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-015.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#86](https://github.com/voidbrain/gauntlet-protocol/pull/86); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87) |
+| Opened | 2026-11-24 |
+| Verification | Pending. |
+| Reviewed | 2026-11-25 |
 
 </details>
 
@@ -226,7 +226,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🔴 Large | 5.5 h agent + 0.25 h owner | [F-015-T01](#f-015-t01), [F-015-T03](#f-015-t03) | — | ⏳ | — | — |
+| 🔴 Open | 🔶 P2 | 🔴 Large | 5.5 h agent + 0.25 h owner | [F-015-T03](#f-015-t03) | — | 🤖 | — | — |
 
 💻 **→** Next: F-016-T02 — Arduino and ESP32 sketch tasks graded by compile (Planned).
 
@@ -240,8 +240,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟡 Medium | <a id="f-016-t02"></a>F-016-T02 — Arduino and ESP32 sketch tasks graded by compile | 2.5 h | 0 h | 2.5 h | Planned | [F-015-T01](#f-015-t01) | [F-016-T04](#f-016-t04) | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-016-t03"></a>F-016-T03 — Raspberry Pi Python tasks graded by static checks | 1.5 h | 0 h | 1.5 h | Planned | [F-015-T01](#f-015-t01) | [F-016-T04](#f-016-t04) | ⏳ 🤖 |
+| 🟡 Medium | <a id="f-016-t02"></a>F-016-T02 — Arduino and ESP32 sketch tasks graded by compile | 2.5 h | 0 h | 2.5 h | Planned | — | [F-016-T04](#f-016-t04) | 🤖 |
+| 🟡 Medium | <a id="f-016-t03"></a>F-016-T03 — Raspberry Pi Python tasks graded by static checks | 1.5 h | 0 h | 1.5 h | Planned | — | [F-016-T04](#f-016-t04) | 🤖 |
 | 🟡 Medium | <a id="f-016-t04"></a>F-016-T04 — Embedded runner, pack and index entry | 1.5 h | 0 h | 1.5 h | Planned | [F-016-T02](#f-016-t02), [F-016-T03](#f-016-t03), [F-015-T03](#f-015-t03) | [F-016-T05](#f-016-t05) | ⏳ 🤖 |
 | 🟢 Small | <a id="f-016-t05"></a>F-016-T05 — Release embedded-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-016-T04](#f-016-t04) | — | ⏳ 🧑‍🔧 |
 | 🔴 Large | **Total** | 5.5 h (3 of 5 steps) | 0 h (0 of 5 steps recorded) | 5.5 h agent + 0.25 h owner | 1 of 5 completed | | | |

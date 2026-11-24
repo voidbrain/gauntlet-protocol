@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-015-T05",
   "parent": "F-015",
-  "status": "planned",
+  "status": "closed",
   "title": "Decide where holdout expectations live",
   "goal": "Decide where holdout expectations live",
   "acceptance": [
@@ -28,11 +28,11 @@
   "ownerLink": "docs/decisions/domain-packs.md#holdout-expectations",
   "effort": {
     "size": "small",
-    "estimate": "0.25 h owner",
-    "basis": "Split from F-015-T02 on 2026-11-24 at the owner's request: the sandbox was decided, this question was not. Owner time only.",
-    "reviewed": "2026-11-24",
+    "estimate": "0 remaining",
+    "basis": "Decided by the owner 2026-11-25: H1, holdout expectations stay public; the public holdouts are exposed examples, not real holdouts. H2 can be revisited when holdout scores are used to choose models. No actual: owner time not measured.",
+    "reviewed": "2026-11-25",
     "agentHours": 0,
-    "ownerHours": 0.25,
+    "ownerHours": 0,
     "ownerKind": "decision"
   }
 }
