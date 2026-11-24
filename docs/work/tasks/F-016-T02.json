@@ -11,8 +11,9 @@
     "Regression and holdout splits"
   ],
   "dependsOn": [
+    "F-015-T01",
     "F-016-T01",
-    "F-015-T01"
+    "F-016-T06"
   ],
   "resources": [
     "src/**",
