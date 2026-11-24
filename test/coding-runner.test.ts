@@ -8,7 +8,7 @@ import { existsSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSyn
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { defaults, run, validatePack, validateRegistry, type Profile } from '../src/index.ts';
-import { containerExecutor } from '../examples/coding-v1/container-executor.mjs';
+import { containerExecutor, defaultLimits } from '../examples/coding-v1/container-executor.mjs';
 import { gradeCandidate, readTask } from '../examples/coding-v1/grade.mjs';
 
 const engine = (() => {
@@ -73,6 +73,33 @@ test('the container boundary kills a timed-out case and a memory hog, leaving no
   } finally {
     rmSync(cwd, { recursive: true, force: true });
   }
+});
+
+test('a candidate that kills its timeout and busy-loops is stopped by the CPU limit', needsEngine, async () => {
+  const execute = containerExecutor({ limits: { ...defaultLimits, cpuSeconds: 2 } });
+  const cwd = workspace();
+  try {
+    const killer = [
+      'import os, signal',
+      'for pid in os.listdir("/proc"):',
+      '    if pid.isdigit() and int(pid) != os.getpid():',
+      '        try:',
+      '            if open("/proc/%s/cmdline" % pid, "rb").read().startswith(b"timeout"):',
+      '                os.kill(int(pid), signal.SIGKILL)',
+      '        except OSError:',
+      '            pass',
+      'while True:',
+      '    pass',
+    ].join('\n');
+    const started = Date.now();
+    const outcome = await execute({ argv: python(killer), cwd, env: {}, timeoutMs: 30000 });
+    assert.equal(outcome.timedOut, false);
+    assert.notEqual(outcome.code, 0);
+    assert.ok(Date.now() - started < 20000);
+  } finally {
+    rmSync(cwd, { recursive: true, force: true });
+  }
+  assert.equal(leftovers(), '');
 });
 
 test('the runner refuses to run without a container engine', async () => {
