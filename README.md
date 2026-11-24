@@ -15,7 +15,7 @@ The generated [pack catalog](docs/test-index.md) also lists six focused 1.0.0 pa
 - `refusal-permission` — four refusal and permission-boundary cases;
 - `long-context` — four retrieval cases with facts at varied context depths.
 
-The `coding` pack holds four Python and TypeScript tasks on the coding layer, graded out of process against expected values the candidate never sees. Running it needs a registered runner that supplies an enforced sandbox; its public holdout cases are contamination-exposed ([coding grader](docs/PROTOCOL.md#coding-pack-grader)).
+The `coding` pack holds four Python and TypeScript tasks on the coding layer, graded out of process against expected values the candidate never sees. The reference runner (`examples/coding-v1/runner.mjs`) asks a local model and grades each case in a throwaway container, so running it needs Docker Desktop or colima ([setup](docs/guides/container-engine.md)); its public holdout cases are contamination-exposed ([coding grader](docs/PROTOCOL.md#coding-pack-grader)).
 
 The `logic-math` pack holds eight exact-answer cases: arithmetic under `math`, puzzles, constraints and scheduling under `logic-planning`. Holdout cases in these public packs are exposed examples, not unseen holdouts.
 

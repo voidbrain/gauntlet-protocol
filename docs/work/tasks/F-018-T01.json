@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-018-T01",
   "parent": "F-018",
-  "status": "implemented",
+  "status": "closed",
   "title": "Deterministic rubric grader",
   "goal": "Deterministic rubric grader",
   "acceptance": [
@@ -33,10 +33,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.25 h agent",
-    "basis": "Implemented 2026-11-25: src/rubric.ts, pack validation, run grading, catalog label, contract tests and PROTOCOL.md; CI and merge remain. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Merged in PR #90 on green CI (run 45507964479) on 2026-11-25. No actual: elapsed time not measured by work-usage.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 2,
     "estimateAgentHours": 2
   }

@@ -1,8 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync, spawn } from 'node:child_process';
-import { mkdtempSync, readFileSync, readdirSync, realpathSync, symlinkSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { spawn } from 'node:child_process';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { defaults, run, validatePack, validateRegistry, type Pack, type Profile } from '../src/index.ts';
 import { gradeCandidate, readTask, removeLeftoverWorkspaces } from '../examples/coding-v1/grade.mjs';
@@ -389,31 +388,43 @@ test('coding grader reports a timeout even while a leftover process keeps writin
   assert.deepEqual(removeLeftoverWorkspaces(), []);
 });
 
-test('coding grader refuses symlinked, oversized and wrong-length results', async () => {
+// Results come back on the driver's stdout (last line, tagged); the workspace is read-only to the candidate.
+test('coding grader refuses missing, oversized, wrong-length and extra-key results', async () => {
   const taskDir = codingTask('slugify-regression');
   const cases = readTask(taskDir).cases.length;
-  const writing =
-    (write: (file: string) => void) =>
-    async ({ cwd }: { cwd: string }) => {
-      write(join(cwd, 'results.json'));
-      return { code: 0, stdout: '', timedOut: false };
-    };
-  const elsewhere = join(mkdtempSync(join(realpathSync(tmpdir()), 'coding-results-')), 'answers.json');
-  writeFileSync(elsewhere, JSON.stringify(Array(cases).fill({ ok: 'x' })));
-  for (const [name, write, reason] of [
-    ['symlink', (file: string) => symlinkSync(elsewhere, file), 'no-results'],
-    ['fifo', (file: string) => execFileSync('mkfifo', [file]), 'no-results'],
-    ['oversized', (file: string) => writeFileSync(file, '[' + ' '.repeat(1_000_001) + ']'), 'no-results'],
-    ['wrong length', (file: string) => writeFileSync(file, JSON.stringify([{ ok: 'x' }])), 'malformed-results'],
+  const printing = (stdout: string) => async () => ({ code: 0, stdout, timedOut: false });
+  for (const [name, stdout, reason] of [
+    ['missing', 'nothing to see\n', 'no-results'],
+    ['oversized', 'GAUNTLET-RESULTS [' + ' '.repeat(1_000_001) + ']\n', 'no-results'],
+    ['wrong length', 'GAUNTLET-RESULTS ' + JSON.stringify([{ ok: 'x' }]) + '\n', 'malformed-results'],
     [
       'extra key',
-      (file: string) => writeFileSync(file, JSON.stringify(Array(cases).fill({ ok: 'x', passed: true }))),
+      'GAUNTLET-RESULTS ' + JSON.stringify(Array(cases).fill({ ok: 'x', passed: true })) + '\n',
       'malformed-results',
     ],
+    [
+      'wrong answers',
+      'noise\nGAUNTLET-RESULTS ' + JSON.stringify(Array(cases).fill({ ok: 'x' })) + '\n',
+      'wrong-answers',
+    ],
   ] as const) {
-    const graded = await gradeCandidate({ taskDir, candidate: '', execute: writing(write) });
+    const graded = await gradeCandidate({ taskDir, candidate: '', execute: printing(stdout) });
     assert.deepEqual([graded.status, graded.reason], ['failed', reason], name);
   }
+});
+
+test('coding grader removes a workspace whose folders the candidate locked', async () => {
+  let workspace = '';
+  await gradeCandidate({
+    taskDir: codingTask('parse-duration-regression'),
+    candidate: 'import os\nos.makedirs("locked/inner")\nos.chmod("locked/inner", 0)\nos.chmod("locked", 0)\n',
+    execute: async (request: { cwd: string }) => {
+      workspace = request.cwd;
+      return trustedExecutor(request as Parameters<typeof trustedExecutor>[0]);
+    },
+  });
+  assert.equal(existsSync(workspace), false);
+  assert.deepEqual(removeLeftoverWorkspaces(), []);
 });
 
 test('logic-math pack has exact answers for math and logic in both splits', async () => {

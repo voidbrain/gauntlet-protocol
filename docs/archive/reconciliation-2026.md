@@ -2,6 +2,10 @@
 
 Dated reconciliation entries, newest by date. The backlog header is generated from the newest `## <date> — <branch> `<sha>`` entry (harness 8.4.0); its first paragraph stays under 300 characters.
 
+## 2026-11-25 — main `019fba8`
+
+PRs #88 (holdouts H1), #89 (logic-math-v1) and #90 (rubric grader) merged on green CI; F-017-T01 and F-018-T01 closed. F-015-T06 done on the owner's Mac.
+
 ## 2026-11-25 — main `c38f4a7`
 
 [PR #87](https://github.com/voidbrain/gauntlet-protocol/pull/87) (owner decisions) and [PR #86](https://github.com/voidbrain/gauntlet-protocol/pull/86) (coding-v1 pack, out-of-process grader) merged on green CI; F-015-T01 closed. Holdout decision H1 recorded (F-015-T05 closed).

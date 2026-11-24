@@ -1,5 +1,5 @@
 # Runs inside the candidate's sandbox. It holds no reference answers: it calls the candidate's function on each input
-# from inputs.json and writes what came back (or the error raised) to results.json. Everything here is
+# from inputs.json and prints what came back (or the error raised) as the last stdout line. Everything here is
 # candidate-controlled once the candidate is imported; the grader outside compares the results.
 import json
 import os
@@ -34,5 +34,5 @@ for args in spec["inputs"]:
         results.append({"ok": value})
     except Exception as error:
         results.append(failure(error))
-with open(os.path.join(here, "results.json"), "w", encoding="utf-8") as target:
-    json.dump(results, target)
+sys.stdout.write("\nGAUNTLET-RESULTS " + json.dumps(results) + "\n")
+sys.stdout.flush()
