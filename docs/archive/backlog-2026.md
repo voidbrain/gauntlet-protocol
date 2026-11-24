@@ -549,3 +549,39 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 </details>
 
 ---
+
+## Closed 2026-11-24
+
+### F-014
+
+**First skill discovery review**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-24: Merged in #83 on green CI; fresh-context review: no blockers, its should-fix figures corrected; check:freshness no longer asks for the skills review; the PR-naming proposal shipped in project-harness v10.9.0 (work:pr), adopted here.
+
+| | |
+|---|---|
+| **Issue** | The owner turned on the periodic skill discovery review (`reviews.skills.days`: 30) on 2026-11-24; the first run is due. |
+| **Reproduce** | `npm run check:freshness` warns that `docs/reviews/skills/<date>.md` is missing. |
+| **Check** | [docs/reviews/skills/2026-11-24.md](../reviews/skills/2026-11-24.md) records the sources read and an outcome for every candidate; each implemented outcome is in the repository; `check:freshness` no longer asks for the review. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-24: Merged in #83 on green CI; fresh-context review: no blockers, its should-fix figures corrected; check:freshness no longer asks for the skills review; the PR-naming proposal shipped in project-harness v10.9.0 (work:pr), adopted here. 2026-11-24: review written. Outcomes: the evaluation-pack recipe added to AGENTS "Adding things" (project line); a helper that names a PR in its record proposed to the template owner as a harness proposal (60 follow-up commits since 2026-10-25), with no project change; reconcile, release preparation and skill drift need no skill. Shipped with the harness 10.8.0 reconcile. Close once this PR merges on green CI.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#83](https://github.com/voidbrain/gauntlet-protocol/pull/83) |
+| Opened | 2026-11-24 |
+| Verification | Script: check:freshness, check:backlog, CI #83 green (2026-11-24) |
+| Reviewed | 2026-11-24 |
+
+</details>
+
+---

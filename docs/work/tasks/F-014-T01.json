@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-014-T01",
   "parent": "F-014",
-  "status": "implemented",
+  "status": "closed",
   "title": "First skill discovery review",
   "goal": "Record the first periodic skill discovery review and act on its outcomes",
   "acceptance": [
@@ -28,10 +28,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "under 1 h remaining",
-    "basis": "Estimated 2026-11-24 at agent speed; review written, CI remains.",
+    "estimate": "0 remaining",
+    "basis": "Estimated 2026-11-24 at agent speed; review written, CI remains. Closed 2026-11-24.",
     "reviewed": "2026-11-24",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
   }
