@@ -10,7 +10,7 @@ The direct local provider supports Ollama's loopback API, exact installed quanti
 
 ## Inputs and execution
 
-Pack: `schemaVersion`, `id`, semantic `version`, `cases`. Each case has stable `id`, `layer`, `split` (regression or holdout), named `capabilities`, `critical`, `expensive`; either `runner`, or model `messages` plus independent `expected: {kind: "text"|"json", value}`. No shell commands in packs. Expectations are never sent to the direct model.
+Pack: `schemaVersion`, `id`, semantic `version`, `cases`. Each case has stable `id`, `layer`, `split` (regression or holdout), named `capabilities`, `critical`, `expensive`; either `runner`, or model `messages` plus independent `expected: {kind: "text"|"json"|"rubric", value}` ([rubric grading](#rubric-grading)). No shell commands in packs. Expectations are never sent to the direct model.
 
 Model profiles can declare `weightsBytes` and `minimumMemoryBytes` together, alongside their quantization and context. Machine environments declare total memory and an owner-reviewed accelerator class. Planning with both declarations reports host fit, makes every case ineligible on a memory misfit and leaves missing sizing explicitly unknown; execution enforces the same memory gate before contacting a provider.
 
@@ -91,3 +91,16 @@ Holdout integrity is procedural in the protocol itself. Separate maintenance, fi
 Both parts are required. The executor's enforced boundary ([coding isolation and holdout limits](#coding-isolation-and-holdout-limits)) protects the host and hides the grader's files from the candidate; out-of-process comparison keeps the verdict outside the candidate's reach. The grader runs nothing itself; the repository's tests use a process-group executor on committed trusted candidates only.
 
 The tasks, expected values and reference solutions are committed to a public repository, so a model may have seen them: the `holdout` cases of this pack are contamination-exposed examples of the split, not unseen holdouts.
+
+## Rubric grading
+
+`expected: {kind: "rubric", value}` grades free text deterministically, for tasks where no single exact answer exists (catalog grader `rubric-v1`). The value holds at least one of these checks, and the case passes only when all hold:
+
+- `language: "it"` — among the common Italian and English function words in the reply, at least three are counted and at least 80 % are Italian;
+- `minWords`, `maxWords` — bounds on the number of words (runs of letters or digits);
+- `required` — groups of terms; each group needs one of its terms as whole words, in order for a multi-word term;
+- `forbidden` — terms that must not appear as whole words;
+- `register: "formal"` — no informal second-person forms (`tu`, `ti`, `tuo`, `puoi` and the like); `"informal"` — at least one.
+
+Matching is case-insensitive on Unicode-normalised text. A failed case's reason names the failed checks (`language`, `min-words`, `required:2`, `forbidden:<term>`, `register`) and never the reply. The word lists are fixed in `src/rubric.ts`, which is part of the engine identity. A rubric measures these observable properties only; it does not judge accuracy or style beyond them, so packs pair it with references reviewed by people.
+
