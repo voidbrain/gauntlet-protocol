@@ -1,11 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { mkdtempSync, readFileSync, readdirSync, realpathSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { defaults, run, validatePack, validateRegistry, type Pack, type Profile } from '../src/index.ts';
-import { gradeCandidate, readTask } from '../examples/coding-v1/grade.mjs';
+import { gradeCandidate, readTask, removeLeftoverWorkspaces } from '../examples/coding-v1/grade.mjs';
 import { trustedExecutor } from './fixtures/coding-trusted-executor.mjs';
 
 const profile: Profile = {
@@ -385,6 +385,8 @@ test('coding grader reports a timeout even while a leftover process keeps writin
   } finally {
     child?.kill('SIGKILL');
   }
+  await new Promise((resolve) => setTimeout(resolve, 200));
+  assert.deepEqual(removeLeftoverWorkspaces(), []);
 });
 
 test('coding grader refuses symlinked, oversized and wrong-length results', async () => {
@@ -400,6 +402,7 @@ test('coding grader refuses symlinked, oversized and wrong-length results', asyn
   writeFileSync(elsewhere, JSON.stringify(Array(cases).fill({ ok: 'x' })));
   for (const [name, write, reason] of [
     ['symlink', (file: string) => symlinkSync(elsewhere, file), 'no-results'],
+    ['fifo', (file: string) => execFileSync('mkfifo', [file]), 'no-results'],
     ['oversized', (file: string) => writeFileSync(file, '[' + ' '.repeat(1_000_001) + ']'), 'no-results'],
     ['wrong length', (file: string) => writeFileSync(file, JSON.stringify([{ ok: 'x' }])), 'malformed-results'],
     [

@@ -4,9 +4,22 @@
 // input; this grader, outside that process, reads the results under a strict schema and size cap and compares them
 // with expectations only it holds. Tampering inside the candidate's process can change only the candidate's own answers.
 // The grader runs nothing itself: `execute` must run the driver inside an enforced boundary whenever the candidate
-// is untrusted. The grader bounds the wait itself and does not rely on the executor to do so.
+// is untrusted, and must have stopped every candidate process before it resolves. The grader bounds the wait
+// itself and does not rely on the executor to do so; it reports a timeout even if cleanup then fails.
 import { createHash } from 'node:crypto';
-import { cpSync, lstatSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  closeSync,
+  constants,
+  cpSync,
+  fstatSync,
+  mkdtempSync,
+  openSync,
+  readFileSync,
+  readSync,
+  realpathSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -82,6 +95,41 @@ const matches = (expect, result) =>
       result.error.includes(expect.raises) &&
       (expect.messageIncludes === undefined || result.message.includes(expect.messageIncludes));
 
+// Opens without following a symlink or blocking on a FIFO, checks the opened file itself and reads at most the cap,
+// so a process still running in the workspace cannot swap the file between the check and the read.
+function readResults(file) {
+  const fd = openSync(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+  try {
+    const stat = fstatSync(fd);
+    if (!stat.isFile() || stat.size > maxResultBytes) return undefined;
+    const buffer = Buffer.alloc(maxResultBytes + 1);
+    let length = 0;
+    for (let read; length <= maxResultBytes && (read = readSync(fd, buffer, length, buffer.length - length, null)) > 0;)
+      length += read;
+    return length > maxResultBytes ? undefined : JSON.parse(buffer.subarray(0, length).toString('utf8'));
+  } finally {
+    closeSync(fd);
+  }
+}
+
+// Best effort: a process the executor failed to stop may still be writing. The verdict never depends on cleanup.
+const leftoverWorkspaces = new Set();
+function removeWorkspace(workspace) {
+  try {
+    rmSync(workspace, { recursive: true, force: true, maxRetries: 3 });
+    leftoverWorkspaces.delete(workspace);
+  } catch {
+    leftoverWorkspaces.add(workspace);
+    process.emitWarning('coding grader could not remove ' + workspace + '; the executor left a process running');
+  }
+}
+
+// Retries the workspaces an earlier cleanup could not remove; returns those still left.
+export function removeLeftoverWorkspaces() {
+  for (const workspace of [...leftoverWorkspaces]) removeWorkspace(workspace);
+  return [...leftoverWorkspaces];
+}
+
 // The candidate is written to an empty workspace first; the driver and the inputs are copied in afterwards.
 export async function gradeCandidate({ taskDir, candidate, execute, timeoutMs = 10000 }) {
   if (typeof candidate !== 'string' || typeof execute !== 'function')
@@ -108,9 +156,7 @@ export async function gradeCandidate({ taskDir, candidate, execute, timeoutMs = 
     if (outcome?.timedOut) return { status: 'failed', reason: 'timeout', tests, passed: 0 };
     let results;
     try {
-      const file = join(workspace, 'results.json');
-      const stat = lstatSync(file);
-      if (stat.isFile() && stat.size <= maxResultBytes) results = JSON.parse(readFileSync(file, 'utf8'));
+      results = readResults(join(workspace, 'results.json'));
     } catch {}
     if (results === undefined) return { status: 'failed', reason: 'no-results', tests, passed: 0 };
     if (!Array.isArray(results) || results.length !== tests || !results.every(answer))
@@ -124,6 +170,6 @@ export async function gradeCandidate({ taskDir, candidate, execute, timeoutMs = 
     };
   } finally {
     clearTimeout(timer);
-    rmSync(workspace, { recursive: true, force: true });
+    removeWorkspace(workspace);
   }
 }
