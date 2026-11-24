@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-017-T01",
   "parent": "F-017",
-  "status": "implemented",
+  "status": "closed",
   "title": "Logic and math pack with exact answers",
   "goal": "Logic and math pack with exact answers",
   "acceptance": [
@@ -34,10 +34,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h agent",
-    "basis": "Implemented 2026-11-25: eight exact-answer cases, test and index; CI and merge remain. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Merged in PR #89 on green CI (run 45507431987) on 2026-11-25. No actual: elapsed time not measured by work-usage.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   }

@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-015-T06",
   "parent": "F-015",
-  "status": "planned",
+  "status": "closed",
   "title": "Run a container engine on the evaluation machine",
   "goal": "Run a container engine on the evaluation machine",
   "acceptance": [
@@ -28,11 +28,11 @@
   "ownerLink": "docs/guides/container-engine.md",
   "effort": {
     "size": "small",
-    "estimate": "0.25 h owner",
-    "basis": "Added 2026-11-24 after the owner chose containers (F-015-T02): the sandboxed runner needs a running engine. Owner time only.",
-    "reviewed": "2026-11-24",
+    "estimate": "0 remaining",
+    "basis": "Performed 2026-11-25 on the owner's instruction on the owner's Mac: Docker Desktop, server 29.8.0; container-engine.md step 2 gave OK, BLOCKED (wget: bad address 'example.com'), exit 137. No actual: owner time not measured.",
+    "reviewed": "2026-11-25",
     "agentHours": 0,
-    "ownerHours": 0.25,
+    "ownerHours": 0,
     "ownerKind": "procedure"
   }
 }

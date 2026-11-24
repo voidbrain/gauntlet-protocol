@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-015-T03",
   "parent": "F-015",
-  "status": "planned",
+  "status": "implemented",
   "title": "Sandboxed reference coding runner",
   "goal": "Sandboxed reference coding runner",
   "acceptance": [
@@ -42,10 +42,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "3 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
-    "reviewed": "2026-11-24",
-    "agentHours": 3,
+    "estimate": "0.5 h agent",
+    "basis": "Implemented 2026-11-25: container executor, reference runner, contract tests; independent review (sandbox boundary), CI and merge remain. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.5,
     "baselineAgentHours": 3,
     "estimateAgentHours": 3
   }

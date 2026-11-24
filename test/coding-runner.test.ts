@@ -78,7 +78,7 @@ test('the container boundary kills a timed-out case and a memory hog, leaving no
 test('the runner refuses to run without a container engine', async () => {
   const execute = containerExecutor({ docker: '/nonexistent/docker' });
   await assert.rejects(
-    execute({ argv: python('pass'), cwd: tmpdir(), env: {}, timeoutMs: 1000 }),
+    execute({ argv: python('pass'), cwd: workspace(), env: {}, timeoutMs: 1000 }),
     /container engine unavailable/,
   );
 });
@@ -112,7 +112,7 @@ async function fakeModel(variant: 'reference' | 'wrong', requests: string[]) {
       if (request.url === '/api/version') return send({ version: 'fixture-v1' });
       if (request.url === '/api/tags') return send({ models: [{ name: 'fixture:1b', digest: 'b'.repeat(64) }] });
       requests.push(body);
-      const prompt = JSON.stringify(JSON.parse(body).messages);
+      const prompt = (JSON.parse(body).messages as { content: string }[]).map((m) => m.content).join('\n');
       const id = ids.find((candidate) => prompt.includes(readTask(join('examples/coding-v1/tasks', candidate)).prompt));
       const { entry } = readTask(join('examples/coding-v1/tasks', String(id)));
       const code = readFileSync(

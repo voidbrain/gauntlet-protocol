@@ -1,104 +1,25 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 25 November 2026 against main `c38f4a7`. [PR #87](https://github.com/voidbrain/gauntlet-protocol/pull/87) (owner decisions) and [PR #86](https://github.com/voidbrain/gauntlet-protocol/pull/86) (coding-v1 pack, out-of-process grader) merged on green CI; F-015-T01 closed. Holdout decision H1 recorded (F-015-T05 closed).
+Current work ledger, reviewed 25 November 2026 against main `019fba8`. PRs #88 (holdouts H1), #89 (logic-math-v1) and #90 (rubric grader) merged on green CI; F-017-T01 and F-018-T01 closed. F-015-T06 done on the owner's Mac.
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 25.5 h agent + 3 h owner across 27 open steps of 8 features. Generated from the task files.
+**Remaining effort:** 22.5 h agent + 2.75 h owner across 24 open steps of 8 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="f-017"></a>[✨ F-017](#top)
-
-**logic-math-v1: puzzles, arithmetic and constraints**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h agent + 0.25 h owner | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-017-T01 — Logic and math pack with exact answers (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The index maps 0 cases to logic-planning and to math. |
-| **Reproduce** | `npm run index:build` reports `math: 0 mapped cases` and `logic-planning: 0 mapped cases`. |
-| **Check** | examples/logic-math-v1.json with exact-answer puzzles, arithmetic and constraint problems on the existing exact-json grader; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
-|---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-017-t01"></a>F-017-T01 — Logic and math pack with exact answers | 1 h | 0 h | 0.25 h | Implemented; verification pending | — | [F-017-T02](#f-017-t02) | 🤖 |
-| 🟢 Small | <a id="f-017-t02"></a>F-017-T02 — Release logic-math-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-017-T01](#f-017-t01) | — | ⏳ 🧑‍🔧 |
-| 🟢 Small | **Total** | 1 h (1 of 2 steps) | 0 h (0 of 2 steps recorded) | 0.25 h agent + 0.25 h owner | 0 of 2 completed | | | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-017.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#89](https://github.com/voidbrain/gauntlet-protocol/pull/89) |
-| Opened | 2026-11-24 |
-| Verification | Pending. |
-| Reviewed | 2026-11-24 |
-
-</details>
-
----
-### <a id="f-018"></a>[✨ F-018](#top)
-
-**italian-quality-v1: Italian summary, rewrite and register**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.75 h agent + 0.25 h owner | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-018-T01 — Deterministic rubric grader (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | bilingual-it-en-v1 checks language choice, not Italian quality. Free text cannot be graded by exact equality. |
-| **Reproduce** | `npm run index:build` lists no case with capability italian-quality. |
-| **Check** | A deterministic rubric grader (required and forbidden terms, Italian share, length, register markers) and examples/italian-quality-v1.json, area language-translation, capability italian-quality; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
-|---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-018-t01"></a>F-018-T01 — Deterministic rubric grader | 2 h | 0 h | 0.25 h | Implemented; verification pending | — | [F-018-T02](#f-018-t02) | 🤖 |
-| 🟡 Medium | <a id="f-018-t02"></a>F-018-T02 — Italian summary, rewrite and register tasks | 1.5 h | 0 h | 1.5 h | Planned | [F-018-T01](#f-018-t01) | [F-018-T03](#f-018-t03) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-018-t03"></a>F-018-T03 — Release italian-quality-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-018-T02](#f-018-t02) | — | ⏳ 🧑‍🔧 |
-| 🟡 Medium | **Total** | 3.5 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 1.75 h agent + 0.25 h owner | 0 of 3 completed | | | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-018.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#90](https://github.com/voidbrain/gauntlet-protocol/pull/90) |
-| Opened | 2026-11-24 |
-| Verification | Pending. |
-| Reviewed | 2026-11-24 |
-
-</details>
-
----
 ### <a id="f-015"></a>[✨ F-015](#top)
 
 **coding-v1: coding pack and sandboxed reference runner**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 3 h agent + 0.5 h owner | — | [F-016-T04](#f-016-t04), [F-019-T02](#f-019-t02), [F-021-T03](#f-021-t03) | ⏳ | 🧑‍🔧 | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h agent + 0.25 h owner | — | [F-016-T04](#f-016-t04), [F-019-T02](#f-019-t02), [F-021-T03](#f-021-t03) | 🤖 | — | — |
 
-🧑 **→** Next: [🧑‍🔧](guides/container-engine.md) F-015-T06 — Run a container engine on the evaluation machine (Planned).
+💻 **→** Next: F-015-T03 — Sandboxed reference coding runner (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -110,18 +31,18 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-015-t06"></a>F-015-T06 — Run a container engine on the evaluation machine | — | 0 h | 0 h agent + 0.25 h owner | Planned | — | [F-015-T03](#f-015-t03) | [🧑‍🔧](guides/container-engine.md) |
-| 🟡 Medium | <a id="f-015-t03"></a>F-015-T03 — Sandboxed reference coding runner | 3 h | 0 h | 3 h | Planned | [F-015-T06](#f-015-t06) | [F-015-T04](#f-015-t04), [F-016-T04](#f-016-t04), [F-019-T02](#f-019-t02), [F-021-T03](#f-021-t03) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-015-t03"></a>F-015-T03 — Sandboxed reference coding runner | 3 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-015-T04](#f-015-t04), [F-016-T04](#f-016-t04), [F-019-T02](#f-019-t02), [F-021-T03](#f-021-t03) | 🤖 |
 | 🟢 Small | <a id="f-015-t04"></a>F-015-T04 — Release coding-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-015-T03](#f-015-t03) | — | ⏳ 🧑‍🔧 |
-| 🟡 Medium | **Total** | 6 h (2 of 6 steps) | 0 h (0 of 6 steps recorded) | 3 h agent + 0.5 h owner | 3 of 6 completed | | | |
+| 🟢 Small | **Total** | 6 h (2 of 6 steps) | 0 h (0 of 6 steps recorded) | 0.5 h agent + 0.25 h owner | 4 of 6 completed | | | |
 
-<details><summary>Done steps (3)</summary>
+<details><summary>Done steps (4)</summary>
 
 | Effort | Step | Estimate | Actual | Status |
 |---|---|---|---|---|
 | — | <a id="f-015-t01"></a>F-015-T01 — Coding tasks, hidden tests and deterministic grader | 3 h | 0 h | Completed |
 | — | <a id="f-015-t02"></a>F-015-T02 — Choose the reference runner's sandbox boundary | — | 0 h | Completed |
 | — | <a id="f-015-t05"></a>F-015-T05 — Decide where holdout expectations live | — | 0 h | Completed |
+| — | <a id="f-015-t06"></a>F-015-T06 — Run a container engine on the evaluation machine | — | 0 h | Completed |
 
 </details>
 
@@ -133,6 +54,53 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#86](https://github.com/voidbrain/gauntlet-protocol/pull/86); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87); [#88](https://github.com/voidbrain/gauntlet-protocol/pull/88) |
+| Opened | 2026-11-24 |
+| Verification | Pending. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+### <a id="f-018"></a>[✨ F-018](#top)
+
+**italian-quality-v1: Italian summary, rewrite and register**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h agent + 0.25 h owner | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-018-T02 — Italian summary, rewrite and register tasks (Planned).
+
+| | |
+|---|---|
+| **Issue** | bilingual-it-en-v1 checks language choice, not Italian quality. Free text cannot be graded by exact equality. |
+| **Reproduce** | `npm run index:build` lists no case with capability italian-quality. |
+| **Check** | A deterministic rubric grader (required and forbidden terms, Italian share, length, register markers) and examples/italian-quality-v1.json, area language-translation, capability italian-quality; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
+|---|---|---|---|---|---|---|---|:---:|
+| 🟡 Medium | <a id="f-018-t02"></a>F-018-T02 — Italian summary, rewrite and register tasks | 1.5 h | 0 h | 1.5 h | Planned | — | [F-018-T03](#f-018-t03) | 🤖 |
+| 🟢 Small | <a id="f-018-t03"></a>F-018-T03 — Release italian-quality-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-018-T02](#f-018-t02) | — | ⏳ 🧑‍🔧 |
+| 🟡 Medium | **Total** | 3.5 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 1.5 h agent + 0.25 h owner | 1 of 3 completed | | | |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| — | <a id="f-018-t01"></a>F-018-T01 — Deterministic rubric grader | 2 h | 0 h | Completed |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-018.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#90](https://github.com/voidbrain/gauntlet-protocol/pull/90) |
 | Opened | 2026-11-24 |
 | Verification | Pending. |
 | Reviewed | 2026-11-25 |
@@ -266,6 +234,52 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-24 |
 | Verification | Pending. |
 | Reviewed | 2026-11-24 |
+
+</details>
+
+---
+### <a id="f-017"></a>[✨ F-017](#top)
+
+**logic-math-v1: puzzles, arithmetic and constraints**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h owner | — | — | — | 🧑‍🔧 | — |
+
+🧑 **→** Next: [🧑‍🔧](guides/release.md) F-017-T02 — Release logic-math-v1 (Planned).
+
+| | |
+|---|---|
+| **Issue** | The index maps 0 cases to logic-planning and to math. |
+| **Reproduce** | `npm run index:build` reports `math: 0 mapped cases` and `logic-planning: 0 mapped cases`. |
+| **Check** | examples/logic-math-v1.json with exact-answer puzzles, arithmetic and constraint problems on the existing exact-json grader; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Who |
+|---|---|---|---|---|---|:---:|
+| 🟢 Small | <a id="f-017-t02"></a>F-017-T02 — Release logic-math-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [🧑‍🔧](guides/release.md) |
+| 🟢 Small | **Total** | 1 h (1 of 2 steps) | 0 h (0 of 2 steps recorded) | 0.25 h owner | 1 of 2 completed | |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| — | <a id="f-017-t01"></a>F-017-T01 — Logic and math pack with exact answers | 1 h | 0 h | Completed |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-017.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#89](https://github.com/voidbrain/gauntlet-protocol/pull/89) |
+| Opened | 2026-11-24 |
+| Verification | Pending. |
+| Reviewed | 2026-11-25 |
 
 </details>
 

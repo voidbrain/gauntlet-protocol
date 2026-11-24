@@ -36,5 +36,6 @@
     "agentHours": 0,
     "ownerHours": 0.25,
     "ownerKind": "procedure"
-  }
+  },
+  "ownerLink": "docs/guides/release.md"
 }
