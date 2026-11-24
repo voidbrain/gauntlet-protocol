@@ -3,7 +3,7 @@
     "path": "../project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "10.7.0",
+  "version": "10.8.0",
   "stacks": [
     "core"
   ],
@@ -65,7 +65,9 @@
     "tools/reconcile-draft.mjs": "core/tools/reconcile-draft.mjs",
     "tools/quiet-reporter.mjs": "core/tools/quiet-reporter.mjs",
     "docs/agents/parallel-work-plans.md": "core/docs/agents/parallel-work-plans.md",
-    "docs/agents/prompt-caching.md": "core/docs/agents/prompt-caching.md"
+    "docs/agents/prompt-caching.md": "core/docs/agents/prompt-caching.md",
+    "docs/agents/skills-discovery.md": "core/docs/agents/skills-discovery.md",
+    "docs/agents/work-usage-launch.md": "core/docs/agents/work-usage-launch.md"
   },
   "forked": {},
   "freshness": {
@@ -146,7 +148,9 @@
     "docs/agents/pull-requests.md": "core/docs/agents/pull-requests.md",
     "docs/backlog/feature-plans.md": "core/docs/backlog/feature-plans.md",
     "docs/backlog/outcomes.md": "core/docs/backlog/outcomes.md",
-    ".npmrc": "core/npmrc.txt"
+    ".npmrc": "core/npmrc.txt",
+    "docs/backlog/human-action.md": "core/docs/backlog/human-action.md",
+    "docs/backlog/ledger-header.md": "core/docs/backlog/ledger-header.md"
   },
   "ciStatus": {
     "workflow": "CI",
@@ -167,6 +171,7 @@
       "docs/agents/mcp.md",
       "docs/agents/solution-profile.md",
       "docs/agents/skills.md",
+      "docs/agents/skills-discovery.md",
       "docs/agents/audit.md",
       "docs/agents/parallel-work.md",
       "docs/agents/parallel-work-plans.md",
@@ -177,6 +182,7 @@
       "docs/agents/task-context.md",
       "docs/agents/prompt-caching.md",
       "docs/agents/work-usage.md",
+      "docs/agents/work-usage-launch.md",
       "tools/work-usage.mjs",
       "tools/usage-launch.mjs"
     ]
@@ -226,6 +232,9 @@
       "days": 30
     },
     "architecture": {
+      "days": 30
+    },
+    "skills": {
       "days": 30
     }
   }
