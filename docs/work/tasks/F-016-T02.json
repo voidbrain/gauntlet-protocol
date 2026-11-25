@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-016-T02",
   "parent": "F-016",
-  "status": "implemented",
+  "status": "closed",
   "title": "Arduino and ESP32 sketch tasks graded by compile",
   "goal": "Arduino and ESP32 sketch tasks graded by compile",
   "acceptance": [
@@ -38,10 +38,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "2.5 h agent",
-    "basis": "Implemented 2026-11-25 in PR #93: four sketch tasks (Uno and ESP32, regression and holdout), examples/embedded-v1/grade.mjs (static checks, include guard, arduino-cli compile against pinned cores, missing-toolchain errors) and test/embedded-grader.test.ts (stand-in CLI everywhere; real compiles where installed). Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Closed 2026-11-25: #93 merged on green CI (stand-in compiler, per the owner decision of 2026-11-25); on the owner's Mac with arduino-cli 1.6.0, arduino:avr 1.8.6 and esp32:esp32 3.0.7, test/embedded-grader.test.ts passed 7/7 including the real compiles of all eight fixtures (references pass; wrong: two static-check failures, two compile errors). Implemented 2026-11-25 in PR #93: four sketch tasks (Uno and ESP32, regression and holdout), examples/embedded-v1/grade.mjs (static checks, include guard, arduino-cli compile against pinned cores, missing-toolchain errors) and test/embedded-grader.test.ts (stand-in CLI everywhere; real compiles where installed). Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
     "reviewed": "2026-11-25",
-    "agentHours": 2.5,
+    "agentHours": 0,
     "baselineAgentHours": 2.5,
     "estimateAgentHours": 2.5
   }
