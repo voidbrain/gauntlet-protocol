@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-019-T01",
   "parent": "F-019",
-  "status": "planned",
+  "status": "implemented",
   "title": "Slicer, material and tolerance questions",
   "goal": "Slicer, material and tolerance questions",
   "acceptance": [
@@ -33,10 +33,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
-    "reviewed": "2026-11-24",
-    "agentHours": 1,
+    "estimate": "0.25 h agent",
+    "basis": "Implemented 2026-11-25: examples/cad-3d-v1.json (6 model-layer slicer, material and tolerance questions across regression and holdout splits), test/fixtures/cad-3d-questions-v1.json, pack and catalog tests, and regenerated docs/test-index.md; CI and merge remain. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.25,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   }

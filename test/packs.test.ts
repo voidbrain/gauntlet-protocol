@@ -461,3 +461,54 @@ test('logic-math pack has exact answers for math and logic in both splits', asyn
     true,
   );
 });
+
+test('cad-3d pack covers slicer, material and tolerance questions in both splits with passing and wrong fixtures', async () => {
+  const pack = load('examples/cad-3d-v1.json');
+  const fixtures = JSON.parse(readFileSync('test/fixtures/cad-3d-questions-v1.json', 'utf8')) as Record<
+    string,
+    { passing: { answer: unknown }; wrong: { answer: unknown } }
+  >;
+  const questions = pack.cases.filter((entry) => entry.layer === 'model');
+  assert.ok(questions.length >= 6);
+  assert.deepEqual(new Set(questions.map((entry) => entry.split)), new Set(['regression', 'holdout']));
+  assert.equal(
+    questions.every(
+      (entry) =>
+        entry.area === 'cad-3d' &&
+        entry.expected?.kind === 'json' &&
+        entry.responseFormat === 'json' &&
+        entry.capabilities.includes('structured-output'),
+    ),
+    true,
+  );
+  for (const capability of ['slicing-parameters', 'printing-materials', 'dimensional-tolerances'])
+    assert.deepEqual(
+      new Set(questions.filter((entry) => entry.capabilities.includes(capability)).map((entry) => entry.split)),
+      new Set(['regression', 'holdout']),
+      capability,
+    );
+  const questionPack = validatePack({ ...pack, cases: questions });
+  const passingAnswers = questions.map((entry) => {
+    const item = fixtures[entry.id];
+    assert.ok(item?.passing && item?.wrong, entry.id);
+    assert.deepEqual(item.passing, (entry.expected as { value: unknown }).value, entry.id);
+    assert.notDeepEqual(item.wrong, item.passing, entry.id);
+    return item.passing;
+  });
+  const passing = await run(questionPack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    fetch: provider(passingAnswers),
+  });
+  assert.equal(passing.passed, true);
+  const wrongAnswers = questions.map((entry) => fixtures[entry.id].wrong);
+  const failing = await run(questionPack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    fetch: provider(wrongAnswers),
+  });
+  assert.equal(
+    failing.results.every((result) => result.status === 'failed'),
+    true,
+  );
+});
