@@ -25,7 +25,7 @@ const profile: Profile = {
   cache: 'neutral',
 };
 
-const provider = (answers: unknown[]) => {
+const provider = (answers: unknown[], raw = false) => {
   let answer = 0;
   return (async (input: unknown) => {
     const path = new URL(String(input)).pathname;
@@ -38,7 +38,7 @@ const provider = (answers: unknown[]) => {
             ? { models: [{ name: profile.model, size: 100, digest: 'a'.repeat(64) }] }
             : {
                 model: profile.model,
-                message: { content: JSON.stringify(answers[answer++]) },
+                message: { content: raw ? String(answers[answer++]) : JSON.stringify(answers[answer++]) },
                 done: true,
                 eval_count: 4,
                 done_reason: 'stop',
@@ -489,28 +489,6 @@ test('logic-math pack has exact answers for math and logic in both splits', asyn
   );
 });
 
-const rawProvider = (answers: string[]) => {
-  let answer = 0;
-  return (async (input: unknown) => {
-    const path = new URL(String(input)).pathname;
-    const value =
-      path === '/api/version'
-        ? { version: 'fixture-v1' }
-        : path === '/api/show'
-          ? { model_info: { 'general.file_type': 15 }, details: { quantization_level: 'Q4_K_M' } }
-          : path === '/api/tags'
-            ? { models: [{ name: profile.model, size: 100, digest: 'a'.repeat(64) }] }
-            : {
-                model: profile.model,
-                message: { content: answers[answer++] },
-                done: true,
-                eval_count: 18,
-                done_reason: 'stop',
-              };
-    return new Response(JSON.stringify(value));
-  }) as typeof fetch;
-};
-
 test('italian-quality pack grades summary, rewrite and register cases in both splits with references and failing fixtures', async () => {
   const pack = load('examples/italian-quality-v1.json');
   const fixtures = JSON.parse(readFileSync('test/fixtures/italian-quality-v1.json', 'utf8')) as Record<
@@ -544,7 +522,7 @@ test('italian-quality pack grades summary, rewrite and register cases in both sp
   const passing = await run(pack, profile, defaults, {
     execute: true,
     allowModels: true,
-    fetch: rawProvider(references),
+    fetch: provider(references, true),
   });
   assert.equal(passing.passed, true);
   for (let index = 0; index < Math.max(...pack.cases.map((entry) => fixtures[entry.id].failing.length)); index++) {
@@ -555,7 +533,7 @@ test('italian-quality pack grades summary, rewrite and register cases in both sp
     const failing = await run(pack, profile, defaults, {
       execute: true,
       allowModels: true,
-      fetch: rawProvider(replies),
+      fetch: provider(replies, true),
     });
     assert.equal(
       failing.results.every((result) => result.status === 'failed'),
@@ -564,7 +542,8 @@ test('italian-quality pack grades summary, rewrite and register cases in both sp
     for (let i = 0; i < pack.cases.length; i++) {
       const list = fixtures[pack.cases[i].id].failing;
       const check = list[Math.min(index, list.length - 1)].check;
-      assert.match(String(failing.results[i].reason), new RegExp(check), `${pack.cases[i].id}[${index}]`);
+      const failed = String(failing.results[i].reason).replace('Rubric checks failed: ', '').split(', ');
+      assert.ok(failed.includes(check), `${pack.cases[i].id}[${index}]: ${failed.join(', ')}`);
     }
   }
 });
