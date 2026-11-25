@@ -2,6 +2,10 @@
 
 Dated reconciliation entries, newest by date. The backlog header is generated from the newest `## <date> — <branch> `<sha>`` entry (harness 8.4.0); its first paragraph stays under 300 characters.
 
+## 2026-11-25 — main `bc0c6d6`
+
+PRs #106 to #108 merged on green CI (#106: F-018 to F-020 archived; #107: B-004, B-005; #108: release 0.11.1, published). B-004 and B-005 closed. Reconciled `project-harness v10.20.0` (committed backlog views kept).
+
 ## 2026-11-25 — main `019fba8`
 
 PRs #88 (holdouts H1), #89 (logic-math-v1) and #90 (rubric grader) merged on green CI; F-017-T01 and F-018-T01 closed. F-015-T06 done on the owner's Mac.

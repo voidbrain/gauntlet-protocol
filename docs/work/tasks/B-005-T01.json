@@ -2,7 +2,7 @@
   "version": 1,
   "id": "B-005-T01",
   "parent": "B-005",
-  "status": "implemented",
+  "status": "closed",
   "title": "Executor errors are errors, not grades",
   "goal": "An engine client spawn failure yields an error result, never failed",
   "acceptance": [
@@ -29,10 +29,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h agent",
-    "basis": "Implemented 2026-11-25: regression test committed failing first (a720f99), fix in examples/coding-v1 and examples/cad-3d-v1, PROTOCOL.md updated; CI and merge remain. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Merged in PR #107 on green CI on 2026-11-25 (regression test committed failing first, a720f99); shipped in v0.11.1 (release PR #108). No actual: elapsed time not measured across sessions.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 0.25,
     "estimateAgentHours": 0.25
   }

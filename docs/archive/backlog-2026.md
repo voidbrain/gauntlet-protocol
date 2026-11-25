@@ -791,3 +791,71 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 </details>
 
 ---
+
+### B-004
+
+**Coding runner asks the model, then crashes without a report, when no container engine is available**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: Merged in #107 on green CI 2026-11-25 (regression test failing first, a720f99); shipped in v0.11.1 (#108).
+
+| | |
+|---|---|
+| **Issue** | `examples/coding-v1/runner.mjs` asks the model first and only then reaches the executor, whose `prepare` throws "container engine unavailable"; the runner exits without a report, so the case shows an adapter failure instead of an `error` naming the fix, and a model generation is wasted. Found by NERV's review of the 0.11.0 adoption; the embedded and cad-3d runners already check first. |
+| **Reproduce** | Run the runner on a coding case with no container engine (`--docker=test/fixtures/no-docker.mjs`): the model is asked, then the process exits non-zero with no report. |
+| **Check** | The runner checks the engine and image before asking the model and writes an `error` result (`complete: false`, 0 checks) with the fix on stderr. Regression test committed failing first. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: Merged in #107 on green CI 2026-11-25 (regression test failing first, a720f99); shipped in v0.11.1 (#108). 2026-11-25: closed. B-004-T01 merged in #107 on green CI (regression test failing first, a720f99); shipped in v0.11.1 (#108). Every check is automated, so #107's green CI run is the evidence.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | NERV review of the 0.11.0 adoption (2026-11-25); [#107](https://github.com/voidbrain/gauntlet-protocol/pull/107) |
+| Opened | 2026-11-25 |
+| Verification | 2026-11-25: #107 CI green; release v0.11.1 published. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### B-005
+
+**An engine client that fails to start is graded as a failure**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: Merged in #107 on green CI 2026-11-25 (regression test failing first, a720f99); shipped in v0.11.1 (#108).
+
+| | |
+|---|---|
+| **Issue** | `examples/coding-v1/container-executor.mjs` resolved a Docker client `spawn` error as exit code `null`, so the coding grader returned `failed` (`no-results`) and the OpenSCAD grader `failed` (`build-error`): an infrastructure fault became a graded result that counts as covering the case. Found by NERV's review of the 0.11.0 adoption. |
+| **Reproduce** | Grade with a container executor whose engine client cannot be started (ENOENT on spawn): the result is `failed`, not `error`. |
+| **Check** | The executor rejects when the engine client fails to start, and both graders turn an executor rejection into `error` (`executor-error`, with the message), which the runners report as `error`. The candidate controls its exit code, so exit codes never mark an executor error. Regression tests committed failing first. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: Merged in #107 on green CI 2026-11-25 (regression test failing first, a720f99); shipped in v0.11.1 (#108). 2026-11-25: closed. B-005-T01 merged in #107 on green CI (regression test failing first, a720f99); shipped in v0.11.1 (#108). Every check is automated, so #107's green CI run is the evidence.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | NERV review of the 0.11.0 adoption (2026-11-25); [#107](https://github.com/voidbrain/gauntlet-protocol/pull/107) |
+| Opened | 2026-11-25 |
+| Verification | 2026-11-25: #107 CI green; release v0.11.1 published. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
