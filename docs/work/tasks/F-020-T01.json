@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-020-T01",
   "parent": "F-020",
-  "status": "implemented",
+  "status": "closed",
   "title": "Defect-finding grader",
   "goal": "Defect-finding grader",
   "acceptance": [
@@ -33,11 +33,16 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.25 h agent",
-    "basis": "Implemented 2026-11-25: src/defects.ts (expected kind defects, grader defects-v1; findings cover at most 10 lines, added in review), pack validation, run grading, engine identity, contract tests in test/defects.test.ts and PROTOCOL.md section; CI and merge remain. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Merged in PR #101 on green CI on 2026-11-25. No actual: elapsed time not measured across sessions.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 2,
     "estimateAgentHours": 2
-  }
+  },
+  "prs": [
+    {
+      "pr": 101
+    }
+  ]
 }

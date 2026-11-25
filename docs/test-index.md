@@ -107,6 +107,12 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [italian-quality@1.0.0 / rewrite-bureaucratic-holdout](../examples/italian-quality-v1.json) | language-translation | italian-quality, rewriting | model / holdout | true / false | rubric-v1 / local-model-runtime | Unmeasured |
 | [italian-quality@1.0.0 / register-formal-regression](../examples/italian-quality-v1.json) | language-translation | italian-quality, register-control | model / regression | true / false | rubric-v1 / local-model-runtime | Unmeasured |
 | [italian-quality@1.0.0 / register-informal-holdout](../examples/italian-quality-v1.json) | language-translation | italian-quality, register-control | model / holdout | true / false | rubric-v1 / local-model-runtime | Unmeasured |
+| [code-review@1.0.0 / sql-and-bounds-regression](../examples/code-review-v1.json) | code-review | defect-detection, security-review, structured-output | model / regression | true / false | defects-v1 / local-model-runtime | Unmeasured |
+| [code-review@1.0.0 / race-and-leak-regression](../examples/code-review-v1.json) | code-review | defect-detection, concurrency-review, structured-output | model / regression | true / false | defects-v1 / local-model-runtime | Unmeasured |
+| [code-review@1.0.0 / path-and-nan-regression](../examples/code-review-v1.json) | code-review | defect-detection, security-review, structured-output | model / regression | true / false | defects-v1 / local-model-runtime | Unmeasured |
+| [code-review@1.0.0 / command-and-retry-holdout](../examples/code-review-v1.json) | code-review | defect-detection, security-review, structured-output | model / holdout | true / false | defects-v1 / local-model-runtime | Unmeasured |
+| [code-review@1.0.0 / listener-and-mutation-holdout](../examples/code-review-v1.json) | code-review | defect-detection, concurrency-review, structured-output | model / holdout | true / false | defects-v1 / local-model-runtime | Unmeasured |
+| [code-review@1.0.0 / token-and-cache-holdout](../examples/code-review-v1.json) | code-review | defect-detection, security-review, concurrency-review, structured-output | model / holdout | true / false | defects-v1 / local-model-runtime | Unmeasured |
 
 ## Area coverage
 
@@ -114,7 +120,7 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 - general-assistant: 42 mapped cases
 - coding: 4 mapped cases
 - embedded: 8 mapped cases
-- code-review: 0 mapped cases
+- code-review: 6 mapped cases
 - math: 4 mapped cases
 - logic-planning: 4 mapped cases
 - cad-3d: 10 mapped cases

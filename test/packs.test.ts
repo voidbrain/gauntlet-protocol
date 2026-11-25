@@ -6,6 +6,7 @@ import { join, resolve } from 'node:path';
 import { defaults, run, validatePack, validateRegistry, type Pack, type Profile } from '../src/index.ts';
 import { gradeCandidate, readTask, removeLeftoverWorkspaces } from '../examples/coding-v1/grade.mjs';
 import { trustedExecutor } from './fixtures/coding-trusted-executor.mjs';
+import { gradeDefects, type DefectExpectation } from '../src/defects.ts';
 
 const profile: Profile = {
   schemaVersion: 1,
@@ -596,5 +597,111 @@ test('italian-quality pack grades summary, rewrite and register cases in both sp
       const failed = String(failing.results[i].reason).replace('Rubric checks failed: ', '').split(', ');
       assert.ok(failed.includes(check), `${pack.cases[i].id}[${index}]: ${failed.join(', ')}`);
     }
+  }
+});
+
+test('code-review pack grades seeded-defect diffs in both splits and rejects missed, noisy and whole-file sweeping findings', async () => {
+  const pack = load('examples/code-review-v1.json');
+  const fixtures = JSON.parse(readFileSync('test/fixtures/code-review-v1.json', 'utf8')) as Record<
+    string,
+    {
+      passing: { findings: unknown[] };
+      missed: { findings: unknown[]; check: string };
+      noisy: { findings: unknown[]; check: string };
+      sweeping: { findings: unknown[]; check: string };
+    }
+  >;
+  assert.ok(pack.cases.length >= 6);
+  assert.deepEqual(new Set(pack.cases.map((entry) => entry.split)), new Set(['regression', 'holdout']));
+  assert.equal(
+    pack.cases.every(
+      (entry) =>
+        entry.layer === 'model' &&
+        entry.area === 'code-review' &&
+        entry.expected?.kind === 'defects' &&
+        entry.responseFormat === 'json' &&
+        entry.capabilities.includes('defect-detection'),
+    ),
+    true,
+  );
+  const passingAnswers = pack.cases.map((entry) => {
+    const item = fixtures[entry.id];
+    assert.ok(item?.passing && item?.missed && item?.noisy && item?.sweeping, entry.id);
+    return item.passing;
+  });
+  const passing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    fetch: provider(passingAnswers),
+  });
+  assert.equal(passing.passed, true);
+
+  for (const variant of ['missed', 'noisy', 'sweeping'] as const) {
+    const replies = pack.cases.map((entry) => ({ findings: fixtures[entry.id][variant].findings }));
+    const failing = await run(pack, profile, defaults, {
+      execute: true,
+      allowModels: true,
+      fetch: provider(replies),
+    });
+    assert.equal(
+      failing.results.every((result) => result.status === 'failed'),
+      true,
+      variant,
+    );
+    for (let i = 0; i < pack.cases.length; i++) {
+      const check = fixtures[pack.cases[i].id][variant].check;
+      const failed = String(failing.results[i].reason).replace('Defect checks failed: ', '').split(', ');
+      assert.ok(failed.includes(check), `${pack.cases[i].id}[${variant}]: ${failed.join(', ')}`);
+    }
+  }
+});
+
+test('code-review pack cannot be passed by vague, whole-file or every-line findings', () => {
+  const pack = load('examples/code-review-v1.json');
+  const categories = ['security', 'logic', 'concurrency', 'resource'];
+  for (const entry of pack.cases) {
+    const expectation = entry.expected?.value as DefectExpectation;
+    const prompt = String(entry.messages?.at(-1)?.content);
+    const excerpts = new Map<string, number[]>();
+    let file = '';
+    for (const line of prompt.split('\n')) {
+      const header = /^File: (\S+)$/.exec(line);
+      if (header) excerpts.set((file = header[1]), []);
+      const numbered = /^(\d+):( |$)/.exec(line);
+      if (numbered && file) excerpts.get(file)?.push(Number(numbered[1]));
+    }
+    const ranges = new Map(
+      [...excerpts].map(([name, numbers]) => [name, [numbers[0], numbers.at(-1) as number] as const]),
+    );
+    for (const [name, numbers] of excerpts) {
+      // Consecutive numbering and more than two 10-line findings per excerpt, so tiling it costs a false positive.
+      assert.ok(
+        numbers.every((value, i) => i === 0 || value === numbers[i - 1] + 1),
+        `${entry.id} ${name}`,
+      );
+      assert.ok(numbers.length > 20, `${entry.id} ${name}: ${numbers.length} lines`);
+    }
+    for (const defect of expectation.defects) {
+      const range = ranges.get(defect.file);
+      assert.ok(range && defect.lines[0] >= range[0] && defect.lines[1] <= range[1], `${entry.id} ${defect.id}`);
+    }
+    const attempts: Record<string, { file: string; lines: [number, number]; category: string }[]> = {
+      everyLineEveryCategory: [...ranges].flatMap(([name, [first, last]]) =>
+        Array.from({ length: last - first + 1 }, (_, i) =>
+          categories.map((category) => ({ file: name, lines: [first + i, first + i] as [number, number], category })),
+        ).flat(),
+      ),
+    };
+    // Whole excerpt as 10-line findings in each seeded defect's own category, at every offset.
+    for (let offset = 0; offset < 10; offset++)
+      attempts[`tiled+${offset}`] = expectation.defects.flatMap((defect) => {
+        const [first, last] = ranges.get(defect.file) as readonly [number, number];
+        const tiles: { file: string; lines: [number, number]; category: string }[] = [];
+        for (let start = first - offset; start <= last; start += 10)
+          tiles.push({ file: defect.file, lines: [Math.max(first, start), start + 9], category: defect.category });
+        return tiles;
+      });
+    for (const [name, findings] of Object.entries(attempts))
+      assert.equal(gradeDefects({ findings }, expectation).passed, false, `${entry.id} ${name}`);
   }
 });
