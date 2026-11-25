@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-016-T02",
   "parent": "F-016",
-  "status": "planned",
+  "status": "implemented",
   "title": "Arduino and ESP32 sketch tasks graded by compile",
   "goal": "Arduino and ESP32 sketch tasks graded by compile",
   "acceptance": [
@@ -39,8 +39,8 @@
   "effort": {
     "size": "medium",
     "estimate": "2.5 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
-    "reviewed": "2026-11-24",
+    "basis": "Implemented 2026-11-25 in this PR: four sketch tasks (Uno and ESP32, regression and holdout), examples/embedded-v1/grade.mjs (static checks, include guard, arduino-cli compile against pinned cores, missing-toolchain errors) and test/embedded-grader.test.ts (stand-in CLI everywhere; real compiles where installed). Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "reviewed": "2026-11-25",
     "agentHours": 2.5,
     "baselineAgentHours": 2.5,
     "estimateAgentHours": 2.5

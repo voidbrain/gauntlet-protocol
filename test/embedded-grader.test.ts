@@ -48,7 +48,7 @@ test('embedded grader passes the reference sketches and fails the wrong ones, de
   });
   assert.deepEqual(
     [blocking.reason, blocking.compile, blocking.failedChecks],
-    ['static-checks', 'passed', ['no-delay']],
+    ['static-checks', 'passed', ['millis', 'no-delay']],
   );
   const broken = await gradeSketch({
     taskDir: task('debounce-toggle-uno-regression'),

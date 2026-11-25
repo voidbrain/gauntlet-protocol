@@ -196,7 +196,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|---|---|---|---|:---:|:---:|:---:|
 | 🔴 Open | 🔶 P2 | 🔴 Large | 5.5 h agent + 0.25 h owner | [F-015-T03](#f-015-t03) | — | 🤖 | — | — |
 
-💻 **→** Next: F-016-T02 — Arduino and ESP32 sketch tasks graded by compile (Planned).
+💻 **→** Next: F-016-T02 — Arduino and ESP32 sketch tasks graded by compile (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -208,7 +208,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟡 Medium | <a id="f-016-t02"></a>F-016-T02 — Arduino and ESP32 sketch tasks graded by compile | 2.5 h | 0 h | 2.5 h | Planned | — | [F-016-T04](#f-016-t04) | 🤖 |
+| 🟡 Medium | <a id="f-016-t02"></a>F-016-T02 — Arduino and ESP32 sketch tasks graded by compile | 2.5 h | 0 h | 2.5 h | Implemented; verification pending | — | [F-016-T04](#f-016-t04) | 🤖 |
 | 🟡 Medium | <a id="f-016-t03"></a>F-016-T03 — Raspberry Pi Python tasks graded by static checks | 1.5 h | 0 h | 1.5 h | Planned | — | [F-016-T04](#f-016-t04) | 🤖 |
 | 🟡 Medium | <a id="f-016-t04"></a>F-016-T04 — Embedded runner, pack and index entry | 1.5 h | 0 h | 1.5 h | Planned | [F-016-T02](#f-016-t02), [F-016-T03](#f-016-t03), [F-015-T03](#f-015-t03) | [F-016-T05](#f-016-t05) | ⏳ 🤖 |
 | 🟢 Small | <a id="f-016-t05"></a>F-016-T05 — Release embedded-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-016-T04](#f-016-t04) | — | ⏳ 🧑‍🔧 |
