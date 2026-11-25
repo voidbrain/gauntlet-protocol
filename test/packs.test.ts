@@ -598,3 +598,59 @@ test('italian-quality pack grades summary, rewrite and register cases in both sp
     }
   }
 });
+
+test('code-review pack grades seeded-defect diffs in both splits and rejects missed, noisy and whole-file sweeping findings', async () => {
+  const pack = load('examples/code-review-v1.json');
+  const fixtures = JSON.parse(readFileSync('test/fixtures/code-review-v1.json', 'utf8')) as Record<
+    string,
+    {
+      passing: { findings: unknown[] };
+      missed: { findings: unknown[]; check: string };
+      noisy: { findings: unknown[]; check: string };
+      sweeping: { findings: unknown[]; check: string };
+    }
+  >;
+  assert.ok(pack.cases.length >= 6);
+  assert.deepEqual(new Set(pack.cases.map((entry) => entry.split)), new Set(['regression', 'holdout']));
+  assert.equal(
+    pack.cases.every(
+      (entry) =>
+        entry.layer === 'model' &&
+        entry.area === 'code-review' &&
+        entry.expected?.kind === 'defects' &&
+        entry.responseFormat === 'json' &&
+        entry.capabilities.includes('defect-detection'),
+    ),
+    true,
+  );
+  const passingAnswers = pack.cases.map((entry) => {
+    const item = fixtures[entry.id];
+    assert.ok(item?.passing && item?.missed && item?.noisy && item?.sweeping, entry.id);
+    return item.passing;
+  });
+  const passing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    fetch: provider(passingAnswers),
+  });
+  assert.equal(passing.passed, true);
+
+  for (const variant of ['missed', 'noisy', 'sweeping'] as const) {
+    const replies = pack.cases.map((entry) => ({ findings: fixtures[entry.id][variant].findings }));
+    const failing = await run(pack, profile, defaults, {
+      execute: true,
+      allowModels: true,
+      fetch: provider(replies),
+    });
+    assert.equal(
+      failing.results.every((result) => result.status === 'failed'),
+      true,
+      variant,
+    );
+    for (let i = 0; i < pack.cases.length; i++) {
+      const check = fixtures[pack.cases[i].id][variant].check;
+      const failed = String(failing.results[i].reason).replace('Defect checks failed: ', '').split(', ');
+      assert.ok(failed.includes(check), `${pack.cases[i].id}[${variant}]: ${failed.join(', ')}`);
+    }
+  }
+});
