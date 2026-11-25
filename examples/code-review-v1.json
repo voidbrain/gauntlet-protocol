@@ -1,0 +1,229 @@
+{
+  "schemaVersion": 1,
+  "id": "code-review",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "sql-and-bounds-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["defect-detection", "security-review", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Review the following numbered diff and report all defects as JSON of the form {\"findings\": [{\"file\": \"...\", \"line\": N, \"category\": \"security\"|\"logic\"|\"concurrency\"|\"resource\", \"summary\": \"...\"}]}. Each finding must pinpoint the defective line or a span of at most 10 lines.\n\nFile: src/users.ts\n10: export function listUsers(db: Database, role: string, page: number, size: number) {\n11:   const safeSize = Math.min(Math.max(size, 1), 100);\n12:   const sql = `SELECT id, email FROM users WHERE role = '${role}' ORDER BY id`;\n13:   const rows = db.query(sql);\n14:   const start = page * safeSize;\n15:   const out = [];\n16:   for (let i = start; i <= start + safeSize; i++) {\n17:     if (i < rows.length) out.push(rows[i]);\n18:   }\n19:   return out;\n20: }"
+        }
+      ],
+      "expected": {
+        "kind": "defects",
+        "value": {
+          "maxFalsePositives": 0,
+          "defects": [
+            {
+              "id": "sql-injection",
+              "file": "src/users.ts",
+              "lines": [12, 13],
+              "category": "security"
+            },
+            {
+              "id": "off-by-one-slice",
+              "file": "src/users.ts",
+              "lines": [16, 18],
+              "category": "logic"
+            }
+          ]
+        }
+      },
+      "area": "code-review",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "race-and-leak-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["defect-detection", "concurrency-review", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Review the following numbered diff and report all defects as JSON of the form {\"findings\": [{\"file\": \"...\", \"line\": N, \"category\": \"security\"|\"logic\"|\"concurrency\"|\"resource\", \"summary\": \"...\"}]}. Each finding must pinpoint the defective line or a span of at most 10 lines.\n\nFile: src/wallet.ts\n20: export async function debit(store: WalletStore, accountId: string, amount: number) {\n21:   const balance = await store.getBalance(accountId);\n22:   if (balance < amount) return { ok: false };\n23:   await store.setBalance(accountId, balance - amount);\n24:   return { ok: true };\n25: }\n\nFile: src/archive.ts\n30: export async function readHeader(path: string): Promise<string> {\n31:   const handle = await open(path, 'r');\n32:   const buf = Buffer.alloc(64);\n33:   await handle.read(buf, 0, 64, 0);\n34:   if (buf[0] !== 0x47) throw new Error('bad magic');\n35:   await handle.close();\n36:   return buf.toString('utf8');\n37: }"
+        }
+      ],
+      "expected": {
+        "kind": "defects",
+        "value": {
+          "maxFalsePositives": 0,
+          "defects": [
+            {
+              "id": "balance-toctou",
+              "file": "src/wallet.ts",
+              "lines": [21, 23],
+              "category": "concurrency"
+            },
+            {
+              "id": "handle-leak-on-throw",
+              "file": "src/archive.ts",
+              "lines": [31, 35],
+              "category": "resource"
+            }
+          ]
+        }
+      },
+      "area": "code-review",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "path-and-nan-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["defect-detection", "security-review", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Review the following numbered diff and report all defects as JSON of the form {\"findings\": [{\"file\": \"...\", \"line\": N, \"category\": \"security\"|\"logic\"|\"concurrency\"|\"resource\", \"summary\": \"...\"}]}. Each finding must pinpoint the defective line or a span of at most 10 lines.\n\nFile: src/downloads.ts\n40: export function resolveAsset(rootDir: string, requestedName: string, limitRaw: string) {\n41:   const fullPath = rootDir + '/' + requestedName;\n42:   const data = readFileSync(fullPath);\n43:   const maxBytes = Number.parseInt(limitRaw, 10);\n44:   if (data.byteLength > maxBytes) {\n45:     throw new Error('asset exceeds limit');\n46:   }\n47:   return data;\n48: }"
+        }
+      ],
+      "expected": {
+        "kind": "defects",
+        "value": {
+          "maxFalsePositives": 0,
+          "defects": [
+            {
+              "id": "path-traversal",
+              "file": "src/downloads.ts",
+              "lines": [41, 42],
+              "category": "security"
+            },
+            {
+              "id": "nan-limit-bypass",
+              "file": "src/downloads.ts",
+              "lines": [43, 45],
+              "category": "logic"
+            }
+          ]
+        }
+      },
+      "area": "code-review",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "command-and-retry-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["defect-detection", "security-review", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Review the following numbered diff and report all defects as JSON of the form {\"findings\": [{\"file\": \"...\", \"line\": N, \"category\": \"security\"|\"logic\"|\"concurrency\"|\"resource\", \"summary\": \"...\"}]}. Each finding must pinpoint the defective line or a span of at most 10 lines.\n\nFile: src/thumbnail.ts\n10: export function extractFrame(videoFile: string, outPath: string): void {\n11:   execSync(`ffmpeg -i ${videoFile} -frames:v 1 ${outPath}`);\n12: }\n\nFile: src/retry.ts\n20: export async function withRetry<T>(fn: () => Promise<T>, maxAttempts: number): Promise<T> {\n21:   let attempts = 0;\n22:   while (true) {\n23:     try {\n24:       return await fn();\n25:     } catch (err) {\n26:       if (attempts > maxAttempts) throw err;\n27:     }\n28:   }\n29: }"
+        }
+      ],
+      "expected": {
+        "kind": "defects",
+        "value": {
+          "maxFalsePositives": 0,
+          "defects": [
+            {
+              "id": "command-injection",
+              "file": "src/thumbnail.ts",
+              "lines": [10, 12],
+              "category": "security"
+            },
+            {
+              "id": "unincremented-retry-loop",
+              "file": "src/retry.ts",
+              "lines": [21, 27],
+              "category": "logic"
+            }
+          ]
+        }
+      },
+      "area": "code-review",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "listener-and-mutation-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["defect-detection", "concurrency-review", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Review the following numbered diff and report all defects as JSON of the form {\"findings\": [{\"file\": \"...\", \"line\": N, \"category\": \"security\"|\"logic\"|\"concurrency\"|\"resource\", \"summary\": \"...\"}]}. Each finding must pinpoint the defective line or a span of at most 10 lines.\n\nFile: src/rpc-wait.ts\n15: export function waitReply(bus: EventEmitter, requestId: string, timeoutMs: number): Promise<unknown> {\n16:   return new Promise((resolve, reject) => {\n17:     const onMessage = (msg: { id: string; payload: unknown }) => {\n18:       if (msg.id === requestId) resolve(msg.payload);\n19:     };\n20:     bus.on('message', onMessage);\n21:     setTimeout(() => reject(new Error('timeout')), timeoutMs);\n22:   });\n23: }\n\nFile: src/scores.ts\n30: export function topThree(scores: number[]): number[] {\n31:   const sorted = scores.sort();\n32:   return sorted.slice(0, 3);\n33: }"
+        }
+      ],
+      "expected": {
+        "kind": "defects",
+        "value": {
+          "maxFalsePositives": 0,
+          "defects": [
+            {
+              "id": "listener-and-timer-leak",
+              "file": "src/rpc-wait.ts",
+              "lines": [17, 21],
+              "category": "resource"
+            },
+            {
+              "id": "lexicographic-in-place-sort",
+              "file": "src/scores.ts",
+              "lines": [30, 32],
+              "category": "logic"
+            }
+          ]
+        }
+      },
+      "area": "code-review",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "token-and-cache-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["defect-detection", "security-review", "concurrency-review", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Review the following numbered diff and report all defects as JSON of the form {\"findings\": [{\"file\": \"...\", \"line\": N, \"category\": \"security\"|\"logic\"|\"concurrency\"|\"resource\", \"summary\": \"...\"}]}. Each finding must pinpoint the defective line or a span of at most 10 lines.\n\nFile: src/webhook.ts\n10: export function verifySignature(headerSig: string | undefined, expectedSig: string): boolean {\n11:   if (!headerSig) return false;\n12:   return expectedSig.startsWith(headerSig);\n13: }\n\nFile: src/token-cache.ts\n20: let cachedToken: string | null = null;\n21: export async function getServiceToken(fetchToken: () => Promise<string>): Promise<string> {\n22:   if (!cachedToken) {\n23:     cachedToken = await fetchToken();\n24:   }\n25:   return cachedToken;\n26: }"
+        }
+      ],
+      "expected": {
+        "kind": "defects",
+        "value": {
+          "maxFalsePositives": 0,
+          "defects": [
+            {
+              "id": "prefix-signature-bypass",
+              "file": "src/webhook.ts",
+              "lines": [11, 12],
+              "category": "security"
+            },
+            {
+              "id": "concurrent-token-stampede",
+              "file": "src/token-cache.ts",
+              "lines": [22, 24],
+              "category": "concurrency"
+            }
+          ]
+        }
+      },
+      "area": "code-review",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    }
+  ]
+}

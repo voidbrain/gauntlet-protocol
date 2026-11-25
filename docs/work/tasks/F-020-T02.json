@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-020-T02",
   "parent": "F-020",
-  "status": "planned",
+  "status": "implemented",
   "title": "Seeded-defect diff cases",
   "goal": "Seeded-defect diff cases",
   "acceptance": [
@@ -35,11 +35,16 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "1.5 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
-    "reviewed": "2026-11-24",
-    "agentHours": 1.5,
+    "estimate": "0.25 h agent",
+    "basis": "Implemented 2026-11-25: examples/code-review-v1.json (6 invented diff cases across regression and holdout splits), test/fixtures/code-review-v1.json (passing, missed, noisy and whole-file sweeping fixtures), pack and catalog tests, and regenerated docs/test-index.md; CI and merge remain. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.25,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
-  }
+  },
+  "prs": [
+    {
+      "pr": 102
+    }
+  ]
 }
