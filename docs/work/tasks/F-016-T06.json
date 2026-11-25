@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-016-T06",
   "parent": "F-016",
-  "status": "planned",
+  "status": "closed",
   "title": "Install arduino-cli and the pinned cores on the evaluation machine",
   "goal": "Install arduino-cli and the pinned cores on the evaluation machine",
   "acceptance": [
@@ -28,11 +28,11 @@
   "ownerLink": "docs/guides/arduino-cli.md",
   "effort": {
     "size": "small",
-    "estimate": "0.25 h owner",
-    "basis": "Added 2026-11-25 at the coordinator's request after the owner chose arduino-cli: F-016-T02 cannot be developed or checked without it. Owner time only.",
+    "estimate": "0 remaining",
+    "basis": "Done 2026-11-25 by the agent on the owner's Mac (owner-approved): brew install arduino-cli gave arduino-cli 1.6.0 (Homebrew, arm64); core install arduino:avr@1.8.6 and esp32:esp32@3.0.7 (index https://espressif.github.io/arduino-esp32/package_esp32_index.json); core list shows arduino:avr 1.8.6 and esp32:esp32 3.0.7 (plus a pre-existing esp8266:esp8266 3.1.2). The guide's Blink sketch compiled for arduino:avr:uno (924 bytes, 2%) and esp32:esp32:esp32 (267433 bytes, 20%) with no error. Added 2026-11-25 after the owner chose arduino-cli.",
     "reviewed": "2026-11-25",
     "agentHours": 0,
-    "ownerHours": 0.25,
+    "ownerHours": 0,
     "ownerKind": "procedure"
   }
 }
