@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-015-T04",
   "parent": "F-015",
-  "status": "planned",
+  "status": "closed",
   "title": "Release coding-v1",
   "goal": "Release coding-v1",
   "acceptance": [
@@ -29,11 +29,11 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h owner",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request); owner time only.",
-    "reviewed": "2026-11-24",
+    "estimate": "0 remaining",
+    "basis": "Closed 2026-11-25: tag v0.10.0 on dcc176b (release PR #97, main CI green), published at https://github.com/voidbrain/gauntlet-protocol/releases/tag/v0.10.0 by the session lead on the owner's instruction; CHANGELOG 0.10.0 names the new cases. Estimated 2026-11-24 in the domain-packs plan (owner request); owner time only.",
+    "reviewed": "2026-11-25",
     "agentHours": 0,
-    "ownerHours": 0.25,
+    "ownerHours": 0,
     "ownerKind": "procedure"
   },
   "ownerLink": "docs/guides/release.md"
