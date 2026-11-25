@@ -388,6 +388,33 @@ test('coding grader reports a timeout even while a leftover process keeps writin
   assert.deepEqual(removeLeftoverWorkspaces(), []);
 });
 
+// B-003: cleanup ran synchronously at the timeout and raced the writer, so on CI the grader hung past the test limit.
+test('coding grader returns at its timeout while a process the executor left keeps writing, and cleans up after', async () => {
+  let child: ReturnType<typeof spawn> | undefined;
+  try {
+    const started = Date.now();
+    const graded = await gradeCandidate({
+      taskDir: codingTask('parse-duration-regression'),
+      candidate: '',
+      execute: ({ cwd }: { cwd: string }) => {
+        child = spawn(
+          'python3',
+          ['-c', 'import os\ni = 0\nwhile True:\n  os.makedirs("d%d/e" % i, exist_ok=True)\n  i += 1'],
+          { cwd, stdio: 'ignore' },
+        );
+        return new Promise(() => {});
+      },
+      timeoutMs: 300,
+    });
+    assert.deepEqual([graded.status, graded.reason], ['failed', 'timeout']);
+    assert.ok(Date.now() - started < 3000, 'returned ' + (Date.now() - started) + ' ms after start');
+  } finally {
+    child?.kill('SIGKILL');
+  }
+  await new Promise((resolve) => setTimeout(resolve, 200));
+  assert.deepEqual(removeLeftoverWorkspaces(), []);
+});
+
 // Results come back on the driver's stdout (last line, tagged); the workspace is read-only to the candidate.
 test('coding grader refuses missing, oversized, wrong-length and extra-key results', async () => {
   const taskDir = codingTask('slugify-regression');
