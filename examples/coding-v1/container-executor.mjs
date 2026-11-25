@@ -54,7 +54,8 @@ export async function sweepStale(docker = 'docker', now = Date.now()) {
   if (stale.length) await exec(docker, ['rm', '-f', ...stale], { timeout: 30000 }).catch(() => {});
 }
 
-export function containerExecutor({ docker = 'docker', limits = defaultLimits } = {}) {
+// spawnProcess is a test seam for the engine client; it defaults to node's spawn.
+export function containerExecutor({ docker = 'docker', limits = defaultLimits, spawnProcess = spawn } = {}) {
   const ready = new Map();
   const imageFor = (argv) => {
     if (!Object.hasOwn(images, argv[0])) throw Error('No pinned image for ' + argv[0]);
@@ -146,7 +147,7 @@ export function containerExecutor({ docker = 'docker', limits = defaultLimits } 
       ...argv,
     ];
     active.add(name);
-    const child = spawn(docker, args, { stdio: ['ignore', 'pipe', 'ignore'] });
+    const child = spawnProcess(docker, args, { stdio: ['ignore', 'pipe', 'ignore'] });
     let stdout = '';
     let bytes = 0;
     child.stdout.on('data', (chunk) => {
@@ -158,11 +159,21 @@ export function containerExecutor({ docker = 'docker', limits = defaultLimits } 
       timedOut = true;
       void remove(docker, name);
     }, timeoutMs);
+    // A client that cannot start is an engine fault, not a candidate result: reject so the grader reports `error`.
+    // Exit codes never mark an engine fault, because the candidate controls its own exit code.
+    let spawnError;
     const code = await new Promise((resolve) => {
-      child.on('error', () => resolve(null));
+      child.on('error', (error) => {
+        spawnError = error;
+        resolve(null);
+      });
       child.on('close', resolve);
     });
     clearTimeout(timer);
+    if (spawnError) {
+      await remove(docker, name);
+      throw Error('container engine failed: ' + (spawnError.code ?? spawnError.message));
+    }
     // The client exiting does not prove the container stopped: remove it before resolving.
     await remove(docker, name);
     return { code, timedOut, stdout: bytes <= maxStdoutBytes ? stdout : '' };

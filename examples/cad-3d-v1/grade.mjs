@@ -151,6 +151,18 @@ function removeWorkspace(workspace) {
   } catch {}
 }
 
+// An executor that rejects (engine missing or its client failing to start) is an infrastructure fault: an `error`
+// result that never counts as covering the case.
+const executorError = (error, checks) => ({
+  status: 'error',
+  reason: 'executor-error',
+  failedChecks: [],
+  message: String(error?.message ?? error),
+  checks,
+  passed: 0,
+  measured: null,
+});
+
 export async function gradeOpenScad({ taskDir, candidate, execute, timeoutMs = 30000 }) {
   if (typeof candidate !== 'string' || typeof execute !== 'function')
     throw Error('Candidate OpenSCAD source and executor required');
@@ -170,12 +182,21 @@ export async function gradeOpenScad({ taskDir, candidate, execute, timeoutMs = 3
   let cleanupDeferred = false;
   try {
     writeFileSync(join(workspace, task.entry), candidate);
-    await execute.prepare?.(openscadArgv);
+    try {
+      await execute.prepare?.(openscadArgv);
+    } catch (error) {
+      return executorError(error, checks);
+    }
     const deadline = new Promise((resolve) => {
       timer = setTimeout(() => resolve({ timedOut: true }), timeoutMs);
     });
     const executing = Promise.resolve().then(() => execute({ argv: openscadArgv, cwd: workspace, env: {}, timeoutMs }));
-    const outcome = await Promise.race([executing, deadline]);
+    let outcome;
+    try {
+      outcome = await Promise.race([executing, deadline]);
+    } catch (error) {
+      return executorError(error, checks);
+    }
     if (outcome?.timedOut) {
       cleanupDeferred = true;
       const cleanup = () => removeWorkspace(workspace);

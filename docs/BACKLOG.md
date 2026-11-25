@@ -57,7 +57,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|---|---|---|---|:---:|:---:|:---:|
 | 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-004-T01 — Toolchain check before the model call (Planned).
+💻 **→** Next: B-004-T01 — Toolchain check before the model call (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -69,7 +69,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-004-t01"></a>B-004-T01 — Toolchain check before the model call | 0.25 h | 0 h | 0.25 h | Planned |
+| 🟢 Small | <a id="b-004-t01"></a>B-004-T01 — Toolchain check before the model call | 0.25 h | 0 h | 0.25 h | Implemented; verification pending |
 | 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
 
 <details>
@@ -95,7 +95,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|---|---|---|---|:---:|:---:|:---:|
 | 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: B-005-T01 — Executor errors are errors, not grades (Planned).
+💻 **→** Next: B-005-T01 — Executor errors are errors, not grades (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -107,7 +107,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status |
 |---|---|---|---|---|---|
-| 🟢 Small | <a id="b-005-t01"></a>B-005-T01 — Executor errors are errors, not grades | 0.25 h | 0 h | 0.25 h | Planned |
+| 🟢 Small | <a id="b-005-t01"></a>B-005-T01 — Executor errors are errors, not grades | 0.25 h | 0 h | 0.25 h | Implemented; verification pending |
 | 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
 
 <details>

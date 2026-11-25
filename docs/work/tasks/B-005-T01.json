@@ -2,7 +2,7 @@
   "version": 1,
   "id": "B-005-T01",
   "parent": "B-005",
-  "status": "planned",
+  "status": "implemented",
   "title": "Executor errors are errors, not grades",
   "goal": "An engine client spawn failure yields an error result, never failed",
   "acceptance": [
@@ -30,7 +30,7 @@
   "effort": {
     "size": "small",
     "estimate": "0.25 h agent",
-    "basis": "Estimated 2026-11-25 when opened: one runner or grader change plus a regression test. Not a measurement.",
+    "basis": "Implemented 2026-11-25: regression test committed failing first (a720f99), fix in examples/coding-v1 and examples/cad-3d-v1, PROTOCOL.md updated; CI and merge remain. Not a measurement.",
     "reviewed": "2026-11-25",
     "agentHours": 0.25,
     "baselineAgentHours": 0.25,

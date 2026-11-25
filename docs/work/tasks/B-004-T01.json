@@ -2,7 +2,7 @@
   "version": 1,
   "id": "B-004-T01",
   "parent": "B-004",
-  "status": "planned",
+  "status": "implemented",
   "title": "Toolchain check before the model call",
   "goal": "The coding runner reports a missing container engine as an error naming the fix, before any model call",
   "acceptance": [
@@ -29,7 +29,7 @@
   "effort": {
     "size": "small",
     "estimate": "0.25 h agent",
-    "basis": "Estimated 2026-11-25 when opened: one runner or grader change plus a regression test. Not a measurement.",
+    "basis": "Implemented 2026-11-25: regression test committed failing first (a720f99), fix in examples/coding-v1 and examples/cad-3d-v1, PROTOCOL.md updated; CI and merge remain. Not a measurement.",
     "reviewed": "2026-11-25",
     "agentHours": 0.25,
     "baselineAgentHours": 0.25,
