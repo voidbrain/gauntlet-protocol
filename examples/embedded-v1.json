@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "embedded",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "blink-millis-esp32-regression",
+      "layer": "coding",
+      "split": "regression",
+      "capabilities": [
+        "code-generation",
+        "embedded-cpp",
+        "esp32"
+      ],
+      "critical": true,
+      "expensive": true,
+      "runner": "embedded-reference",
+      "area": "embedded",
+      "requirements": [
+        "arduino-cli"
+      ]
+    },
+    {
+      "id": "debounce-toggle-uno-regression",
+      "layer": "coding",
+      "split": "regression",
+      "capabilities": [
+        "code-generation",
+        "embedded-cpp",
+        "arduino-avr"
+      ],
+      "critical": true,
+      "expensive": true,
+      "runner": "embedded-reference",
+      "area": "embedded",
+      "requirements": [
+        "arduino-cli"
+      ]
+    },
+    {
+      "id": "pwm-fade-esp32-holdout",
+      "layer": "coding",
+      "split": "holdout",
+      "capabilities": [
+        "code-generation",
+        "embedded-cpp",
+        "esp32"
+      ],
+      "critical": true,
+      "expensive": true,
+      "runner": "embedded-reference",
+      "area": "embedded",
+      "requirements": [
+        "arduino-cli"
+      ]
+    },
+    {
+      "id": "serial-command-uno-holdout",
+      "layer": "coding",
+      "split": "holdout",
+      "capabilities": [
+        "code-generation",
+        "embedded-cpp",
+        "arduino-avr"
+      ],
+      "critical": true,
+      "expensive": true,
+      "runner": "embedded-reference",
+      "area": "embedded",
+      "requirements": [
+        "arduino-cli"
+      ]
+    },
+    {
+      "id": "led-blink-gpiozero-regression",
+      "layer": "coding",
+      "split": "regression",
+      "capabilities": [
+        "code-generation",
+        "python",
+        "raspberry-pi"
+      ],
+      "critical": true,
+      "expensive": false,
+      "runner": "embedded-reference",
+      "area": "embedded",
+      "requirements": [
+        "python3"
+      ]
+    },
+    {
+      "id": "pwm-servo-rpigpio-regression",
+      "layer": "coding",
+      "split": "regression",
+      "capabilities": [
+        "code-generation",
+        "python",
+        "raspberry-pi"
+      ],
+      "critical": true,
+      "expensive": false,
+      "runner": "embedded-reference",
+      "area": "embedded",
+      "requirements": [
+        "python3"
+      ]
+    },
+    {
+      "id": "button-toggle-gpiozero-holdout",
+      "layer": "coding",
+      "split": "holdout",
+      "capabilities": [
+        "code-generation",
+        "python",
+        "raspberry-pi"
+      ],
+      "critical": true,
+      "expensive": false,
+      "runner": "embedded-reference",
+      "area": "embedded",
+      "requirements": [
+        "python3"
+      ]
+    },
+    {
+      "id": "edge-counter-rpigpio-holdout",
+      "layer": "coding",
+      "split": "holdout",
+      "capabilities": [
+        "code-generation",
+        "python",
+        "raspberry-pi"
+      ],
+      "critical": true,
+      "expensive": false,
+      "runner": "embedded-reference",
+      "area": "embedded",
+      "requirements": [
+        "python3"
+      ]
+    }
+  ]
+}

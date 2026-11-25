@@ -164,7 +164,7 @@ test('embedded runner reports a missing arduino-cli as an error without asking t
     assert.equal(report.passed, false);
     assert.deepEqual(
       report.results.map((result) => result.status),
-      sketches.cases.map(() => 'error'),
+      sketches.cases.map((_, index) => (index === 0 ? 'error' : 'not-run')),
     );
     assert.equal(requests.length, 0);
   } finally {

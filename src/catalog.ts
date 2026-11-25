@@ -3,6 +3,7 @@ export const areas = [
   'unclassified',
   'general-assistant',
   'coding',
+  'embedded',
   'code-review',
   'math',
   'logic-planning',

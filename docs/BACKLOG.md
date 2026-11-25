@@ -19,7 +19,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|---|---|---|---|:---:|:---:|:---:|
 | 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h agent + 0.25 h owner | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-016-T04 — Embedded runner, pack and index entry (Planned).
+💻 **→** Next: F-016-T04 — Embedded runner, pack and index entry (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -31,7 +31,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟡 Medium | <a id="f-016-t04"></a>F-016-T04 — Embedded runner, pack and index entry | 1.5 h | 0 h | 1.5 h | Planned | — | [F-016-T05](#f-016-t05) | 🤖 |
+| 🟡 Medium | <a id="f-016-t04"></a>F-016-T04 — Embedded runner, pack and index entry | 1.5 h | 0 h | 1.5 h | Implemented; verification pending | — | [F-016-T05](#f-016-t05) | 🤖 |
 | 🟢 Small | <a id="f-016-t05"></a>F-016-T05 — Release embedded-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-016-T04](#f-016-t04) | — | ⏳ 🧑‍🔧 |
 | 🟡 Medium | **Total** | 5.5 h (3 of 6 steps) | 0 h (0 of 6 steps recorded) | 1.5 h agent + 0.25 h owner | 4 of 6 completed | | | |
 
