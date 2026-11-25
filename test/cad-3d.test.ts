@@ -1,10 +1,10 @@
 // Contract tests for the cad-3d-v1 OpenSCAD build-and-measure grader and reference runner (F-019-T02).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { createServer } from 'node:http';
 import { dirname, join, resolve } from 'node:path';
-import { mkdtempSync, readFileSync, realpathSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { defaults, run, validatePack, validateRegistry, type Profile } from '../src/index.ts';
 import { containerExecutor } from '../examples/coding-v1/container-executor.mjs';
@@ -256,5 +256,74 @@ test('cad-3d reference runner asks the model, renders and grades each OpenSCAD t
     } finally {
       server.close();
     }
+  }
+});
+
+test('cad-3d reference runner reports a missing container engine as an error naming the fix, before asking the model', async () => {
+  const full = validatePack(JSON.parse(readFileSync('examples/cad-3d-v1.json', 'utf8')));
+  const codingOnly = validatePack({ ...full, cases: full.cases.filter((c) => c.layer === 'coding') });
+  const noEngine = validateRegistry(
+    {
+      schemaVersion: 1,
+      runners: {
+        'cad-3d-reference': {
+          command: process.execPath,
+          args: [
+            resolve('examples/cad-3d-v1/runner.mjs'),
+            '{report}',
+            '{configuration}',
+            '{budget}',
+            '{case}',
+            '--docker=' + resolve('test/fixtures/no-docker.mjs'),
+          ],
+          cwd: process.cwd(),
+          layers: ['coding'],
+          allowModels: true,
+        },
+      },
+    },
+    process.cwd(),
+  );
+  const requests: string[] = [];
+  const { server, endpoint } = await fakeModel('reference', requests);
+  try {
+    const report = await run(codingOnly, profile(endpoint), defaults, {
+      execute: true,
+      allowModels: true,
+      registry: noEngine,
+    });
+    assert.equal(report.passed, false);
+    // The first critical error stops the run; the rest are not run.
+    assert.equal(report.results[0].status, 'error');
+    // Run directly to read the runner's own report and the fix it names on stderr.
+    const dir = mkdtempSync(join(realpathSync(tmpdir()), 'cad-3d-no-engine-'));
+    try {
+      const write = (name: string, value: unknown) => {
+        writeFileSync(join(dir, name), JSON.stringify(value));
+        return join(dir, name);
+      };
+      const child = spawnSync(
+        process.execPath,
+        [
+          resolve('examples/cad-3d-v1/runner.mjs'),
+          join(dir, 'report.json'),
+          write('configuration.json', profile(endpoint)),
+          write('budget.json', { timeoutMs: 60000 }),
+          write('case.json', codingOnly.cases[0]),
+          '--docker=' + resolve('test/fixtures/no-docker.mjs'),
+        ],
+        { encoding: 'utf8' },
+      );
+      assert.equal(child.status, 0);
+      assert.match(child.stderr, /start Docker Desktop or colima/);
+      const own = JSON.parse(readFileSync(join(dir, 'report.json'), 'utf8'));
+      assert.deepEqual([own.complete, own.results[0].status], [false, 'error']);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+    assert.ok(report.results.slice(1).every((r) => r.status === 'not-run'));
+    assert.equal(requests.length, 0);
+  } finally {
+    server.close();
   }
 });

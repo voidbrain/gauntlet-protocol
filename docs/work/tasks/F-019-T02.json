@@ -37,7 +37,7 @@
   "effort": {
     "size": "small",
     "estimate": "0.25 h agent",
-    "basis": "Implemented 2026-11-25: examples/cad-3d-v1/grade.mjs, examples/cad-3d-v1/runner.mjs, 4 OpenSCAD coding tasks across regression and holdout splits, test/fixtures/cad-3d-v1/ (reference, wrong and broken fixtures), test/cad-3d.test.ts (including anti-gaming bounding-box checks and container sandbox execution), protocol and README docs, and regenerated docs/test-index.md; CI and merge remain. Not a measurement.",
+    "basis": "Implemented 2026-11-25: examples/cad-3d-v1/grade.mjs, examples/cad-3d-v1/runner.mjs, 4 OpenSCAD coding tasks across regression and holdout splits, test/fixtures/cad-3d-v1/ (reference, wrong and broken fixtures), test/cad-3d.test.ts (including anti-gaming bounding-box checks and container sandbox execution), protocol and README docs, and regenerated docs/test-index.md Review fix: the runner reports a missing container engine or image as an error naming the fix before asking the model (test with a failing engine stand-in). Real OpenSCAD renders are not run in CI (owner decision); CI uses stand-ins. CI and merge remain. Not a measurement.",
     "reviewed": "2026-11-25",
     "agentHours": 0.25,
     "baselineAgentHours": 3,
