@@ -1,0 +1,104 @@
+{
+  "summary-service-regression": {
+    "reference": "Da giovedì 14 maggio lo sportello anagrafe del Comune riceve dalle 8:30 alle 13:00 esclusivamente su prenotazione online, mentre i certificati urgenti restano disponibili allo sportello automatico nell'atrio.",
+    "failing": [
+      {
+        "reply": "From Thursday May 14 the municipal office opens only by online booking, while urgent certificates remain at the lobby kiosk.",
+        "check": "language"
+      },
+      {
+        "reply": "Da giovedì 14 maggio lo sportello anagrafe del Comune riceve la mattina solo con booking online, mentre i certificati urgenti sono nell'atrio.",
+        "check": "forbidden:booking"
+      },
+      {
+        "reply": "Lo sportello anagrafe del Comune cambia gli orari di apertura al pubblico durante la settimana.",
+        "check": "required:1"
+      }
+    ]
+  },
+  "summary-report-holdout": {
+    "reference": "Nel controllo del deposito nord sono risultati conformi 420 bancali, mentre i 18 bancali con imballo danneggiato dall'umidità sono stati isolati per la sostituzione del fornitore entro venerdì.",
+    "failing": [
+      {
+        "reply": "The quarterly warehouse check found 420 compliant pallets and 18 moisture-damaged pallets isolated for supplier replacement by Friday.",
+        "check": "language"
+      },
+      {
+        "reply": "Nel controllo del warehouse nord abbiamo trovato 18 pallet danneggiati dall'umidità che attendono la sostituzione del fornitore entro venerdì.",
+        "check": "forbidden:warehouse"
+      },
+      {
+        "reply": "Il controllo trimestrale del deposito nord ha contato i bancali presenti sugli scaffali del reparto logistico.",
+        "check": "required:2"
+      }
+    ]
+  },
+  "rewrite-anglicisms-regression": {
+    "reference": "Prima della riunione di domani dobbiamo programmare il rilascio e raccogliere il riscontro del gruppo sulla scadenza prevista per il progetto.",
+    "failing": [
+      {
+        "reply": "Prima della call di domani dobbiamo programmare il rilascio e raccogliere il riscontro sulla deadline del progetto.",
+        "check": "forbidden:call"
+      },
+      {
+        "reply": "Before tomorrow's meeting we must schedule the release and share feedback on the project deadline.",
+        "check": "language"
+      },
+      {
+        "reply": "Prima della riunione di domani parleremo a lungo delle attività rimaste in sospeso con tutti i colleghi dell'ufficio.",
+        "check": "required:2"
+      }
+    ]
+  },
+  "rewrite-bureaucratic-holdout": {
+    "reference": "Informiamo i passeggeri che il biglietto va convalidato appena si sale a bordo dell'autobus per evitare una sanzione durante i controlli.",
+    "failing": [
+      {
+        "reply": "Si comunica altresì ai passeggeri che l'obliterazione del biglietto va fatta appena si sale sull'autobus per evitare una multa.",
+        "check": "forbidden:altresì"
+      },
+      {
+        "reply": "Convalida subito il biglietto sull'autobus.",
+        "check": "min-words"
+      },
+      {
+        "reply": "Informiamo i viaggiatori che sul percorso urbano dell'autobus sono attivi controlli regolari da parte del personale incaricato.",
+        "check": "required:1"
+      }
+    ]
+  },
+  "register-formal-regression": {
+    "reference": "Gentile cliente, la informiamo che il rimborso relativo alla fattura del mese di marzo sarà accreditato entro mercoledì tramite bonifico sul conto indicato.",
+    "failing": [
+      {
+        "reply": "Ciao, ti informo che puoi ricevere il rimborso della tua fattura di marzo entro mercoledì tramite bonifico sul conto.",
+        "check": "register"
+      },
+      {
+        "reply": "Dear customer, we inform you that the refund for the March invoice will be credited by Wednesday via bank transfer.",
+        "check": "language"
+      },
+      {
+        "reply": "Gentile cliente, la informiamo che la pratica amministrativa del mese scorso è stata presa in carico dal nostro ufficio contabilità.",
+        "check": "required:1"
+      }
+    ]
+  },
+  "register-informal-holdout": {
+    "reference": "Ehi Marco, domani mattina quando arrivi puoi portarmi in laboratorio le chiavi dell'armadio degli attrezzi? Mi servono per sistemare il banco.",
+    "failing": [
+      {
+        "reply": "La prego di voler consegnare domani mattina in laboratorio le chiavi dell'armadio degli attrezzi per consentire la manutenzione del banco.",
+        "check": "register"
+      },
+      {
+        "reply": "Gentile collega, domani mattina puoi portarmi in laboratorio le chiavi dell'armadio degli attrezzi? Cordiali saluti.",
+        "check": "forbidden:gentile"
+      },
+      {
+        "reply": "Ehi Marco, puoi passare in laboratorio nel pomeriggio così vediamo insieme gli strumenti nuovi sul banco?",
+        "check": "required:1"
+      }
+    ]
+  }
+}

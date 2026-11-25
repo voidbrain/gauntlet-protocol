@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "id": "italian-quality",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "summary-service-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["italian-quality", "summarization"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Riassumi in italiano, in una o due frasi (tra 12 e 38 parole), il seguente avviso operativo:\n\n\"A partire da giovedì 14 maggio lo sportello anagrafe del Comune aprirà dalle 8:30 alle 13:00 solo su prenotazione online; i certificati urgenti restano disponibili allo sportello automatico nell'atrio.\"\n\nIncludi il giorno o il mese di avvio, la necessità di prenotazione e la disponibilità dei certificati urgenti. Non usare parole inglesi come booking, desk o appointment."
+        }
+      ],
+      "expected": {
+        "kind": "rubric",
+        "value": {
+          "language": "it",
+          "minWords": 12,
+          "maxWords": 38,
+          "required": [
+            ["giovedì", "14 maggio", "maggio"],
+            ["prenotazione", "prenotazioni", "prenotare"],
+            ["certificati", "certificato", "automatico"]
+          ],
+          "forbidden": ["booking", "desk", "appointment"]
+        }
+      },
+      "area": "language-translation",
+      "requirements": ["local-model-runtime"]
+    },
+    {
+      "id": "summary-report-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["italian-quality", "summarization"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Riassumi in italiano, in una o due frasi (tra 12 e 38 parole), questa nota di magazzino:\n\n\"Il controllo trimestrale del deposito nord ha rilevato 420 bancali conformi e 18 bancali con imballo danneggiato dall'umidità; il lotto danneggiato è stato isolato in attesa della sostituzione del fornitore entro venerdì.\"\n\nIncludi i bancali o il deposito, il danno o l'umidità e la sostituzione entro venerdì. Non usare parole inglesi come warehouse, pallet o supplier."
+        }
+      ],
+      "expected": {
+        "kind": "rubric",
+        "value": {
+          "language": "it",
+          "minWords": 12,
+          "maxWords": 38,
+          "required": [
+            ["bancali", "deposito"],
+            ["umidità", "danneggiato", "danneggiati"],
+            ["sostituzione", "venerdì", "fornitore"]
+          ],
+          "forbidden": ["warehouse", "pallet", "supplier"]
+        }
+      },
+      "area": "language-translation",
+      "requirements": ["local-model-runtime"]
+    },
+    {
+      "id": "rewrite-anglicisms-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["italian-quality", "rewriting"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Riscrivi in buon italiano (tra 12 e 35 parole) questa frase aziendale eliminando tutti gli anglicismi:\n\n\"Prima della call di domani dobbiamo schedulare la release e condividere il feedback sulla deadline del progetto.\"\n\nSostituisci call, schedulare, release, feedback e deadline con equivalenti italiani appropriati (ad esempio riunione, pianificare/programmare, rilascio/versione, riscontro/parere, scadenza)."
+        }
+      ],
+      "expected": {
+        "kind": "rubric",
+        "value": {
+          "language": "it",
+          "minWords": 12,
+          "maxWords": 35,
+          "required": [
+            ["riunione", "incontro", "telefonata", "colloquio"],
+            ["pianificare", "programmare", "fissare"],
+            ["rilascio", "versione", "pubblicazione"],
+            ["riscontro", "parere", "commenti", "valutazioni"],
+            ["scadenza", "termine"]
+          ],
+          "forbidden": ["call", "schedulare", "release", "feedback", "deadline"]
+        }
+      },
+      "area": "language-translation",
+      "requirements": ["local-model-runtime"]
+    },
+    {
+      "id": "rewrite-bureaucratic-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["italian-quality", "rewriting"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Riscrivi in italiano chiaro e diretto (tra 12 e 35 parole) questo periodo burocratico:\n\n\"Si provvede altresì a comunicare all'utenza che l'obliterazione del titolo di viaggio dovrà essere effettuata contestualmente all'accesso a bordo dell'autobus onde evitare sanzioni.\"\n\nEvita le parole \"altresì\", \"obliterazione\", \"contestualmente\" e \"onde\"."
+        }
+      ],
+      "expected": {
+        "kind": "rubric",
+        "value": {
+          "language": "it",
+          "minWords": 12,
+          "maxWords": 35,
+          "required": [
+            ["biglietto", "titolo di viaggio"],
+            ["convalidare", "convalidato", "timbrare", "timbrato", "validare", "validato"],
+            ["autobus", "bordo", "sale", "salita"],
+            ["multa", "multe", "sanzione", "sanzioni"]
+          ],
+          "forbidden": ["altresì", "obliterazione", "contestualmente", "onde"]
+        }
+      },
+      "area": "language-translation",
+      "requirements": ["local-model-runtime"]
+    },
+    {
+      "id": "register-formal-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["italian-quality", "register-control"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Scrivi in italiano formale (dando del Lei, senza mai usare il tu; tra 14 e 40 parole) una comunicazione a un cliente per informarlo che il rimborso della fattura di marzo sarà accreditato entro mercoledì tramite bonifico."
+        }
+      ],
+      "expected": {
+        "kind": "rubric",
+        "value": {
+          "language": "it",
+          "minWords": 14,
+          "maxWords": 40,
+          "required": [
+            ["rimborso"],
+            ["fattura", "marzo"],
+            ["mercoledì", "bonifico"]
+          ],
+          "forbidden": ["ciao", "refund", "invoice"],
+          "register": "formal"
+        }
+      },
+      "area": "language-translation",
+      "requirements": ["local-model-runtime"]
+    },
+    {
+      "id": "register-informal-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["italian-quality", "register-control"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Scrivi in italiano informale e amichevole (dando del tu; tra 12 e 36 parole) un messaggio a un collega per chiedergli se domani mattina può portarti in laboratorio le chiavi dell'armadio degli attrezzi."
+        }
+      ],
+      "expected": {
+        "kind": "rubric",
+        "value": {
+          "language": "it",
+          "minWords": 12,
+          "maxWords": 36,
+          "required": [
+            ["domani"],
+            ["chiavi", "chiave"],
+            ["laboratorio", "armadio", "attrezzi"]
+          ],
+          "forbidden": ["gentile", "egregio", "spettabile", "cordiali saluti"],
+          "register": "informal"
+        }
+      },
+      "area": "language-translation",
+      "requirements": ["local-model-runtime"]
+    }
+  ]
+}

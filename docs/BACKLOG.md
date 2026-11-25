@@ -1,10 +1,10 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 25 November 2026 against main `dcc176b`. PRs #91 to #97 merged on green CI; v0.10.0 tagged and published (coding, logic-math, embedded packs). F-015, F-016 and F-017 closed.
+Current work ledger, reviewed 25 November 2026 against main `f47e853`. PR #98 merged on green CI (F-015, F-016 and F-017 archived on v0.10.0).
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 16.5 h agent + 1.75 h owner across 16 open steps of 5 features. Generated from the task files.
+**Remaining effort:** 15.25 h agent + 1.75 h owner across 16 open steps of 5 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -17,9 +17,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h agent + 0.25 h owner | — | — | 🤖 | — | — |
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h agent + 0.25 h owner | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-018-T02 — Italian summary, rewrite and register tasks (Planned).
+💻 **→** Next: F-018-T02 — Italian summary, rewrite and register tasks (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -31,9 +31,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟡 Medium | <a id="f-018-t02"></a>F-018-T02 — Italian summary, rewrite and register tasks | 1.5 h | 0 h | 1.5 h | Planned | — | [F-018-T03](#f-018-t03) | 🤖 |
+| 🟢 Small | <a id="f-018-t02"></a>F-018-T02 — Italian summary, rewrite and register tasks | 1.5 h | 0 h | 0.25 h | Implemented; verification pending | — | [F-018-T03](#f-018-t03) | 🤖 |
 | 🟢 Small | <a id="f-018-t03"></a>F-018-T03 — Release italian-quality-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-018-T02](#f-018-t02) | — | ⏳ 🧑‍🔧 |
-| 🟡 Medium | **Total** | 3.5 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 1.5 h agent + 0.25 h owner | 1 of 3 completed | | | |
+| 🟢 Small | **Total** | 3.5 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 0.25 h agent + 0.25 h owner | 1 of 3 completed | | | |
 
 <details><summary>Done steps (1)</summary>
 

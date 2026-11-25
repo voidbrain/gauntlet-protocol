@@ -91,6 +91,12 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [embedded@1.0.0 / pwm-servo-rpigpio-regression](../examples/embedded-v1.json) | embedded | code-generation, python, raspberry-pi | coding / regression | true / false | registered:embedded-reference / python3 | Unmeasured |
 | [embedded@1.0.0 / button-toggle-gpiozero-holdout](../examples/embedded-v1.json) | embedded | code-generation, python, raspberry-pi | coding / holdout | true / false | registered:embedded-reference / python3 | Unmeasured |
 | [embedded@1.0.0 / edge-counter-rpigpio-holdout](../examples/embedded-v1.json) | embedded | code-generation, python, raspberry-pi | coding / holdout | true / false | registered:embedded-reference / python3 | Unmeasured |
+| [italian-quality@1.0.0 / summary-service-regression](../examples/italian-quality-v1.json) | language-translation | italian-quality, summarization | model / regression | true / false | rubric-v1 / local-model-runtime | Unmeasured |
+| [italian-quality@1.0.0 / summary-report-holdout](../examples/italian-quality-v1.json) | language-translation | italian-quality, summarization | model / holdout | true / false | rubric-v1 / local-model-runtime | Unmeasured |
+| [italian-quality@1.0.0 / rewrite-anglicisms-regression](../examples/italian-quality-v1.json) | language-translation | italian-quality, rewriting | model / regression | true / false | rubric-v1 / local-model-runtime | Unmeasured |
+| [italian-quality@1.0.0 / rewrite-bureaucratic-holdout](../examples/italian-quality-v1.json) | language-translation | italian-quality, rewriting | model / holdout | true / false | rubric-v1 / local-model-runtime | Unmeasured |
+| [italian-quality@1.0.0 / register-formal-regression](../examples/italian-quality-v1.json) | language-translation | italian-quality, register-control | model / regression | true / false | rubric-v1 / local-model-runtime | Unmeasured |
+| [italian-quality@1.0.0 / register-informal-holdout](../examples/italian-quality-v1.json) | language-translation | italian-quality, register-control | model / holdout | true / false | rubric-v1 / local-model-runtime | Unmeasured |
 
 ## Area coverage
 
@@ -112,6 +118,6 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 - ui-visual: 0 mapped cases
 - security-permissions: 4 mapped cases
 - documents-data: 4 mapped cases
-- language-translation: 4 mapped cases
+- language-translation: 10 mapped cases
 - audio-video: 0 mapped cases
 - scheduling-time: 0 mapped cases

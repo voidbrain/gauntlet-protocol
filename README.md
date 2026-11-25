@@ -21,6 +21,8 @@ The `embedded` pack holds Arduino and ESP32 sketches graded by static checks and
 
 The `logic-math` pack holds eight exact-answer cases: arithmetic under `math`, puzzles, constraints and scheduling under `logic-planning`. Holdout cases in these public packs are exposed examples, not unseen holdouts.
 
+The `italian-quality` pack holds six Italian-only free-text cases under `language-translation` (summary, rewrite and register control in regression and holdout splits), graded deterministically by `rubric-v1` ([rubric grading](docs/PROTOCOL.md#rubric-grading)).
+
 The [run ledger](docs/LEDGER.md) lets a consumer list the cases of the packs it consumes that it has not run in their current definition, or under the model, runtime, machine scenario or consumer source it now intends (`pending`), without storing evidence.
 Use `run --pending --ledger=results/ledger.json` to execute only those cases while retaining the complete pack identity in the report; ledger-current cases are explicitly reported as `not-run / skipped-current`.
 Runs atomically checkpoint each finished case to their private output. Resume an interrupted campaign with `run --resume=results/interrupted.json` and a new `--out`; the pack, source and execution identity must still match.
