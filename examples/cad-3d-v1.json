@@ -62,7 +62,7 @@
       "messages": [
         {
           "role": "user",
-          "content": "Choose one filament from [\"PLA\", \"ASA\", \"PVA\"] for a rigid outdoor sensor bracket exposed to direct summer sun and UV, where glass-transition temperature (~100 C vs ~60 C for PLA) and weather resistance are required. Return only JSON of the form {\"answer\": \"...\"}."
+          "content": "Choose one filament from [\"PLA\", \"ASA\", \"PVA\"] for a rigid outdoor sensor bracket exposed to direct summer sun and UV. It must stay rigid and keep its strength outdoors for years. Return only JSON of the form {\"answer\": \"...\"}."
         }
       ],
       "expected": {
