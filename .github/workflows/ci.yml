@@ -31,8 +31,8 @@ jobs:
           npm run check:harness
           npm run check:rules
           npm run check:rule-load
-          npm run check:backlog
           npm run check:work
+          npm run check:backlog
           npm run check:impact
           npm run check:maintenance
           npm run check:audits

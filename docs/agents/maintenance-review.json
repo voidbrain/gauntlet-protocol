@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewed": "2026-11-24T07:14:18.936Z",
+  "reviewed": "2026-11-25T11:18:27.171Z",
   "policy": "7369979fefe5ef15aa6d7125e89fc81e163c87bd304f4493269712e8fc74a841",
   "inputs": {
     "AGENTS.md": "1b85ac2b42a996403802598485b0f6bdd7d75beb5d86ebecc4f251aec358700f",
@@ -13,19 +13,19 @@
     "docs/agents/maintenance.md": "69f77d944551e4a442de20a0e46badf19a91e42f870bf8048f428c8a64f343a9",
     "docs/agents/mcp.md": "06efbb58a50f9236506ca0afa9a79bb1d42c12ca380a29ed0254bf0a537f860d",
     "docs/agents/parallel-work-plans.md": "d171d89ec5431668ff770e5fcb0098ad518da6289a0d12a56aafdae60930d567",
-    "docs/agents/parallel-work.md": "e460a7ef54aa1ce270e9c8d87a8da85680182d2adec3cafbbf7ad0af5b75439c",
-    "docs/agents/procedures.md": "60d1502790439ed68796d632456cd5bd8ad2634abfaa9d12e4fe88aa65c376e3",
+    "docs/agents/parallel-work.md": "be8887601fefe6eb9f52f8a549abebc36a875f354570d5291900ddfc5f708d0d",
+    "docs/agents/procedures.md": "9b95bf5f3707453ce76392524feea05e754e005a6e96d21a0fe8b7dd95059b2d",
     "docs/agents/prompt-caching.md": "3b8962bd4f2f713d5730e999e65338ebdd90347ee09dffbd9c8da98e2405a21e",
     "docs/agents/skills-discovery.md": "ad322a2b93f2dc1b8f27d0b052248d57c050ca852077589ba889447577357057",
     "docs/agents/skills.md": "7da9fc43bd0886b06580cc15b9a45e47d097c6fa7fca627bf7ed0f0202a409a1",
-    "docs/agents/solution-profile.md": "685d55612f55d157bf124e23115f95bd16fe4d4f8834a4e0e152a191e3cd45f8",
+    "docs/agents/solution-profile.md": "1ac84543aecc107b9406ca03ae10ee19e70396ddbd501fddfab64fccbeb3c247",
     "docs/agents/task-context.md": "c689f02b9571ff747a4866d71690bb01afd7e6654dea640a1ce1c66e7c0fa204",
     "docs/agents/work-usage-launch.md": "3225858b8b840322d2bb073f30659c376826eea3d1f772df8582fb37eef74465",
     "docs/agents/work-usage.md": "9a4c574e6cd2b0af3ddd1cb5a70560dc84c962c991d42567b7829b9a25cae3be",
-    "tools/task-claims.mjs": "ef755fe7951544e5c05b20de7c64a7b53778b6d039a11a2abeb079e7d42b6fd2",
+    "tools/task-claims.mjs": "f22fa98ed34d2914b3c5572353f8352a2a84a77b81e30316575f4b7d7aa17272",
     "tools/usage-launch.mjs": "51dea30282a89f7efa8fa0291679447d8f25a1b4b2aeb805173db603d093d6f5",
-    "tools/work-items.mjs": "e33cd1d21a381f7127aaccf9a8ba189c6d0414ba7af4af5bb121c29c4f79aa93",
-    "tools/work-usage.mjs": "09569f9b56bd6e403d4c235f980ba5fb03b2aff8fe56a28878cc298fe8a4b2af"
+    "tools/work-items.mjs": "981448222990533069fa7d09e587da9b5955354a3f5e5ad5371823f6685ef5ec",
+    "tools/work-usage.mjs": "780c9ca35d2057e6ac86ca1f6168a8e315622919215dc317ae6238e875bcf023"
   },
   "measurements": {
     "samples": 8,
@@ -84,7 +84,13 @@
       "kind": "tool",
       "disposition": "implemented",
       "target": "tools/work-items.mjs",
-      "evidence": "Harness 10.9.0 reconcile: work:pr (from this project's F-014 skills review proposal) copied byte-identically with its script; also carries 10.8.1 (work:close without a tasks folder). PR guide and review step 7 carry the template sentence."
+      "evidence": "Harness 10.20.0 reconcile: work-items, task-claims, work-usage and the backlog readers copied byte-identically (cross-repository step prerequisites, built-view support left off, work:pr attribution trailer); CI runs check:work before check:backlog. Committed backlog views kept (views unset)."
+    },
+    {
+      "kind": "rule",
+      "disposition": "implemented",
+      "target": "docs/agents/parallel-work.md",
+      "evidence": "Harness 10.20.0: parallel-work, procedures, session-start, rule-review and solution guides copied; solution-gaps.md added to copied; ordering, review step 1 and pull-requests carry the template sentences. check:rules and check:rule-load pass."
     }
   ]
 }
