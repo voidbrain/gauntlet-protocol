@@ -1,7 +1,7 @@
 // Contract tests for the cad-3d-v1 OpenSCAD build-and-measure grader and reference runner (F-019-T02).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync, spawnSync } from 'node:child_process';
+import { execFileSync, spawn, spawnSync } from 'node:child_process';
 import { createServer } from 'node:http';
 import { dirname, join, resolve } from 'node:path';
 import { mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
@@ -326,4 +326,21 @@ test('cad-3d reference runner reports a missing container engine as an error nam
   } finally {
     server.close();
   }
+});
+
+// B-005: an engine client that cannot start is an executor error, never a graded build failure.
+test('OpenSCAD grader reports an engine client that fails to start as an error, not a build failure', async () => {
+  const execute = containerExecutor({
+    docker: resolve('test/fixtures/fake-docker.mjs'),
+    spawnProcess: (_command: string, args: string[], options: object) =>
+      spawn(resolve('test/fixtures/missing-engine-client'), args, options),
+  });
+  const graded = await gradeOpenScad({
+    taskDir: task('spacer-cylinder-regression'),
+    candidate: fixture('spacer-cylinder-regression/reference.scad'),
+    execute,
+    timeoutMs: 1000,
+  });
+  assert.deepEqual([graded.status, graded.reason, graded.passed], ['error', 'executor-error', 0]);
+  assert.match(String(graded.message), /container engine failed/);
 });

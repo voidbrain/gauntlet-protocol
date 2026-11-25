@@ -2,7 +2,7 @@
 // are skipped locally and fail in CI, where the engine is part of the contract.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync, spawn } from 'node:child_process';
+import { execFileSync, spawn, spawnSync } from 'node:child_process';
 import { createServer } from 'node:http';
 import { existsSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -308,4 +308,55 @@ test('the reference runner asks the model, grades in containers and reports per 
     }
   }
   assert.equal(leftovers(), '');
+});
+
+// B-004: no container engine means an `error` result naming the fix, written before any model call.
+test('the reference runner reports a missing container engine as an error before asking the model', async () => {
+  const requests: string[] = [];
+  const { server, endpoint } = await fakeModel('reference', requests);
+  const dir = workspace();
+  try {
+    const pack = validatePack(JSON.parse(readFileSync('examples/coding-v1.json', 'utf8')));
+    const write = (name: string, value: unknown) => {
+      writeFileSync(join(dir, name), JSON.stringify(value));
+      return join(dir, name);
+    };
+    const child = spawnSync(
+      process.execPath,
+      [
+        resolve('examples/coding-v1/runner.mjs'),
+        join(dir, 'report.json'),
+        write('configuration.json', profile(endpoint)),
+        write('budget.json', { timeoutMs: 60000 }),
+        write('case.json', pack.cases[0]),
+        '--docker=' + resolve('test/fixtures/no-docker.mjs'),
+      ],
+      { encoding: 'utf8' },
+    );
+    assert.equal(child.status, 0, child.stderr);
+    assert.match(child.stderr, /start Docker Desktop or colima/);
+    const report = JSON.parse(readFileSync(join(dir, 'report.json'), 'utf8'));
+    assert.deepEqual([report.complete, report.results[0].status, report.results[0].checks], [false, 'error', 0]);
+    assert.equal(requests.length, 0);
+  } finally {
+    server.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+// B-005: an engine client that cannot start is an executor error, never a graded result that covers the case.
+test('a container engine client that fails to start is graded as an error, not a failure', async () => {
+  const execute = containerExecutor({
+    docker: resolve('test/fixtures/fake-docker.mjs'),
+    spawnProcess: (_command: string, args: string[], options: object) =>
+      spawn(resolve('test/fixtures/missing-engine-client'), args, options),
+  });
+  const graded = await gradeCandidate({
+    taskDir: 'examples/coding-v1/tasks/parse-duration-regression',
+    candidate: '',
+    execute,
+    timeoutMs: 1000,
+  });
+  assert.deepEqual([graded.status, graded.reason, graded.passed], ['error', 'executor-error', 0]);
+  assert.match(String(graded.message), /container engine failed/);
 });

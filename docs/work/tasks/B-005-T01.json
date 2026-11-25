@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "id": "B-005-T01",
+  "parent": "B-005",
+  "status": "planned",
+  "title": "Executor errors are errors, not grades",
+  "goal": "An engine client spawn failure yields an error result, never failed",
+  "acceptance": [
+    "A spawn failure makes the executor reject",
+    "Coding and OpenSCAD graders return error / executor-error on an executor rejection; runners report error"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "examples/**",
+    "test/**",
+    "docs/**",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "No data: runner and grader control flow only.",
+  "validation": [
+    "Regression test committed failing first; npm test; CI"
+  ],
+  "escalation": [
+    "A change to the executor contract is an owner decision"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h agent",
+    "basis": "Estimated 2026-11-25 when opened: one runner or grader change plus a regression test. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.25,
+    "baselineAgentHours": 0.25,
+    "estimateAgentHours": 0.25
+  }
+}

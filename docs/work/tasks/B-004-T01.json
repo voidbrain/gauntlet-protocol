@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "id": "B-004-T01",
+  "parent": "B-004",
+  "status": "planned",
+  "title": "Toolchain check before the model call",
+  "goal": "The coding runner reports a missing container engine as an error naming the fix, before any model call",
+  "acceptance": [
+    "No container engine: an error result with the fix on stderr, complete false, and no model request"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "examples/**",
+    "test/**",
+    "docs/**",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "No data: runner and grader control flow only.",
+  "validation": [
+    "Regression test committed failing first; npm test; CI"
+  ],
+  "escalation": [
+    "A change to the executor contract is an owner decision"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h agent",
+    "basis": "Estimated 2026-11-25 when opened: one runner or grader change plus a regression test. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.25,
+    "baselineAgentHours": 0.25,
+    "estimateAgentHours": 0.25
+  }
+}
