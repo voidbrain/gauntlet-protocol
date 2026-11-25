@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-016-T04",
   "parent": "F-016",
-  "status": "implemented",
+  "status": "closed",
   "title": "Embedded runner, pack and index entry",
   "goal": "Embedded runner, pack and index entry",
   "acceptance": [
@@ -37,10 +37,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "1.5 h agent",
-    "basis": "Implemented 2026-11-25 in PR #96: core area embedded in src/catalog.ts, examples/embedded-v1.json (8 cases), examples/embedded-v1/runner.mjs (embedded-reference; shares examples/coding-v1/ollama-candidate.mjs with the coding runner), index entry and regenerated test-index; test/embedded-pack.test.ts runs the pack end to end against a stand-in model and arduino-cli. Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Closed 2026-11-25: #96 merged on green CI (main run 45569195046); the full suite passed 107/107 on the owner's Mac with Docker and the real arduino-cli present (coding container tests and real compiles included). The pack runs end to end through its reference runner against a stand-in model; no real-model run. Implemented 2026-11-25 in PR #96: core area embedded in src/catalog.ts, examples/embedded-v1.json (8 cases), examples/embedded-v1/runner.mjs (embedded-reference; shares examples/coding-v1/ollama-candidate.mjs with the coding runner), index entry and regenerated test-index; test/embedded-pack.test.ts runs the pack end to end against a stand-in model and arduino-cli. Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
     "reviewed": "2026-11-25",
-    "agentHours": 1.5,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }

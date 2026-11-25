@@ -1,6 +1,6 @@
 # Gauntlet Protocol
 
-Version 0.9.0 adds six focused evaluation packs; version 0.8.0 added incremental pending-only runs, private checkpoints, interrupted-campaign resume and observable partial ledger merges. Version 0.4.0 added [bounded private failure captures and selected diagnostics](docs/FAILURES.md); earlier releases added [reusable machine/load-scenario contracts](docs/ENVIRONMENTS.md), a [generated capability index](docs/test-index.md), [conservative evidence reuse](docs/EVIDENCE.md), [performance telemetry](docs/PERFORMANCE.md) and [local runtime adapters](docs/RUNTIMES.md).
+Version 0.10.0 adds the coding, logic-math and embedded domain packs; version 0.9.0 added six focused evaluation packs; version 0.8.0 added incremental pending-only runs, private checkpoints, interrupted-campaign resume and observable partial ledger merges. Version 0.4.0 added [bounded private failure captures and selected diagnostics](docs/FAILURES.md); earlier releases added [reusable machine/load-scenario contracts](docs/ENVIRONMENTS.md), a [generated capability index](docs/test-index.md), [conservative evidence reuse](docs/EVIDENCE.md), [performance telemetry](docs/PERFORMANCE.md) and [local runtime adapters](docs/RUNTIMES.md).
 
 An independent TypeScript library and CLI for capability-scoped AI evaluation. It records the tested configuration, bounded execution and independent acceptance evidence. It never grants production permission or promotes a model automatically.
 
