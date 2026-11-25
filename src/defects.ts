@@ -2,6 +2,8 @@
 // Each seeded defect has a file path, an inclusive 1-based line range [start, end] and a category.
 // The candidate answer is a JSON object { findings: [...] }; it passes when every seeded defect is matched
 // by at least one finding and the number of unmatched findings stays within maxFalsePositives (default 0).
+// A finding covers at most maxFindingLines lines; a wider one matches no defect, so sweeping a whole file
+// cannot find every defect in it.
 // Failure reasons name only defect IDs/indices and counts, never candidate text.
 export interface SeededDefect {
   id?: string;
@@ -25,6 +27,7 @@ export interface DefectGradeResult {
 
 const idPattern = /^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,99}$/;
 const categoryPattern = /^[a-z0-9][a-z0-9_-]{0,63}$/;
+const maxFindingLines = 10;
 
 const normalizePath = (value: string): string =>
   value
@@ -127,6 +130,7 @@ function parseFindings(input: unknown): ParsedFinding[] | null {
 }
 
 const matchesDefect = (finding: ParsedFinding, defect: SeededDefect): boolean =>
+  finding.lines[1] - finding.lines[0] < maxFindingLines &&
   finding.file === normalizePath(defect.file) &&
   finding.category === defect.category.toLowerCase() &&
   Math.max(finding.lines[0], defect.lines[0]) <= Math.min(finding.lines[1], defect.lines[1]);

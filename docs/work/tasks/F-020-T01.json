@@ -34,7 +34,7 @@
   "effort": {
     "size": "medium",
     "estimate": "0.25 h agent",
-    "basis": "Implemented 2026-11-25: src/defects.ts (expected kind defects, grader defects-v1), pack validation, run grading, engine identity, contract tests in test/defects.test.ts and PROTOCOL.md section; CI and merge remain. Not a measurement.",
+    "basis": "Implemented 2026-11-25: src/defects.ts (expected kind defects, grader defects-v1; findings cover at most 10 lines, added in review), pack validation, run grading, engine identity, contract tests in test/defects.test.ts and PROTOCOL.md section; CI and merge remain. Not a measurement.",
     "reviewed": "2026-11-25",
     "agentHours": 0.25,
     "baselineAgentHours": 2,
