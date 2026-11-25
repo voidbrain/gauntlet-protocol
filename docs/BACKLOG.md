@@ -1,10 +1,10 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 25 November 2026 against main `f47e853`. PR #98 merged on green CI (F-015, F-016 and F-017 archived on v0.10.0).
+Current work ledger, reviewed 25 November 2026 against main `c7202ae`. PRs #99 to #105 merged on green CI (#99: F-018; #100, #103, #104: F-019; #101, #102: F-020; #105: release 0.11.0). The owner tagged v0.11.0 on `c7202ae` and published it (italian-quality, cad-3d, code-review packs). F-018, F-019 and F-020 closed.
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 8.25 h agent + 1.75 h owner across 14 open steps of 5 features and 1 other record. Generated from the task files.
+**Remaining effort:** 7.75 h agent + 1 h owner across 9 open steps of 2 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -43,147 +43,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | [#99](https://github.com/voidbrain/gauntlet-protocol/pull/99) |
 | Opened | 2026-11-25 |
-| Verification | Pending. |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
-### <a id="f-018"></a>[✨ F-018](#top)
-
-**italian-quality-v1: Italian summary, rewrite and register**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h agent + 0.25 h owner | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-018-T02 — Italian summary, rewrite and register tasks (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | bilingual-it-en-v1 checks language choice, not Italian quality. Free text cannot be graded by exact equality. |
-| **Reproduce** | `npm run index:build` lists no case with capability italian-quality. |
-| **Check** | A deterministic rubric grader (required and forbidden terms, Italian share, length, register markers) and examples/italian-quality-v1.json, area language-translation, capability italian-quality; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
-|---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-018-t02"></a>F-018-T02 — Italian summary, rewrite and register tasks | 1.5 h | 0 h | 0.25 h | Implemented; verification pending | — | [F-018-T03](#f-018-t03) | 🤖 |
-| 🟢 Small | <a id="f-018-t03"></a>F-018-T03 — Release italian-quality-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-018-T02](#f-018-t02) | — | ⏳ 🧑‍🔧 |
-| 🟢 Small | **Total** | 3.5 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 0.25 h agent + 0.25 h owner | 1 of 3 completed | | | |
-
-<details><summary>Done steps (1)</summary>
-
-| Effort | Step | Estimate | Actual | Status |
-|---|---|---|---|---|
-| — | <a id="f-018-t01"></a>F-018-T01 — Deterministic rubric grader | 2 h | 0 h | Completed |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-018.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#90](https://github.com/voidbrain/gauntlet-protocol/pull/90); [#91](https://github.com/voidbrain/gauntlet-protocol/pull/91); [#99](https://github.com/voidbrain/gauntlet-protocol/pull/99) |
-| Opened | 2026-11-24 |
-| Verification | Pending. |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
-### <a id="f-020"></a>[✨ F-020](#top)
-
-**code-review-v1: seeded-defect diffs**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h agent + 0.25 h owner | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-020-T02 — Seeded-defect diff cases (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The index maps 0 cases to code-review. Finding defects needs a grader that matches a set of findings, not exact equality. |
-| **Reproduce** | `npm run index:build` reports `code-review: 0 mapped cases`. |
-| **Check** | A deterministic defect-finding grader (seeded defects by file, line range and category; bounded false positives) and examples/code-review-v1.json; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
-|---|---|---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="f-020-t02"></a>F-020-T02 — Seeded-defect diff cases | 1.5 h | 0 h | 0.25 h | Implemented; verification pending | — | [F-020-T03](#f-020-t03) | 🤖 | PR #102 |
-| 🟢 Small | <a id="f-020-t03"></a>F-020-T03 — Release code-review-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-020-T02](#f-020-t02) | — | ⏳ 🧑‍🔧 | — |
-| 🟢 Small | **Total** | 3.5 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 0.25 h agent + 0.25 h owner | 1 of 3 completed | | | | |
-
-<details><summary>Done steps (1)</summary>
-
-| Effort | Step | Estimate | Actual | Status | PRs |
-|---|---|---|---|---|---|
-| — | <a id="f-020-t01"></a>F-020-T01 — Defect-finding grader | 2 h | 0 h | Completed | PR #101 |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-020.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-020-T01: PR #101 · F-020-T02: PR #102. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#101](https://github.com/voidbrain/gauntlet-protocol/pull/101); [#102](https://github.com/voidbrain/gauntlet-protocol/pull/102) |
-| Opened | 2026-11-24 |
-| Verification | Pending. |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
-### <a id="f-019"></a>[✨ F-019](#top)
-
-**cad-3d-v1: OpenSCAD build-and-measure and printing questions**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h owner | — | — | — | 🧑‍🔧 | — |
-
-🧑 **→** Next: [🧑‍🔧](guides/release.md) F-019-T03 — Release cad-3d-v1 (Planned).
-
-| | |
-|---|---|
-| **Issue** | The index maps 0 cases to cad-3d. |
-| **Reproduce** | `npm run index:build` reports `cad-3d: 0 mapped cases`. |
-| **Check** | Exact-answer slicer, material and tolerance questions, and OpenSCAD tasks rendered in the coding runner's sandbox and graded by measured dimensions; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
-|---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="f-019-t03"></a>F-019-T03 — Release cad-3d-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [🧑‍🔧](guides/release.md) | — |
-| 🟢 Small | **Total** | 4 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 0.25 h owner | 2 of 3 completed | | |
-
-<details><summary>Done steps (2)</summary>
-
-| Effort | Step | Estimate | Actual | Status | PRs |
-|---|---|---|---|---|---|
-| — | <a id="f-019-t01"></a>F-019-T01 — Slicer, material and tolerance questions | 1 h | 0 h | Completed | PR #100 |
-| — | <a id="f-019-t02"></a>F-019-T02 — OpenSCAD build-and-measure grader and tasks | 3 h | 0 h | Completed | PR #103 |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-019.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-019-T01: PR #100 · F-019-T02: PR #103. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#100](https://github.com/voidbrain/gauntlet-protocol/pull/100); [#103](https://github.com/voidbrain/gauntlet-protocol/pull/103); [#104](https://github.com/voidbrain/gauntlet-protocol/pull/104) |
-| Opened | 2026-11-24 |
 | Verification | Pending. |
 | Reviewed | 2026-11-25 |
 

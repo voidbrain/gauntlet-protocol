@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-018-T02",
   "parent": "F-018",
-  "status": "implemented",
+  "status": "closed",
   "title": "Italian summary, rewrite and register tasks",
   "goal": "Italian summary, rewrite and register tasks",
   "acceptance": [
@@ -35,10 +35,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.25 h agent",
-    "basis": "Implemented 2026-11-25: examples/italian-quality-v1.json (6 summary, rewrite and register cases across regression and holdout splits), test/fixtures/italian-quality-v1.json, pack and catalog tests, and regenerated docs/test-index.md; CI and merge remain. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Merged in PR #99 on green CI on 2026-11-25; shipped in v0.11.0. No actual: elapsed time not measured across sessions.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }
