@@ -7,7 +7,8 @@
 // The grader runs nothing itself: `execute` must run the driver inside an enforced boundary whenever the candidate
 // is untrusted, return the command's stdout, and have stopped every candidate process before it resolves; an
 // optional `execute.prepare(argv)` (engine checks, image pulls) is awaited before the case's time starts. The grader bounds the wait
-// itself and does not rely on the executor to do so; it reports a timeout even if cleanup then fails.
+// itself and does not rely on the executor to do so. On a timeout it returns at once and removes the workspace only
+// once the executor resolves (its processes are then stopped); until then the workspace is a leftover.
 import { createHash } from 'node:crypto';
 import {
   chmodSync,
@@ -132,6 +133,7 @@ export async function gradeCandidate({ taskDir, candidate, execute, timeoutMs = 
   const tests = task.cases.length;
   const workspace = mkdtempSync(join(realpathSync(tmpdir()), 'gauntlet-coding-'));
   let timer;
+  let cleanupDeferred = false;
   try {
     writeFileSync(join(workspace, task.entry), candidate);
     cpSync(join(drivers, language.driver), join(workspace, language.driver));
@@ -144,11 +146,18 @@ export async function gradeCandidate({ taskDir, candidate, execute, timeoutMs = 
     const deadline = new Promise((resolve) => {
       timer = setTimeout(() => resolve({ timedOut: true }), timeoutMs);
     });
-    const outcome = await Promise.race([
+    const executing = Promise.resolve().then(() =>
       execute({ argv: language.argv, cwd: workspace, env: {}, timeoutMs }),
-      deadline,
-    ]);
-    if (outcome?.timedOut) return { status: 'failed', reason: 'timeout', tests, passed: 0 };
+    );
+    const outcome = await Promise.race([executing, deadline]);
+    if (outcome?.timedOut) {
+      // Removing the tree now would race a process the executor has not stopped yet and block the event loop.
+      cleanupDeferred = true;
+      leftoverWorkspaces.add(workspace);
+      const cleanup = () => removeWorkspace(workspace);
+      executing.then(cleanup, cleanup);
+      return { status: 'failed', reason: 'timeout', tests, passed: 0 };
+    }
     // The driver prints its results as the last tagged line of stdout; anything the candidate prints is ignored.
     const line = String(outcome?.stdout ?? '')
       .split('\n')
@@ -171,6 +180,6 @@ export async function gradeCandidate({ taskDir, candidate, execute, timeoutMs = 
     };
   } finally {
     clearTimeout(timer);
-    removeWorkspace(workspace);
+    if (!cleanupDeferred) removeWorkspace(workspace);
   }
 }

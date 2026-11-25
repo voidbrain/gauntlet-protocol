@@ -97,6 +97,12 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [cad-3d@1.0.0 / material-damp-isolation-holdout](../examples/cad-3d-v1.json) | cad-3d | printing-materials, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [cad-3d@1.0.0 / tolerance-clearance-pin-regression](../examples/cad-3d-v1.json) | cad-3d | dimensional-tolerances, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [cad-3d@1.0.0 / tolerance-shrinkage-compensation-holdout](../examples/cad-3d-v1.json) | cad-3d | dimensional-tolerances, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [italian-quality@1.0.0 / summary-service-regression](../examples/italian-quality-v1.json) | language-translation | italian-quality, summarization | model / regression | true / false | rubric-v1 / local-model-runtime | Unmeasured |
+| [italian-quality@1.0.0 / summary-report-holdout](../examples/italian-quality-v1.json) | language-translation | italian-quality, summarization | model / holdout | true / false | rubric-v1 / local-model-runtime | Unmeasured |
+| [italian-quality@1.0.0 / rewrite-anglicisms-regression](../examples/italian-quality-v1.json) | language-translation | italian-quality, rewriting | model / regression | true / false | rubric-v1 / local-model-runtime | Unmeasured |
+| [italian-quality@1.0.0 / rewrite-bureaucratic-holdout](../examples/italian-quality-v1.json) | language-translation | italian-quality, rewriting | model / holdout | true / false | rubric-v1 / local-model-runtime | Unmeasured |
+| [italian-quality@1.0.0 / register-formal-regression](../examples/italian-quality-v1.json) | language-translation | italian-quality, register-control | model / regression | true / false | rubric-v1 / local-model-runtime | Unmeasured |
+| [italian-quality@1.0.0 / register-informal-holdout](../examples/italian-quality-v1.json) | language-translation | italian-quality, register-control | model / holdout | true / false | rubric-v1 / local-model-runtime | Unmeasured |
 
 ## Area coverage
 
@@ -118,6 +124,6 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 - ui-visual: 0 mapped cases
 - security-permissions: 4 mapped cases
 - documents-data: 4 mapped cases
-- language-translation: 4 mapped cases
+- language-translation: 10 mapped cases
 - audio-video: 0 mapped cases
 - scheduling-time: 0 mapped cases

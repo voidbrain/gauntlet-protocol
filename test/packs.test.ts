@@ -25,7 +25,7 @@ const profile: Profile = {
   cache: 'neutral',
 };
 
-const provider = (answers: unknown[]) => {
+const provider = (answers: unknown[], raw = false) => {
   let answer = 0;
   return (async (input: unknown) => {
     const path = new URL(String(input)).pathname;
@@ -38,7 +38,7 @@ const provider = (answers: unknown[]) => {
             ? { models: [{ name: profile.model, size: 100, digest: 'a'.repeat(64) }] }
             : {
                 model: profile.model,
-                message: { content: JSON.stringify(answers[answer++]) },
+                message: { content: raw ? String(answers[answer++]) : JSON.stringify(answers[answer++]) },
                 done: true,
                 eval_count: 4,
                 done_reason: 'stop',
@@ -388,6 +388,33 @@ test('coding grader reports a timeout even while a leftover process keeps writin
   assert.deepEqual(removeLeftoverWorkspaces(), []);
 });
 
+// B-003: cleanup ran synchronously at the timeout and raced the writer, so on CI the grader hung past the test limit.
+test('coding grader returns at its timeout while a process the executor left keeps writing, and cleans up after', async () => {
+  let child: ReturnType<typeof spawn> | undefined;
+  try {
+    const started = Date.now();
+    const graded = await gradeCandidate({
+      taskDir: codingTask('parse-duration-regression'),
+      candidate: '',
+      execute: ({ cwd }: { cwd: string }) => {
+        child = spawn(
+          'python3',
+          ['-c', 'import os\ni = 0\nwhile True:\n  os.makedirs("d%d/e" % i, exist_ok=True)\n  i += 1'],
+          { cwd, stdio: 'ignore' },
+        );
+        return new Promise(() => {});
+      },
+      timeoutMs: 300,
+    });
+    assert.deepEqual([graded.status, graded.reason], ['failed', 'timeout']);
+    assert.ok(Date.now() - started < 3000, 'returned ' + (Date.now() - started) + ' ms after start');
+  } finally {
+    child?.kill('SIGKILL');
+  }
+  await new Promise((resolve) => setTimeout(resolve, 200));
+  assert.deepEqual(removeLeftoverWorkspaces(), []);
+});
+
 // Results come back on the driver's stdout (last line, tagged); the workspace is read-only to the candidate.
 test('coding grader refuses missing, oversized, wrong-length and extra-key results', async () => {
   const taskDir = codingTask('slugify-regression');
@@ -511,4 +538,63 @@ test('cad-3d pack covers slicer, material and tolerance questions in both splits
     failing.results.every((result) => result.status === 'failed'),
     true,
   );
+});
+
+test('italian-quality pack grades summary, rewrite and register cases in both splits with references and failing fixtures', async () => {
+  const pack = load('examples/italian-quality-v1.json');
+  const fixtures = JSON.parse(readFileSync('test/fixtures/italian-quality-v1.json', 'utf8')) as Record<
+    string,
+    { reference: string; failing: { reply: string; check: string }[] }
+  >;
+  assert.deepEqual(new Set(pack.cases.map((entry) => entry.split)), new Set(['regression', 'holdout']));
+  assert.equal(
+    pack.cases.every(
+      (entry) =>
+        entry.layer === 'model' &&
+        entry.area === 'language-translation' &&
+        entry.capabilities.includes('italian-quality') &&
+        entry.expected?.kind === 'rubric' &&
+        entry.responseFormat === undefined,
+    ),
+    true,
+  );
+  for (const kind of ['summary', 'rewrite', 'register'])
+    assert.deepEqual(
+      new Set(pack.cases.filter((entry) => entry.id.startsWith(kind + '-')).map((entry) => entry.split)),
+      new Set(['regression', 'holdout']),
+      kind,
+    );
+  const references = pack.cases.map((entry) => {
+    const item = fixtures[entry.id];
+    assert.ok(item?.reference, entry.id);
+    assert.ok(item.failing.length >= 2, entry.id);
+    return item.reference;
+  });
+  const passing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    fetch: provider(references, true),
+  });
+  assert.equal(passing.passed, true);
+  for (let index = 0; index < Math.max(...pack.cases.map((entry) => fixtures[entry.id].failing.length)); index++) {
+    const replies = pack.cases.map((entry) => {
+      const list = fixtures[entry.id].failing;
+      return list[Math.min(index, list.length - 1)].reply;
+    });
+    const failing = await run(pack, profile, defaults, {
+      execute: true,
+      allowModels: true,
+      fetch: provider(replies, true),
+    });
+    assert.equal(
+      failing.results.every((result) => result.status === 'failed'),
+      true,
+    );
+    for (let i = 0; i < pack.cases.length; i++) {
+      const list = fixtures[pack.cases[i].id].failing;
+      const check = list[Math.min(index, list.length - 1)].check;
+      const failed = String(failing.results[i].reason).replace('Rubric checks failed: ', '').split(', ');
+      assert.ok(failed.includes(check), `${pack.cases[i].id}[${index}]: ${failed.join(', ')}`);
+    }
+  }
 });
