@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "tool": "arduino-cli",
+  "cores": {
+    "arduino:avr": "1.8.6",
+    "esp32:esp32": "3.0.7"
+  },
+  "additionalUrls": ["https://espressif.github.io/arduino-esp32/package_esp32_index.json"]
+}

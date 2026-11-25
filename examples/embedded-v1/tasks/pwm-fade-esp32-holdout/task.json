@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "fqbn": "esp32:esp32:esp32",
+  "prompt": "Write a complete Arduino sketch (sketch.ino) for an ESP32 DevKit (Arduino-ESP32 core 3.0.7). Fade the LED on GPIO 4 up and down continuously with hardware PWM: 5 kHz, 8-bit resolution, using the core 3.x LEDC API (ledcAttach and ledcWrite by pin). Step the duty cycle with millis() every 10 ms; never call delay(). Use only the core; no libraries.",
+  "requires": [
+    { "id": "ledc-attach", "pattern": "\\bledcAttach\\s*\\(\\s*4\\s*,\\s*5000\\s*,\\s*8\\s*\\)" },
+    { "id": "ledc-write", "pattern": "\\bledcWrite\\s*\\(\\s*4\\s*," },
+    { "id": "millis", "pattern": "\\bmillis\\s*\\(" }
+  ],
+  "forbids": [
+    { "id": "no-delay", "pattern": "\\bdelay(Microseconds)?\\s*\\(" },
+    { "id": "no-analog-write", "pattern": "\\banalogWrite\\s*\\(" }
+  ]
+}

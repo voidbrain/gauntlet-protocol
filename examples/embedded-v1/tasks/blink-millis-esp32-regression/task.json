@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "fqbn": "esp32:esp32:esp32",
+  "prompt": "Write a complete Arduino sketch (sketch.ino) for an ESP32 DevKit (Arduino-ESP32 core 3.0.7). Blink the LED on GPIO 2: on for 250 ms, off for 750 ms, forever. Do not block: time the blink with millis(), never delay(), so loop() returns quickly. Use only the core; no libraries.",
+  "requires": [
+    { "id": "millis", "pattern": "\\bmillis\\s*\\(" },
+    { "id": "output-pin-2", "pattern": "\\bpinMode\\s*\\(\\s*2\\s*,\\s*OUTPUT\\s*\\)" },
+    { "id": "writes-pin-2", "pattern": "\\bdigitalWrite\\s*\\(\\s*2\\s*," }
+  ],
+  "forbids": [{ "id": "no-delay", "pattern": "\\bdelay(Microseconds)?\\s*\\(" }]
+}
