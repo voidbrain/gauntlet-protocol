@@ -461,3 +461,83 @@ test('logic-math pack has exact answers for math and logic in both splits', asyn
     true,
   );
 });
+
+const rawProvider = (answers: string[]) => {
+  let answer = 0;
+  return (async (input: unknown) => {
+    const path = new URL(String(input)).pathname;
+    const value =
+      path === '/api/version'
+        ? { version: 'fixture-v1' }
+        : path === '/api/show'
+          ? { model_info: { 'general.file_type': 15 }, details: { quantization_level: 'Q4_K_M' } }
+          : path === '/api/tags'
+            ? { models: [{ name: profile.model, size: 100, digest: 'a'.repeat(64) }] }
+            : {
+                model: profile.model,
+                message: { content: answers[answer++] },
+                done: true,
+                eval_count: 18,
+                done_reason: 'stop',
+              };
+    return new Response(JSON.stringify(value));
+  }) as typeof fetch;
+};
+
+test('italian-quality pack grades summary, rewrite and register cases in both splits with references and failing fixtures', async () => {
+  const pack = load('examples/italian-quality-v1.json');
+  const fixtures = JSON.parse(readFileSync('test/fixtures/italian-quality-v1.json', 'utf8')) as Record<
+    string,
+    { reference: string; failing: { reply: string; check: string }[] }
+  >;
+  assert.deepEqual(new Set(pack.cases.map((entry) => entry.split)), new Set(['regression', 'holdout']));
+  assert.equal(
+    pack.cases.every(
+      (entry) =>
+        entry.layer === 'model' &&
+        entry.area === 'language-translation' &&
+        entry.capabilities.includes('italian-quality') &&
+        entry.expected?.kind === 'rubric' &&
+        entry.responseFormat === undefined,
+    ),
+    true,
+  );
+  for (const kind of ['summary', 'rewrite', 'register'])
+    assert.deepEqual(
+      new Set(pack.cases.filter((entry) => entry.id.startsWith(kind + '-')).map((entry) => entry.split)),
+      new Set(['regression', 'holdout']),
+      kind,
+    );
+  const references = pack.cases.map((entry) => {
+    const item = fixtures[entry.id];
+    assert.ok(item?.reference, entry.id);
+    assert.ok(item.failing.length >= 2, entry.id);
+    return item.reference;
+  });
+  const passing = await run(pack, profile, defaults, {
+    execute: true,
+    allowModels: true,
+    fetch: rawProvider(references),
+  });
+  assert.equal(passing.passed, true);
+  for (let index = 0; index < Math.max(...pack.cases.map((entry) => fixtures[entry.id].failing.length)); index++) {
+    const replies = pack.cases.map((entry) => {
+      const list = fixtures[entry.id].failing;
+      return list[Math.min(index, list.length - 1)].reply;
+    });
+    const failing = await run(pack, profile, defaults, {
+      execute: true,
+      allowModels: true,
+      fetch: rawProvider(replies),
+    });
+    assert.equal(
+      failing.results.every((result) => result.status === 'failed'),
+      true,
+    );
+    for (let i = 0; i < pack.cases.length; i++) {
+      const list = fixtures[pack.cases[i].id].failing;
+      const check = list[Math.min(index, list.length - 1)].check;
+      assert.match(String(failing.results[i].reason), new RegExp(check), `${pack.cases[i].id}[${index}]`);
+    }
+  }
+});
