@@ -113,7 +113,7 @@ function parseFindings(input: unknown): ParsedFinding[] | null {
     const file = normalizePath(f.file);
     const category = f.category.trim().toLowerCase();
     if (!file || file.length > 256 || !categoryPattern.test(category)) return null;
-    let lines: [number, number] | null = null;
+    let lines: [number, number];
     if (f.line !== undefined && f.lines === undefined) {
       if (!Number.isSafeInteger(f.line) || (f.line as number) < 1 || (f.line as number) > 1_000_000) return null;
       lines = [f.line as number, f.line as number];
