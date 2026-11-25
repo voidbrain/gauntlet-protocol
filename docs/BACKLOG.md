@@ -4,7 +4,7 @@ Current work ledger, reviewed 25 November 2026 against main `c7202ae`. PRs #99 t
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 7.75 h agent + 1 h owner across 9 open steps of 2 features and 1 other record. Generated from the task files.
+**Remaining effort:** 8.25 h agent + 1 h owner across 11 open steps of 2 features and 3 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -42,6 +42,82 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | [#99](https://github.com/voidbrain/gauntlet-protocol/pull/99) |
+| Opened | 2026-11-25 |
+| Verification | Pending. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+### <a id="b-004"></a>[🐞 B-004](#top)
+
+**Coding runner asks the model, then crashes without a report, when no container engine is available**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-004-T01 — Toolchain check before the model call (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | `examples/coding-v1/runner.mjs` asks the model first and only then reaches the executor, whose `prepare` throws "container engine unavailable"; the runner exits without a report, so the case shows an adapter failure instead of an `error` naming the fix, and a model generation is wasted. Found by NERV's review of the 0.11.0 adoption; the embedded and cad-3d runners already check first. |
+| **Reproduce** | Run the runner on a coding case with no container engine (`--docker=test/fixtures/no-docker.mjs`): the model is asked, then the process exits non-zero with no report. |
+| **Check** | The runner checks the engine and image before asking the model and writes an `error` result (`complete: false`, 0 checks) with the fix on stderr. Regression test committed failing first. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-004-t01"></a>B-004-T01 — Toolchain check before the model call | 0.25 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-004.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | NERV review of the 0.11.0 adoption (2026-11-25); [#107](https://github.com/voidbrain/gauntlet-protocol/pull/107) |
+| Opened | 2026-11-25 |
+| Verification | Pending. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+### <a id="b-005"></a>[🐞 B-005](#top)
+
+**An engine client that fails to start is graded as a failure**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-005-T01 — Executor errors are errors, not grades (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | `examples/coding-v1/container-executor.mjs` resolved a Docker client `spawn` error as exit code `null`, so the coding grader returned `failed` (`no-results`) and the OpenSCAD grader `failed` (`build-error`): an infrastructure fault became a graded result that counts as covering the case. Found by NERV's review of the 0.11.0 adoption. |
+| **Reproduce** | Grade with a container executor whose engine client cannot be started (ENOENT on spawn): the result is `failed`, not `error`. |
+| **Check** | The executor rejects when the engine client fails to start, and both graders turn an executor rejection into `error` (`executor-error`, with the message), which the runners report as `error`. The candidate controls its exit code, so exit codes never mark an executor error. Regression tests committed failing first. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-005-t01"></a>B-005-T01 — Executor errors are errors, not grades | 0.25 h | 0 h | 0.25 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/B-005.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | NERV review of the 0.11.0 adoption (2026-11-25); [#107](https://github.com/voidbrain/gauntlet-protocol/pull/107) |
 | Opened | 2026-11-25 |
 | Verification | Pending. |
 | Reviewed | 2026-11-25 |

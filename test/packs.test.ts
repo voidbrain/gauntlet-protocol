@@ -323,10 +323,13 @@ test('coding grader bounds time and ignores printed summaries and early exits', 
     timeoutMs: 200,
   });
   assert.deepEqual([hung.status, hung.reason], ['failed', 'timeout']);
-  await assert.rejects(
-    gradeCandidate({ taskDir: python, candidate: '', execute: async () => Promise.reject(Error('no boundary')) }),
-    /no boundary/,
-  );
+  // B-005: an executor rejection is an infrastructure `error`, never a graded result (it was rethrown before).
+  const rejected = await gradeCandidate({
+    taskDir: python,
+    candidate: '',
+    execute: async () => Promise.reject(Error('no boundary')),
+  });
+  assert.deepEqual([rejected.status, rejected.reason, rejected.message], ['error', 'executor-error', 'no boundary']);
 });
 
 test('coding grader is not fooled by a candidate that tampers with grading', async () => {

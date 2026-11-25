@@ -124,6 +124,16 @@ export function removeLeftoverWorkspaces() {
   return [...leftoverWorkspaces];
 }
 
+// An executor that rejects (engine missing or its client failing to start) is an infrastructure fault: an `error`
+// result that never counts as covering the case.
+const executorError = (error, tests) => ({
+  status: 'error',
+  reason: 'executor-error',
+  message: String(error?.message ?? error),
+  tests,
+  passed: 0,
+});
+
 // The candidate is written to an empty workspace first; the driver and the inputs are copied in afterwards.
 export async function gradeCandidate({ taskDir, candidate, execute, timeoutMs = 10000 }) {
   if (typeof candidate !== 'string' || typeof execute !== 'function')
@@ -142,14 +152,23 @@ export async function gradeCandidate({ taskDir, candidate, execute, timeoutMs = 
       JSON.stringify({ function: task.function, inputs: task.cases.map((c) => c.input) }),
     );
     // Engine checks and image pulls happen before the case's time starts.
-    await execute.prepare?.(language.argv);
+    try {
+      await execute.prepare?.(language.argv);
+    } catch (error) {
+      return executorError(error, tests);
+    }
     const deadline = new Promise((resolve) => {
       timer = setTimeout(() => resolve({ timedOut: true }), timeoutMs);
     });
     const executing = Promise.resolve().then(() =>
       execute({ argv: language.argv, cwd: workspace, env: {}, timeoutMs }),
     );
-    const outcome = await Promise.race([executing, deadline]);
+    let outcome;
+    try {
+      outcome = await Promise.race([executing, deadline]);
+    } catch (error) {
+      return executorError(error, tests);
+    }
     if (outcome?.timedOut) {
       // Removing the tree now would race a process the executor has not stopped yet and block the event loop.
       cleanupDeferred = true;

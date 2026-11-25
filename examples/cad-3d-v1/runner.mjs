@@ -104,6 +104,11 @@ if (asked.truncated) {
 } else {
   const timeoutMs = Math.max(1000, Math.min(30000, budget.timeoutMs - (Date.now() - started) - 10000));
   const graded = await gradeOpenScad({ taskDir, candidate: asked.candidate, execute, timeoutMs });
+  if (graded.status === 'error') {
+    process.stderr.write(graded.message + '\n');
+    report({ complete: false, results: [{ id: current.id, status: 'error', checks: 0 }] });
+    process.exit(0);
+  }
   status = graded.status;
   checks = graded.checks;
 }
