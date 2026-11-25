@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "prompt": "Write solution.py for a Raspberry Pi with gpiozero. Blink an LED on GPIO 17 (BCM numbering): 0.5 s on, 0.5 s off, forever, using LED.blink with on_time and off_time, then wait with signal.pause(). Do not loop yourself.",
+  "requires": [
+    { "id": "led-17", "call": "gpiozero.LED", "args": [{ "pos": 0, "name": "pin", "value": 17 }] },
+    {
+      "id": "blink-timing",
+      "call": "?.blink",
+      "args": [
+        { "pos": 0, "name": "on_time", "value": 0.5 },
+        { "pos": 1, "name": "off_time", "value": 0.5 }
+      ]
+    },
+    { "id": "pause", "call": "signal.pause" }
+  ],
+  "forbids": [{ "id": "no-rpi-gpio", "import": "RPi.GPIO" }],
+  "noBusyLoop": true
+}

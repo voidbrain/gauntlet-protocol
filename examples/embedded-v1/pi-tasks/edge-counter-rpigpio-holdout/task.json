@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "prompt": "Write solution.py for a Raspberry Pi with RPi.GPIO. Use BCM numbering. Count falling edges on GPIO 23, configured as an input with the internal pull-up, using GPIO.add_event_detect with GPIO.FALLING, a callback and bouncetime=200. Print the count once a second with time.sleep(1) in the main loop. Always call GPIO.cleanup() in a finally block.",
+  "requires": [
+    { "id": "bcm-mode", "call": "RPi.GPIO.setmode", "args": [{ "pos": 0, "value": { "name": "RPi.GPIO.BCM" } }] },
+    {
+      "id": "input-23-pullup",
+      "call": "RPi.GPIO.setup",
+      "args": [
+        { "pos": 0, "value": 23 },
+        { "pos": 1, "value": { "name": "RPi.GPIO.IN" } },
+        { "name": "pull_up_down", "value": { "name": "RPi.GPIO.PUD_UP" } }
+      ]
+    },
+    {
+      "id": "edge-detect",
+      "call": "RPi.GPIO.add_event_detect",
+      "args": [
+        { "pos": 0, "value": 23 },
+        { "pos": 1, "value": { "name": "RPi.GPIO.FALLING" } },
+        { "name": "bouncetime", "value": 200 }
+      ]
+    },
+    { "id": "sleep-1", "call": "time.sleep", "args": [{ "pos": 0, "value": 1 }] },
+    { "id": "cleanup-in-finally", "finally": "RPi.GPIO.cleanup" }
+  ],
+  "forbids": [{ "id": "no-input-polling", "call": "RPi.GPIO.input" }],
+  "noBusyLoop": true
+}

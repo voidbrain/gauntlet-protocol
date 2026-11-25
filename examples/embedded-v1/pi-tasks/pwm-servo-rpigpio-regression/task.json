@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "prompt": "Write solution.py for a Raspberry Pi with RPi.GPIO. Use BCM numbering. Drive a hobby servo on GPIO 18 with 50 Hz software PWM: start at a 7.5 % duty cycle, then sweep between 5 % and 10 % in 0.5 % steps, sleeping 0.05 s after each change with time.sleep. Stop on KeyboardInterrupt and always call GPIO.cleanup() in a finally block.",
+  "requires": [
+    { "id": "bcm-mode", "call": "RPi.GPIO.setmode", "args": [{ "pos": 0, "value": { "name": "RPi.GPIO.BCM" } }] },
+    {
+      "id": "output-18",
+      "call": "RPi.GPIO.setup",
+      "args": [
+        { "pos": 0, "value": 18 },
+        { "pos": 1, "value": { "name": "RPi.GPIO.OUT" } }
+      ]
+    },
+    {
+      "id": "pwm-18-50hz",
+      "call": "RPi.GPIO.PWM",
+      "args": [
+        { "pos": 0, "value": 18 },
+        { "pos": 1, "value": 50 }
+      ]
+    },
+    { "id": "start-7-5", "call": "?.start", "args": [{ "pos": 0, "value": 7.5 }] },
+    { "id": "duty-change", "call": "?.ChangeDutyCycle" },
+    { "id": "sleep", "call": "time.sleep" },
+    { "id": "cleanup-in-finally", "finally": "RPi.GPIO.cleanup" }
+  ],
+  "forbids": [{ "id": "no-board-mode", "call": "RPi.GPIO.setmode", "args": [{ "pos": 0, "value": { "name": "RPi.GPIO.BOARD" } }] }],
+  "noBusyLoop": true
+}
