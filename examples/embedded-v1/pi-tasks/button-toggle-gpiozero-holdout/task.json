@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "prompt": "Write solution.py for a Raspberry Pi with gpiozero. A push button on GPIO 2 (BCM) toggles an LED on GPIO 27 on each press. Create the Button with bounce_time=0.05, attach the toggle with the when_pressed callback, then wait with signal.pause(). Never poll the button in a loop.",
+  "requires": [
+    {
+      "id": "button-2",
+      "call": "gpiozero.Button",
+      "args": [
+        { "pos": 0, "name": "pin", "value": 2 },
+        { "name": "bounce_time", "value": 0.05 }
+      ]
+    },
+    { "id": "led-27", "call": "gpiozero.LED", "args": [{ "pos": 0, "name": "pin", "value": 27 }] },
+    { "id": "when-pressed", "assign": "?.when_pressed" },
+    { "id": "pause", "call": "signal.pause" }
+  ],
+  "forbids": [{ "id": "no-polling", "attribute": "?.is_pressed" }],
+  "noBusyLoop": true
+}
