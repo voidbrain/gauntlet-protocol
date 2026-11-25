@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-015-T03",
   "parent": "F-015",
-  "status": "implemented",
+  "status": "closed",
   "title": "Sandboxed reference coding runner",
   "goal": "Sandboxed reference coding runner",
   "acceptance": [
@@ -43,10 +43,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.5 h agent",
-    "basis": "Implemented 2026-11-25; security review of #91 fixed the same day (in-container kill timer, stale sweep, read-only workspace with stdout results, pulls before the timer, no engine log). Re-review, CI and merge remain. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Closed 2026-11-25: #91 merged on green CI (run 45512550747 on main; the container contract tests are required there, not skipped, and every main run since passed, last 45567827107). Verified on the owner's Mac with Docker Desktop 29.8.0: test/coding-runner.test.ts passed 9/9 twice (denied network and host files, read-only root and workspace, non-root user, timeout and memory kill, CPU-time limit, refusal without an engine, SIGKILLed runner leaves no container, stale sweep, pulls before the timer, no engine log, the runner end to end against a stand-in model). The security review findings are fixed in #91, each with a test. Not run: a real local model, which needs an explicit run request. Implemented 2026-11-25; initial estimate retained in Git.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.5,
+    "agentHours": 0,
     "baselineAgentHours": 3,
     "estimateAgentHours": 3
   }

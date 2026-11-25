@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-016-T03",
   "parent": "F-016",
-  "status": "implemented",
+  "status": "closed",
   "title": "Raspberry Pi Python tasks graded by static checks",
   "goal": "Raspberry Pi Python tasks graded by static checks",
   "acceptance": [
@@ -36,10 +36,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "1.5 h agent",
-    "basis": "Implemented 2026-11-25 in PR #94: four Pi tasks (gpiozero and RPi.GPIO, regression and holdout), examples/embedded-v1/pi_facts.py and pi-grade.mjs, test/embedded-pi-grader.test.ts. Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Closed 2026-11-25: #94 merged on green CI; test/embedded-pi-grader.test.ts passed 5/5 on the owner's Mac (Python 3.9.6) and in CI. Implemented 2026-11-25 in PR #94: four Pi tasks (gpiozero and RPi.GPIO, regression and holdout), examples/embedded-v1/pi_facts.py and pi-grade.mjs, test/embedded-pi-grader.test.ts. Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
     "reviewed": "2026-11-25",
-    "agentHours": 1.5,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   }
