@@ -1,10 +1,10 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 25 November 2026 against main `019fba8`. PRs #88 (holdouts H1), #89 (logic-math-v1) and #90 (rubric grader) merged on green CI; F-017-T01 and F-018-T01 closed. F-015-T06 done on the owner's Mac.
+Current work ledger, reviewed 25 November 2026 against main `dcc176b`. PRs #91 to #97 merged on green CI; v0.10.0 tagged and published (coding, logic-math, embedded packs). F-015, F-016 and F-017 closed.
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 16.5 h agent + 2.5 h owner across 19 open steps of 8 features. Generated from the task files.
+**Remaining effort:** 16.5 h agent + 1.75 h owner across 16 open steps of 5 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -134,152 +134,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-24 |
 | Verification | Pending. |
 | Reviewed | 2026-11-24 |
-
-</details>
-
----
-### <a id="f-015"></a>[✨ F-015](#top)
-
-**coding-v1: coding pack and sandboxed reference runner**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h owner | — | — | — | 🧑‍🔧 | — |
-
-🧑 **→** Next: [🧑‍🔧](guides/release.md) F-015-T04 — Release coding-v1 (Planned).
-
-| | |
-|---|---|
-| **Issue** | The capability index maps 0 cases to the coding area. The coding layer exists only as a bridge (PROTOCOL.md, "Registered external runners"): no pack uses it and no runner meets its sandbox and candidate/test separation contract. |
-| **Reproduce** | `npm run index:build` reports `coding: 0 mapped cases`; `gauntlet packs` lists no coding-layer pack. |
-| **Check** | examples/coding-v1.json with Python and TypeScript tasks graded out of process against expected values the candidate never sees; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. A reference runner runs model-written code only inside the owner-chosen boundary (no network, time and memory limits) with contract tests proving each limit; grading stays outside the candidate's process. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Who |
-|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-015-t04"></a>F-015-T04 — Release coding-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [🧑‍🔧](guides/release.md) |
-| 🟢 Small | **Total** | 6 h (2 of 6 steps) | 0 h (0 of 6 steps recorded) | 0.25 h owner | 5 of 6 completed | |
-
-<details><summary>Done steps (5)</summary>
-
-| Effort | Step | Estimate | Actual | Status |
-|---|---|---|---|---|
-| — | <a id="f-015-t01"></a>F-015-T01 — Coding tasks, hidden tests and deterministic grader | 3 h | 0 h | Completed |
-| — | <a id="f-015-t02"></a>F-015-T02 — Choose the reference runner's sandbox boundary | — | 0 h | Completed |
-| — | <a id="f-015-t03"></a>F-015-T03 — Sandboxed reference coding runner | 3 h | 0 h | Completed |
-| — | <a id="f-015-t05"></a>F-015-T05 — Decide where holdout expectations live | — | 0 h | Completed |
-| — | <a id="f-015-t06"></a>F-015-T06 — Run a container engine on the evaluation machine | — | 0 h | Completed |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-015.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#86](https://github.com/voidbrain/gauntlet-protocol/pull/86); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87); [#88](https://github.com/voidbrain/gauntlet-protocol/pull/88); [#91](https://github.com/voidbrain/gauntlet-protocol/pull/91); [#95](https://github.com/voidbrain/gauntlet-protocol/pull/95) (F-015-T03 verification) |
-| Opened | 2026-11-24 |
-| Verification | Unit/integration, 2026-11-25: `test/coding-runner.test.ts` 9/9 on the owner's Mac with Docker Desktop 29.8.0 (run twice) and in CI on main (run 45567827107). Human (release, F-015-T04): Pending. |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
-### <a id="f-016"></a>[✨ F-016](#top)
-
-**embedded-v1: Arduino, ESP32 and Raspberry Pi pack**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h owner | — | — | — | 🧑‍🔧 | — |
-
-🧑 **→** Next: [🧑‍🔧](guides/release.md) F-016-T05 — Release embedded-v1 (Planned).
-
-| | |
-|---|---|
-| **Issue** | No pack covers embedded code. NERV wants models qualified for Arduino/ESP32 sketches and Raspberry Pi Python without hardware in the loop. |
-| **Reproduce** | `npm run index:build` lists no embedded case; the taxonomy in src/catalog.ts has no embedded area. |
-| **Check** | examples/embedded-v1.json graded by compile (pinned arduino-cli or PlatformIO ESP32 core) and static checks, no hardware; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. The area choice is recorded. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Who |
-|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-016-t05"></a>F-016-T05 — Release embedded-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [🧑‍🔧](guides/release.md) |
-| 🟢 Small | **Total** | 5.5 h (3 of 6 steps) | 0 h (0 of 6 steps recorded) | 0.25 h owner | 5 of 6 completed | |
-
-<details><summary>Done steps (5)</summary>
-
-| Effort | Step | Estimate | Actual | Status |
-|---|---|---|---|---|
-| — | <a id="f-016-t01"></a>F-016-T01 — Choose the embedded area and toolchain | — | 0 h | Completed |
-| — | <a id="f-016-t02"></a>F-016-T02 — Arduino and ESP32 sketch tasks graded by compile | 2.5 h | 0 h | Completed |
-| — | <a id="f-016-t03"></a>F-016-T03 — Raspberry Pi Python tasks graded by static checks | 1.5 h | 0 h | Completed |
-| — | <a id="f-016-t04"></a>F-016-T04 — Embedded runner, pack and index entry | 1.5 h | 0 h | Completed |
-| — | <a id="f-016-t06"></a>F-016-T06 — Install arduino-cli and the pinned cores on the evaluation machine | — | 0 h | Completed |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-016.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87); [#89](https://github.com/voidbrain/gauntlet-protocol/pull/89); [#92](https://github.com/voidbrain/gauntlet-protocol/pull/92) (F-016-T06 evidence); [#93](https://github.com/voidbrain/gauntlet-protocol/pull/93) (F-016-T02); [#94](https://github.com/voidbrain/gauntlet-protocol/pull/94) (F-016-T03, CI decision); [#95](https://github.com/voidbrain/gauntlet-protocol/pull/95) (F-016-T02, F-016-T03 closed); [#96](https://github.com/voidbrain/gauntlet-protocol/pull/96) (F-016-T04) |
-| Opened | 2026-11-24 |
-| Verification | Human (agent on the owner's Mac), 2026-11-25: F-016-T06 toolchain installed and both test compiles passed ([guide](guides/arduino-cli.md)). Pack verification pending. |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
-### <a id="f-017"></a>[✨ F-017](#top)
-
-**logic-math-v1: puzzles, arithmetic and constraints**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h owner | — | — | — | 🧑‍🔧 | — |
-
-🧑 **→** Next: [🧑‍🔧](guides/release.md) F-017-T02 — Release logic-math-v1 (Planned).
-
-| | |
-|---|---|
-| **Issue** | The index maps 0 cases to logic-planning and to math. |
-| **Reproduce** | `npm run index:build` reports `math: 0 mapped cases` and `logic-planning: 0 mapped cases`. |
-| **Check** | examples/logic-math-v1.json with exact-answer puzzles, arithmetic and constraint problems on the existing exact-json grader; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Who |
-|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-017-t02"></a>F-017-T02 — Release logic-math-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [🧑‍🔧](guides/release.md) |
-| 🟢 Small | **Total** | 1 h (1 of 2 steps) | 0 h (0 of 2 steps recorded) | 0.25 h owner | 1 of 2 completed | |
-
-<details><summary>Done steps (1)</summary>
-
-| Effort | Step | Estimate | Actual | Status |
-|---|---|---|---|---|
-| — | <a id="f-017-t01"></a>F-017-T01 — Logic and math pack with exact answers | 1 h | 0 h | Completed |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-017.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#89](https://github.com/voidbrain/gauntlet-protocol/pull/89); [#91](https://github.com/voidbrain/gauntlet-protocol/pull/91) |
-| Opened | 2026-11-24 |
-| Verification | Pending. |
-| Reviewed | 2026-11-25 |
 
 </details>
 

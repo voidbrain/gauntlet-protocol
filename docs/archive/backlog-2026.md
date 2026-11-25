@@ -585,3 +585,107 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 </details>
 
 ---
+
+## Closed 2026-11-25
+
+### F-015
+
+**coding-v1: coding pack and sandboxed reference runner**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🔴 Large |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v0.10.0.
+
+| | |
+|---|---|
+| **Issue** | The capability index maps 0 cases to the coding area. The coding layer exists only as a bridge (PROTOCOL.md, "Registered external runners"): no pack uses it and no runner meets its sandbox and candidate/test separation contract. |
+| **Reproduce** | `npm run index:build` reports `coding: 0 mapped cases`; `gauntlet packs` lists no coding-layer pack. |
+| **Check** | examples/coding-v1.json with Python and TypeScript tasks graded out of process against expected values the candidate never sees; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. A reference runner runs model-written code only inside the owner-chosen boundary (no network, time and memory limits) with contract tests proving each limit; grading stays outside the candidate's process. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: Released in v0.10.0 (tag on dcc176b, release PR #97, main CI green; https://github.com/voidbrain/gauntlet-protocol/releases/tag/v0.10.0); released in v0.10.0. 2026-11-25: F-015-T06 closed: on the owner's instruction, Docker Desktop (server 29.8.0) runs on the owner's Mac; [container engine](../guides/container-engine.md) step 2 gave `OK`, `BLOCKED` (wget: bad address 'example.com') and `exit 137`. F-015-T03 implemented: `examples/coding-v1/container-executor.mjs` (one throwaway container per case from pinned images; no network, read-only root, non-root user, memory, process and CPU limits, only the workspace mounted, container removed before the call resolves) and `examples/coding-v1/runner.mjs` (asks the local model, grades out of process). Merged in #91 after the security review's fixes, on green CI. 2026-11-25: F-015-T03 closed: the container contract tests pass 9/9 on the owner's Mac (Docker Desktop 29.8.0) and are required in CI; a run against a real local model is not done (needs an explicit run request). Earlier: F-015-T01 closed (PR #86); F-015-T02 sandbox A; F-015-T05 holdouts H1 (public, exposed). Release PR [#97](https://github.com/voidbrain/gauntlet-protocol/pull/97) for 0.10.0 ships coding-v1; next: F-015-T04, the owner tags v0.10.0 ([release](../guides/release.md) step 2). Planned 2026-11-24 as part of the [roadmap](../ROADMAP.md) milestone "Domain packs"; every step is in its task file.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#86](https://github.com/voidbrain/gauntlet-protocol/pull/86); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87); [#88](https://github.com/voidbrain/gauntlet-protocol/pull/88); [#91](https://github.com/voidbrain/gauntlet-protocol/pull/91); [#95](https://github.com/voidbrain/gauntlet-protocol/pull/95) (F-015-T03 verification) |
+| Opened | 2026-11-24 |
+| Verification | Unit/integration, 2026-11-25: pack, grader and runner contract tests green in CI and locally; Human (release), 2026-11-25: v0.10.0 tagged and published. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### F-017
+
+**logic-math-v1: puzzles, arithmetic and constraints**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v0.10.0.
+
+| | |
+|---|---|
+| **Issue** | The index maps 0 cases to logic-planning and to math. |
+| **Reproduce** | `npm run index:build` reports `math: 0 mapped cases` and `logic-planning: 0 mapped cases`. |
+| **Check** | examples/logic-math-v1.json with exact-answer puzzles, arithmetic and constraint problems on the existing exact-json grader; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: Released in v0.10.0 (tag on dcc176b, release PR #97, main CI green; https://github.com/voidbrain/gauntlet-protocol/releases/tag/v0.10.0); released in v0.10.0. 2026-11-25: F-017-T01 closed: PR #89 merged on green CI. Release PR [#97](https://github.com/voidbrain/gauntlet-protocol/pull/97) for 0.10.0 ships logic-math-v1; next: F-017-T02, the owner tags v0.10.0 ([release](../guides/release.md) step 2). Planned 2026-11-24 as part of the [roadmap](../ROADMAP.md) milestone "Domain packs"; every step is in its task file.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#89](https://github.com/voidbrain/gauntlet-protocol/pull/89); [#91](https://github.com/voidbrain/gauntlet-protocol/pull/91) |
+| Opened | 2026-11-24 |
+| Verification | Unit/integration, 2026-11-25: pack, grader and runner contract tests green in CI and locally; Human (release), 2026-11-25: v0.10.0 tagged and published. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### F-016
+
+**embedded-v1: Arduino, ESP32 and Raspberry Pi pack**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🔴 Large |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v0.10.0.
+
+| | |
+|---|---|
+| **Issue** | No pack covers embedded code. NERV wants models qualified for Arduino/ESP32 sketches and Raspberry Pi Python without hardware in the loop. |
+| **Reproduce** | `npm run index:build` lists no embedded case; the taxonomy in src/catalog.ts has no embedded area. |
+| **Check** | examples/embedded-v1.json graded by compile (pinned arduino-cli or PlatformIO ESP32 core) and static checks, no hardware; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. The area choice is recorded. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: Released in v0.10.0 (tag on dcc176b, release PR #97, main CI green; https://github.com/voidbrain/gauntlet-protocol/releases/tag/v0.10.0); released in v0.10.0. 2026-11-24: owner decision, F-016-T01 closed: area **A, a new core area `embedded`**; toolchain **arduino-cli with a pinned ESP32 core** ([decision](../decisions/domain-packs.md#embedded-area)). F-015-T01 closed (PR #86), so F-016-T03 can start; F-016-T04 adds the area to the taxonomy. 2026-11-25: F-016-T06 closed: arduino-cli 1.6.0 with arduino:avr 1.8.6 and esp32:esp32 3.0.7 installed on the owner's Mac by the agent (owner-approved); the [guide](../guides/arduino-cli.md)'s Blink sketch compiles for arduino:avr:uno and esp32:esp32:esp32. 2026-11-25: F-016-T02 implemented in #93: four sketch tasks and a compile grader (`examples/embedded-v1/grade.mjs`, [grader](../PROTOCOL.md#embedded-sketch-grader)); CI checks it against a stand-in arduino-cli, since CI has no toolchain; real compiles of every fixture run where arduino-cli and the pinned cores are installed (the owner's Mac). **Owner decision 2026-11-25:** no real arduino-cli or ESP32 compiles in CI (the core download is too large per run); CI keeps the stand-in compiler and real compiles run on the owner's Mac only ([guide](../guides/arduino-cli.md)). 2026-11-25: F-016-T03 implemented in #94: four Raspberry Pi Python tasks graded by byte-compilation and AST checks, nothing executed ([grader](../PROTOCOL.md#raspberry-pi-static-grader)). 2026-11-25: F-016-T02 and F-016-T03 closed on green CI and local runs (real compiles on the owner's Mac). 2026-11-25: F-016-T04 implemented in #96: area `embedded`, `examples/embedded-v1.json` and its reference runner ([runner](../PROTOCOL.md#embedded-pack-runner)), index entry. F-016-T04 closed on green CI (main run 45569195046) and 107/107 locally. Release PR [#97](https://github.com/voidbrain/gauntlet-protocol/pull/97) for 0.10.0 ships embedded-v1; next: F-016-T05, the owner tags v0.10.0 ([release](../guides/release.md) step 2). Planned 2026-11-24 as part of the [roadmap](../ROADMAP.md) milestone "Domain packs"; every step is in its task file.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87); [#89](https://github.com/voidbrain/gauntlet-protocol/pull/89); [#92](https://github.com/voidbrain/gauntlet-protocol/pull/92) (F-016-T06 evidence); [#93](https://github.com/voidbrain/gauntlet-protocol/pull/93) (F-016-T02); [#94](https://github.com/voidbrain/gauntlet-protocol/pull/94) (F-016-T03, CI decision); [#95](https://github.com/voidbrain/gauntlet-protocol/pull/95) (F-016-T02, F-016-T03 closed); [#96](https://github.com/voidbrain/gauntlet-protocol/pull/96) (F-016-T04) |
+| Opened | 2026-11-24 |
+| Verification | Unit/integration, 2026-11-25: pack, grader and runner contract tests green in CI and locally, real arduino-cli compiles on the owner's Mac; Human (release), 2026-11-25: v0.10.0 tagged and published. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---

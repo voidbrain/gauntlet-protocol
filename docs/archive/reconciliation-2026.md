@@ -110,3 +110,7 @@ F-002/F-003/F-004 released in v0.2.0 from PR #5, CI42572655186 and independent r
 B-001 closed against PR #3, CI 42534614317 and independent report-only review; release v0.1.1. This documentation reconciliation adds no runtime work.
 
 PR #1 implemented the independent protocol; CI 42533767427 and fresh-context review accepted it. F-001 archived in [2026](archive/backlog-2026.md). PR #2 reconciled and archived F-001 with CI 42534060898 passed; no model qualified.
+
+## 2026-11-25 — main `dcc176b`
+
+PRs #91 to #97 merged on green CI; v0.10.0 tagged and published (coding, logic-math, embedded packs). F-015, F-016 and F-017 closed.
