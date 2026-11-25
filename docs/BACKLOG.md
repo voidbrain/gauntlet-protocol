@@ -4,63 +4,13 @@ Current work ledger, reviewed 25 November 2026 against main `019fba8`. PRs #88 (
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 18 h agent + 2.5 h owner across 20 open steps of 8 features. Generated from the task files.
+**Remaining effort:** 16.5 h agent + 2.5 h owner across 19 open steps of 8 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
-### <a id="f-016"></a>[✨ F-016](#top)
-
-**embedded-v1: Arduino, ESP32 and Raspberry Pi pack**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h agent + 0.25 h owner | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-016-T04 — Embedded runner, pack and index entry (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | No pack covers embedded code. NERV wants models qualified for Arduino/ESP32 sketches and Raspberry Pi Python without hardware in the loop. |
-| **Reproduce** | `npm run index:build` lists no embedded case; the taxonomy in src/catalog.ts has no embedded area. |
-| **Check** | examples/embedded-v1.json graded by compile (pinned arduino-cli or PlatformIO ESP32 core) and static checks, no hardware; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. The area choice is recorded. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
-|---|---|---|---|---|---|---|---|:---:|
-| 🟡 Medium | <a id="f-016-t04"></a>F-016-T04 — Embedded runner, pack and index entry | 1.5 h | 0 h | 1.5 h | Implemented; verification pending | — | [F-016-T05](#f-016-t05) | 🤖 |
-| 🟢 Small | <a id="f-016-t05"></a>F-016-T05 — Release embedded-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-016-T04](#f-016-t04) | — | ⏳ 🧑‍🔧 |
-| 🟡 Medium | **Total** | 5.5 h (3 of 6 steps) | 0 h (0 of 6 steps recorded) | 1.5 h agent + 0.25 h owner | 4 of 6 completed | | | |
-
-<details><summary>Done steps (4)</summary>
-
-| Effort | Step | Estimate | Actual | Status |
-|---|---|---|---|---|
-| — | <a id="f-016-t01"></a>F-016-T01 — Choose the embedded area and toolchain | — | 0 h | Completed |
-| — | <a id="f-016-t02"></a>F-016-T02 — Arduino and ESP32 sketch tasks graded by compile | 2.5 h | 0 h | Completed |
-| — | <a id="f-016-t03"></a>F-016-T03 — Raspberry Pi Python tasks graded by static checks | 1.5 h | 0 h | Completed |
-| — | <a id="f-016-t06"></a>F-016-T06 — Install arduino-cli and the pinned cores on the evaluation machine | — | 0 h | Completed |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-016.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87); [#89](https://github.com/voidbrain/gauntlet-protocol/pull/89); [#92](https://github.com/voidbrain/gauntlet-protocol/pull/92) (F-016-T06 evidence); [#93](https://github.com/voidbrain/gauntlet-protocol/pull/93) (F-016-T02); [#94](https://github.com/voidbrain/gauntlet-protocol/pull/94) (F-016-T03, CI decision); [#95](https://github.com/voidbrain/gauntlet-protocol/pull/95) (F-016-T02, F-016-T03 closed); [#96](https://github.com/voidbrain/gauntlet-protocol/pull/96) (F-016-T04) |
-| Opened | 2026-11-24 |
-| Verification | Human (agent on the owner's Mac), 2026-11-25: F-016-T06 toolchain installed and both test compiles passed ([guide](guides/arduino-cli.md)). Pack verification pending. |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
 ### <a id="f-018"></a>[✨ F-018](#top)
 
 **italian-quality-v1: Italian summary, rewrite and register**
@@ -233,6 +183,56 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#86](https://github.com/voidbrain/gauntlet-protocol/pull/86); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87); [#88](https://github.com/voidbrain/gauntlet-protocol/pull/88); [#91](https://github.com/voidbrain/gauntlet-protocol/pull/91); [#95](https://github.com/voidbrain/gauntlet-protocol/pull/95) (F-015-T03 verification) |
 | Opened | 2026-11-24 |
 | Verification | Unit/integration, 2026-11-25: `test/coding-runner.test.ts` 9/9 on the owner's Mac with Docker Desktop 29.8.0 (run twice) and in CI on main (run 45567827107). Human (release, F-015-T04): Pending. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+### <a id="f-016"></a>[✨ F-016](#top)
+
+**embedded-v1: Arduino, ESP32 and Raspberry Pi pack**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h owner | — | — | — | 🧑‍🔧 | — |
+
+🧑 **→** Next: [🧑‍🔧](guides/release.md) F-016-T05 — Release embedded-v1 (Planned).
+
+| | |
+|---|---|
+| **Issue** | No pack covers embedded code. NERV wants models qualified for Arduino/ESP32 sketches and Raspberry Pi Python without hardware in the loop. |
+| **Reproduce** | `npm run index:build` lists no embedded case; the taxonomy in src/catalog.ts has no embedded area. |
+| **Check** | examples/embedded-v1.json graded by compile (pinned arduino-cli or PlatformIO ESP32 core) and static checks, no hardware; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. The area choice is recorded. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Who |
+|---|---|---|---|---|---|:---:|
+| 🟢 Small | <a id="f-016-t05"></a>F-016-T05 — Release embedded-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [🧑‍🔧](guides/release.md) |
+| 🟢 Small | **Total** | 5.5 h (3 of 6 steps) | 0 h (0 of 6 steps recorded) | 0.25 h owner | 5 of 6 completed | |
+
+<details><summary>Done steps (5)</summary>
+
+| Effort | Step | Estimate | Actual | Status |
+|---|---|---|---|---|
+| — | <a id="f-016-t01"></a>F-016-T01 — Choose the embedded area and toolchain | — | 0 h | Completed |
+| — | <a id="f-016-t02"></a>F-016-T02 — Arduino and ESP32 sketch tasks graded by compile | 2.5 h | 0 h | Completed |
+| — | <a id="f-016-t03"></a>F-016-T03 — Raspberry Pi Python tasks graded by static checks | 1.5 h | 0 h | Completed |
+| — | <a id="f-016-t04"></a>F-016-T04 — Embedded runner, pack and index entry | 1.5 h | 0 h | Completed |
+| — | <a id="f-016-t06"></a>F-016-T06 — Install arduino-cli and the pinned cores on the evaluation machine | — | 0 h | Completed |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-016.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87); [#89](https://github.com/voidbrain/gauntlet-protocol/pull/89); [#92](https://github.com/voidbrain/gauntlet-protocol/pull/92) (F-016-T06 evidence); [#93](https://github.com/voidbrain/gauntlet-protocol/pull/93) (F-016-T02); [#94](https://github.com/voidbrain/gauntlet-protocol/pull/94) (F-016-T03, CI decision); [#95](https://github.com/voidbrain/gauntlet-protocol/pull/95) (F-016-T02, F-016-T03 closed); [#96](https://github.com/voidbrain/gauntlet-protocol/pull/96) (F-016-T04) |
+| Opened | 2026-11-24 |
+| Verification | Human (agent on the owner's Mac), 2026-11-25: F-016-T06 toolchain installed and both test compiles passed ([guide](guides/arduino-cli.md)). Pack verification pending. |
 | Reviewed | 2026-11-25 |
 
 </details>

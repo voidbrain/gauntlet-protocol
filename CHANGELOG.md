@@ -1,5 +1,20 @@
 # Releases
 
+## 0.10.0 — domain packs: coding, logic-math, embedded
+
+Three new independently versioned packs, each with regression and holdout cases and a deterministic grader proven by fixtures:
+
+- `coding@1.0.0` (area `coding`): `parse-duration-regression`, `slugify-regression`, `merge-intervals-holdout`, `dependency-order-holdout`. Python and TypeScript functions graded out of process against expected values the candidate never sees; the reference runner `examples/coding-v1/runner.mjs` asks a loopback Ollama model and runs each candidate in a throwaway container (Docker Desktop or colima). Holdouts are public and therefore contamination-exposed (owner decision H1).
+- `logic-math@1.0.0` (area `math` and `logic-planning`): `jars-total-regression`, `price-change-regression`, `multiples-sum-holdout`, `fraction-sum-holdout`, `race-order-regression`, `task-schedule-regression`, `digit-swap-holdout`, `key-box-holdout`. Exact-answer cases.
+- `embedded@1.0.0` (new core area `embedded`): `blink-millis-esp32-regression`, `debounce-toggle-uno-regression`, `pwm-fade-esp32-holdout`, `serial-command-uno-holdout` (Arduino and ESP32 sketches: static checks and an arduino-cli compile against arduino:avr 1.8.6 and esp32:esp32 3.0.7, marked expensive), `led-blink-gpiozero-regression`, `pwm-servo-rpigpio-regression`, `button-toggle-gpiozero-holdout`, `edge-counter-rpigpio-holdout` (Raspberry Pi Python: byte-compilation and AST checks). Nothing is uploaded or run; the reference runner is `examples/embedded-v1/runner.mjs`.
+
+Also: the deterministic rubric grader for free text (`src/rubric.ts`), and the area taxonomy gains `embedded` (minor protocol change). The engine hash changes, so automatic cache reuse requires 0.10.0 evidence. The generated catalog lists 86 cases. Existing pack definitions and grading are unchanged. No real-model run.
+
+Pack case changes since 0.9.3:
+
+- `coding@1.0.0`, `logic-math@1.0.0`, `embedded@1.0.0`: new packs; every case above is added.
+- Every other pack: added none; changed none; removed none.
+
 ## 0.9.1 — harness 8.17.0
 
 Development harness reconciled to `8.17.0` (suggested pauses in `work-usage`, done-steps table and Who/Agent cell rules, and `check:freshness` empty-backlog milestone prompt). No package code, protocol, grading or evidence change; the engine hash is unchanged. No real-model run.
