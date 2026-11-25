@@ -230,7 +230,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87); [#89](https://github.com/voidbrain/gauntlet-protocol/pull/89); [#92](https://github.com/voidbrain/gauntlet-protocol/pull/92) (F-016-T06 evidence) |
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#87](https://github.com/voidbrain/gauntlet-protocol/pull/87); [#89](https://github.com/voidbrain/gauntlet-protocol/pull/89); [#92](https://github.com/voidbrain/gauntlet-protocol/pull/92) (F-016-T06 evidence); [#93](https://github.com/voidbrain/gauntlet-protocol/pull/93) (F-016-T02) |
 | Opened | 2026-11-24 |
 | Verification | Human (agent on the owner's Mac), 2026-11-25: F-016-T06 toolchain installed and both test compiles passed ([guide](guides/arduino-cli.md)). Pack verification pending. |
 | Reviewed | 2026-11-25 |
