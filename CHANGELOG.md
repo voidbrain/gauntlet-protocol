@@ -1,5 +1,25 @@
 # Releases
 
+## 0.11.0 — domain packs: italian-quality, cad-3d, code-review
+
+Three new independently versioned packs, each with regression and holdout cases and a deterministic grader proven by fixtures. Holdouts are public and therefore contamination-exposed (owner decision H1):
+
+- `italian-quality@1.0.0` (area `language-translation`): `summary-service-regression`, `summary-report-holdout`, `rewrite-anglicisms-regression`, `rewrite-bureaucratic-holdout`, `register-formal-regression`, `register-informal-holdout`. Italian-only free text graded by `rubric-v1`.
+- `cad-3d@1.0.0` (area `cad-3d`): `slicer-wall-layers-regression`, `slicer-flow-limit-holdout`, `material-outdoor-bracket-regression`, `material-damp-isolation-holdout`, `tolerance-clearance-pin-regression`, `tolerance-shrinkage-compensation-holdout` (exact-answer questions), and `spacer-cylinder-regression`, `l-bracket-regression`, `open-tray-holdout`, `flanged-bushing-holdout` (OpenSCAD coding tasks). The reference runner `examples/cad-3d-v1/runner.mjs` renders each candidate in a throwaway container (pinned `openscad/openscad:2021.01`, no network). The grader measures the STL bounding box and volume outside the container. A missing container engine or image gives an `error` result that names the fix. CI uses stand-ins. A real render of every fixture passed on the owner's Mac on 2026-11-25. Known limitation: only the bounding box and volume are measured, so a wrong shape with the right extents and volume passes, for example a mirrored L-bracket.
+- `code-review@1.0.0` (area `code-review`): `sql-and-bounds-regression`, `race-and-leak-regression`, `path-and-nan-regression`, `command-and-retry-holdout`, `listener-and-mutation-holdout`, `token-and-cache-holdout`. Invented code excerpts with seeded security, logic, concurrency and resource defects, graded by `defects-v1`.
+
+Also:
+
+- New expected kind `defects`, with the deterministic defect-finding grader `src/defects.ts` (catalog grader `defects-v1`). A finding covers at most 10 lines, and every excerpt is longer than 20 lines, so whole-file or every-line answers fail.
+- B-003: the coding grader now returns at its timeout.
+
+The engine hash changes, so automatic cache reuse requires 0.11.0 evidence. The generated catalog lists 108 cases. Existing pack definitions are unchanged. No real-model run.
+
+Pack case changes since 0.10.0:
+
+- `italian-quality@1.0.0`, `cad-3d@1.0.0`, `code-review@1.0.0`: new packs; every case above is added.
+- Every other pack: added none; changed none; removed none.
+
 ## 0.10.0 — domain packs: coding, logic-math, embedded
 
 Three new independently versioned packs, each with regression and holdout cases and a deterministic grader proven by fixtures:
