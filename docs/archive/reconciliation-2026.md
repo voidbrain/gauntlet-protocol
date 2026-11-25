@@ -114,3 +114,7 @@ PR #1 implemented the independent protocol; CI 42533767427 and fresh-context rev
 ## 2026-11-25 — main `dcc176b`
 
 PRs #91 to #97 merged on green CI; v0.10.0 tagged and published (coding, logic-math, embedded packs). F-015, F-016 and F-017 closed.
+
+## 2026-11-25 — main `f47e853`
+
+PR #98 merged on green CI (F-015, F-016 and F-017 archived on v0.10.0).
