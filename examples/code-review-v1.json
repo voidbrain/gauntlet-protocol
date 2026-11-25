@@ -1,0 +1,302 @@
+{
+  "schemaVersion": 1,
+  "id": "code-review",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "sql-and-bounds-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "defect-detection",
+        "security-review",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Review the following numbered diff and report all defects as JSON of the form {\"findings\": [{\"file\": \"...\", \"line\": N, \"category\": \"security\"|\"logic\"|\"concurrency\"|\"resource\", \"summary\": \"...\"}]}. Each finding must pinpoint the defective line or a span of at most 10 lines.\n\nFile: src/users.ts\n1: import type { Database } from './db.ts';\n2:\n3: export interface UserRow {\n4:   id: number;\n5:   email: string;\n6: }\n7:\n8: // Returns one page of users with the given role, at most size rows.\n9:\n10: export function listUsers(db: Database, role: string, page: number, size: number) {\n11:   const safeSize = Math.min(Math.max(size, 1), 100);\n12:   const sql = `SELECT id, email FROM users WHERE role = '${role}' ORDER BY id`;\n13:   const rows = db.query(sql);\n14:   const start = page * safeSize;\n15:   const out = [];\n16:   for (let i = start; i <= start + safeSize; i++) {\n17:     if (i < rows.length) out.push(rows[i]);\n18:   }\n19:   return out;\n20: }\n21:\n22: export function findUserById(db: Database, id: number): UserRow | undefined {\n23:   const rows = db.query('SELECT id, email FROM users WHERE id = ?', [id]);\n24:   return rows[0];\n25: }\n26:\n27: export function formatUser(user: UserRow): string {\n28:   return `${user.id} <${user.email}>`;\n29: }"
+        }
+      ],
+      "expected": {
+        "kind": "defects",
+        "value": {
+          "maxFalsePositives": 0,
+          "defects": [
+            {
+              "id": "sql-injection",
+              "file": "src/users.ts",
+              "lines": [
+                12,
+                13
+              ],
+              "category": "security"
+            },
+            {
+              "id": "off-by-one-slice",
+              "file": "src/users.ts",
+              "lines": [
+                16,
+                18
+              ],
+              "category": "logic"
+            }
+          ]
+        }
+      },
+      "area": "code-review",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    },
+    {
+      "id": "race-and-leak-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "defect-detection",
+        "concurrency-review",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Review the following numbered diff and report all defects as JSON of the form {\"findings\": [{\"file\": \"...\", \"line\": N, \"category\": \"security\"|\"logic\"|\"concurrency\"|\"resource\", \"summary\": \"...\"}]}. Each finding must pinpoint the defective line or a span of at most 10 lines.\n\nFile: src/wallet.ts\n10: export interface WalletStore {\n11:   getBalance(accountId: string): Promise<number>;\n12:   setBalance(accountId: string, value: number): Promise<void>;\n13: }\n14:\n15: export async function balanceOf(store: WalletStore, accountId: string): Promise<number> {\n16:   return store.getBalance(accountId);\n17: }\n18:\n19: // Removes amount from the account when funds allow; requests run concurrently.\n20: export async function debit(store: WalletStore, accountId: string, amount: number) {\n21:   const balance = await store.getBalance(accountId);\n22:   if (balance < amount) return { ok: false };\n23:   await store.setBalance(accountId, balance - amount);\n24:   return { ok: true };\n25: }\n26:\n27: export function formatBalance(cents: number): string {\n28:   const sign = cents < 0 ? '-' : '';\n29:   const abs = Math.abs(cents);\n30:   return `${sign}${Math.floor(abs / 100)}.${String(abs % 100).padStart(2, '0')}`;\n31: }\n\nFile: src/archive.ts\n20: import { open, stat } from 'node:fs/promises';\n21:\n22: export async function archiveSize(path: string): Promise<number> {\n23:   const info = await stat(path);\n24:   return info.size;\n25: }\n26:\n27: // Reads the 64-byte archive header.\n28: // The first byte is the format magic 0x47.\n29: // Callers pass a path that has already been validated.\n30: export async function readHeader(path: string): Promise<string> {\n31:   const handle = await open(path, 'r');\n32:   const buf = Buffer.alloc(64);\n33:   await handle.read(buf, 0, 64, 0);\n34:   if (buf[0] !== 0x47) throw new Error('bad magic');\n35:   await handle.close();\n36:   return buf.toString('utf8');\n37: }\n38:\n39: export async function isArchive(path: string): Promise<boolean> {\n40:   try {\n41:     await readHeader(path);\n42:     return true;\n43:   } catch {\n44:     return false;\n45:   }\n46: }"
+        }
+      ],
+      "expected": {
+        "kind": "defects",
+        "value": {
+          "maxFalsePositives": 0,
+          "defects": [
+            {
+              "id": "balance-toctou",
+              "file": "src/wallet.ts",
+              "lines": [
+                21,
+                23
+              ],
+              "category": "concurrency"
+            },
+            {
+              "id": "handle-leak-on-throw",
+              "file": "src/archive.ts",
+              "lines": [
+                31,
+                35
+              ],
+              "category": "resource"
+            }
+          ]
+        }
+      },
+      "area": "code-review",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    },
+    {
+      "id": "path-and-nan-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "defect-detection",
+        "security-review",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Review the following numbered diff and report all defects as JSON of the form {\"findings\": [{\"file\": \"...\", \"line\": N, \"category\": \"security\"|\"logic\"|\"concurrency\"|\"resource\", \"summary\": \"...\"}]}. Each finding must pinpoint the defective line or a span of at most 10 lines.\n\nFile: src/downloads.ts\n30: import { readFileSync } from 'node:fs';\n31: import { extname } from 'node:path';\n32:\n33: const textTypes = new Set(['.txt', '.md', '.json']);\n34:\n35: export function isTextAsset(name: string): boolean {\n36:   return textTypes.has(extname(name).toLowerCase());\n37: }\n38:\n39: // Loads an asset that must stay below rootDir, capped at limitRaw bytes.\n40: export function resolveAsset(rootDir: string, requestedName: string, limitRaw: string) {\n41:   const fullPath = rootDir + '/' + requestedName;\n42:   const data = readFileSync(fullPath);\n43:   const maxBytes = Number.parseInt(limitRaw, 10);\n44:   if (data.byteLength > maxBytes) {\n45:     throw new Error('asset exceeds limit');\n46:   }\n47:   return data;\n48: }\n49:\n50: export function assetLabel(name: string, bytes: number): string {\n51:   const kib = Math.ceil(bytes / 1024);\n52:   return `${name} (${kib} KiB)`;\n53: }"
+        }
+      ],
+      "expected": {
+        "kind": "defects",
+        "value": {
+          "maxFalsePositives": 0,
+          "defects": [
+            {
+              "id": "path-traversal",
+              "file": "src/downloads.ts",
+              "lines": [
+                41,
+                42
+              ],
+              "category": "security"
+            },
+            {
+              "id": "nan-limit-bypass",
+              "file": "src/downloads.ts",
+              "lines": [
+                43,
+                45
+              ],
+              "category": "logic"
+            }
+          ]
+        }
+      },
+      "area": "code-review",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    },
+    {
+      "id": "command-and-retry-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "defect-detection",
+        "security-review",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Review the following numbered diff and report all defects as JSON of the form {\"findings\": [{\"file\": \"...\", \"line\": N, \"category\": \"security\"|\"logic\"|\"concurrency\"|\"resource\", \"summary\": \"...\"}]}. Each finding must pinpoint the defective line or a span of at most 10 lines.\n\nFile: src/thumbnail.ts\n1: import { execSync } from 'node:child_process';\n2: import { existsSync } from 'node:fs';\n3:\n4: export const frameFormat = 'png';\n5:\n6: // videoFile and outPath come from the upload request.\n7:\n8: // Writes the first frame of videoFile to outPath.\n9:\n10: export function extractFrame(videoFile: string, outPath: string): void {\n11:   execSync(`ffmpeg -i ${videoFile} -frames:v 1 ${outPath}`);\n12: }\n13:\n14: export function hasThumbnail(outPath: string): boolean {\n15:   return existsSync(outPath);\n16: }\n17:\n18: export function thumbnailUrl(id: number): string {\n19:   if (!Number.isSafeInteger(id) || id < 0) throw new Error('bad id');\n20:   return `/thumbs/${id}.${frameFormat}`;\n21: }\n\nFile: src/retry.ts\n10: export function delayFor(attempt: number): number {\n11:   return Math.min(1000 * 2 ** attempt, 30_000);\n12: }\n13:\n14: export function isRetryable(err: unknown): boolean {\n15:   return err instanceof Error && err.name !== 'AbortError';\n16: }\n17:\n18: // Calls fn until it succeeds, rethrowing after maxAttempts failures.\n19: // fn is idempotent.\n20: export async function withRetry<T>(fn: () => Promise<T>, maxAttempts: number): Promise<T> {\n21:   let attempts = 0;\n22:   while (true) {\n23:     try {\n24:       return await fn();\n25:     } catch (err) {\n26:       if (attempts > maxAttempts) throw err;\n27:     }\n28:   }\n29: }\n30:\n31: export function attemptsLabel(maxAttempts: number): string {\n32:   return maxAttempts === 1 ? '1 attempt' : `${maxAttempts} attempts`;\n33: }"
+        }
+      ],
+      "expected": {
+        "kind": "defects",
+        "value": {
+          "maxFalsePositives": 0,
+          "defects": [
+            {
+              "id": "command-injection",
+              "file": "src/thumbnail.ts",
+              "lines": [
+                10,
+                12
+              ],
+              "category": "security"
+            },
+            {
+              "id": "unincremented-retry-loop",
+              "file": "src/retry.ts",
+              "lines": [
+                21,
+                27
+              ],
+              "category": "logic"
+            }
+          ]
+        }
+      },
+      "area": "code-review",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    },
+    {
+      "id": "listener-and-mutation-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "defect-detection",
+        "concurrency-review",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Review the following numbered diff and report all defects as JSON of the form {\"findings\": [{\"file\": \"...\", \"line\": N, \"category\": \"security\"|\"logic\"|\"concurrency\"|\"resource\", \"summary\": \"...\"}]}. Each finding must pinpoint the defective line or a span of at most 10 lines.\n\nFile: src/rpc-wait.ts\n5: import { EventEmitter } from 'node:events';\n6:\n7: export interface Reply {\n8:   id: string;\n9:   payload: unknown;\n10: }\n11:\n12: export const defaultTimeoutMs = 5_000;\n13:\n14: // Resolves with the payload of the reply whose id matches requestId; called once per request.\n15: export function waitReply(bus: EventEmitter, requestId: string, timeoutMs: number): Promise<unknown> {\n16:   return new Promise((resolve, reject) => {\n17:     const onMessage = (msg: { id: string; payload: unknown }) => {\n18:       if (msg.id === requestId) resolve(msg.payload);\n19:     };\n20:     bus.on('message', onMessage);\n21:     setTimeout(() => reject(new Error('timeout')), timeoutMs);\n22:   });\n23: }\n24:\n25: export function sendRequest(bus: EventEmitter, requestId: string, payload: unknown): void {\n26:   bus.emit('request', { id: requestId, payload });\n27: }\n28:\n29: export function isReply(value: unknown): value is Reply {\n30:   return typeof value === 'object' && value !== null && typeof (value as Reply).id === 'string';\n31: }\n\nFile: src/scores.ts\n20: export function average(scores: number[]): number {\n21:   if (scores.length === 0) return 0;\n22:   let total = 0;\n23:   for (const score of scores) total += score;\n24:   return total / scores.length;\n25: }\n26:\n27: // Returns the three highest scores, highest first.\n28: // Scores are integers from 0 to 1000.\n29: // The caller's array must stay unchanged.\n30: export function topThree(scores: number[]): number[] {\n31:   const sorted = scores.sort();\n32:   return sorted.slice(0, 3);\n33: }\n34:\n35: export function bestScore(scores: number[]): number | undefined {\n36:   return scores.length ? scores.reduce((a, b) => (a > b ? a : b)) : undefined;\n37: }\n38:\n39: export function passedCount(scores: number[], threshold: number): number {\n40:   return scores.filter((score) => score >= threshold).length;\n41: }"
+        }
+      ],
+      "expected": {
+        "kind": "defects",
+        "value": {
+          "maxFalsePositives": 0,
+          "defects": [
+            {
+              "id": "listener-and-timer-leak",
+              "file": "src/rpc-wait.ts",
+              "lines": [
+                17,
+                21
+              ],
+              "category": "resource"
+            },
+            {
+              "id": "lexicographic-in-place-sort",
+              "file": "src/scores.ts",
+              "lines": [
+                30,
+                32
+              ],
+              "category": "logic"
+            }
+          ]
+        }
+      },
+      "area": "code-review",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    },
+    {
+      "id": "token-and-cache-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "defect-detection",
+        "security-review",
+        "concurrency-review",
+        "structured-output"
+      ],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Review the following numbered diff and report all defects as JSON of the form {\"findings\": [{\"file\": \"...\", \"line\": N, \"category\": \"security\"|\"logic\"|\"concurrency\"|\"resource\", \"summary\": \"...\"}]}. Each finding must pinpoint the defective line or a span of at most 10 lines.\n\nFile: src/webhook.ts\n1: import { createHmac } from 'node:crypto';\n2:\n3: export function signBody(secret: string, body: string): string {\n4:   return createHmac('sha256', secret).update(body).digest('hex');\n5: }\n6:\n7: // Accepts a request only when headerSig equals the expected signature.\n8: // Both values are lower-case hex strings.\n9: // Callers compute expectedSig with signBody.\n10: export function verifySignature(headerSig: string | undefined, expectedSig: string): boolean {\n11:   if (!headerSig) return false;\n12:   return expectedSig.startsWith(headerSig);\n13: }\n14:\n15: export function signatureHeader(sig: string): string {\n16:   return `sha256=${sig}`;\n17: }\n18:\n19: export function parseSignatureHeader(value: string): string | undefined {\n20:   return value.startsWith('sha256=') ? value.slice('sha256='.length) : undefined;\n21: }\n\nFile: src/token-cache.ts\n10: // Caches one service token for the process lifetime.\n11: // Tokens issued by this service never expire.\n12: // fetchToken performs a rate-limited network request; callers run concurrently.\n13:\n14: export function bearer(token: string): string {\n15:   return `Bearer ${token}`;\n16: }\n17:\n18: export const tokenHeader = 'authorization';\n19:\n20: let cachedToken: string | null = null;\n21: export async function getServiceToken(fetchToken: () => Promise<string>): Promise<string> {\n22:   if (!cachedToken) {\n23:     cachedToken = await fetchToken();\n24:   }\n25:   return cachedToken;\n26: }\n27:\n28: export function clearServiceToken(): void {\n29:   cachedToken = null;\n30: }\n31:\n32: export function hasServiceToken(): boolean {\n33:   return cachedToken !== null;\n34: }"
+        }
+      ],
+      "expected": {
+        "kind": "defects",
+        "value": {
+          "maxFalsePositives": 0,
+          "defects": [
+            {
+              "id": "prefix-signature-bypass",
+              "file": "src/webhook.ts",
+              "lines": [
+                11,
+                12
+              ],
+              "category": "security"
+            },
+            {
+              "id": "concurrent-token-stampede",
+              "file": "src/token-cache.ts",
+              "lines": [
+                22,
+                24
+              ],
+              "category": "concurrency"
+            }
+          ]
+        }
+      },
+      "area": "code-review",
+      "requirements": [
+        "local-model-runtime"
+      ],
+      "responseFormat": "json"
+    }
+  ]
+}

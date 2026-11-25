@@ -1,0 +1,176 @@
+{
+  "sql-and-bounds-regression": {
+    "passing": {
+      "findings": [
+        { "file": "src/users.ts", "line": 12, "category": "security", "summary": "SQL injection via interpolated role" },
+        { "file": "src/users.ts", "lines": [16, 17], "category": "logic", "summary": "<= copies safeSize + 1 items" }
+      ]
+    },
+    "missed": {
+      "findings": [
+        { "file": "src/users.ts", "line": 12, "category": "security", "summary": "SQL injection via interpolated role" }
+      ],
+      "check": "missed:off-by-one-slice"
+    },
+    "noisy": {
+      "findings": [
+        { "file": "src/users.ts", "line": 12, "category": "security" },
+        { "file": "src/users.ts", "line": 16, "category": "logic" },
+        { "file": "src/users.ts", "line": 11, "category": "logic" }
+      ],
+      "check": "false-positives:1>0"
+    },
+    "sweeping": {
+      "findings": [
+        { "file": "src/users.ts", "lines": [1, 100], "category": "security" },
+        { "file": "src/users.ts", "lines": [1, 100], "category": "logic" }
+      ],
+      "check": "missed:sql-injection"
+    }
+  },
+  "race-and-leak-regression": {
+    "passing": {
+      "findings": [
+        { "file": "src/wallet.ts", "lines": [21, 23], "category": "concurrency", "summary": "Non-atomic check-then-set on balance" },
+        { "file": "src/archive.ts", "lines": [31, 35], "category": "resource", "summary": "File handle leaked when magic check throws" }
+      ]
+    },
+    "missed": {
+      "findings": [
+        { "file": "src/wallet.ts", "line": 22, "category": "concurrency" }
+      ],
+      "check": "missed:handle-leak-on-throw"
+    },
+    "noisy": {
+      "findings": [
+        { "file": "src/wallet.ts", "line": 22, "category": "concurrency" },
+        { "file": "src/archive.ts", "line": 34, "category": "resource" },
+        { "file": "src/archive.ts", "line": 32, "category": "security" }
+      ],
+      "check": "false-positives:1>0"
+    },
+    "sweeping": {
+      "findings": [
+        { "file": "src/wallet.ts", "lines": [1, 50], "category": "concurrency" },
+        { "file": "src/archive.ts", "lines": [1, 50], "category": "resource" }
+      ],
+      "check": "missed:balance-toctou"
+    }
+  },
+  "path-and-nan-regression": {
+    "passing": {
+      "findings": [
+        { "file": "src/downloads.ts", "line": 41, "category": "security", "summary": "Unchecked path concatenation allows traversal" },
+        { "file": "src/downloads.ts", "lines": [43, 44], "category": "logic", "summary": "NaN maxBytes makes comparison false and bypasses cap" }
+      ]
+    },
+    "missed": {
+      "findings": [
+        { "file": "src/downloads.ts", "line": 41, "category": "security" }
+      ],
+      "check": "missed:nan-limit-bypass"
+    },
+    "noisy": {
+      "findings": [
+        { "file": "src/downloads.ts", "line": 41, "category": "security" },
+        { "file": "src/downloads.ts", "line": 44, "category": "logic" },
+        { "file": "src/downloads.ts", "line": 47, "category": "resource" }
+      ],
+      "check": "false-positives:1>0"
+    },
+    "sweeping": {
+      "findings": [
+        { "file": "src/downloads.ts", "lines": [1, 80], "category": "security" },
+        { "file": "src/downloads.ts", "lines": [1, 80], "category": "logic" }
+      ],
+      "check": "missed:path-traversal"
+    }
+  },
+  "command-and-retry-holdout": {
+    "passing": {
+      "findings": [
+        { "file": "src/thumbnail.ts", "line": 11, "category": "security", "summary": "Shell command injection via unquoted paths" },
+        { "file": "src/retry.ts", "lines": [21, 26], "category": "logic", "summary": "attempts is never incremented so retry loops forever" }
+      ]
+    },
+    "missed": {
+      "findings": [
+        { "file": "src/thumbnail.ts", "line": 11, "category": "security" }
+      ],
+      "check": "missed:unincremented-retry-loop"
+    },
+    "noisy": {
+      "findings": [
+        { "file": "src/thumbnail.ts", "line": 11, "category": "security" },
+        { "file": "src/retry.ts", "line": 26, "category": "logic" },
+        { "file": "src/retry.ts", "line": 20, "category": "concurrency" }
+      ],
+      "check": "false-positives:1>0"
+    },
+    "sweeping": {
+      "findings": [
+        { "file": "src/thumbnail.ts", "lines": [1, 50], "category": "security" },
+        { "file": "src/retry.ts", "lines": [1, 50], "category": "logic" }
+      ],
+      "check": "missed:command-injection"
+    }
+  },
+  "listener-and-mutation-holdout": {
+    "passing": {
+      "findings": [
+        { "file": "src/rpc-wait.ts", "lines": [20, 21], "category": "resource", "summary": "Message listener and timeout timer are never cleaned up" },
+        { "file": "src/scores.ts", "line": 31, "category": "logic", "summary": "Array.prototype.sort mutates input and sorts numbers lexicographically" }
+      ]
+    },
+    "missed": {
+      "findings": [
+        { "file": "src/rpc-wait.ts", "line": 20, "category": "resource" }
+      ],
+      "check": "missed:lexicographic-in-place-sort"
+    },
+    "noisy": {
+      "findings": [
+        { "file": "src/rpc-wait.ts", "line": 20, "category": "resource" },
+        { "file": "src/scores.ts", "line": 31, "category": "logic" },
+        { "file": "src/scores.ts", "line": 32, "category": "security" }
+      ],
+      "check": "false-positives:1>0"
+    },
+    "sweeping": {
+      "findings": [
+        { "file": "src/rpc-wait.ts", "lines": [1, 60], "category": "resource" },
+        { "file": "src/scores.ts", "lines": [1, 60], "category": "logic" }
+      ],
+      "check": "missed:listener-and-timer-leak"
+    }
+  },
+  "token-and-cache-holdout": {
+    "passing": {
+      "findings": [
+        { "file": "src/webhook.ts", "line": 12, "category": "security", "summary": "startsWith accepts any 1-char prefix of expectedSig" },
+        { "file": "src/token-cache.ts", "lines": [22, 24], "category": "concurrency", "summary": "Concurrent callers before resolution trigger parallel token fetches" }
+      ]
+    },
+    "missed": {
+      "findings": [
+        { "file": "src/webhook.ts", "line": 12, "category": "security" }
+      ],
+      "check": "missed:concurrent-token-stampede"
+    },
+    "noisy": {
+      "findings": [
+        { "file": "src/webhook.ts", "line": 12, "category": "security" },
+        { "file": "src/token-cache.ts", "line": 23, "category": "concurrency" },
+        { "file": "src/webhook.ts", "line": 10, "category": "resource" }
+      ],
+      "check": "false-positives:1>0"
+    },
+    "sweeping": {
+      "findings": [
+        { "file": "src/webhook.ts", "lines": [1, 50], "category": "security" },
+        { "file": "src/token-cache.ts", "lines": [1, 50], "category": "concurrency" }
+      ],
+      "check": "missed:prefix-signature-bypass"
+    }
+  }
+}
