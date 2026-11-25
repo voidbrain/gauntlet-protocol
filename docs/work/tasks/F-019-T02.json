@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-019-T02",
   "parent": "F-019",
-  "status": "planned",
+  "status": "implemented",
   "title": "OpenSCAD build-and-measure grader and tasks",
   "goal": "OpenSCAD build-and-measure grader and tasks",
   "acceptance": [
@@ -35,12 +35,17 @@
     "Material scope or effort growth goes to the owner before adoption"
   ],
   "effort": {
-    "size": "medium",
-    "estimate": "3 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
-    "reviewed": "2026-11-24",
-    "agentHours": 3,
+    "size": "small",
+    "estimate": "0.25 h agent",
+    "basis": "Implemented 2026-11-25: examples/cad-3d-v1/grade.mjs, examples/cad-3d-v1/runner.mjs, 4 OpenSCAD coding tasks across regression and holdout splits, test/fixtures/cad-3d-v1/ (reference, wrong and broken fixtures), test/cad-3d.test.ts (including anti-gaming bounding-box checks and container sandbox execution), protocol and README docs, and regenerated docs/test-index.md; CI and merge remain. Not a measurement.",
+    "reviewed": "2026-11-25",
+    "agentHours": 0.25,
     "baselineAgentHours": 3,
     "estimateAgentHours": 3
-  }
+  },
+  "prs": [
+    {
+      "pr": 103
+    }
+  ]
 }

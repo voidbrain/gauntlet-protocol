@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "entry": "model.scad",
+  "prompt": "Model a flanged hollow cylindrical bushing in millimetres coaxial with the Z axis (`$fn = 64`): a circular base flange of outer diameter 24 mm and height 4 mm (Z from 0 to 4), a coaxial cylindrical sleeve of outer diameter 12 mm extending to total height 16 mm (Z from 0 to 16), and a coaxial 6 mm diameter through-hole through the full 16 mm height.",
+  "expected": {
+    "sizeX": { "target": 24, "tolerance": 0.2 },
+    "sizeY": { "target": 24, "tolerance": 0.2 },
+    "sizeZ": { "target": 16, "tolerance": 0.2 },
+    "volume": { "target": 2710, "tolerance": 40 }
+  }
+}

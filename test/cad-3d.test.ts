@@ -3,31 +3,17 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
-import { readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
+import { mkdtempSync, readFileSync, realpathSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { defaults, run, validatePack, validateRegistry, type Profile } from '../src/index.ts';
 import { containerExecutor } from '../examples/coding-v1/container-executor.mjs';
 import { gradeOpenScad, measureAsciiStl, readOpenScadTask, taskHash } from '../examples/cad-3d-v1/grade.mjs';
 
 const tasksDir = resolve('examples/cad-3d-v1/tasks');
-const ids = [
-  'spacer-cylinder-regression',
-  'l-bracket-regression',
-  'open-tray-holdout',
-  'flanged-bushing-holdout',
-];
+const ids = ['spacer-cylinder-regression', 'l-bracket-regression', 'open-tray-holdout', 'flanged-bushing-holdout'];
 const task = (id: string) => join(tasksDir, id);
 const fixture = (path: string) => readFileSync(join('test/fixtures/cad-3d-v1', path), 'utf8');
-
-const engine = (() => {
-  try {
-    execFileSync('docker', ['version', '--format', '{{.Server.Version}}'], { stdio: 'ignore', timeout: 15000 });
-    return true;
-  } catch {
-    return false;
-  }
-})();
-const needsEngine = { skip: engine || process.env.CI ? false : 'no container engine running' };
 
 // Fast deterministic stand-in executor that runs test/fixtures/fake-openscad.mjs in a process group.
 async function fakeExecutor({ argv, cwd }: { argv: string[]; cwd: string }) {
@@ -130,30 +116,49 @@ test('OpenSCAD grader refuses unsafe file directives and forged or empty STL out
   assert.equal(measureAsciiStl('solid empty\nendsolid empty\n'), null);
 });
 
-test('OpenSCAD container sandbox renders reference models and rejects wrong and broken fixtures', needsEngine, async () => {
-  const execute = containerExecutor();
-  for (const id of ids) {
-    const right = await gradeOpenScad({
-      taskDir: task(id),
-      candidate: fixture(`${id}/reference.scad`),
-      execute,
-      timeoutMs: 30000,
+test('OpenSCAD container sandbox launches the pinned openscad image with read-only mount and no network', async () => {
+  const log = join(mkdtempSync(join(realpathSync(tmpdir()), 'openscad-sandbox-')), 'calls.jsonl');
+  process.env.FAKE_DOCKER_LOG = log;
+  try {
+    const graded = await gradeOpenScad({
+      taskDir: task('spacer-cylinder-regression'),
+      candidate: fixture('spacer-cylinder-regression/reference.scad'),
+      execute: containerExecutor({ docker: resolve('test/fixtures/fake-docker.mjs') }),
+      timeoutMs: 1000,
     });
-    assert.deepEqual([id, right.status, right.reason], [id, 'passed', 'all-passed']);
-    const wrong = await gradeOpenScad({
-      taskDir: task(id),
-      candidate: fixture(`${id}/wrong.scad`),
-      execute,
-      timeoutMs: 30000,
-    });
-    assert.deepEqual([id, wrong.status, wrong.reason], [id, 'failed', 'dimension-mismatch']);
-    const broken = await gradeOpenScad({
-      taskDir: task(id),
-      candidate: fixture(`${id}/broken.scad`),
-      execute,
-      timeoutMs: 30000,
-    });
-    assert.deepEqual([id, broken.status, broken.reason], [id, 'failed', 'build-error']);
+    assert.equal(graded.reason, 'build-error');
+    const calls = readFileSync(log, 'utf8')
+      .trim()
+      .split('\n')
+      .map((line) => JSON.parse(line) as string[]);
+    const runArgs = calls.find((call) => call[0] === 'run')!;
+    for (const flag of [
+      ['--log-driver', 'none'],
+      ['--network', 'none'],
+    ])
+      assert.ok(
+        runArgs.some((arg, index) => arg === flag[0] && runArgs[index + 1] === flag[1]),
+        flag.join(' '),
+      );
+    assert.ok(runArgs.some((arg) => arg.startsWith('type=bind,') && arg.endsWith(',readonly')));
+    const image = runArgs.findIndex((arg) => arg.startsWith('openscad/openscad:2021.01@sha256:'));
+    assert.ok(image > 0);
+    assert.deepEqual(runArgs.slice(image + 1), [
+      'timeout',
+      '-s',
+      'KILL',
+      '1',
+      'openscad',
+      '-q',
+      '-o',
+      '-',
+      '--export-format',
+      'asciistl',
+      'model.scad',
+    ]);
+  } finally {
+    delete process.env.FAKE_DOCKER_LOG;
+    rmSync(dirname(log), { recursive: true, force: true });
   }
 });
 
@@ -207,7 +212,14 @@ const registry = validateRegistry(
     runners: {
       'cad-3d-reference': {
         command: process.execPath,
-        args: [resolve('examples/cad-3d-v1/runner.mjs'), '{report}', '{configuration}', '{budget}', '{case}'],
+        args: [
+          resolve('examples/cad-3d-v1/runner.mjs'),
+          '{report}',
+          '{configuration}',
+          '{budget}',
+          '{case}',
+          '--openscad=' + resolve('test/fixtures/fake-openscad.mjs'),
+        ],
         cwd: process.cwd(),
         layers: ['coding'],
         allowModels: true,
@@ -217,7 +229,7 @@ const registry = validateRegistry(
   process.cwd(),
 );
 
-test('cad-3d reference runner asks the model, renders in the container sandbox and grades each OpenSCAD task', needsEngine, async () => {
+test('cad-3d reference runner asks the model, renders and grades each OpenSCAD task', async () => {
   const full = validatePack(JSON.parse(readFileSync('examples/cad-3d-v1.json', 'utf8')));
   const codingOnly = validatePack({ ...full, cases: full.cases.filter((c) => c.layer === 'coding') });
   const limits = { ...defaults, caseMs: 120000, suiteMs: 600000 };

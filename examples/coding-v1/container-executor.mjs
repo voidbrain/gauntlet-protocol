@@ -18,6 +18,7 @@ const exec = promisify(execFile);
 export const images = {
   python3: 'python:3.12-alpine@sha256:c5ba3deef00c7758561a0f03c26f44f10589263d40e732b8748e0d1f38f6dd89',
   node: 'node:24-alpine@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5',
+  openscad: 'openscad/openscad:2021.01@sha256:147e48525bec392bcf628d7a6d5ea4ccac71b16251952328f86e1061cbf47c37',
 };
 export const defaultLimits = { memory: '256m', pids: 64, cpus: '1', tmpfs: '16m' };
 export const label = 'gauntlet.coding';
