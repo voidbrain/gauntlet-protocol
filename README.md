@@ -17,6 +17,8 @@ The generated [pack catalog](docs/test-index.md) also lists six focused 1.0.0 pa
 
 The `coding` pack holds four Python and TypeScript tasks on the coding layer, graded out of process against expected values the candidate never sees. The reference runner (`examples/coding-v1/runner.mjs`) asks a local model and grades each case in a throwaway container, so running it needs Docker Desktop or colima ([setup](docs/guides/container-engine.md)); its public holdout cases are contamination-exposed ([coding grader](docs/PROTOCOL.md#coding-pack-grader)).
 
+The `embedded` pack holds Arduino and ESP32 sketches graded by static checks and an arduino-cli compile against pinned cores, and Raspberry Pi Python graded by byte-compilation and AST checks; nothing runs on hardware. Its reference runner (`examples/embedded-v1/runner.mjs`) asks a local model; sketch cases need arduino-cli with the pinned cores ([setup](docs/guides/arduino-cli.md), [runner](docs/PROTOCOL.md#embedded-pack-runner)).
+
 The `logic-math` pack holds eight exact-answer cases: arithmetic under `math`, puzzles, constraints and scheduling under `logic-planning`. Holdout cases in these public packs are exposed examples, not unseen holdouts.
 
 The [run ledger](docs/LEDGER.md) lets a consumer list the cases of the packs it consumes that it has not run in their current definition, or under the model, runtime, machine scenario or consumer source it now intends (`pending`), without storing evidence.

@@ -83,12 +83,21 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [logic-math@1.0.0 / task-schedule-regression](../examples/logic-math-v1.json) | logic-planning | planning, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [logic-math@1.0.0 / digit-swap-holdout](../examples/logic-math-v1.json) | logic-planning | logic-reasoning, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [logic-math@1.0.0 / key-box-holdout](../examples/logic-math-v1.json) | logic-planning | logic-reasoning, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [embedded@1.0.0 / blink-millis-esp32-regression](../examples/embedded-v1.json) | embedded | code-generation, embedded-cpp, esp32 | coding / regression | true / true | registered:embedded-reference / arduino-cli | Unmeasured |
+| [embedded@1.0.0 / debounce-toggle-uno-regression](../examples/embedded-v1.json) | embedded | code-generation, embedded-cpp, arduino-avr | coding / regression | true / true | registered:embedded-reference / arduino-cli | Unmeasured |
+| [embedded@1.0.0 / pwm-fade-esp32-holdout](../examples/embedded-v1.json) | embedded | code-generation, embedded-cpp, esp32 | coding / holdout | true / true | registered:embedded-reference / arduino-cli | Unmeasured |
+| [embedded@1.0.0 / serial-command-uno-holdout](../examples/embedded-v1.json) | embedded | code-generation, embedded-cpp, arduino-avr | coding / holdout | true / true | registered:embedded-reference / arduino-cli | Unmeasured |
+| [embedded@1.0.0 / led-blink-gpiozero-regression](../examples/embedded-v1.json) | embedded | code-generation, python, raspberry-pi | coding / regression | true / false | registered:embedded-reference / python3 | Unmeasured |
+| [embedded@1.0.0 / pwm-servo-rpigpio-regression](../examples/embedded-v1.json) | embedded | code-generation, python, raspberry-pi | coding / regression | true / false | registered:embedded-reference / python3 | Unmeasured |
+| [embedded@1.0.0 / button-toggle-gpiozero-holdout](../examples/embedded-v1.json) | embedded | code-generation, python, raspberry-pi | coding / holdout | true / false | registered:embedded-reference / python3 | Unmeasured |
+| [embedded@1.0.0 / edge-counter-rpigpio-holdout](../examples/embedded-v1.json) | embedded | code-generation, python, raspberry-pi | coding / holdout | true / false | registered:embedded-reference / python3 | Unmeasured |
 
 ## Area coverage
 
 - unclassified: 0 mapped cases
 - general-assistant: 42 mapped cases
 - coding: 4 mapped cases
+- embedded: 8 mapped cases
 - code-review: 0 mapped cases
 - math: 4 mapped cases
 - logic-planning: 4 mapped cases

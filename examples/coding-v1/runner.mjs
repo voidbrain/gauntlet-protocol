@@ -9,6 +9,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gradeCandidate, readTask, taskHash } from './grade.mjs';
 import { containerExecutor, stopAll } from './container-executor.mjs';
+import { askCandidate } from './ollama-candidate.mjs';
 
 const [out, configurationFile, budgetFile, caseFile] = process.argv.slice(2);
 const here = dirname(fileURLToPath(import.meta.url));
@@ -29,66 +30,25 @@ const taskDir = join(here, 'tasks', current.id);
 const task = readTask(taskDir);
 const starter = readFileSync(join(taskDir, 'starter' + task.entry.slice(task.entry.lastIndexOf('.'))), 'utf8');
 
-const endpoint = new URL(profile.endpoint);
-// Literal loopback addresses only: no name resolution, no proxy (Node's fetch ignores proxy variables), no redirects.
-if (!['127.0.0.1', '[::1]'].includes(endpoint.hostname))
-  throw Error('Model endpoint must be a literal loopback address');
-const call = async (path, body) => {
-  const response = await fetch(new URL(path, endpoint), {
-    method: body ? 'POST' : 'GET',
-    redirect: 'error',
-    headers: body ? { 'content-type': 'application/json' } : undefined,
-    body: body ? JSON.stringify(body) : undefined,
-    signal: AbortSignal.timeout(Math.max(1000, budget.timeoutMs - (Date.now() - started) - 20000)),
-  });
-  if (!response.ok) throw Error('Model endpoint returned ' + response.status);
-  return response.json();
-};
-
-const version = await call('/api/version');
-const tags = await call('/api/tags');
-const model = tags.models?.find((entry) => entry.name === profile.model);
-if (!model || !/^[a-f0-9]{64}$/.test(String(model.digest))) throw Error('Model not installed');
-const maxTokens = Math.min(profile.maxOutputTokens, budget.outputTokens);
-if (maxTokens < 1) throw Error('No output budget left');
-const options = { num_ctx: profile.context, num_predict: maxTokens };
-for (const [key, field] of [
-  ['temperature', 'temperature'],
-  ['top_p', 'topP'],
-  ['top_k', 'topK'],
-  ['seed', 'seed'],
-])
-  if (profile[field] !== null) options[key] = profile[field];
-const reply = await call('/api/chat', {
-  model: profile.model,
-  stream: false,
-  keep_alive: 0,
-  ...(profile.think === null ? {} : { think: profile.think }),
-  options,
-  messages: [
-    {
-      role: 'user',
-      content:
-        task.prompt +
-        '\n\nThe current ' +
-        task.entry +
-        ' is:\n\n```\n' +
-        starter +
-        '```\n\nReply with the complete ' +
-        task.entry +
-        ' in one fenced code block.',
-    },
-  ],
+const asked = await askCandidate({
+  profile,
+  budget,
+  started,
+  prompt:
+    task.prompt +
+    '\n\nThe current ' +
+    task.entry +
+    ' is:\n\n```\n' +
+    starter +
+    '```\n\nReply with the complete ' +
+    task.entry +
+    ' in one fenced code block.',
 });
-const outputTokens = reply.eval_count;
-if (!Number.isInteger(outputTokens) || outputTokens > maxTokens) throw Error('Unmeasured or excess output tokens');
-const content = String(reply.message?.content ?? '');
-const fenced = /```[^\n]*\n([\s\S]*?)```/.exec(content);
-const candidate = fenced ? fenced[1] : content;
+const { candidate, outputTokens } = asked;
 
 let status;
 let checks;
-if (reply.done_reason === 'length') {
+if (asked.truncated) {
   status = 'failed';
   checks = task.cases.length;
 } else {
@@ -105,8 +65,8 @@ writeFileSync(
     caseHash: hash(current),
     fixtureHash: taskHash(taskDir),
     configurationHash: hash(profile),
-    modelDigest: model.digest,
-    runtimeIdentity: 'ollama-' + String(version.version) + '+coding-reference-v1',
+    modelDigest: asked.modelDigest,
+    runtimeIdentity: 'ollama-' + asked.ollamaVersion + '+coding-reference-v1',
     sourceStable: true,
     complete: true,
     outputTokens,
