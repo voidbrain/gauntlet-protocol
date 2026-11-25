@@ -79,7 +79,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | NERV review of the 0.11.0 adoption (2026-11-25) |
+| PR / evidence | NERV review of the 0.11.0 adoption (2026-11-25); [#107](https://github.com/voidbrain/gauntlet-protocol/pull/107) |
 | Opened | 2026-11-25 |
 | Verification | Pending. |
 | Reviewed | 2026-11-25 |
@@ -117,7 +117,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | NERV review of the 0.11.0 adoption (2026-11-25) |
+| PR / evidence | NERV review of the 0.11.0 adoption (2026-11-25); [#107](https://github.com/voidbrain/gauntlet-protocol/pull/107) |
 | Opened | 2026-11-25 |
 | Verification | Pending. |
 | Reviewed | 2026-11-25 |
