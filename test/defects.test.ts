@@ -114,6 +114,26 @@ test('defect grading matches seeded defects by file, line range and category and
     failures: ['missed:off-by-one', 'false-positives:2>1'],
   });
 
+  // A finding that sweeps a whole file must not find every seeded defect in it: a finding covers at
+  // most 10 lines, and a wider one matches no defect and counts as a false positive.
+  const sweeping = {
+    findings: [
+      { file: 'src/query.ts', lines: [1, 1_000_000], category: 'security' },
+      { file: 'src/page.ts', lines: [1, 1_000_000], category: 'logic' },
+    ],
+  };
+  assert.deepEqual(gradeDefects(sweeping, expectation), {
+    passed: false,
+    found: [],
+    missed: ['sql-injection', 'off-by-one'],
+    falsePositives: 2,
+    failures: ['missed:sql-injection', 'missed:off-by-one', 'false-positives:2>1'],
+  });
+  const tenLines = { file: 'src/page.ts', lines: [25, 34], category: 'logic' };
+  const elevenLines = { file: 'src/page.ts', lines: [24, 34], category: 'logic' };
+  assert.equal(gradeDefects({ findings: [exact.findings[0], tenLines] }, expectation).passed, true);
+  assert.deepEqual(gradeDefects({ findings: [exact.findings[0], elevenLines] }, expectation).missed, ['off-by-one']);
+
   for (const malformed of [
     null,
     'not an object',
