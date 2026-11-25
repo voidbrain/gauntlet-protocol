@@ -38,7 +38,7 @@
   "effort": {
     "size": "medium",
     "estimate": "1.5 h agent",
-    "basis": "Implemented 2026-11-25 in this PR: core area embedded in src/catalog.ts, examples/embedded-v1.json (8 cases), examples/embedded-v1/runner.mjs (embedded-reference; shares examples/coding-v1/ollama-candidate.mjs with the coding runner), index entry and regenerated test-index; test/embedded-pack.test.ts runs the pack end to end against a stand-in model and arduino-cli. Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "basis": "Implemented 2026-11-25 in PR #96: core area embedded in src/catalog.ts, examples/embedded-v1.json (8 cases), examples/embedded-v1/runner.mjs (embedded-reference; shares examples/coding-v1/ollama-candidate.mjs with the coding runner), index entry and regenerated test-index; test/embedded-pack.test.ts runs the pack end to end against a stand-in model and arduino-cli. Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
     "reviewed": "2026-11-25",
     "agentHours": 1.5,
     "baselineAgentHours": 1.5,
