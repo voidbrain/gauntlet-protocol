@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-019-T02",
   "parent": "F-019",
-  "status": "implemented",
+  "status": "closed",
   "title": "OpenSCAD build-and-measure grader and tasks",
   "goal": "OpenSCAD build-and-measure grader and tasks",
   "acceptance": [
@@ -36,10 +36,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h agent",
-    "basis": "Implemented 2026-11-25: examples/cad-3d-v1/grade.mjs, examples/cad-3d-v1/runner.mjs, 4 OpenSCAD coding tasks across regression and holdout splits, test/fixtures/cad-3d-v1/ (reference, wrong and broken fixtures), test/cad-3d.test.ts (including anti-gaming bounding-box checks and container sandbox execution), protocol and README docs, and regenerated docs/test-index.md Review fix: the runner reports a missing container engine or image as an error naming the fix before asking the model (test with a failing engine stand-in). Real OpenSCAD renders are not run in CI (owner decision); CI uses stand-ins. CI and merge remain. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Merged in PR #103 on green CI on 2026-11-25 (CI uses OpenSCAD stand-ins, owner decision). Real render 2026-11-25 on the owner's Mac (Docker 29.8.0, arm64, no model call): the pinned digest sha256:147e4852... resolves on Docker Hub (multi-arch list with linux/arm64 and linux/amd64) and pulls; through gradeOpenScad with containerExecutor, all four reference.scad fixtures pass (spacer 12/12/15 mm, 1270.30 mm3; L-bracket 40/25/30, 8125; tray 50/30/20, 8472; bushing 24/24/16, 2709.98), every wrong.scad fails dimension-mismatch and every broken.scad fails build-error, about 0.3 s per render. Known limitation: only bounding box and volume are measured, so a wrong shape with the right extents and volume passes (an L-bracket with its wall at X = 35 instead of X = 0 measured 40/25/30, 8125, passed). No actual: elapsed time not measured across sessions.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 3,
     "estimateAgentHours": 3
   },

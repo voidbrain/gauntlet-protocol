@@ -4,7 +4,7 @@ Current work ledger, reviewed 25 November 2026 against main `f47e853`. PR #98 me
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 8.5 h agent + 1.75 h owner across 15 open steps of 5 features and 1 other record. Generated from the task files.
+**Remaining effort:** 8.25 h agent + 1.75 h owner across 14 open steps of 5 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -96,53 +96,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
-### <a id="f-019"></a>[✨ F-019](#top)
-
-**cad-3d-v1: OpenSCAD build-and-measure and printing questions**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h agent + 0.25 h owner | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-019-T02 — OpenSCAD build-and-measure grader and tasks (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The index maps 0 cases to cad-3d. |
-| **Reproduce** | `npm run index:build` reports `cad-3d: 0 mapped cases`. |
-| **Check** | Exact-answer slicer, material and tolerance questions, and OpenSCAD tasks rendered in the coding runner's sandbox and graded by measured dimensions; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
-|---|---|---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="f-019-t02"></a>F-019-T02 — OpenSCAD build-and-measure grader and tasks | 3 h | 0 h | 0.25 h | Implemented; verification pending | — | [F-019-T03](#f-019-t03) | 🤖 | PR #103 |
-| 🟢 Small | <a id="f-019-t03"></a>F-019-T03 — Release cad-3d-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-019-T02](#f-019-t02) | — | ⏳ 🧑‍🔧 | — |
-| 🟢 Small | **Total** | 4 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 0.25 h agent + 0.25 h owner | 1 of 3 completed | | | | |
-
-<details><summary>Done steps (1)</summary>
-
-| Effort | Step | Estimate | Actual | Status | PRs |
-|---|---|---|---|---|---|
-| — | <a id="f-019-t01"></a>F-019-T01 — Slicer, material and tolerance questions | 1 h | 0 h | Completed | PR #100 |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-019.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-019-T01: PR #100 · F-019-T02: PR #103. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#100](https://github.com/voidbrain/gauntlet-protocol/pull/100); [#103](https://github.com/voidbrain/gauntlet-protocol/pull/103) |
-| Opened | 2026-11-24 |
-| Verification | Pending. |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
 ### <a id="f-020"></a>[✨ F-020](#top)
 
 **code-review-v1: seeded-defect diffs**
@@ -183,6 +136,53 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | Steps: F-020-T01: PR #101 · F-020-T02: PR #102. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#101](https://github.com/voidbrain/gauntlet-protocol/pull/101); [#102](https://github.com/voidbrain/gauntlet-protocol/pull/102) |
+| Opened | 2026-11-24 |
+| Verification | Pending. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+### <a id="f-019"></a>[✨ F-019](#top)
+
+**cad-3d-v1: OpenSCAD build-and-measure and printing questions**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h owner | — | — | — | 🧑‍🔧 | — |
+
+🧑 **→** Next: [🧑‍🔧](guides/release.md) F-019-T03 — Release cad-3d-v1 (Planned).
+
+| | |
+|---|---|
+| **Issue** | The index maps 0 cases to cad-3d. |
+| **Reproduce** | `npm run index:build` reports `cad-3d: 0 mapped cases`. |
+| **Check** | Exact-answer slicer, material and tolerance questions, and OpenSCAD tasks rendered in the coding runner's sandbox and graded by measured dimensions; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
+|---|---|---|---|---|---|:---:|---|
+| 🟢 Small | <a id="f-019-t03"></a>F-019-T03 — Release cad-3d-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [🧑‍🔧](guides/release.md) | — |
+| 🟢 Small | **Total** | 4 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 0.25 h owner | 2 of 3 completed | | |
+
+<details><summary>Done steps (2)</summary>
+
+| Effort | Step | Estimate | Actual | Status | PRs |
+|---|---|---|---|---|---|
+| — | <a id="f-019-t01"></a>F-019-T01 — Slicer, material and tolerance questions | 1 h | 0 h | Completed | PR #100 |
+| — | <a id="f-019-t02"></a>F-019-T02 — OpenSCAD build-and-measure grader and tasks | 3 h | 0 h | Completed | PR #103 |
+
+</details>
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-019.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-019-T01: PR #100 · F-019-T02: PR #103. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#100](https://github.com/voidbrain/gauntlet-protocol/pull/100); [#103](https://github.com/voidbrain/gauntlet-protocol/pull/103) |
 | Opened | 2026-11-24 |
 | Verification | Pending. |
 | Reviewed | 2026-11-25 |
