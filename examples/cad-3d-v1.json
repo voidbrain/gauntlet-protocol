@@ -143,6 +143,50 @@
       "area": "cad-3d",
       "requirements": ["local-model-runtime"],
       "responseFormat": "json"
+    },
+    {
+      "id": "spacer-cylinder-regression",
+      "layer": "coding",
+      "split": "regression",
+      "capabilities": ["code-generation", "openscad", "cad-3d"],
+      "critical": true,
+      "expensive": false,
+      "runner": "cad-3d-reference",
+      "area": "cad-3d",
+      "requirements": ["coding-sandbox"]
+    },
+    {
+      "id": "l-bracket-regression",
+      "layer": "coding",
+      "split": "regression",
+      "capabilities": ["code-generation", "openscad", "cad-3d"],
+      "critical": true,
+      "expensive": false,
+      "runner": "cad-3d-reference",
+      "area": "cad-3d",
+      "requirements": ["coding-sandbox"]
+    },
+    {
+      "id": "open-tray-holdout",
+      "layer": "coding",
+      "split": "holdout",
+      "capabilities": ["code-generation", "openscad", "cad-3d"],
+      "critical": true,
+      "expensive": false,
+      "runner": "cad-3d-reference",
+      "area": "cad-3d",
+      "requirements": ["coding-sandbox"]
+    },
+    {
+      "id": "flanged-bushing-holdout",
+      "layer": "coding",
+      "split": "holdout",
+      "capabilities": ["code-generation", "openscad", "cad-3d"],
+      "critical": true,
+      "expensive": false,
+      "runner": "cad-3d-reference",
+      "area": "cad-3d",
+      "requirements": ["coding-sandbox"]
     }
   ]
 }

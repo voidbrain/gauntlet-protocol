@@ -21,7 +21,7 @@ The `embedded` pack holds Arduino and ESP32 sketches graded by static checks and
 
 The `logic-math` pack holds eight exact-answer cases: arithmetic under `math`, puzzles, constraints and scheduling under `logic-planning`. Holdout cases in these public packs are exposed examples, not unseen holdouts.
 
-The `cad-3d` pack holds six exact-answer 3D-printing and CAD questions under `cad-3d` covering slicer parameters, filament material choice and dimensional tolerances. Its holdout cases are public, so they are exposed examples, not unseen holdouts.
+The `cad-3d` pack holds six exact-answer 3D-printing and CAD questions under `cad-3d` (slicer parameters, filament material choice and dimensional tolerances) plus four OpenSCAD coding tasks rendered in the coding container sandbox (`examples/cad-3d-v1/runner.mjs`) and graded by measured STL bounding box and volume ([OpenSCAD grader](docs/PROTOCOL.md#openscad-build-and-measure-grader)). Its holdout cases are public (H1), so they are exposed examples, not unseen holdouts.
 
 The `italian-quality` pack holds six Italian-only free-text cases under `language-translation` (summary, rewrite and register control in regression and holdout splits), graded deterministically by `rubric-v1` ([rubric grading](docs/PROTOCOL.md#rubric-grading)). Its holdout cases are public, so they are exposed examples, not unseen holdouts.
 

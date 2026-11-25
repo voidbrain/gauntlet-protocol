@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "entry": "model.scad",
+  "prompt": "Model a hollow cylindrical spacer in millimetres aligned with the Z axis (`$fn = 64`): outer diameter 12 mm, coaxial inner through-hole diameter 6 mm, and total height 15 mm from Z = 0 to Z = 15.",
+  "expected": {
+    "sizeX": { "target": 12, "tolerance": 0.2 },
+    "sizeY": { "target": 12, "tolerance": 0.2 },
+    "sizeZ": { "target": 15, "tolerance": 0.2 },
+    "volume": { "target": 1270.3, "tolerance": 25 }
+  }
+}

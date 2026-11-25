@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "entry": "model.scad",
+  "prompt": "Model an L-bracket in millimetres starting at the origin: a horizontal base plate 40 mm (X) by 25 mm (Y) by 5 mm (Z), joined with a vertical wall 5 mm (X) by 25 mm (Y) by 30 mm total height (Z) along the X = 0 edge.",
+  "expected": {
+    "sizeX": { "target": 40, "tolerance": 0.2 },
+    "sizeY": { "target": 25, "tolerance": 0.2 },
+    "sizeZ": { "target": 30, "tolerance": 0.2 },
+    "volume": { "target": 8125, "tolerance": 50 }
+  }
+}

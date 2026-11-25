@@ -97,6 +97,10 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [cad-3d@1.0.0 / material-damp-isolation-holdout](../examples/cad-3d-v1.json) | cad-3d | printing-materials, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [cad-3d@1.0.0 / tolerance-clearance-pin-regression](../examples/cad-3d-v1.json) | cad-3d | dimensional-tolerances, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [cad-3d@1.0.0 / tolerance-shrinkage-compensation-holdout](../examples/cad-3d-v1.json) | cad-3d | dimensional-tolerances, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [cad-3d@1.0.0 / spacer-cylinder-regression](../examples/cad-3d-v1.json) | cad-3d | code-generation, openscad, cad-3d | coding / regression | true / false | registered:cad-3d-reference / coding-sandbox | Unmeasured |
+| [cad-3d@1.0.0 / l-bracket-regression](../examples/cad-3d-v1.json) | cad-3d | code-generation, openscad, cad-3d | coding / regression | true / false | registered:cad-3d-reference / coding-sandbox | Unmeasured |
+| [cad-3d@1.0.0 / open-tray-holdout](../examples/cad-3d-v1.json) | cad-3d | code-generation, openscad, cad-3d | coding / holdout | true / false | registered:cad-3d-reference / coding-sandbox | Unmeasured |
+| [cad-3d@1.0.0 / flanged-bushing-holdout](../examples/cad-3d-v1.json) | cad-3d | code-generation, openscad, cad-3d | coding / holdout | true / false | registered:cad-3d-reference / coding-sandbox | Unmeasured |
 | [italian-quality@1.0.0 / summary-service-regression](../examples/italian-quality-v1.json) | language-translation | italian-quality, summarization | model / regression | true / false | rubric-v1 / local-model-runtime | Unmeasured |
 | [italian-quality@1.0.0 / summary-report-holdout](../examples/italian-quality-v1.json) | language-translation | italian-quality, summarization | model / holdout | true / false | rubric-v1 / local-model-runtime | Unmeasured |
 | [italian-quality@1.0.0 / rewrite-anglicisms-regression](../examples/italian-quality-v1.json) | language-translation | italian-quality, rewriting | model / regression | true / false | rubric-v1 / local-model-runtime | Unmeasured |
@@ -119,7 +123,7 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 - code-review: 6 mapped cases
 - math: 4 mapped cases
 - logic-planning: 4 mapped cases
-- cad-3d: 6 mapped cases
+- cad-3d: 10 mapped cases
 - backlog-management: 0 mapped cases
 - estimation: 0 mapped cases
 - ci-operations: 0 mapped cases

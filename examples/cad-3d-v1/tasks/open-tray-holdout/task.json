@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "entry": "model.scad",
+  "prompt": "Model a rectangular open-top parts tray in millimetres: outer bounding box 50 mm (X) by 30 mm (Y) by 20 mm (Z), with a 2 mm floor thickness and 2 mm wall thickness on all four sides (inner cavity 46 mm by 26 mm by 18 mm deep, open at Z = 20).",
+  "expected": {
+    "sizeX": { "target": 50, "tolerance": 0.2 },
+    "sizeY": { "target": 30, "tolerance": 0.2 },
+    "sizeZ": { "target": 20, "tolerance": 0.2 },
+    "volume": { "target": 8472, "tolerance": 50 }
+  }
+}
