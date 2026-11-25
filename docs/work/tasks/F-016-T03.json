@@ -37,7 +37,7 @@
   "effort": {
     "size": "medium",
     "estimate": "1.5 h agent",
-    "basis": "Implemented 2026-11-25 in this PR: four Pi tasks (gpiozero and RPi.GPIO, regression and holdout), examples/embedded-v1/pi_facts.py and pi-grade.mjs, test/embedded-pi-grader.test.ts. Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "basis": "Implemented 2026-11-25 in PR #94: four Pi tasks (gpiozero and RPi.GPIO, regression and holdout), examples/embedded-v1/pi_facts.py and pi-grade.mjs, test/embedded-pi-grader.test.ts. Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
     "reviewed": "2026-11-25",
     "agentHours": 1.5,
     "baselineAgentHours": 1.5,
