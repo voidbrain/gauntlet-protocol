@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "id": "cad-3d",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "slicer-wall-layers-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["slicing-parameters", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "An FDM slicer prints with a 0.4 mm nozzle, 0.4 mm perimeter line width, 3 perimeters, 0.2 mm layer height (including the first layer) and 5 solid top layers. What are the total single-side wall thickness in mm and the top solid shell thickness in mm for a vertical wall? Return only JSON of the form {\"answer\": {\"wallThicknessMm\": ..., \"topThicknessMm\": ...}}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": {
+            "wallThicknessMm": 1.2,
+            "topThicknessMm": 1
+          }
+        }
+      },
+      "area": "cad-3d",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "slicer-flow-limit-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["slicing-parameters", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Approximating extrusion cross-section as line_width * layer_height, what is the maximum print speed in mm/s for a 0.45 mm line width and 0.2 mm layer height when the hotend's maximum volumetric flow rate is 13.5 mm^3/s? The answer is an integer. Return only JSON of the form {\"answer\": ...}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": 150
+        }
+      },
+      "area": "cad-3d",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "material-outdoor-bracket-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["printing-materials", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Choose one filament from [\"PLA\", \"ASA\", \"PVA\"] for a rigid outdoor sensor bracket exposed to direct summer sun and UV, where glass-transition temperature (~100 C vs ~60 C for PLA) and weather resistance are required. Return only JSON of the form {\"answer\": \"...\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": "ASA"
+        }
+      },
+      "area": "cad-3d",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "material-damp-isolation-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["printing-materials", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Choose one filament from [\"PLA\", \"TPU-95A\", \"PA6-Nylon\"] for a flexible vibration-damping landing skid that must absorb impact shocks without cracking. Return only JSON of the form {\"answer\": \"...\"}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": "TPU-95A"
+        }
+      },
+      "area": "cad-3d",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "tolerance-clearance-pin-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": ["dimensional-tolerances", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "A cylindrical steel dowel pin has a 6.0 mm diameter. In a 3D CAD model for FDM printing, a through-hole requires a 0.2 mm radial clearance on all sides so the pin slides freely. What modelled hole diameter in mm should be specified? Return only JSON of the form {\"answer\": ...}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": 6.4
+        }
+      },
+      "area": "cad-3d",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    },
+    {
+      "id": "tolerance-shrinkage-compensation-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": ["dimensional-tolerances", "structured-output"],
+      "critical": true,
+      "expensive": false,
+      "messages": [
+        {
+          "role": "user",
+          "content": "A printed ABS bar shrinks uniformly by 0.8 percent on cooling (L_final = L_scaled * (1 - 0.008)). Using the linear slicer compensation approximation L_scaled = L_target * (1 + 0.008), what scaled CAD length in mm is needed for a 125 mm target bar? Return only JSON of the form {\"answer\": ...}."
+        }
+      ],
+      "expected": {
+        "kind": "json",
+        "value": {
+          "answer": 126
+        }
+      },
+      "area": "cad-3d",
+      "requirements": ["local-model-runtime"],
+      "responseFormat": "json"
+    }
+  ]
+}

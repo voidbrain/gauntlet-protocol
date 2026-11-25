@@ -1,0 +1,56 @@
+{
+  "slicer-wall-layers-regression": {
+    "passing": {
+      "answer": {
+        "wallThicknessMm": 1.2,
+        "topThicknessMm": 1
+      }
+    },
+    "wrong": {
+      "answer": {
+        "wallThicknessMm": 0.8,
+        "topThicknessMm": 1
+      }
+    }
+  },
+  "slicer-flow-limit-holdout": {
+    "passing": {
+      "answer": 150
+    },
+    "wrong": {
+      "answer": 120
+    }
+  },
+  "material-outdoor-bracket-regression": {
+    "passing": {
+      "answer": "ASA"
+    },
+    "wrong": {
+      "answer": "PLA"
+    }
+  },
+  "material-damp-isolation-holdout": {
+    "passing": {
+      "answer": "TPU-95A"
+    },
+    "wrong": {
+      "answer": "PLA"
+    }
+  },
+  "tolerance-clearance-pin-regression": {
+    "passing": {
+      "answer": 6.4
+    },
+    "wrong": {
+      "answer": 6.2
+    }
+  },
+  "tolerance-shrinkage-compensation-holdout": {
+    "passing": {
+      "answer": 126
+    },
+    "wrong": {
+      "answer": 125
+    }
+  }
+}
