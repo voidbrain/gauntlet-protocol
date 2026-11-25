@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "fqbn": "arduino:avr:uno",
+  "prompt": "Write a complete Arduino sketch (sketch.ino) for an Arduino Uno (arduino:avr core 1.8.6). A push button connects pin 2 to ground: use the internal pull-up (INPUT_PULLUP). Each press toggles the LED on pin 13. Debounce in software with millis() and a 50 ms window; never call delay(). Use only the core; no libraries.",
+  "requires": [
+    { "id": "pullup-pin-2", "pattern": "\\bpinMode\\s*\\(\\s*2\\s*,\\s*INPUT_PULLUP\\s*\\)" },
+    { "id": "reads-pin-2", "pattern": "\\bdigitalRead\\s*\\(\\s*2\\s*\\)" },
+    { "id": "writes-pin-13", "pattern": "\\bdigitalWrite\\s*\\(\\s*13\\s*," },
+    { "id": "millis", "pattern": "\\bmillis\\s*\\(" },
+    { "id": "window-50", "pattern": "\\b50\\b" }
+  ],
+  "forbids": [{ "id": "no-delay", "pattern": "\\bdelay(Microseconds)?\\s*\\(" }]
+}

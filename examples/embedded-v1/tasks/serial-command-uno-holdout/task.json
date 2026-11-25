@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "fqbn": "arduino:avr:uno",
+  "prompt": "Write a complete Arduino sketch (sketch.ino) for an Arduino Uno (arduino:avr core 1.8.6). Open Serial at 9600 baud. Read newline-terminated commands: ON sets pin 13 HIGH, OFF sets it LOW, anything else prints ERR followed by a newline. Reply OK after a valid command. Read without blocking: check Serial.available() and buffer characters until the newline. Use only the core; no libraries.",
+  "requires": [
+    { "id": "baud-9600", "pattern": "\\bSerial\\s*\\.\\s*begin\\s*\\(\\s*9600\\s*\\)" },
+    { "id": "available", "pattern": "\\bSerial\\s*\\.\\s*available\\s*\\(" },
+    { "id": "output-pin-13", "pattern": "\\bpinMode\\s*\\(\\s*13\\s*,\\s*OUTPUT\\s*\\)" },
+    { "id": "writes-pin-13", "pattern": "\\bdigitalWrite\\s*\\(\\s*13\\s*," }
+  ],
+  "forbids": [
+    { "id": "no-blocking-read", "pattern": "\\bSerial\\s*\\.\\s*(readString|readStringUntil|readBytes|readBytesUntil|parseInt|parseFloat|find)\\s*\\(" }
+  ],
+  "literals": ["ON", "OFF", "OK", "ERR"]
+}
