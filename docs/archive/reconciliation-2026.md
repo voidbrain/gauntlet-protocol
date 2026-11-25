@@ -118,3 +118,7 @@ PRs #91 to #97 merged on green CI; v0.10.0 tagged and published (coding, logic-m
 ## 2026-11-25 — main `f47e853`
 
 PR #98 merged on green CI (F-015, F-016 and F-017 archived on v0.10.0).
+
+## 2026-11-25 — main `c7202ae`
+
+PRs #99 to #105 merged on green CI (#99: F-018; #100, #103, #104: F-019; #101, #102: F-020; #105: release 0.11.0). The owner tagged v0.11.0 on `c7202ae` and published it (italian-quality, cad-3d, code-review packs). F-018, F-019 and F-020 closed.

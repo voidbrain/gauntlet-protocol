@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-020-T02",
   "parent": "F-020",
-  "status": "implemented",
+  "status": "closed",
   "title": "Seeded-defect diff cases",
   "goal": "Seeded-defect diff cases",
   "acceptance": [
@@ -35,10 +35,10 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "0.25 h agent",
-    "basis": "Implemented 2026-11-25: examples/code-review-v1.json (6 invented diff cases across regression and holdout splits), test/fixtures/code-review-v1.json (passing, missed, noisy and whole-file sweeping fixtures), pack and catalog tests, regenerated docs/test-index.md. Review fix: every excerpt now has more than 20 numbered lines, so a whole-excerpt answer within the 10-line finding cap no longer passes; tested with tiled and every-line findings. CI and merge remain. Not a measurement.",
+    "estimate": "0 remaining",
+    "basis": "Merged in PR #102 on green CI on 2026-11-25; shipped in v0.11.0. No actual: elapsed time not measured across sessions.",
     "reviewed": "2026-11-25",
-    "agentHours": 0.25,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   },

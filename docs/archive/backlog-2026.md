@@ -689,3 +689,105 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 </details>
 
 ---
+
+### F-018
+
+**italian-quality-v1: Italian summary, rewrite and register**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v0.11.0.
+
+| | |
+|---|---|
+| **Issue** | bilingual-it-en-v1 checks language choice, not Italian quality. Free text cannot be graded by exact equality. |
+| **Reproduce** | `npm run index:build` lists no case with capability italian-quality. |
+| **Check** | A deterministic rubric grader (required and forbidden terms, Italian share, length, register markers) and examples/italian-quality-v1.json, area language-translation, capability italian-quality; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: Release v0.11.0 (tag on c7202ae, release PR #105 merged on green CI, main CI green; published by the owner 2026-11-25); Closed 2026-11-25; released in v0.11.0. 2026-11-25: F-018-T01 closed: PR #90 merged on green CI (expected kind `rubric`, grader `rubric-v1`). F-018-T02 implemented: `examples/italian-quality-v1.json` (six Italian summary, rewrite and register cases across regression and holdout splits under `language-translation` with capability `italian-quality`), `test/fixtures/italian-quality-v1.json` (agent-written references and failing fixtures per case, checked in review in #99; no native-speaker review yet), pack and catalog tests and index entry; it closes on green CI after merge, then F-018-T03 releases `italian-quality-v1`. Native client token counters are not exposed by the host; usage job recorded with unknown token coverage. Planned 2026-11-24 as part of the [roadmap](../ROADMAP.md) milestone "Domain packs"; every step is in its task file.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#90](https://github.com/voidbrain/gauntlet-protocol/pull/90); [#91](https://github.com/voidbrain/gauntlet-protocol/pull/91); [#99](https://github.com/voidbrain/gauntlet-protocol/pull/99) |
+| Opened | 2026-11-24 |
+| Verification | Pending. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### F-019
+
+**cad-3d-v1: OpenSCAD build-and-measure and printing questions**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v0.11.0.
+
+| | |
+|---|---|
+| **Issue** | The index maps 0 cases to cad-3d. |
+| **Reproduce** | `npm run index:build` reports `cad-3d: 0 mapped cases`. |
+| **Check** | Exact-answer slicer, material and tolerance questions, and OpenSCAD tasks rendered in the coding runner's sandbox and graded by measured dimensions; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: Release v0.11.0 (tag on c7202ae, release PR #105 merged on green CI, main CI green; published by the owner 2026-11-25); Closed 2026-11-25; released in v0.11.0. 2026-11-25: F-019-T01 closed on #100. F-019-T02 closed: PR #103 merged on green CI (OpenSCAD grader, container runner, four tasks; CI uses stand-ins). Real render 2026-11-25 on the owner's Mac (Docker 29.8.0, arm64, no model call): the pinned digest sha256:147e4852... resolves on Docker Hub (multi-arch list with linux/arm64 and linux/amd64) and pulls; through gradeOpenScad with containerExecutor, all four reference.scad fixtures pass (spacer 12/12/15 mm, 1270.30 mm3; L-bracket 40/25/30, 8125; tray 50/30/20, 8472; bushing 24/24/16, 2709.98), every wrong.scad fails dimension-mismatch and every broken.scad fails build-error, about 0.3 s per render. Known limitation: only bounding box and volume are measured, so a wrong shape with the right extents and volume passes (an L-bracket with its wall at X = 35 instead of X = 0 measured 40/25/30, 8125, passed). Next: F-019-T03 releases cad-3d-v1. Native client token counters are not exposed by the host; usage job recorded with unknown token coverage. Planned 2026-11-24 as part of the [roadmap](../ROADMAP.md) milestone "Domain packs"; every step is in its task file.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#100](https://github.com/voidbrain/gauntlet-protocol/pull/100); [#103](https://github.com/voidbrain/gauntlet-protocol/pull/103); [#104](https://github.com/voidbrain/gauntlet-protocol/pull/104) |
+| Opened | 2026-11-24 |
+| Verification | Pending. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---
+
+### F-020
+
+**code-review-v1: seeded-defect diffs**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-25: released in v0.11.0.
+
+| | |
+|---|---|
+| **Issue** | The index maps 0 cases to code-review. Finding defects needs a grader that matches a set of findings, not exact equality. |
+| **Reproduce** | `npm run index:build` reports `code-review: 0 mapped cases`. |
+| **Check** | A deterministic defect-finding grader (seeded defects by file, line range and category; bounded false positives) and examples/code-review-v1.json; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-25: Release v0.11.0 (tag on c7202ae, release PR #105 merged on green CI, main CI green; published by the owner 2026-11-25); Closed 2026-11-25; released in v0.11.0. 2026-11-25: F-020-T01 closed: PR #101 merged on green CI (expected kind `defects`, grader `defects-v1`; findings cover at most 10 lines, so a whole-file finding cannot match every defect). F-020-T02 implemented: `examples/code-review-v1.json` (six invented diffs with seeded security, logic, concurrency and resource defects across regression and holdout splits under `code-review`), `test/fixtures/code-review-v1.json` (agent-written passing, missed-defect, noisy and whole-file sweeping fixtures per case; no human review yet), pack and catalog tests and index entry; review in a fresh Claude Code session found every excerpt fit inside one 10-line finding, so a whole-excerpt answer per category passed; excerpts now exceed 20 lines and a test rejects tiled and every-line findings; it closes on green CI after merge, then F-020-T03 releases `code-review-v1`. Native client token counters are not exposed by the host; usage job recorded with unknown token coverage. Planned 2026-11-24 as part of the [roadmap](../ROADMAP.md) milestone "Domain packs"; every step is in its task file.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#101](https://github.com/voidbrain/gauntlet-protocol/pull/101); [#102](https://github.com/voidbrain/gauntlet-protocol/pull/102) |
+| Opened | 2026-11-24 |
+| Verification | Pending. |
+| Reviewed | 2026-11-25 |
+
+</details>
+
+---

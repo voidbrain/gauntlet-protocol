@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-020-T03",
   "parent": "F-020",
-  "status": "planned",
+  "status": "closed",
   "title": "Release code-review-v1",
   "goal": "Release code-review-v1",
   "acceptance": [
@@ -29,12 +29,17 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h owner",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request); owner time only.",
-    "reviewed": "2026-11-24",
+    "estimate": "0 remaining",
+    "basis": "Closed 2026-11-25: the owner tagged v0.11.0 on c7202ae (release PR #105, main CI green) and published https://github.com/voidbrain/gauntlet-protocol/releases/tag/v0.11.0; CHANGELOG 0.11.0 names the new code-review-v1 cases. Estimated 2026-11-24 in the domain-packs plan (owner request); owner time only.",
+    "reviewed": "2026-11-25",
     "agentHours": 0,
-    "ownerHours": 0.25,
+    "ownerHours": 0,
     "ownerKind": "procedure"
   },
-  "ownerLink": "docs/guides/release.md"
+  "ownerLink": "docs/guides/release.md",
+  "prs": [
+    {
+      "pr": 105
+    }
+  ]
 }
