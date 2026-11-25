@@ -91,6 +91,12 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [embedded@1.0.0 / pwm-servo-rpigpio-regression](../examples/embedded-v1.json) | embedded | code-generation, python, raspberry-pi | coding / regression | true / false | registered:embedded-reference / python3 | Unmeasured |
 | [embedded@1.0.0 / button-toggle-gpiozero-holdout](../examples/embedded-v1.json) | embedded | code-generation, python, raspberry-pi | coding / holdout | true / false | registered:embedded-reference / python3 | Unmeasured |
 | [embedded@1.0.0 / edge-counter-rpigpio-holdout](../examples/embedded-v1.json) | embedded | code-generation, python, raspberry-pi | coding / holdout | true / false | registered:embedded-reference / python3 | Unmeasured |
+| [cad-3d@1.0.0 / slicer-wall-layers-regression](../examples/cad-3d-v1.json) | cad-3d | slicing-parameters, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [cad-3d@1.0.0 / slicer-flow-limit-holdout](../examples/cad-3d-v1.json) | cad-3d | slicing-parameters, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [cad-3d@1.0.0 / material-outdoor-bracket-regression](../examples/cad-3d-v1.json) | cad-3d | printing-materials, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [cad-3d@1.0.0 / material-damp-isolation-holdout](../examples/cad-3d-v1.json) | cad-3d | printing-materials, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [cad-3d@1.0.0 / tolerance-clearance-pin-regression](../examples/cad-3d-v1.json) | cad-3d | dimensional-tolerances, structured-output | model / regression | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
+| [cad-3d@1.0.0 / tolerance-shrinkage-compensation-holdout](../examples/cad-3d-v1.json) | cad-3d | dimensional-tolerances, structured-output | model / holdout | true / false | exact-json-v1 / local-model-runtime | Unmeasured |
 | [italian-quality@1.0.0 / summary-service-regression](../examples/italian-quality-v1.json) | language-translation | italian-quality, summarization | model / regression | true / false | rubric-v1 / local-model-runtime | Unmeasured |
 | [italian-quality@1.0.0 / summary-report-holdout](../examples/italian-quality-v1.json) | language-translation | italian-quality, summarization | model / holdout | true / false | rubric-v1 / local-model-runtime | Unmeasured |
 | [italian-quality@1.0.0 / rewrite-anglicisms-regression](../examples/italian-quality-v1.json) | language-translation | italian-quality, rewriting | model / regression | true / false | rubric-v1 / local-model-runtime | Unmeasured |
@@ -107,7 +113,7 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 - code-review: 0 mapped cases
 - math: 4 mapped cases
 - logic-planning: 4 mapped cases
-- cad-3d: 0 mapped cases
+- cad-3d: 6 mapped cases
 - backlog-management: 0 mapped cases
 - estimation: 0 mapped cases
 - ci-operations: 0 mapped cases

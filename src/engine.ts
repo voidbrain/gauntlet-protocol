@@ -12,6 +12,7 @@ export function engineIdentity(): string {
     'environments',
     'failures',
     'rubric',
+    'defects',
     'engine',
   ])
     digest.update(name).update(readFileSync(new URL('./' + name + '.' + extension, import.meta.url)));

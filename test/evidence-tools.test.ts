@@ -140,6 +140,7 @@ test('generated catalog maps cases and evidence without claiming unmeasured area
     coding = validatePack(JSON.parse(readFileSync('examples/coding-v1.json', 'utf8'))),
     logicMath = validatePack(JSON.parse(readFileSync('examples/logic-math-v1.json', 'utf8'))),
     embedded = validatePack(JSON.parse(readFileSync('examples/embedded-v1.json', 'utf8'))),
+    cad3d = validatePack(JSON.parse(readFileSync('examples/cad-3d-v1.json', 'utf8'))),
     italianQuality = validatePack(JSON.parse(readFileSync('examples/italian-quality-v1.json', 'utf8')));
   assert.equal(
     generated,
@@ -156,6 +157,7 @@ test('generated catalog maps cases and evidence without claiming unmeasured area
         coding,
         logicMath,
         embedded,
+        cad3d,
         italianQuality,
       ]),
       {
@@ -170,6 +172,7 @@ test('generated catalog maps cases and evidence without claiming unmeasured area
         coding: '../examples/coding-v1.json',
         'logic-math': '../examples/logic-math-v1.json',
         embedded: '../examples/embedded-v1.json',
+        'cad-3d': '../examples/cad-3d-v1.json',
         'italian-quality': '../examples/italian-quality-v1.json',
       },
     ),

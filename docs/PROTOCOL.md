@@ -10,7 +10,7 @@ The direct local provider supports Ollama's loopback API, exact installed quanti
 
 ## Inputs and execution
 
-Pack: `schemaVersion`, `id`, semantic `version`, `cases`. Each case has stable `id`, `layer`, `split` (regression or holdout), named `capabilities`, `critical`, `expensive`; either `runner`, or model `messages` plus independent `expected: {kind: "text"|"json"|"rubric", value}` ([rubric grading](#rubric-grading)). No shell commands in packs. Expectations are never sent to the direct model.
+Pack: `schemaVersion`, `id`, semantic `version`, `cases`. Each case has stable `id`, `layer`, `split` (regression or holdout), named `capabilities`, `critical`, `expensive`; either `runner`, or model `messages` plus independent `expected: {kind: "text"|"json"|"rubric"|"defects", value}` ([rubric grading](#rubric-grading), [defect-finding grading](#defect-finding-grading)). No shell commands in packs. Expectations are never sent to the direct model.
 
 Model profiles can declare `weightsBytes` and `minimumMemoryBytes` together, alongside their quantization and context. Machine environments declare total memory and an owner-reviewed accelerator class. Planning with both declarations reports host fit, makes every case ineligible on a memory misfit and leaves missing sizing explicitly unknown; execution enforces the same memory gate before contacting a provider.
 
@@ -119,4 +119,13 @@ The tasks, expected values and reference solutions are committed to a public rep
 - `register: "formal"` — no informal second-person forms (`tu`, `ti`, `tuo`, `puoi` and the like); `"informal"` — at least one.
 
 Matching is case-insensitive on Unicode-normalised text. A failed case's reason names the failed checks (`language`, `min-words`, `required:2`, `forbidden:<term>`, `register`) and never the reply. The word lists are fixed in `src/rubric.ts`, which is part of the engine identity. A rubric measures these observable properties only; it does not judge accuracy or style beyond them, so packs pair it with references reviewed by people.
+
+## Defect-finding grading
+
+`expected: {kind: "defects", value}` grades structured code-review findings deterministically against seeded defects (catalog grader `defects-v1`). The expectation value has:
+
+- `defects` — a non-empty array of seeded defects `{id?, file, lines: [start, end], category}` where `file` is a normalised relative path, `lines` is an inclusive 1-based range and `category` is a lower-case identifier;
+- `maxFalsePositives` — optional integer (default `0`), the maximum number of candidate findings that do not match any seeded defect.
+
+The candidate reply must be JSON of the form `{"findings": [{"file": "...", "line": N | "lines": [start, end], "category": "..."}, ...]}` (cases may set `responseFormat: "json"` or an object schema). A finding matches a seeded defect when their normalised relative `file` paths are equal, their lower-case `category` values are equal and their line intervals overlap (`max(findingStart, defectStart) <= min(findingEnd, defectEnd)`); a finding covers at most 10 lines, and a wider one matches no defect and counts as a false positive, so sweeping a whole file cannot find every defect in it. A case passes only when every seeded defect is matched by at least one finding and the count of findings that match no seeded defect is at most `maxFalsePositives`. A failed case's reason names only the missed defect IDs or 1-based indices and the false-positive bound (`malformed-findings`, `missed:<id>`, `false-positives:<count>><max>`) and never copies candidate finding text into the report. `src/defects.ts` is part of the engine identity.
 

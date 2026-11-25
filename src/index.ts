@@ -1,6 +1,7 @@
 import { FailureCapture, failureDestination, inspectFailures } from './failures.ts';
 import { validateExecutionEnvironment, admitEnvironment, type ExecutionEnvironment } from './environments.ts';
 import { engineIdentity } from './engine.ts';
+import { gradeDefects, validateDefects, type DefectExpectation } from './defects.ts';
 import { gradeRubric, validateRubric, type Rubric } from './rubric.ts';
 import { areas, type Area } from './catalog.ts';
 import {
@@ -58,7 +59,7 @@ export interface Case {
   }[];
   responseFormat?: 'json' | Record<string, unknown>;
   expected?: {
-    kind: 'text' | 'json' | 'rubric';
+    kind: 'text' | 'json' | 'rubric' | 'defects';
     value: unknown;
   };
 }
@@ -386,7 +387,8 @@ export function validatePack(input: unknown): Pack {
         };
         check(schema);
       }
-      if (record(c.expected).kind !== 'json') throw Error('Response format requires JSON grading');
+      if (!['json', 'defects'].includes(String(record(c.expected).kind)))
+        throw Error('Response format requires JSON grading');
     }
     seen.add(c.id);
     if (c.runner !== undefined) {
@@ -413,12 +415,13 @@ export function validatePack(input: unknown): Pack {
       const e = record(c.expected);
       fields(e, ['kind', 'value']);
       if (
-        !['text', 'json', 'rubric'].includes(String(e.kind)) ||
+        !['text', 'json', 'rubric', 'defects'].includes(String(e.kind)) ||
         !Object.hasOwn(e, 'value') ||
         (e.kind === 'text' && typeof e.value !== 'string')
       )
         throw Error('Invalid independent expectation');
       if (e.kind === 'rubric') validateRubric(e.value);
+      if (e.kind === 'defects') validateDefects(e.value);
     }
   }
   return v as unknown as Pack;
@@ -1200,7 +1203,7 @@ export async function run(
               throw Error('Output truncated');
             }
             let observed: unknown = message.content.trim();
-            if (c.expected!.kind === 'json') {
+            if (c.expected!.kind === 'json' || c.expected!.kind === 'defects') {
               try {
                 observed = JSON.parse(message.content) as unknown;
               } catch {
@@ -1223,6 +1226,10 @@ export async function run(
               const graded = gradeRubric(message.content, c.expected!.value as Rubric);
               r.status = graded.passed ? 'passed' : 'failed';
               r.reason = graded.passed ? null : 'Rubric checks failed: ' + graded.failures.join(', ');
+            } else if (c.expected!.kind === 'defects') {
+              const graded = gradeDefects(observed, c.expected!.value as DefectExpectation);
+              r.status = graded.passed ? 'passed' : 'failed';
+              r.reason = graded.passed ? null : 'Defect checks failed: ' + graded.failures.join(', ');
             } else {
               r.status = isDeepStrictEqual(observed, c.expected!.value) ? 'passed' : 'failed';
               r.reason = r.status === 'passed' ? null : 'Independent acceptance mismatch';
@@ -1693,6 +1700,8 @@ export function validateReport(input: unknown): Report {
   return v as unknown as Report;
 }
 export { catalog, catalogMarkdown, areas } from './catalog.ts';
+export { gradeDefects, validateDefects } from './defects.ts';
+export type { DefectExpectation, DefectGradeResult, SeededDefect } from './defects.ts';
 export { gradeRubric, validateRubric } from './rubric.ts';
 export type { Rubric } from './rubric.ts';
 export { inspectRuntime, verifyArtifacts, validateManifest } from './runtimes.ts';
