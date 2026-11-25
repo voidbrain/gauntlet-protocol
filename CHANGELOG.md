@@ -1,5 +1,18 @@
 # Releases
 
+## 0.11.1 — coding runner and executor errors
+
+Fixes found by a consumer's review of the 0.11.0 adoption (#107):
+
+- B-004: when no container engine or image is available, `examples/coding-v1/runner.mjs` now writes an `error` result that names the fix (`complete: false`, 0 checks) before any model call. It used to ask the model and then crash without a report. The runner accepts `--docker=PATH`.
+- B-005: the container executor now rejects when the engine client fails to start, instead of returning exit code `null`. The coding and OpenSCAD graders report an executor rejection as `error` (`executor-error`), never as a graded `failed` that counts as covering the case, and both reference runners report it as `error`. Exit codes never mark an executor fault, because the candidate controls its own.
+
+The engine hash is unchanged. Pack definitions and grading of candidate output are unchanged. No real-model run.
+
+Pack case changes since 0.11.0:
+
+- Every pack: added none; changed none; removed none.
+
 ## 0.11.0 — domain packs: italian-quality, cad-3d, code-review
 
 Three new independently versioned packs, each with regression and holdout cases and a deterministic grader proven by fixtures. Holdouts are public and therefore contamination-exposed (owner decision H1):
