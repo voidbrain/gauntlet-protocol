@@ -2,6 +2,8 @@
 
 The embedded pack compiles candidate Arduino and ESP32 sketches with arduino-cli and pinned cores; nothing runs on hardware. The evaluation machine (the Mac that runs `gauntlet run` and where the agent develops the pack) needs arduino-cli and both cores. Run every block below in Terminal on that machine.
 
+CI does not install arduino-cli or compile for real (owner decision 2026-11-25: the ESP32 core download is too large per run). CI runs the grader against a stand-in compiler; real compiles run only on this machine, in `test/embedded-grader.test.ts`, which skips where the toolchain is missing.
+
 ## 1. Install arduino-cli
 
 ```bash
