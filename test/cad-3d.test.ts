@@ -61,10 +61,12 @@ test('OpenSCAD grader passes reference models, rejects wrong dimensions, solid b
       execute: fakeExecutor,
     });
     assert.deepEqual([id, right.status, right.reason, right.passed], [id, 'passed', 'all-passed', 4]);
+    const measured = right.measured;
+    assert.ok(measured, `${id}: measured`);
     for (const key of ['sizeX', 'sizeY', 'sizeZ', 'volume'] as const) {
       assert.ok(
-        Math.abs(right.measured[key] - spec.expected[key].target) <= spec.expected[key].tolerance + 1e-9,
-        `${id}.${key}: ${right.measured[key]}`,
+        Math.abs(measured[key] - spec.expected[key].target) <= spec.expected[key].tolerance + 1e-9,
+        `${id}.${key}: ${measured[key]}`,
       );
     }
 

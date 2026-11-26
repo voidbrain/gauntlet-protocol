@@ -1,6 +1,15 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { catalog, defaults, gradeRubric, run, validatePack, type Pack, type Profile } from '../src/index.ts';
+import {
+  catalog,
+  defaults,
+  gradeRubric,
+  run,
+  validatePack,
+  type Pack,
+  type Profile,
+  type Rubric,
+} from '../src/index.ts';
 
 const profile: Profile = {
   schemaVersion: 1,
@@ -42,14 +51,14 @@ const provider = (answers: string[]) => {
   }) as typeof fetch;
 };
 
-const rubric = {
+const rubric: Rubric = {
   language: 'it',
   minWords: 12,
   maxWords: 40,
   required: [['biblioteca'], ['sabato', 'sabati']],
   forbidden: ['library'],
   register: 'formal',
-} as const;
+};
 const good =
   'Gentile cliente, la informiamo che la biblioteca resterà chiusa sabato per lavori di manutenzione. Ci scusiamo per il disagio.';
 

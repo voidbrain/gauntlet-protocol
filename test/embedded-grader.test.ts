@@ -56,7 +56,7 @@ test('embedded grader passes the reference sketches and fails the wrong ones, de
     cli: fake,
   });
   assert.deepEqual([broken.reason, broken.compile, broken.failedChecks], ['compile-error', 'failed', ['compile']]);
-  assert.match(broken.diagnostics, /lastChange/);
+  assert.match(String(broken.diagnostics), /lastChange/);
 });
 
 test('embedded grader ignores comments and strings and refuses host includes without compiling', async () => {
@@ -102,8 +102,8 @@ test('embedded grader reports a missing toolchain or unpinned core as an error, 
     cli: '/nonexistent/arduino-cli',
   });
   assert.deepEqual([missing.status, missing.reason], ['error', 'toolchain-missing']);
-  assert.match(missing.message, /GAUNTLET_ARDUINO_CLI/);
-  assert.match(missing.message, /docs\/guides\/arduino-cli\.md/);
+  assert.match(String(missing.message), /GAUNTLET_ARDUINO_CLI/);
+  assert.match(String(missing.message), /docs\/guides\/arduino-cli\.md/);
   const absent = await gradeSketch({
     taskDir: task('blink-millis-esp32-regression'),
     candidate: reference,
@@ -111,7 +111,7 @@ test('embedded grader reports a missing toolchain or unpinned core as an error, 
     env: { FAKE_ARDUINO_CORES: '{"arduino:avr":"1.8.6"}' },
   });
   assert.deepEqual([absent.status, absent.reason], ['error', 'core-missing']);
-  assert.match(absent.message, /esp32:esp32@3\.0\.7/);
+  assert.match(String(absent.message), /esp32:esp32@3\.0\.7/);
   const drifted = await gradeSketch({
     taskDir: task('debounce-toggle-uno-regression'),
     candidate: fixture('debounce-toggle-uno-regression/reference.ino'),
@@ -119,7 +119,7 @@ test('embedded grader reports a missing toolchain or unpinned core as an error, 
     env: { FAKE_ARDUINO_CORES: '{"arduino:avr":"1.8.8","esp32:esp32":"3.0.7"}' },
   });
   assert.deepEqual([drifted.status, drifted.reason], ['error', 'core-version-mismatch']);
-  assert.match(drifted.message, /arduino:avr 1\.8\.8.*1\.8\.6/);
+  assert.match(String(drifted.message), /arduino:avr 1\.8\.8.*1\.8\.6/);
 });
 
 test('arduino-cli resolves from GAUNTLET_ARDUINO_CLI, then the default locations, then PATH', () => {

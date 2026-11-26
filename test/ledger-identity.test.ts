@@ -121,10 +121,7 @@ test('B-002: a recorded entry carries the model digest, runtime, scenario and so
     allowModels: true,
     fetch: fetcher,
   })) as Report;
-  const ledger = recordRun(emptyLedger(), report, smoke, { sourceKey: 'git-0123abcd' }) as {
-    schemaVersion: number;
-    entries: Record<string, unknown>[];
-  };
+  const ledger = recordRun(emptyLedger(), report, smoke, { sourceKey: 'git-0123abcd' });
   assert.equal(ledger.schemaVersion, 2);
   const e = ledger.entries[0];
   assert.equal(e.modelDigest, report.modelDigest);
@@ -206,7 +203,7 @@ test('B-002: schema 1 ledgers stay readable as unknown identity and upgrade on w
   // Recording into a schema 1 ledger writes schema 2 and keeps the old entries as unknown identity.
   const other = pack('other', modelCase('o'));
   const report = (await run(other, profile, defaults, { execute: true, allowModels: true, fetch: fetcher })) as Report;
-  const upgraded = recordRun(v1, report, other) as { schemaVersion: number; entries: Record<string, unknown>[] };
+  const upgraded = recordRun(v1, report, other);
   assert.equal(upgraded.schemaVersion, 2);
   assert.equal(upgraded.entries.length, 2);
   const old = upgraded.entries.find((e) => e.pack === 'models')!;
