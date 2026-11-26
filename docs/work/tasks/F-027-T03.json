@@ -2,12 +2,12 @@
   "version": 1,
   "id": "F-027-T03",
   "parent": "F-027",
-  "title": "Turn coverage.enforce on",
-  "goal": "coverage.enforce true once the baseline is on main",
+  "title": "Turn coverage.enforce on with a baseline CI can reproduce",
+  "goal": "coverage.enforce true against a baseline measured in CI's environment",
   "status": "planned",
   "acceptance": [
-    "`coverage.enforce` is true",
-    "CI's coverage table passes against the baseline on `main`"
+    "The committed baseline matches what CI measures (written from a CI run, or the local-only tests named and excluded)",
+    "`coverage.enforce` is true and CI's coverage table passes"
   ],
   "dependsOn": [
     "F-027-T01"
@@ -28,13 +28,13 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h agent",
-    "basis": "One setting in a follow-up PR after the baseline lands. Estimate, not a measurement.",
+    "estimate": "1 h agent",
+    "basis": "Re-estimated 2026-11-26 after #120 failed: CI measures functions 86.2 % where a local run measures 89.7 % on the same code (CI skips a test local runs execute), so a locally written baseline fails CI by more than 2 points. Estimate, not a measurement.",
     "reviewed": "2026-11-26",
-    "agentHours": 0.25,
+    "agentHours": 1,
     "ownerHours": 0,
     "baselineAgentHours": 0.25,
-    "estimateAgentHours": 0.25,
+    "estimateAgentHours": 1,
     "days": 0,
     "baselineDays": 0
   }
