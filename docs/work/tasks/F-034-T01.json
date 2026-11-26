@@ -6,7 +6,7 @@
   "goal": "A project can write its pack from the guide",
   "status": "planned",
   "acceptance": [
-    "Owner decision 2026-11-26 in chat: \"ok to all\" (accepts proposals 1 to 3 of the shared-asset review, solution:F-016-T09); same message: \"nerv and all modules will need to work with Italian\".",
+    "Owner decision 2026-11-26 in chat: \"ok to all\" (accepts proposals 1 to 3 of the shared-asset review, coordinator:F-016-T09); same message: \"nerv and all modules will need to work with Italian\".",
     "The guide covers pinning, file layout and splits, invented data, `gauntlet validate` in CI (and `--tools` when F-033 lands), recording skips, tagging so a consumer can run the pack",
     "A section \"Languages\": project packs include Italian phrasings alongside English (owner 2026-11-26), each capability has both, expected tool calls are language-independent, and when a grader would fail free text the pack uses json-match (F-032)",
     "The guide is linked from the README"
@@ -32,7 +32,7 @@
   "effort": {
     "size": "small",
     "estimate": "0.75 h agent",
-    "basis": "One guide of about 100 lines. Estimated 2026-11-26 at agent speed from the solution:F-016 shared-asset review. Not a measurement.",
+    "basis": "One guide of about 100 lines. Estimated 2026-11-26 at agent speed from the coordinator:F-016 shared-asset review. Not a measurement.",
     "reviewed": "2026-11-26",
     "agentHours": 0.75,
     "baselineAgentHours": 0.75,

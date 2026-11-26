@@ -6,7 +6,7 @@
   "goal": "Consumers can pin json-match",
   "status": "planned",
   "acceptance": [
-    "Owner decision 2026-11-26 in chat: \"ok to all\" (accepts proposals 1 to 3 of the shared-asset review, solution:F-016-T09); same message: \"nerv and all modules will need to work with Italian\".",
+    "Owner decision 2026-11-26 in chat: \"ok to all\" (accepts proposals 1 to 3 of the shared-asset review, coordinator:F-016-T09); same message: \"nerv and all modules will need to work with Italian\".",
     "The owner tags the release (docs/guides/release.md); the agent prepares the release PR first"
   ],
   "dependsOn": [
@@ -29,7 +29,7 @@
   "effort": {
     "size": "small",
     "estimate": "0.25 h owner",
-    "basis": "A tag, per the release guide. Estimated 2026-11-26 at agent speed from the solution:F-016 shared-asset review. Not a measurement.",
+    "basis": "A tag, per the release guide. Estimated 2026-11-26 at agent speed from the coordinator:F-016 shared-asset review. Not a measurement.",
     "reviewed": "2026-11-26",
     "agentHours": 0,
     "baselineAgentHours": 0,
