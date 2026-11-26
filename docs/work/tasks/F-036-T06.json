@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "F-036-T06",
+  "parent": "F-036",
+  "title": "Night runner: execute an approved plan sequentially with the end-time guard (failing test first)",
+  "goal": "Runs the plan unattended and safely",
+  "status": "planned",
+  "acceptance": [
+    "Owner request 2026-11-26 in the consumer session (𖣂 nerv): \"maybe useful to suggest, planning for nights run\"; nerv runs campaigns through tools/gauntlet.mjs and is the first consumer.",
+    "A committed failing test first, then a runner that takes only an approved plan file, runs stages one at a time, checks before each that the stage's estimate still ends before the window end and skips with a reason otherwise, unloads the model (Ollama) or frees the generator (ComfyUI) after each stage, and stops cleanly on a failed stage while recording it",
+    "Writes one report per stage and never writes the ledger; the owner merges reports after review with gauntlet ledger",
+    "Tested with a fake clock and a fake runtime adapter: guard skip, failure stop, unload called between stages, no ledger change"
+  ],
+  "dependsOn": [
+    "F-036-T05"
+  ],
+  "resources": [
+    "bin/**",
+    "src/**",
+    "test/**",
+    "docs/work/records/F-036.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; reports and plans hold no personal text.",
+  "validation": [
+    "npm test",
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1.5 h agent",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  },
+  "prs": []
+}

@@ -4,7 +4,7 @@ Current work ledger, reviewed 26 November 2026 against main `67ef7e6`. PR #127 r
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 29 h agent + 1.5 h owner across 37 open steps of 15 features and 2 other records. Generated from the task files.
+**Remaining effort:** 37 h agent + 2 h owner across 46 open steps of 16 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -635,6 +635,52 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | Plan: pending; nerv:F-142; [#128](https://github.com/voidbrain/gauntlet-protocol/pull/128) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-036"></a>[✨ F-036](#top)
+
+**Night-run planner and runner**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🔴 Large | 8 h agent + 0.5 h owner | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-036-T01 — Design: night-plan format, inputs and the 07:00 guard (Planned).
+
+| | |
+|---|---|
+| **Issue** | Overnight runs on the owner's Mac (M3 Pro, 36 GB; Ollama gemma4:26b, gemma4:12b, qwen3-coder:30b, devstral-small-2:24b, qwen2.5-coder:14b; ComfyUI image runs) are queued by hand-written shell scripts: a campaign, then a planner pack, then an image campaign, then extra packs, each waiting for the previous one and skipping if it would not end before 07:00. Found on the first such night: profiles missing from the checkout, no duration estimates, hand-chained waits. Gauntlet has the ledger (what is stale or never run) and per-case `durationMs`, but nothing turns them into a queue. Owner request 2026-11-26 in the consumer session: "maybe useful to suggest, planning for nights run". Consumer: 𖣂 nerv runs its campaigns through `tools/gauntlet.mjs` and would call these commands from its own scheduler; coordinator:F-020 (process freeze) is a reference only, and this is a feature record with no new rule, procedure or check. |
+| **Reproduce** | `gauntlet --help` has no command that proposes a run order for a time window; a night is queued with ad hoc shell. |
+| **Check** | `gauntlet night-plan` proposes, from the ledger, saved timing history and `limits-night.json`, an ordered sequential queue that ends before the window end (default 01:00-07:00) with owner priorities (for example Italian coverage) applied, names a missing profile, pack or limits file before showing it, and runs nothing; a runner executes only an approved plan, one stage at a time, with an end-time guard and model unloading between stages, writes one report per stage and never touches the ledger; a morning summary lists what ran, what was skipped and the exact `gauntlet ledger` commands to merge reviewed reports; a test across planner, runner and summary on fake runtimes and a fake clock passes; the owner has approved and reviewed one real night. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
+|---|---|---|---|---|---|---|---|:---:|
+| 🟢 Small | <a id="f-036-t01"></a>F-036-T01 — Design: night-plan format, inputs and the 07:00 guard | 0.75 h | 0 h | 0.75 h | Planned | — | [F-036-T02](#f-036-t02), [F-036-T03](#f-036-t03) | 🤖 |
+| 🟢 Small | <a id="f-036-t02"></a>F-036-T02 — Duration history: per pack and model estimates from saved reports (failing test first) | 1 h | 0 h | 1 h | Planned | [F-036-T01](#f-036-t01) | [F-036-T04](#f-036-t04) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-036-t03"></a>F-036-T03 — Candidates: stale and never-run pack x model pairs with owner priorities (failing test first) | 1 h | 0 h | 1 h | Planned | [F-036-T01](#f-036-t01) | [F-036-T04](#f-036-t04) | ⏳ 🤖 |
+| 🟡 Medium | <a id="f-036-t04"></a>F-036-T04 — Planner: fit an ordered queue to a time window (failing test first) | 1.25 h | 0 h | 1.25 h | Planned | [F-036-T02](#f-036-t02), [F-036-T03](#f-036-t03) | [F-036-T05](#f-036-t05) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-036-t05"></a>F-036-T05 — night-plan command: print the proposed queue for the owner to approve | 0.75 h | 0 h | 0.75 h | Planned | [F-036-T04](#f-036-t04) | [F-036-T06](#f-036-t06) | ⏳ 🤖 |
+| 🟡 Medium | <a id="f-036-t06"></a>F-036-T06 — Night runner: execute an approved plan sequentially with the end-time guard (failing test first) | 1.5 h | 0 h | 1.5 h | Planned | [F-036-T05](#f-036-t05) | [F-036-T07](#f-036-t07) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-036-t07"></a>F-036-T07 — Morning summary: what ran, what was skipped, what to review | 0.75 h | 0 h | 0.75 h | Planned | [F-036-T06](#f-036-t06) | [F-036-T08](#f-036-t08) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-036-t08"></a>F-036-T08 — Join test and guide: plan, run and summarise on fake runtimes | 1 h | 0 h | 1 h | Planned | [F-036-T07](#f-036-t07) | [F-036-T09](#f-036-t09) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-036-t09"></a>F-036-T09 — Owner approves a first real night plan and reviews the morning report | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | [F-036-T08](#f-036-t08) | — | ⏳ 🧑‍🔧 |
+| 🔴 Large | **Total** | 8 h | 0 h (0 of 9 steps recorded) | 8 h agent + 0.5 h owner | 0 of 9 completed | | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-036.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Plan: [#131](https://github.com/voidbrain/gauntlet-protocol/pull/131); consumer nerv |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
