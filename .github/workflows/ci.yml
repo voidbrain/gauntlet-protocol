@@ -24,6 +24,13 @@ jobs:
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npm run format:check && npm run lint && npm run check:tooling
       - run: npm run typecheck && npm run build && npm run test:coverage && npm run check:index
+      - name: Upload coverage summary (baseline source, F-027-T03)
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: coverage-summary
+          path: coverage/coverage-summary.json
+          if-no-files-found: ignore
       - name: Code coverage table (F-027)
         run: node tools/coverage-table.mjs --check --github
       - name: Harness and record checks
