@@ -27,6 +27,8 @@ The `italian-quality` pack holds six Italian-only free-text cases under `languag
 
 The `code-review` pack holds six invented diff cases with seeded security, logic, concurrency and resource defects under `code-review` in regression and holdout splits, graded deterministically by `defects-v1` ([defect-finding grading](docs/PROTOCOL.md#defect-finding-grading)). Its holdout cases are public (H1), so they are exposed examples, not unseen holdouts.
 
+The `image-generation` pack (unreleased) holds six expensive text-to-image cases under `audio-video`: a local ComfyUI generates each image with a pinned workflow (`examples/image-generation-v1/runner.mjs`), then structural checks and a pinned local vision judge (`gemma4:12b` by digest, temperature 0) answering a fixed yes/no checklist grade it ([image generation](docs/PROTOCOL.md#image-generation-runner-and-grader)). Generated images stay outside the repository; the committed fixture images are drawn by code. Its holdout cases are public (H1).
+
 The [run ledger](docs/LEDGER.md) lets a consumer list the cases of the packs it consumes that it has not run in their current definition, or under the model, runtime, machine scenario or consumer source it now intends (`pending`), without storing evidence.
 Use `run --pending --ledger=results/ledger.json` to execute only those cases while retaining the complete pack identity in the report; ledger-current cases are explicitly reported as `not-run / skipped-current`.
 Runs atomically checkpoint each finished case to their private output. Resume an interrupted campaign with `run --resume=results/interrupted.json` and a new `--out`; the pack, source and execution identity must still match.
