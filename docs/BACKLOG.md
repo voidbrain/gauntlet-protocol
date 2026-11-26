@@ -4,7 +4,7 @@ Current work ledger, reviewed 26 November 2026 against main `f209281`. PRs #112,
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 13 h agent + 1 h owner across 20 open steps of 7 features and 2 other records. Generated from the task files.
+**Remaining effort:** 12.75 h agent + 1 h owner across 20 open steps of 7 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -256,7 +256,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔹 P3 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
 
 💻 **→** Next: F-027-T01 — Measure coverage of src/ with a committed baseline (Implemented; verification pending).
 
@@ -272,8 +272,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|---|---|---|---|---|---|---|
 | 🟢 Small | <a id="f-027-t01"></a>F-027-T01 — Measure coverage of src/ with a committed baseline | 0.5 h | 0 h | 0 h | Implemented; verification pending | — | [F-027-T03](#f-027-t03) | PR #118 |
 | 🟢 Small | <a id="f-027-t02"></a>F-027-T02 — Set behaviour.runner | 0.25 h | 0 h | 0 h | Implemented; verification pending | — | — | PR #118 |
-| 🟢 Small | <a id="f-027-t03"></a>F-027-T03 — Turn coverage.enforce on | 0.25 h | 0 h | 0.25 h | Planned | [F-027-T01](#f-027-t01) | — | — |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 3 steps recorded) | 0.25 h | 0 of 3 completed | | | |
+| 🟢 Small | <a id="f-027-t03"></a>F-027-T03 — Turn coverage.enforce on | 0.25 h | 0 h | 0 h | Implemented; verification pending | [F-027-T01](#f-027-t01) | — | — |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 3 steps recorded) | 0 h | 0 of 3 completed | | | |
 
 <details>
 <summary>Next action, estimates and PR history</summary>
