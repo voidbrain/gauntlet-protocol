@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-021-T01",
   "parent": "F-021",
-  "status": "planned",
+  "status": "implemented",
   "title": "Draft the image-generation design decision",
   "goal": "Draft the image-generation design decision",
   "acceptance": [

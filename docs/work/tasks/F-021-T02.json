@@ -19,6 +19,7 @@
     "owner-decision"
   ],
   "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "ownerLink": "docs/decisions/image-generation.md#to-answer",
   "validation": [
     "Owner answer recorded in the record"
   ],
