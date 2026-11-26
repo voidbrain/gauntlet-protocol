@@ -48,6 +48,10 @@
     {
       "pr": 115,
       "note": "re-estimate"
+    },
+    {
+      "pr": 119,
+      "note": "runner; int8 runs on MPS"
     }
   ]
 }

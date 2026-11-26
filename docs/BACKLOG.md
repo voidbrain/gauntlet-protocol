@@ -273,7 +273,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|---|---|---|---|---|---|:---:|---|
 | 🟢 Small | <a id="f-021-t01"></a>F-021-T01 — Draft the image-generation design decision | 1 h | 0 h | 1 h | Implemented; verification pending | — | — | 🤖 | PR #113 |
 | 🟢 Small | <a id="f-021-t06"></a>F-021-T06 — Host check: Ollama image generation, then record runtime A or B | 0.5 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-021-T03](#f-021-t03) | 🤖 | PR #114 planned; PR #115 host check |
-| 🟡 Medium | <a id="f-021-t03"></a>F-021-T03 — Image-generation runner | 4 h | 0 h | 4 h | Implemented; verification pending | [F-021-T06](#f-021-t06) | [F-021-T04](#f-021-t04) | 🤖 | PR #115 re-estimate |
+| 🟡 Medium | <a id="f-021-t03"></a>F-021-T03 — Image-generation runner | 4 h | 0 h | 4 h | Implemented; verification pending | [F-021-T06](#f-021-t06) | [F-021-T04](#f-021-t04) | 🤖 | PR #115 re-estimate; PR #119 runner; int8 runs on MPS |
 | 🟡 Medium | <a id="f-021-t04"></a>F-021-T04 — Image grader and pack | 2 h | 0 h | 2 h | Planned | [F-021-T03](#f-021-t03) | [F-021-T08](#f-021-t08) | ⏳ 🤖 | — |
 | 🟢 Small | <a id="f-021-t08"></a>F-021-T08 — First real run: prove the judge, measure generator variance | 1 h | 0 h | 1 h | Planned | [F-021-T04](#f-021-t04) | [F-021-T05](#f-021-t05) | ⏳ 🤖 | PR #114 planned |
 | 🟢 Small | <a id="f-021-t05"></a>F-021-T05 — Release image-generation-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T08](#f-021-t08) | — | ⏳ 🧑‍🔧 | — |
@@ -295,7 +295,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-021-T01: PR #113 · F-021-T02: PR #114 decision · F-021-T03: PR #115 re-estimate · F-021-T06: PR #114 planned; PR #115 host check · F-021-T07: PR #114 planned; PR #115 pull commands; PR #117 models pulled; Comfy Desktop · F-021-T08: PR #114 planned. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#113](https://github.com/voidbrain/gauntlet-protocol/pull/113); owner decision 2026-11-26, F-021-T02 ("Do you accept these as recommended? ok"); owner approval 2026-11-26 of the widened F-021-T06 check ("Qwen Image 2.1 and Ollama check ok"); [#115](https://github.com/voidbrain/gauntlet-protocol/pull/115); [#117](https://github.com/voidbrain/gauntlet-protocol/pull/117); [#119](https://github.com/voidbrain/gauntlet-protocol/pull/119) |
+| PR / evidence | Steps: F-021-T01: PR #113 · F-021-T02: PR #114 decision · F-021-T03: PR #115 re-estimate; PR #119 runner; int8 runs on MPS · F-021-T06: PR #114 planned; PR #115 host check · F-021-T07: PR #114 planned; PR #115 pull commands; PR #117 models pulled; Comfy Desktop · F-021-T08: PR #114 planned. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#113](https://github.com/voidbrain/gauntlet-protocol/pull/113); owner decision 2026-11-26, F-021-T02 ("Do you accept these as recommended? ok"); owner approval 2026-11-26 of the widened F-021-T06 check ("Qwen Image 2.1 and Ollama check ok"); [#115](https://github.com/voidbrain/gauntlet-protocol/pull/115); [#117](https://github.com/voidbrain/gauntlet-protocol/pull/117); [#119](https://github.com/voidbrain/gauntlet-protocol/pull/119) |
 | Opened | 2026-11-24 |
 | Verification | Pending. |
 | Reviewed | 2026-11-26 |
