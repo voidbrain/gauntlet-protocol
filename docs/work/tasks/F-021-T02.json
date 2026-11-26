@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-021-T02",
   "parent": "F-021",
-  "status": "planned",
+  "status": "closed",
   "title": "Decide the image-generation design",
   "goal": "Decide the image-generation design",
   "acceptance": [
@@ -29,11 +29,11 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h owner",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request); owner time only.",
-    "reviewed": "2026-11-24",
+    "estimate": "0 remaining",
+    "basis": "Owner accepted the recommendations on 2026-11-26 (\"Do you accept these as recommended? ok\"): runtime A (Ollama image generation) if a host check confirms it, else B (ComfyUI on loopback); grader S+V. No actual: owner time not measured.",
+    "reviewed": "2026-11-26",
     "agentHours": 0,
-    "ownerHours": 0.5,
+    "ownerHours": 0,
     "ownerKind": "decision"
   }
 }

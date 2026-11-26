@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "F-025-T01",
+  "parent": "F-025",
+  "status": "planned",
+  "title": "research-v1 pack over supplied sources with cited ids",
+  "goal": "research-v1 pack over supplied sources with cited ids",
+  "acceptance": [
+    "examples/research-v1.json: three to five short invented documents with ids in each prompt; the JSON answer carries the value and the source ids it relies on, both graded exactly; includes a two-source question, a newest-date-wins conflict and an unanswerable question expecting {\"answer\": null, \"sources\": []}",
+    "Area research; regression and holdout splits; live web research is out (recorded in the roadmap) and domain corpora stay with consumers",
+    "Passing and wrong fixtures prove exact grading, including a right answer with a wrong source id; index entry regenerated; public holdouts documented as exposed"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "examples/**",
+    "docs/**",
+    "package.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Failing pack test first; fixture for each acceptance item; npm test; npm run check:index; CI"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1.25 h agent",
+    "basis": "Planned 2026-11-26 after the owner accepted the proposal on its decision page, at observed agent speed for one-PR pack steps. Not a measurement. Larger than the other two packs for the source-id grading and the conflict cases.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.25,
+    "baselineAgentHours": 1.25,
+    "estimateAgentHours": 1.25
+  }
+}

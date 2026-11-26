@@ -6,11 +6,12 @@
   "title": "Image-generation runner",
   "goal": "Image-generation runner",
   "acceptance": [
-    "Registered runner drives the chosen local generator with fixed seed and size, inside the limits the decision names",
-    "Contract tests with a fixture generator; no real model in CI"
+    "Registered runner drives the runtime recorded in F-021-T06 (A: Ollama image generation, else B: ComfyUI with one committed pinned workflow) on loopback with no redirect, proxy or credentials, fixed seed and size, loading the generator and unloading it before the judge",
+    "The runner records model digest, seed, size, steps and image SHA-256 per result",
+    "Contract tests with a fixture generator, written failing first; no real model and no download in CI; real runs only on an explicit request, marked costly"
   ],
   "dependsOn": [
-    "F-021-T02",
+    "F-021-T06",
     "F-015-T03"
   ],
   "resources": [
@@ -37,7 +38,7 @@
   "effort": {
     "size": "medium",
     "estimate": "3 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement. Re-planned 2026-11-26 to the owner's decision; 3 h holds for runtime A, add 1 to 2 h for B.",
     "reviewed": "2026-11-24",
     "agentHours": 3,
     "baselineAgentHours": 3,

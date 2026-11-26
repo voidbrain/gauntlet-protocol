@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "F-021-T08",
+  "parent": "F-021",
+  "status": "planned",
+  "title": "First real run: prove the judge, measure generator variance",
+  "goal": "First real run: prove the judge, measure generator variance",
+  "acceptance": [
+    "On the owner's request after F-021-T07: the pinned vision judge answers the committed pass and fail fixture images as expected (verdicts recorded with the judge digest), and the generator runs each case three times with its digest, seed, size, steps and image SHA-256 recorded",
+    "Results and cost recorded in the record; no generated image committed except small invented fixtures; a judge that misses a fixture blocks the release"
+  ],
+  "dependsOn": [
+    "F-021-T04",
+    "F-021-T07"
+  ],
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "examples/**",
+    "docs/**",
+    "package.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Recorded run output; npm run check:backlog; CI"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h agent",
+    "basis": "Planned 2026-11-26; six to eight cases times three repeats plus model loads is a few minutes of run time, the rest is recording. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}

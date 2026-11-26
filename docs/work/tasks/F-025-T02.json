@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "F-025-T02",
+  "parent": "F-025",
+  "status": "planned",
+  "title": "Release research-v1",
+  "goal": "Release research-v1",
+  "acceptance": [
+    "Owner tags the release that ships research-v1 after green CI on main (one tag may ship several packs)",
+    "CHANGELOG names the new cases; consumers adopt through their pin"
+  ],
+  "dependsOn": [
+    "F-025-T01"
+  ],
+  "resources": [
+    "docs/**",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "owner-release"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Tag pushed by the owner; consumers see the new cases as pending"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "ownerLink": "docs/guides/release.md",
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h owner",
+    "basis": "Planned 2026-11-26 after the owner accepted the proposal on its decision page, at observed agent speed for one-PR pack steps. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0,
+    "ownerHours": 0.25,
+    "ownerKind": "procedure"
+  }
+}

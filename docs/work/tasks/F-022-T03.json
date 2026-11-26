@@ -2,11 +2,11 @@
   "version": 1,
   "id": "F-022-T03",
   "parent": "F-022",
-  "status": "planned",
+  "status": "implemented",
   "title": "Record the outcome",
   "goal": "Record the outcome",
   "acceptance": [
-    "Each chosen pack gets its own planned record; each skip is recorded with its reason in the roadmap"
+    "Each chosen pack gets its own planned record (F-023, F-024, F-025); the backlog-management skip and the live-web-research skip are recorded with their reasons in the roadmap"
   ],
   "dependsOn": [
     "F-022-T02"
@@ -33,10 +33,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "0.5 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
-    "reviewed": "2026-11-24",
-    "agentHours": 0.5,
+    "estimate": "0 remaining",
+    "basis": "Done 2026-11-26 in the PR that records the owner decision: three planned records and the roadmap skips. Estimated 0.5 h at observed agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
   }

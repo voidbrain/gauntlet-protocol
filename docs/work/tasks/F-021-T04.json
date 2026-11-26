@@ -6,8 +6,9 @@
   "title": "Image grader and pack",
   "goal": "Image grader and pack",
   "acceptance": [
-    "Grader as decided, deterministic for a fixed model and seed; fixtures that pass and fail",
-    "examples/image-generation-v1.json, area audio-video, regression and holdout splits; index entry"
+    "Grader S+V: structural checks first (decode, size, format, not blank, simple pixel facts), then a checklist of fixed yes/no or count questions answered as JSON at temperature 0 by a pinned local vision model; the verdict is a pure function of the image and the pinned judge",
+    "Proven by committed pass and fail fixture images (a few kilobytes each, invented), with a fixture judge standing in for the model in CI, written failing first",
+    "examples/image-generation-v1.json, area audio-video, six to eight cases split regression and holdout, with checklist questions a correct image answers unambiguously; index entry regenerated"
   ],
   "dependsOn": [
     "F-021-T03"
@@ -36,7 +37,7 @@
   "effort": {
     "size": "medium",
     "estimate": "2 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement. Re-planned 2026-11-26 to the owner's decision.",
     "reviewed": "2026-11-24",
     "agentHours": 2,
     "baselineAgentHours": 2,
