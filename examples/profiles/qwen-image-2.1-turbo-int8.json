@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "qwen-image-2.1-turbo-int8",
+  "model": "qwen-image-2.1-turbo-int8-convrot",
+  "quantization": "int8-convrot",
+  "endpoint": "http://127.0.0.1:8188",
+  "context": 1024,
+  "maxOutputTokens": 1,
+  "temperature": null,
+  "topP": null,
+  "topK": null,
+  "seed": null,
+  "think": null,
+  "parallel": 1,
+  "hardware": "apple-m3-pro-36g-shared-ram",
+  "cache": "comfyui-unloaded-after-batch"
+}
