@@ -680,7 +680,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Plan: pending; consumer nerv |
+| PR / evidence | Plan: [#131](https://github.com/voidbrain/gauntlet-protocol/pull/131); consumer nerv |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
