@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-021-T01",
   "parent": "F-021",
-  "status": "planned",
+  "status": "implemented",
   "title": "Draft the image-generation design decision",
   "goal": "Draft the image-generation design decision",
   "acceptance": [
@@ -38,5 +38,10 @@
     "agentHours": 1,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
-  }
+  },
+  "prs": [
+    {
+      "pr": 113
+    }
+  ]
 }
