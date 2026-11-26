@@ -6,7 +6,7 @@
   "goal": "A stale tool name or argument in a case fails validation",
   "status": "planned",
   "acceptance": [
-    "Owner decision 2026-11-26 in chat: \"ok to all\" (accepts proposals 1 to 3 of the shared-asset review, solution:F-016-T09); same message: \"nerv and all modules will need to work with Italian\".",
+    "Owner decision 2026-11-26 in chat: \"ok to all\" (accepts proposals 1 to 3 of the shared-asset review, coordinator:F-016-T09); same message: \"nerv and all modules will need to work with Italian\".",
     "`--tools <file>` takes a tools/list snapshot; fails with the case id and the missing tool or argument; fixtures for a renamed tool and a removed argument (failing tests first)",
     "Documented (README or PROTOCOL) with the command for a consumer's CI"
   ],
@@ -34,7 +34,7 @@
   "effort": {
     "size": "medium",
     "estimate": "1.5 h agent",
-    "basis": "A flag, a schema lookup and two fixtures. Estimated 2026-11-26 at agent speed from the solution:F-016 shared-asset review. Not a measurement.",
+    "basis": "A flag, a schema lookup and two fixtures. Estimated 2026-11-26 at agent speed from the coordinator:F-016 shared-asset review. Not a measurement.",
     "reviewed": "2026-11-26",
     "agentHours": 1.5,
     "baselineAgentHours": 1.5,

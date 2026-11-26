@@ -23,7 +23,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | | |
 |---|---|
-| **Issue** | `exact-json-v1` is a deep, order-sensitive equality (`src/index.ts:1234`, `isDeepStrictEqual`), so a correct answer whose free text or free numbers differ fails: openbando's command batches (free `reply` and positions), fpvbuddy's several batteries in one phrase, nerv's planner actions with free-text arguments such as a reminder title, and research-v1's cited source ids (a set) cannot be graded fairly. The consumers' cases are in Italian and English, so the free text is often Italian. Owner decision 2026-11-26 in chat: "ok to all" (accepts proposals 1 to 3 of the shared-asset review, solution:F-016-T09); same message: "nerv and all modules will need to work with Italian". |
+| **Issue** | `exact-json-v1` is a deep, order-sensitive equality (`src/index.ts:1234`, `isDeepStrictEqual`), so a correct answer whose free text or free numbers differ fails: openbando's command batches (free `reply` and positions), fpvbuddy's several batteries in one phrase, nerv's planner actions with free-text arguments such as a reminder title, and research-v1's cited source ids (a set) cannot be graded fairly. The consumers' cases are in Italian and English, so the free text is often Italian. Owner decision 2026-11-26 in chat: "ok to all" (accepts proposals 1 to 3 of the shared-asset review, coordinator:F-016-T09); same message: "nerv and all modules will need to work with Italian". |
 | **Reproduce** | A fixture whose answer differs from the expected only in `reply` text, or in array order, fails `exact-json-v1`. |
 | **Check** | A new expected kind (`json-match`) with declared ignored paths, per-path numeric ranges and order-free arrays; deterministic, proven by fixtures (pass and fail per rule, including Italian free text with accents under an ignored path); validated by `gauntlet validate`; documented in PROTOCOL; a tagged release. Consumers (openbando:F-057, fpvbuddy:F-022, nerv:F-120-T09) adopt through their pin. |
 
@@ -138,7 +138,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | | |
 |---|---|
-| **Issue** | Four projects start their first domain pack (grover, fpvbuddy, hobo, openbando), and a fifth, nerv, runs them. There is no guide. The owner uses NERV and all modules in Italian, so project packs must include Italian phrasings alongside English. Owner decision 2026-11-26 in chat: "ok to all" (accepts proposals 1 to 3 of the shared-asset review, solution:F-016-T09); same message: "nerv and all modules will need to work with Italian". |
+| **Issue** | Four projects start their first domain pack (grover, fpvbuddy, hobo, openbando), and a fifth, nerv, runs them. There is no guide. The owner uses NERV and all modules in Italian, so project packs must include Italian phrasings alongside English. Owner decision 2026-11-26 in chat: "ok to all" (accepts proposals 1 to 3 of the shared-asset review, coordinator:F-016-T09); same message: "nerv and all modules will need to work with Italian". |
 | **Reproduce** | `ls docs/guides` has no project-pack guide. |
 | **Check** | `docs/guides/project-packs.md` says how a project pins the package as a devDependency, keeps `evals/gauntlet/<project>-v1.json` with regression and holdout splits and invented data, runs `gauntlet validate` in CI (with `--tools` once F-033 lands), records skips, and how a consumer (NERV) runs the pack from the project's tag; and says that a project pack includes the owner's language (Italian) alongside English: every capability has Italian and English requests, with examples ("accendi la luce", "aggiungi Rocca Calascio al trip di agosto", "carica le batterie 7 e 8 blu") and a note that tool names and arguments stay the same in both. |
 
@@ -176,7 +176,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | | |
 |---|---|
-| **Issue** | Project packs name MCP tools and arguments (grover-v1 grover:F-027, fpvbuddy-v1 fpvbuddy:F-022, hobo-v1 hobo:F-011-T03, nerv-planner-v1 nerv:F-120-T09); when a tool is renamed the case goes stale and still validates. Owner decision 2026-11-26 in chat: "ok to all" (accepts proposals 1 to 3 of the shared-asset review, solution:F-016-T09); same message: "nerv and all modules will need to work with Italian". |
+| **Issue** | Project packs name MCP tools and arguments (grover-v1 grover:F-027, fpvbuddy-v1 fpvbuddy:F-022, hobo-v1 hobo:F-011-T03, nerv-planner-v1 nerv:F-120-T09); when a tool is renamed the case goes stale and still validates. Owner decision 2026-11-26 in chat: "ok to all" (accepts proposals 1 to 3 of the shared-asset review, coordinator:F-016-T09); same message: "nerv and all modules will need to work with Italian". |
 | **Reproduce** | Rename a tool in a pack fixture: `gauntlet validate` still passes. |
 | **Check** | `gauntlet validate --tools <file>` reads a `tools/list` snapshot (name and input schema) and fails on a case whose expected tool or argument is not in it; fixtures for a renamed tool and a removed argument, with Italian-language cases included; documented. |
 
