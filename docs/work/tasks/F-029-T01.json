@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "F-029-T01",
+  "parent": "F-029",
+  "title": "Licence allow-list tool",
+  "goal": "A check that fails on a production dependency with a licence outside the allow-list",
+  "status": "planned",
+  "acceptance": [
+    "`tools/check-licences.mjs` and `npm run check:licences` read the production dependencies (`--omit=dev` equivalent) with their SPDX licence, fail on one outside `docs/licences.json` or unknown, and understand `OR` expressions",
+    "Fixtures (invented lock data): all allowed, one disallowed, unknown, dual-licensed `MIT OR GPL-3.0-only`, dev-only dependency ignored",
+    "The current dependency tree passes, or each exception is listed with its reason",
+    "Failing test committed first: the disallowed and unknown fixtures expect exit 1 against an empty tool; the change never edits that test to pass"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "tools/check-licences.mjs",
+    "docs/licences.json",
+    "package.json",
+    "docs/work/records/F-029.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "1.5 h agent",
+    "basis": "The report's 1 h plus failing-first fixtures and the first pass over the tree. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  }
+}

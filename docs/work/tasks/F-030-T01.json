@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "id": "F-030-T01",
+  "parent": "F-030",
+  "title": "Roadmap status tool and CI check",
+  "goal": "ROADMAP milestone status comes from the records and CI fails when it is stale",
+  "status": "planned",
+  "acceptance": [
+    "`tools/roadmap-status.mjs` writes the milestone status block of `docs/ROADMAP.md`; `--check` fails when it is stale; both are npm scripts and `--check` is in `check:fast` and CI",
+    "Fixtures: all steps closed, one open, a milestone naming an unknown record",
+    "Failing test committed first: the stale-roadmap fixture expects `--check` to fail against an empty tool; the change never edits that test to pass"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "tools/roadmap-status.mjs",
+    "docs/ROADMAP.md",
+    "package.json",
+    ".github/workflows/ci.yml",
+    "docs/work/records/F-030.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1 h agent",
+    "basis": "The report's 1 h (a copy) plus a failing-first fixture. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1
+  }
+}
