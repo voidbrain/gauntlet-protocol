@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-021-T03",
   "parent": "F-021",
-  "status": "planned",
+  "status": "implemented",
   "title": "Image-generation runner",
   "goal": "Image-generation runner",
   "acceptance": [
@@ -38,7 +38,7 @@
   "effort": {
     "size": "medium",
     "estimate": "4 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request); not a measurement. Re-estimated 2026-11-26 to 4 h after F-021-T06 recorded runtime B (ComfyUI workflow, /free between phases, int8-on-MPS check), within the 1 to 2 h the owner accepted for B.",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request); not a measurement. Re-estimated 2026-11-26 to 4 h after F-021-T06 recorded runtime B (ComfyUI workflow, /free between phases, int8-on-MPS check), within the 1 to 2 h the owner accepted for B. No actual: elapsed time not tracked in this session.",
     "reviewed": "2026-11-26",
     "agentHours": 4,
     "baselineAgentHours": 3,

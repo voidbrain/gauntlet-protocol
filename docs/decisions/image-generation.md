@@ -90,9 +90,30 @@ Restart the app, then check that `curl -s 127.0.0.1:8188/models/diffusion_models
 
 Expected: every `shasum` line matches or prints `OK`; report the judge digest, the ComfyUI commit and the three file hashes for the F-021 record.
 
-Not verified on this host: the int8 "convrot" weights are the official workflow's choice and ComfyUI's quantised layers run without CUDA through a generic path, but a Mac run is unproven until F-021-T03 loads the workflow. If they fail on MPS, the fallback is the bf16 transformer (`qwen_image_2.1_turbo_bf16.safetensors`, 14.23 GB, sha256 `8b74237a7f505773e2c66726fa696444b4c704585c93a347cff9044937f7914a`) with the bf16 text encoder (`qwen3vl_8b_bf16.safetensors`, 17.53 GB, sha256 `68bdc82bc1b66851162ae656225e7e2068166b603db19bd5d5a3b90eb12669a9`), loaded one after the other (about 18 GB peak, 32.4 GB on disk), which F-021-T03 records before the first real run.
+Verified 2026-11-26 by F-021-T03: the int8 files run on this host (see First real check below). Written before that check: the int8 "convrot" weights are the official workflow's choice and ComfyUI's quantised layers run without CUDA through a generic path, but a Mac run is unproven until F-021-T03 loads the workflow. If they fail on MPS, the fallback is the bf16 transformer (`qwen_image_2.1_turbo_bf16.safetensors`, 14.23 GB, sha256 `8b74237a7f505773e2c66726fa696444b4c704585c93a347cff9044937f7914a`) with the bf16 text encoder (`qwen3vl_8b_bf16.safetensors`, 17.53 GB, sha256 `68bdc82bc1b66851162ae656225e7e2068166b603db19bd5d5a3b90eb12669a9`), loaded one after the other (about 18 GB peak, 32.4 GB on disk), which F-021-T03 records before the first real run.
 
 What any choice must keep, as for the other packs: invented neutral prompts; regression and holdout splits; a grader proven by committed fixtures (images that must pass and images that must fail); no real model and no download in CI (a fixture generator and a fixture judge stand in); a loopback-only runtime with no credentials; real runs only on an explicit request, marked costly.
+
+## Runner (F-021-T03)
+
+`examples/image-generation-v1/` holds the runner for runtime B. `workflow.json` is the committed ComfyUI API-format workflow: Qwen Image 2.1 Turbo text-to-image with the three int8 loaders pinned in `models.json` (names and SHA-256 from Pull the models), the official Turbo sigmas (8 steps, Euler, CFG 1), a `PreviewImage` output so ComfyUI keeps no copy, and no prompt enhancer. A task (`tasks/<case>.json`) sets only the prompt, seed and size. `comfy.mjs` talks to the profile's endpoint only, a literal loopback address (127.0.0.1 or [::1]), with no redirects, proxy or credentials; it checks the three models are listed, submits `POST /prompt`, polls `/history`, fetches the image from `/view`, interrupts and dequeues on timeout, and names the cause when ComfyUI is down, a model is missing or a node fails. Images and their records (seed, size, steps, model digest, workflow and image SHA-256) go outside the repository, by default `~/gauntlet-image-runs`; a folder inside the repository is refused.
+
+Memory sequence: before generating, Ollama's `/api/ps` must be empty; with `--unload-ollama` the runner unloads each listed model through the API (`keep_alive: 0`), never by stopping a process. After generating, `POST /free {"unload_models": true, "free_memory": true}`, also after a failure. `runner.mjs` is the registered runner (`image-generation-reference`, one case per call, freed after each case; structural check only until the judge in F-021-T04); `generate.mjs` is the phased batch (every case and repeat, then one `/free`) and needs `--confirm-costly`.
+
+### First real check (2026-11-26)
+
+**The int8 files run on Apple Silicon.** One 512 x 512 image (`probe-red-cube-regression`, seed 20261126, 8 steps) on the Apple M3 Pro 36 GiB host: `generate.mjs` exited 0 and the image shows the prompt (a single red cube on a white table). ComfyUI 0.46.3, PyTorch 2.12.1, device `mps`. Comfy Desktop did not start from the agent's shell, so the agent ran the same install's ComfyUI headless (`main.py --listen 127.0.0.1 --port 8188`) and stopped it afterwards.
+
+| Measured | Value |
+|---|---|
+| Wall time, submit to image | 147 s (ComfyUI: "Prompt executed in 144.97 seconds"), cold: every model loaded from disk |
+| Sampling | 8 steps in 62 s, about 7.8 s per step at 512 px |
+| Loaded | text encoder 8,917 MB (on CPU), transformer 6,921 MB (MPS, int8 through ComfyUI's emulated `int8_tensorwise` ops), VAE 644 MB |
+| Peak memory | ComfyUI process footprint about 10 GB (`top`, sampled every few seconds); 1.8 GB after `/free` |
+| Host load | not idle: about 22 GB already held by two virtual machines, 8.4 GB free at the start; swap grew from 16.0 GB to 28.4 GB during the run |
+| Records | model digest `383fc5bb…34d7`, workflow `e83bfe10…3fcb`, image `ccd7bb8e…3541` (kept outside Git) |
+
+The bf16 fallback is not needed. Timings on a host without the virtual machines' load may be shorter; F-021-T08 measures them per case.
 
 ## Question 1: generator runtime
 
