@@ -34,7 +34,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json",
     "test": "node --test --test-reporter=./tools/quiet-reporter.mjs --test-reporter-destination=stdout --test-reporter=spec --test-reporter-destination=.test-report.txt --test-timeout=60000 test/*.test.ts",
     "prepack": "npm run build",
     "check:freshness": "node tools/check-freshness.mjs",
