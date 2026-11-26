@@ -4,7 +4,7 @@ Current work ledger, reviewed 26 November 2026 against main `f209281`. PRs #112,
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 19.75 h agent + 1 h owner across 26 open steps of 11 features and 2 other records. Generated from the task files.
+**Remaining effort:** 24 h agent + 1.25 h owner across 30 open steps of 14 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -80,6 +80,121 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | Steps: B-004-T01: PR #118. [#118](https://github.com/voidbrain/gauntlet-protocol/pull/118) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-034"></a>[✨ F-034](#top)
+
+**Guide: a project's own domain pack, in English and Italian**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.75 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-034-T01 — Write docs/guides/project-packs.md (Planned).
+
+| | |
+|---|---|
+| **Issue** | Four projects start their first domain pack (grover, fpvbuddy, hobo, openbando), and a fifth, nerv, runs them. There is no guide. The owner uses NERV and all modules in Italian, so project packs must include Italian phrasings alongside English. Owner decision 2026-11-26 in chat: "ok to all" (accepts proposals 1 to 3 of the shared-asset review, solution:F-016-T09); same message: "nerv and all modules will need to work with Italian". |
+| **Reproduce** | `ls docs/guides` has no project-pack guide. |
+| **Check** | `docs/guides/project-packs.md` says how a project pins the package as a devDependency, keeps `evals/gauntlet/<project>-v1.json` with regression and holdout splits and invented data, runs `gauntlet validate` in CI (with `--tools` once F-033 lands), records skips, and how a consumer (NERV) runs the pack from the project's tag; and says that a project pack includes the owner's language (Italian) alongside English: every capability has Italian and English requests, with examples ("accendi la luce", "aggiungi Rocca Calascio al trip di agosto", "carica le batterie 7 e 8 blu") and a note that tool names and arguments stay the same in both. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-034-t01"></a>F-034-T01 — Write docs/guides/project-packs.md | 0.75 h | 0 h | 0.75 h | Planned | PR #126 plan |
+| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 1 steps recorded) | 0.75 h | 0 of 1 completed | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-034.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-034-T01: PR #126 plan. [#126](https://github.com/voidbrain/gauntlet-protocol/pull/126) (plan); [review page](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-shared-assets/gauntlet-protocol.md); owner decision 2026-11-26 |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-032"></a>[✨ F-032](#top)
+
+**json-match grader: ignored paths, numeric tolerance, order-free arrays**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 2 h agent + 0.25 h owner | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-032-T01 — json-match grader with fixtures and PROTOCOL text (Planned).
+
+| | |
+|---|---|
+| **Issue** | `exact-json-v1` is a deep, order-sensitive equality (`src/index.ts:1234`, `isDeepStrictEqual`), so a correct answer whose free text or free numbers differ fails: openbando's command batches (free `reply` and positions), fpvbuddy's several batteries in one phrase, nerv's planner actions with free-text arguments such as a reminder title, and research-v1's cited source ids (a set) cannot be graded fairly. The consumers' cases are in Italian and English, so the free text is often Italian. Owner decision 2026-11-26 in chat: "ok to all" (accepts proposals 1 to 3 of the shared-asset review, solution:F-016-T09); same message: "nerv and all modules will need to work with Italian". |
+| **Reproduce** | A fixture whose answer differs from the expected only in `reply` text, or in array order, fails `exact-json-v1`. |
+| **Check** | A new expected kind (`json-match`) with declared ignored paths, per-path numeric ranges and order-free arrays; deterministic, proven by fixtures (pass and fail per rule, including Italian free text with accents under an ignored path); validated by `gauntlet validate`; documented in PROTOCOL; a tagged release. Consumers (openbando:F-057, fpvbuddy:F-022, nerv:F-120-T09) adopt through their pin. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
+|---|---|---|---|---|---|---|---|:---:|---|
+| 🟡 Medium | <a id="f-032-t01"></a>F-032-T01 — json-match grader with fixtures and PROTOCOL text | 2 h | 0 h | 2 h | Planned | — | [F-032-T02](#f-032-t02) | 🤖 | PR #126 plan |
+| 🟢 Small | <a id="f-032-t02"></a>F-032-T02 — Owner tags the release carrying json-match | 0 h | 0 h | 0 h agent + 0.25 h owner | Planned | [F-032-T01](#f-032-t01) | — | ⏳ 🧑‍🔧 | PR #126 plan |
+| 🟡 Medium | **Total** | 2 h | 0 h (0 of 2 steps recorded) | 2 h agent + 0.25 h owner | 0 of 2 completed | | | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-032.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-032-T01: PR #126 plan · F-032-T02: PR #126 plan. [#126](https://github.com/voidbrain/gauntlet-protocol/pull/126) (plan); [review page](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-shared-assets/gauntlet-protocol.md); owner decision 2026-11-26 |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-033"></a>[✨ F-033](#top)
+
+**Check a pack against a tool table: gauntlet validate --tools**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 1.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-033-T01 — gauntlet validate --tools with fixtures (Planned).
+
+| | |
+|---|---|
+| **Issue** | Project packs name MCP tools and arguments (grover-v1 grover:F-027, fpvbuddy-v1 fpvbuddy:F-022, hobo-v1 hobo:F-011-T03, nerv-planner-v1 nerv:F-120-T09); when a tool is renamed the case goes stale and still validates. Owner decision 2026-11-26 in chat: "ok to all" (accepts proposals 1 to 3 of the shared-asset review, solution:F-016-T09); same message: "nerv and all modules will need to work with Italian". |
+| **Reproduce** | Rename a tool in a pack fixture: `gauntlet validate` still passes. |
+| **Check** | `gauntlet validate --tools <file>` reads a `tools/list` snapshot (name and input schema) and fails on a case whose expected tool or argument is not in it; fixtures for a renamed tool and a removed argument, with Italian-language cases included; documented. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-033-t01"></a>F-033-T01 — gauntlet validate --tools with fixtures | 1.5 h | 0 h | 1.5 h | Planned | PR #126 plan |
+| 🟡 Medium | **Total** | 1.5 h | 0 h (0 of 1 steps recorded) | 1.5 h | 0 of 1 completed | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-033.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-033-T01: PR #126 plan. [#126](https://github.com/voidbrain/gauntlet-protocol/pull/126) (plan); [review page](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-shared-assets/gauntlet-protocol.md); owner decision 2026-11-26 |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |

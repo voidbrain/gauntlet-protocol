@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "id": "F-032-T01",
+  "parent": "F-032",
+  "title": "json-match grader with fixtures and PROTOCOL text",
+  "goal": "Free text, free numbers and set-like arrays no longer fail a correct answer",
+  "status": "planned",
+  "acceptance": [
+    "Owner decision 2026-11-26 in chat: \"ok to all\" (accepts proposals 1 to 3 of the shared-asset review, solution:F-016-T09); same message: \"nerv and all modules will need to work with Italian\".",
+    "`json-match` expected kind: ignored paths, per-path numeric range or tolerance, order-free arrays; deterministic; `gauntlet validate` accepts and checks it",
+    "Fixtures: a pass and a fail per rule, including a reply in Italian with accented characters under an ignored path and a wrong value outside it; failing tests first",
+    "Documented in PROTOCOL; an example in the pack format guide"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "docs/**",
+    "package.json",
+    "examples/**",
+    "docs/work/records/F-032.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "medium",
+    "estimate": "2.0 h agent",
+    "basis": "A grader kind with three rules, fixtures and docs. Estimated 2026-11-26 at agent speed from the solution:F-016 shared-asset review. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 2.0,
+    "baselineAgentHours": 2.0,
+    "estimateAgentHours": 2.0
+  },
+  "prs": [
+    {
+      "pr": 126,
+      "note": "plan"
+    }
+  ]
+}
