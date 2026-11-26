@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "F-027-T01",
+  "parent": "F-027",
+  "title": "Measure coverage of src/ and enforce it in CI",
+  "goal": "coverage table with a main baseline, enforced",
+  "status": "implemented",
+  "acceptance": [
+    "`test:coverage` and `coverage` scripts; `coverage` setting with `enforce: true`, `drop: 2`, folder `src/`",
+    "CI runs `test:coverage` and `coverage-table --check --github`",
+    "`docs/agents/coverage.md` and `coverage.json` committed as the baseline"
+  ],
+  "dependsOn": [],
+  "resources": [
+    ".harness.json",
+    "package.json",
+    ".github/workflows/ci.yml",
+    "docs/agents/coverage.md",
+    "docs/agents/coverage.json"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral invented fixtures only; no personal data, credentials or private reports in Git.",
+  "validation": [
+    "npm run coverage",
+    "CI"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 remaining",
+    "basis": "Done 2026-11-26 following another repository's Node coverage scripts. Not timed.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0,
+    "ownerHours": 0,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5,
+    "days": 0,
+    "baselineDays": 0
+  }
+}

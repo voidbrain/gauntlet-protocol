@@ -36,6 +36,8 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json",
     "test": "node --test --test-reporter=./tools/quiet-reporter.mjs --test-reporter-destination=stdout --test-reporter=spec --test-reporter-destination=.test-report.txt --test-timeout=60000 test/*.test.ts",
+    "test:coverage": "mkdir -p coverage && node --test --experimental-test-coverage --test-coverage-include='src/**' --test-timeout=60000 --test-reporter=./tools/quiet-reporter.mjs --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=coverage/lcov.info test/*.test.ts && node tools/lcov-summary.mjs",
+    "coverage": "npm run test:coverage && node tools/coverage-table.mjs --write",
     "prepack": "npm run build",
     "check:freshness": "node tools/check-freshness.mjs",
     "check:backlog": "node tools/check-backlog.mjs",

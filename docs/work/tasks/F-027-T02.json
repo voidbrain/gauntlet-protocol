@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "id": "F-027-T02",
+  "parent": "F-027",
+  "title": "Set behaviour.runner",
+  "goal": "behaviour.runner is the Claude Code command",
+  "status": "implemented",
+  "acceptance": [
+    "`behaviour.runner` is the `claude -p` command from rule-review",
+    "No behaviour campaign run"
+  ],
+  "dependsOn": [],
+  "resources": [
+    ".harness.json"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral invented fixtures only; no personal data, credentials or private reports in Git.",
+  "validation": [
+    "npm run check:harness"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 remaining",
+    "basis": "Done 2026-11-26, a setting. Not timed.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0,
+    "ownerHours": 0,
+    "baselineAgentHours": 0.25,
+    "estimateAgentHours": 0.25,
+    "days": 0,
+    "baselineDays": 0
+  }
+}

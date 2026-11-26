@@ -207,7 +207,8 @@
     }
   },
   "behaviour": {
-    "times": 3
+    "times": 3,
+    "runner": "claude -p --permission-mode acceptEdits --allowedTools \"Bash(git:*)\" \"Bash(npm:*)\" \"Bash(node:*)\" -- \"$(cat \"$HARNESS_TASK_FILE\")\""
   },
   "verification": {
     "enabled": false
@@ -238,5 +239,14 @@
     "skills": {
       "days": 30
     }
+  },
+  "coverage": {
+    "summary": "coverage/coverage-summary.json",
+    "lcov": "coverage/lcov.info",
+    "folders": [
+      "src/"
+    ],
+    "drop": 2,
+    "enforce": true
   }
 }

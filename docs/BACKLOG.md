@@ -4,7 +4,7 @@ Current work ledger, reviewed 26 November 2026 against main `f209281`. PRs #112,
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 12.75 h agent + 1.5 h owner across 17 open steps of 6 features and 1 other record. Generated from the task files.
+**Remaining effort:** 12.75 h agent + 1.5 h owner across 20 open steps of 7 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -45,6 +45,44 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-25 |
 | Verification | Pending. |
 | Reviewed | 2026-11-25 |
+
+</details>
+
+---
+### <a id="b-004"></a>[🐞 B-004](#top)
+
+**Test files are type-checked**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-004-T01 — Type-check test/&#42;&#42;/&#42;.ts in typecheck (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | The 15 `test/*.test.ts` files were in no `tsconfig`: `typecheck` and `build` checked `src/**/*.ts` only, and Node strips the types of tests without checking them, so a wrong call in a test ran unchecked. Found by the coordinator's dormant-checks sweep, 2026-11-26 (T2, proposal 3). |
+| **Reproduce** | On `main` `62a7787`: `tsc -p` a config that includes `test/**/*.ts` reports 18 errors (36 once the JavaScript graders the tests import are resolved). |
+| **Check** | `npm run typecheck` also runs `tsc -p tsconfig.test.json` (src, tests and, through `allowJs`, the JavaScript graders they import) and passes; the commit that added it failed first (`c2c85e0`). `npm test` passes. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-004-t01"></a>B-004-T01 — Type-check test/&#42;&#42;/&#42;.ts in typecheck | 1 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+[Full notes & evidence](work/records/B-004.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
 
 </details>
 
@@ -205,6 +243,45 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | Steps: F-026-T01: PR #116 audit.enforce true. [#116](https://github.com/voidbrain/gauntlet-protocol/pull/116) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-027"></a>[✨ F-027](#top)
+
+**Coverage measured and enforced; behaviour runner set**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-027-T01 — Measure coverage of src/ and enforce it in CI (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | The 2026-11-26 dormant-checks sweep (coordinator `docs/audits/2026-11-26-dormant-checks.md`, rows S1 and S3) found that this repository measures no coverage (so nothing could be enforced) and sets no `behaviour.runner`. Reviews and work usage were already on. |
+| **Reproduce** | `.harness.json` on `main` `62a7787`: no `coverage`, `behaviour` `{times: 3}`. |
+| **Check** | `npm run test:coverage` writes LCOV and the summary; CI runs it and `coverage-table --check`, which fails on a drop over 2 points against `docs/agents/coverage.json` (`coverage.enforce: true`); `behaviour.runner` is set and no campaign was run. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status |
+|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-027-t01"></a>F-027-T01 — Measure coverage of src/ and enforce it in CI | 0.5 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | <a id="f-027-t02"></a>F-027-T02 — Set behaviour.runner | 0.25 h | 0 h | 0 h | Implemented; verification pending |
+| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 2 steps recorded) | 0 h | 0 of 2 completed |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+[Full notes & evidence](work/records/F-027.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Pending |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
