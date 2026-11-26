@@ -4,7 +4,7 @@ Current work ledger, reviewed 26 November 2026 against main `f209281`. PRs #112,
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 12.75 h agent + 1.5 h owner across 17 open steps of 6 features and 1 other record. Generated from the task files.
+**Remaining effort:** 12.75 h agent + 1 h owner across 16 open steps of 6 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -257,7 +257,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟣 Very large | 8.5 h agent + 0.75 h owner | — | — | 🤖 | — | — |
+| 🔴 Open | 🔹 P3 | 🟣 Very large | 8.5 h agent + 0.25 h owner | — | — | 🤖 | — | — |
 
 💻 **→** Next: F-021-T01 — Draft the image-generation design decision (Implemented; verification pending).
 
@@ -272,19 +272,19 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
 |---|---|---|---|---|---|---|---|:---:|---|
 | 🟢 Small | <a id="f-021-t01"></a>F-021-T01 — Draft the image-generation design decision | 1 h | 0 h | 1 h | Implemented; verification pending | — | — | 🤖 | PR #113 |
-| 🟢 Small | <a id="f-021-t06"></a>F-021-T06 — Host check: Ollama image generation, then record runtime A or B | 0.5 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-021-T03](#f-021-t03), [F-021-T07](#f-021-t07) | 🤖 | PR #114 planned; PR #115 host check |
+| 🟢 Small | <a id="f-021-t06"></a>F-021-T06 — Host check: Ollama image generation, then record runtime A or B | 0.5 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-021-T03](#f-021-t03) | 🤖 | PR #114 planned; PR #115 host check |
 | 🟡 Medium | <a id="f-021-t03"></a>F-021-T03 — Image-generation runner | 4 h | 0 h | 4 h | Planned | [F-021-T06](#f-021-t06) | [F-021-T04](#f-021-t04) | ⏳ 🤖 | PR #115 re-estimate |
 | 🟡 Medium | <a id="f-021-t04"></a>F-021-T04 — Image grader and pack | 2 h | 0 h | 2 h | Planned | [F-021-T03](#f-021-t03) | [F-021-T08](#f-021-t08) | ⏳ 🤖 | — |
-| 🟢 Small | <a id="f-021-t07"></a>F-021-T07 — Pull the image generator and the vision judge models | — | 0 h | 0 h agent + 0.5 h owner | Planned | [F-021-T06](#f-021-t06) | [F-021-T08](#f-021-t08) | ⏳ 🧑‍🔧 | PR #114 planned; PR #115 pull commands |
-| 🟢 Small | <a id="f-021-t08"></a>F-021-T08 — First real run: prove the judge, measure generator variance | 1 h | 0 h | 1 h | Planned | [F-021-T04](#f-021-t04), [F-021-T07](#f-021-t07) | [F-021-T05](#f-021-t05) | ⏳ 🤖 | PR #114 planned |
+| 🟢 Small | <a id="f-021-t08"></a>F-021-T08 — First real run: prove the judge, measure generator variance | 1 h | 0 h | 1 h | Planned | [F-021-T04](#f-021-t04) | [F-021-T05](#f-021-t05) | ⏳ 🤖 | PR #114 planned |
 | 🟢 Small | <a id="f-021-t05"></a>F-021-T05 — Release image-generation-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T08](#f-021-t08) | — | ⏳ 🧑‍🔧 | — |
-| 🟣 Very large | **Total** | 8.5 h (5 of 8 steps) | 0 h (0 of 8 steps recorded) | 8.5 h agent + 0.75 h owner | 1 of 8 completed | | | | |
+| 🟣 Very large | **Total** | 8.5 h (5 of 8 steps) | 0 h (0 of 8 steps recorded) | 8.5 h agent + 0.25 h owner | 2 of 8 completed | | | | |
 
-<details><summary>Done steps (1)</summary>
+<details><summary>Done steps (2)</summary>
 
 | Effort | Step | Estimate | Actual | Status | PRs |
 |---|---|---|---|---|---|
 | — | <a id="f-021-t02"></a>F-021-T02 — Decide the image-generation design | — | 0 h | Completed | PR #114 decision |
+| — | <a id="f-021-t07"></a>F-021-T07 — Pull the image generator and the vision judge models | — | 0 h | Completed | PR #114 planned; PR #115 pull commands |
 
 </details>
 

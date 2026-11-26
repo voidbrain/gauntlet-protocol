@@ -76,6 +76,18 @@ bb21f7473051e1ac368515dd3f2e15cd44d7a11748ee8823e1ddca3e4876b7c9  vae/qwen_image
 EOF
 ```
 
+Accepted alternative (F-021-T07, 2026-11-26): the free, local Comfy Desktop app instead of the pinned checkout in step 2 (not Comfy Cloud). It bundles its own ComfyUI (0.46.3 was used, not 0.46.0; record the version you run) and Python, and serves on 127.0.0.1:8188. Fetch the models in step 3 into any folder and point the app at it with an `extra_model_paths.yaml` in its ComfyUI folder:
+
+```yaml
+gauntlet:
+  base_path: ~/gauntlet-comfyui/models
+  diffusion_models: diffusion_models
+  text_encoders: text_encoders
+  vae: vae
+```
+
+Restart the app, then check that `curl -s 127.0.0.1:8188/models/diffusion_models` (and `text_encoders`, `vae`) lists the three files.
+
 Expected: every `shasum` line matches or prints `OK`; report the judge digest, the ComfyUI commit and the three file hashes for the F-021 record.
 
 Not verified on this host: the int8 "convrot" weights are the official workflow's choice and ComfyUI's quantised layers run without CUDA through a generic path, but a Mac run is unproven until F-021-T03 loads the workflow. If they fail on MPS, the fallback is the bf16 transformer (`qwen_image_2.1_turbo_bf16.safetensors`, 14.23 GB, sha256 `8b74237a7f505773e2c66726fa696444b4c704585c93a347cff9044937f7914a`) with the bf16 text encoder (`qwen3vl_8b_bf16.safetensors`, 17.53 GB, sha256 `68bdc82bc1b66851162ae656225e7e2068166b603db19bd5d5a3b90eb12669a9`), loaded one after the other (about 18 GB peak, 32.4 GB on disk), which F-021-T03 records before the first real run.

@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-021-T07",
   "parent": "F-021",
-  "status": "planned",
+  "status": "closed",
   "title": "Pull the image generator and the vision judge models",
   "goal": "Pull the image generator and the vision judge models",
   "acceptance": [
@@ -29,11 +29,11 @@
   "ownerLink": "docs/decisions/image-generation.md#pull-the-models",
   "effort": {
     "size": "small",
-    "estimate": "0.5 h owner",
-    "basis": "Planned 2026-11-26; owner time only, download wait not counted. Raised from 0.25 h on 2026-11-26 because runtime B adds a ComfyUI install to the pulls, within the 1 to 2 h the owner accepted for B.",
+    "estimate": "0 remaining",
+    "basis": "Owner procedure done 2026-11-26 using Comfy Desktop (accepted alternative to the pinned checkout); owner time not measured.",
     "reviewed": "2026-11-26",
     "agentHours": 0,
-    "ownerHours": 0.5,
+    "ownerHours": 0,
     "ownerKind": "procedure"
   },
   "prs": [
