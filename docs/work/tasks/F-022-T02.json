@@ -35,5 +35,11 @@
     "agentHours": 0,
     "ownerHours": 0,
     "ownerKind": "decision"
-  }
+  },
+  "prs": [
+    {
+      "pr": 114,
+      "note": "decision"
+    }
+  ]
 }

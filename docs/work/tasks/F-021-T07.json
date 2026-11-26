@@ -35,5 +35,11 @@
     "agentHours": 0,
     "ownerHours": 0.25,
     "ownerKind": "procedure"
-  }
+  },
+  "prs": [
+    {
+      "pr": 114,
+      "note": "planned"
+    }
+  ]
 }
