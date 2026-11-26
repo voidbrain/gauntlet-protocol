@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 25 November 2026 against main `bc0c6d6`. PRs #106 to #108 merged on green CI (#106: F-018 to F-020 archived; #107: B-004, B-005; #108: release 0.11.1, published). B-004 and B-005 closed. Reconciled `project-harness v10.20.0` (committed backlog views kept).
+Current work ledger, reviewed 26 November 2026 against main `5a1e306`. PRs #109 and #110 merged on green CI (#109: harness v10.20.0, B-004, B-005; #110: F-075 opened). Reconciling `project-harness v10.21.4` (F-075).
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
@@ -51,26 +51,26 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 ---
 ### <a id="f-075"></a>[✨ F-075](#top)
 
-**Reconcile project-harness v10.20.0 → v10.21.3**
+**Reconcile project-harness v10.20.0 → v10.21.4**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+| 🟡 Implemented | 🔹 P3 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-075-T01 — Reconcile harness files v10.20.0 -&gt; v10.21.3 (Planned).
+💻 **→** Next: F-075-T01 — Reconcile harness files v10.20.0 -&gt; v10.21.4 (Implemented; verification pending).
 
 | | |
 |---|---|
-| **Issue** | `.harness.json` names v10.20.0 while the template has released up to v10.21.3. Coordinator gap review 2026-11-26, proposal 12 ("Behind the harness"), accepted by the owner. |
-| **Reproduce** | `npm run check:freshness` on `main`: it reports the harness template v10.21.3 and the files to update or reconcile. |
-| **Check** | `.harness.json` names v10.21.3; `check:freshness` reports no harness update; `check:fast` and CI on the PR pass. |
+| **Issue** | `.harness.json` names v10.20.0 while the template has released up to v10.21.4. Coordinator gap review 2026-11-26, proposal 12 ("Behind the harness"), accepted by the owner. |
+| **Reproduce** | `npm run check:freshness` on `main`: it reports the harness template v10.21.4 and the files to update or reconcile. |
+| **Check** | `.harness.json` names v10.21.4; `check:freshness` reports no harness update; `check:fast` and CI on the PR pass. |
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-075-t01"></a>F-075-T01 — Reconcile harness files v10.20.0 -&gt; v10.21.3 | 1 h | 0 h | 1 h | Planned |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed |
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-075-t01"></a>F-075-T01 — Reconcile harness files v10.20.0 -&gt; v10.21.4 | 1 h | 0 h | 1 h | Implemented; verification pending | PR #111 |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -79,7 +79,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Opened in [#110](https://github.com/voidbrain/gauntlet-protocol/pull/110) |
+| PR / evidence | Steps: F-075-T01: PR #111. Opened in [#110](https://github.com/voidbrain/gauntlet-protocol/pull/110); [#111](https://github.com/voidbrain/gauntlet-protocol/pull/111) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
