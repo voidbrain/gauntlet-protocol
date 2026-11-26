@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "id": "F-026-T01",
+  "parent": "F-026",
+  "title": "Turn audit.enforce on",
+  "goal": "audit.enforce is true in .harness.json",
+  "status": "implemented",
+  "acceptance": [
+    "`audit.enforce` is `true` in .harness.json (a project setting; full audits already exist: docs/audits/2026-11-08-initial-protocol, 2026-11-09-evidence-tools, 2026-11-22-v10-2-reconcile manifests have kind full)",
+    "`npm run check:audits` and `npm run check:freshness` pass with it on"
+  ],
+  "dependsOn": [],
+  "resources": [
+    ".harness.json",
+    "docs/work/records/F-026.md"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "npm run check:fast",
+    "npm run check:audits",
+    "npm run check:work"
+  ],
+  "escalation": [
+    "A material scope or effort increase goes to the owner"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0 remaining",
+    "basis": "Done 2026-11-26 in one PR from cross-project audit proposal 17, accepted by the owner in chat 2026-11-26 (\"accept all 17 proposals\"); verification is its CI. No actual: not timed.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0,
+    "ownerHours": 0,
+    "baselineAgentHours": 0.25,
+    "estimateAgentHours": 0.25,
+    "days": 0,
+    "baselineDays": 0
+  },
+  "prs": [
+    {
+      "pr": 116,
+      "note": "audit.enforce true"
+    }
+  ]
+}
