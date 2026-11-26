@@ -67,10 +67,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-004-t01"></a>B-004-T01 — Type-check test/&#42;&#42;/&#42;.ts in typecheck | 1 h | 0 h | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed |
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-004-t01"></a>B-004-T01 — Type-check test/&#42;&#42;/&#42;.ts in typecheck | 1 h | 0 h | 0 h | Implemented; verification pending | PR #118 |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed | |
 
 <details>
 <summary>Next action, estimates and PR history</summary>
@@ -79,7 +79,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Pending; [#118](https://github.com/voidbrain/gauntlet-protocol/pull/118) |
+| PR / evidence | Steps: B-004-T01: PR #118. [#118](https://github.com/voidbrain/gauntlet-protocol/pull/118) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
@@ -268,11 +268,11 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-027-t01"></a>F-027-T01 — Measure coverage of src/ and enforce it in CI | 0.5 h | 0 h | 0 h | Implemented; verification pending |
-| 🟢 Small | <a id="f-027-t02"></a>F-027-T02 — Set behaviour.runner | 0.25 h | 0 h | 0 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 2 steps recorded) | 0 h | 0 of 2 completed |
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-027-t01"></a>F-027-T01 — Measure coverage of src/ and enforce it in CI | 0.5 h | 0 h | 0 h | Implemented; verification pending | PR #118 |
+| 🟢 Small | <a id="f-027-t02"></a>F-027-T02 — Set behaviour.runner | 0.25 h | 0 h | 0 h | Implemented; verification pending | PR #118 |
+| 🟢 Small | **Total** | 0.75 h | 0 h (0 of 2 steps recorded) | 0 h | 0 of 2 completed | |
 
 <details>
 <summary>Next action, estimates and PR history</summary>
@@ -281,7 +281,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Pending; [#118](https://github.com/voidbrain/gauntlet-protocol/pull/118) |
+| PR / evidence | Steps: F-027-T01: PR #118 · F-027-T02: PR #118. [#118](https://github.com/voidbrain/gauntlet-protocol/pull/118) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
