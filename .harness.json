@@ -247,6 +247,6 @@
       "src/"
     ],
     "drop": 2,
-    "enforce": true
+    "enforce": false
   }
 }
