@@ -1,10 +1,10 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 26 November 2026 against main `9a61a61`. PR #111 merged on green CI (F-075: harness v10.21.4). F-075 closed and archived.
+Current work ledger, reviewed 26 November 2026 against main `f209281`. PRs #112, #113 and #114 merged on green CI (#112: F-022 proposals, F-075 archived; #113: F-021 design draft; #114: F-021 and F-022 owner decisions). F-021-T06 host check recorded: runtime B.
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 11.75 h agent + 1.25 h owner across 16 open steps of 5 features and 1 other record. Generated from the task files.
+**Remaining effort:** 12.75 h agent + 1.5 h owner across 16 open steps of 5 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -219,7 +219,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🔴 Large | 7.5 h agent + 0.5 h owner | — | — | 🤖 | — | — |
+| 🔴 Open | 🔹 P3 | 🟣 Very large | 8.5 h agent + 0.75 h owner | — | — | 🤖 | — | — |
 
 💻 **→** Next: F-021-T01 — Draft the image-generation design decision (Implemented; verification pending).
 
@@ -234,13 +234,13 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
 |---|---|---|---|---|---|---|---|:---:|---|
 | 🟢 Small | <a id="f-021-t01"></a>F-021-T01 — Draft the image-generation design decision | 1 h | 0 h | 1 h | Implemented; verification pending | — | — | 🤖 | PR #113 |
-| 🟢 Small | <a id="f-021-t06"></a>F-021-T06 — Host check: Ollama image generation, then record runtime A or B | 0.5 h | 0 h | 0.5 h | Planned | — | [F-021-T03](#f-021-t03), [F-021-T07](#f-021-t07) | 🤖 | PR #114 planned |
-| 🟡 Medium | <a id="f-021-t03"></a>F-021-T03 — Image-generation runner | 3 h | 0 h | 3 h | Planned | [F-021-T06](#f-021-t06) | [F-021-T04](#f-021-t04) | ⏳ 🤖 | — |
+| 🟢 Small | <a id="f-021-t06"></a>F-021-T06 — Host check: Ollama image generation, then record runtime A or B | 0.5 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-021-T03](#f-021-t03), [F-021-T07](#f-021-t07) | 🤖 | PR #114 planned; PR #115 host check |
+| 🟡 Medium | <a id="f-021-t03"></a>F-021-T03 — Image-generation runner | 4 h | 0 h | 4 h | Planned | [F-021-T06](#f-021-t06) | [F-021-T04](#f-021-t04) | ⏳ 🤖 | PR #115 re-estimate |
 | 🟡 Medium | <a id="f-021-t04"></a>F-021-T04 — Image grader and pack | 2 h | 0 h | 2 h | Planned | [F-021-T03](#f-021-t03) | [F-021-T08](#f-021-t08) | ⏳ 🤖 | — |
-| 🟢 Small | <a id="f-021-t07"></a>F-021-T07 — Pull the image generator and the vision judge models | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T06](#f-021-t06) | [F-021-T08](#f-021-t08) | ⏳ 🧑‍🔧 | PR #114 planned |
+| 🟢 Small | <a id="f-021-t07"></a>F-021-T07 — Pull the image generator and the vision judge models | — | 0 h | 0 h agent + 0.5 h owner | Planned | [F-021-T06](#f-021-t06) | [F-021-T08](#f-021-t08) | ⏳ 🧑‍🔧 | PR #114 planned; PR #115 pull commands |
 | 🟢 Small | <a id="f-021-t08"></a>F-021-T08 — First real run: prove the judge, measure generator variance | 1 h | 0 h | 1 h | Planned | [F-021-T04](#f-021-t04), [F-021-T07](#f-021-t07) | [F-021-T05](#f-021-t05) | ⏳ 🤖 | PR #114 planned |
 | 🟢 Small | <a id="f-021-t05"></a>F-021-T05 — Release image-generation-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T08](#f-021-t08) | — | ⏳ 🧑‍🔧 | — |
-| 🔴 Large | **Total** | 7.5 h (5 of 8 steps) | 0 h (0 of 8 steps recorded) | 7.5 h agent + 0.5 h owner | 1 of 8 completed | | | | |
+| 🟣 Very large | **Total** | 8.5 h (5 of 8 steps) | 0 h (0 of 8 steps recorded) | 8.5 h agent + 0.75 h owner | 1 of 8 completed | | | | |
 
 <details><summary>Done steps (1)</summary>
 
@@ -257,7 +257,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-021-T01: PR #113 · F-021-T02: PR #114 decision · F-021-T06: PR #114 planned · F-021-T07: PR #114 planned · F-021-T08: PR #114 planned. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#113](https://github.com/voidbrain/gauntlet-protocol/pull/113); owner decision 2026-11-26, F-021-T02 ("Do you accept these as recommended? ok") |
+| PR / evidence | Steps: F-021-T01: PR #113 · F-021-T02: PR #114 decision · F-021-T03: PR #115 re-estimate · F-021-T06: PR #114 planned; PR #115 host check · F-021-T07: PR #114 planned; PR #115 pull commands · F-021-T08: PR #114 planned. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#113](https://github.com/voidbrain/gauntlet-protocol/pull/113); owner decision 2026-11-26, F-021-T02 ("Do you accept these as recommended? ok"); owner approval 2026-11-26 of the widened F-021-T06 check ("Qwen Image 2.1 and Ollama check ok"); [#115](https://github.com/voidbrain/gauntlet-protocol/pull/115) |
 | Opened | 2026-11-24 |
 | Verification | Pending. |
 | Reviewed | 2026-11-26 |
