@@ -194,7 +194,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | PRs |
 |---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-026-t01"></a>F-026-T01 — Turn audit.enforce on | 0.25 h | 0 h | 0 h | Implemented; verification pending | PR #999 audit.enforce true |
+| 🟢 Small | <a id="f-026-t01"></a>F-026-T01 — Turn audit.enforce on | 0.25 h | 0 h | 0 h | Implemented; verification pending | PR #116 audit.enforce true |
 | 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed | |
 
 <details>
@@ -204,7 +204,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-026-T01: PR #999 audit.enforce true. PRN |
+| PR / evidence | Steps: F-026-T01: PR #116 audit.enforce true. [#116](https://github.com/voidbrain/gauntlet-protocol/pull/116) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
