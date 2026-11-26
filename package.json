@@ -64,7 +64,21 @@
     "work:close": "node tools/work-items.mjs close",
     "work:pr": "node tools/work-items.mjs pr",
     "work:launch": "node tools/usage-launch.mjs",
-    "check:impact": "node tools/impact-map.mjs && git diff --exit-code -- docs/agents/impact-map.md"
+    "check:impact": "node tools/impact-map.mjs && git diff --exit-code -- docs/agents/impact-map.md",
+    "impact-map": "node tools/impact-map.mjs",
+    "mcp:recommend": "node tools/mcp.mjs recommend",
+    "reconcile:preview": "node tools/reconcile-preview.mjs",
+    "friction": "node tools/friction.mjs",
+    "archive:recap": "node tools/archive-recap.mjs",
+    "check:archive-recap": "node tools/archive-recap.mjs --check",
+    "guard:install": "node tools/guard.mjs install",
+    "behaviour": "node tools/behaviour.mjs",
+    "coverage:browser": "node tools/browser-coverage.mjs",
+    "check:dependencies": "node tools/backlog-dependencies.mjs --check",
+    "check:queue": "node tools/backlog-queue.mjs --check",
+    "verification:plan": "node tools/verification.mjs",
+    "work:claims": "node tools/task-claims.mjs",
+    "rule-load": "node tools/rule-load.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
