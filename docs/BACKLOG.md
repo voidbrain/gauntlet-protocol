@@ -282,7 +282,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-027-T01: PR #118 · F-027-T02: PR #118. [#118](https://github.com/voidbrain/gauntlet-protocol/pull/118); [#120](https://github.com/voidbrain/gauntlet-protocol/pull/120) |
+| PR / evidence | Steps: F-027-T01: PR #118 · F-027-T02: PR #118. [#118](https://github.com/voidbrain/gauntlet-protocol/pull/118); [#120](https://github.com/voidbrain/gauntlet-protocol/pull/120); [#122](https://github.com/voidbrain/gauntlet-protocol/pull/122) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
