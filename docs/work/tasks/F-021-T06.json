@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "id": "F-021-T06",
+  "parent": "F-021",
+  "status": "planned",
+  "title": "Host check: Ollama image generation, then record runtime A or B",
+  "goal": "Host check: Ollama image generation, then record runtime A or B",
+  "acceptance": [
+    "On the owner's host, read-only and with no model download: `ollama --version`, `ollama list` and the documented image-generation API are checked against the decision page, and the result is recorded in docs/decisions/image-generation.md",
+    "Runtime A is recorded if the host offers Ollama image generation with a model that fits beside the judge (peak 8 to 12 GB, never both loaded); otherwise runtime B (ComfyUI on loopback) is recorded, and F-021-T03 and F-021-T04 are re-estimated by the decision page's 1 to 2 h before they start",
+    "The generator and judge models to pull by digest, and the pull commands, are written into the decision page for F-021-T07"
+  ],
+  "dependsOn": [
+    "F-021-T02"
+  ],
+  "resources": [
+    "src/**",
+    "bin/**",
+    "test/**",
+    "examples/**",
+    "docs/**",
+    "package.json",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Recorded host output (versions only, no paths or personal data); npm run check:backlog; CI"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h agent",
+    "basis": "Planned 2026-11-26 after the owner accepted runtime A conditional on a host check. Read-only commands and one decision-page edit. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  },
+  "prs": [
+    {
+      "pr": 114,
+      "note": "planned"
+    }
+  ]
+}

@@ -10,7 +10,7 @@
     "CHANGELOG names the new cases; consumers adopt through their pin"
   ],
   "dependsOn": [
-    "F-021-T04"
+    "F-021-T08"
   ],
   "resources": [
     "docs/**",

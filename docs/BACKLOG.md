@@ -4,7 +4,7 @@ Current work ledger, reviewed 26 November 2026 against main `9a61a61`. PR #111 m
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 7.75 h agent + 1 h owner across 9 open steps of 2 features and 1 other record. Generated from the task files.
+**Remaining effort:** 11.75 h agent + 1.25 h owner across 16 open steps of 5 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -55,7 +55,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟡 Medium | 1.5 h agent + 0.25 h owner | — | — | 🤖 | — | — |
+| 🔴 Open | 🔹 P3 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
 
 💻 **→** Next: F-022-T01 — Propose packs or skips for the remaining areas (Implemented; verification pending).
 
@@ -67,12 +67,19 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
-|---|---|---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="f-022-t01"></a>F-022-T01 — Propose packs or skips for the remaining areas | 1 h | 0 h | 1 h | Implemented; verification pending | — | [F-022-T02](#f-022-t02) | 🤖 | PR #112 |
-| 🟢 Small | <a id="f-022-t02"></a>F-022-T02 — Decide packs or skips for the remaining areas | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-022-T01](#f-022-t01) | [F-022-T03](#f-022-t03) | ⏳ 🤔 | — |
-| 🟢 Small | <a id="f-022-t03"></a>F-022-T03 — Record the outcome | 0.5 h | 0 h | 0.5 h | Planned | [F-022-T02](#f-022-t02) | — | ⏳ 🤖 | — |
-| 🟡 Medium | **Total** | 1.5 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 1.5 h agent + 0.25 h owner | 0 of 3 completed | | | | |
+| Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
+|---|---|---|---|---|---|:---:|---|
+| 🟢 Small | <a id="f-022-t01"></a>F-022-T01 — Propose packs or skips for the remaining areas | 1 h | 0 h | 1 h | Implemented; verification pending | 🤖 | PR #112 |
+| 🟢 Small | <a id="f-022-t03"></a>F-022-T03 — Record the outcome | 0.5 h | 0 h | 0 h | Implemented; verification pending | 🤖 | PR #114 records and roadmap skips |
+| 🟢 Small | **Total** | 1.5 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 1 h | 1 of 3 completed | | |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status | PRs |
+|---|---|---|---|---|---|
+| — | <a id="f-022-t02"></a>F-022-T02 — Decide packs or skips for the remaining areas | — | 0 h | Completed | PR #114 decision |
+
+</details>
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -81,10 +88,127 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-022-T01: PR #112. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#112](https://github.com/voidbrain/gauntlet-protocol/pull/112) |
+| PR / evidence | Steps: F-022-T01: PR #112 · F-022-T02: PR #114 decision · F-022-T03: PR #114 records and roadmap skips. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#112](https://github.com/voidbrain/gauntlet-protocol/pull/112); owner decision 2026-11-26, F-022-T02 ("Do you accept these as recommended? ok") |
 | Opened | 2026-11-24 |
 | Verification | Pending. |
-| Reviewed | 2026-11-24 |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-023"></a>[✨ F-023](#top)
+
+**scheduling-time-v1: date and time arithmetic**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 1 h agent + 0.25 h owner | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-023-T01 — scheduling-time-v1 pack with exact date and time answers (Planned).
+
+| | |
+|---|---|
+| **Issue** | The index maps 0 cases to scheduling-time. |
+| **Reproduce** | `npm run index:build` reports `scheduling-time: 0 mapped cases`. |
+| **Check** | examples/scheduling-time-v1.json with exact-answer date and time questions on the existing exact-json grader. Regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
+|---|---|---|---|---|---|---|---|:---:|
+| 🟢 Small | <a id="f-023-t01"></a>F-023-T01 — scheduling-time-v1 pack with exact date and time answers | 1 h | 0 h | 1 h | Planned | — | [F-023-T02](#f-023-t02) | 🤖 |
+| 🟢 Small | <a id="f-023-t02"></a>F-023-T02 — Release scheduling-time-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-023-T01](#f-023-t01) | — | ⏳ 🧑‍🔧 |
+| 🟢 Small | **Total** | 1 h (1 of 2 steps) | 0 h (0 of 2 steps recorded) | 1 h agent + 0.25 h owner | 0 of 2 completed | | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-023.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner decision 2026-11-26, F-022-T02 ("Do you accept these as recommended? ok") |
+| Opened | 2026-11-26 |
+| Verification | Pending. |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-024"></a>[✨ F-024](#top)
+
+**estimation-v1: evidence in the prompt, decline on missing figures**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 0.75 h agent + 0.25 h owner | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-024-T01 — estimation-v1 pack: evidence in the prompt, decline on missing figures (Planned).
+
+| | |
+|---|---|
+| **Issue** | The index maps 0 cases to estimation. |
+| **Reproduce** | `npm run index:build` reports `estimation: 0 mapped cases`. |
+| **Check** | examples/estimation-v1.json with exact-answer estimation questions on the existing exact-json grader. Regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
+|---|---|---|---|---|---|---|---|:---:|
+| 🟢 Small | <a id="f-024-t01"></a>F-024-T01 — estimation-v1 pack: evidence in the prompt, decline on missing figures | 0.75 h | 0 h | 0.75 h | Planned | — | [F-024-T02](#f-024-t02) | 🤖 |
+| 🟢 Small | <a id="f-024-t02"></a>F-024-T02 — Release estimation-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-024-T01](#f-024-t01) | — | ⏳ 🧑‍🔧 |
+| 🟢 Small | **Total** | 0.75 h (1 of 2 steps) | 0 h (0 of 2 steps recorded) | 0.75 h agent + 0.25 h owner | 0 of 2 completed | | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-024.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner decision 2026-11-26, F-022-T02 ("Do you accept these as recommended? ok") |
+| Opened | 2026-11-26 |
+| Verification | Pending. |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-025"></a>[✨ F-025](#top)
+
+**research-v1: answers from supplied sources with cited ids**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟡 Medium | 1.25 h agent + 0.25 h owner | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-025-T01 — research-v1 pack over supplied sources with cited ids (Planned).
+
+| | |
+|---|---|
+| **Issue** | The index maps 0 cases to research. |
+| **Reproduce** | `npm run index:build` reports `research: 0 mapped cases`. |
+| **Check** | examples/research-v1.json with closed-corpus questions graded on the answer and the cited source ids, on the existing exact-json grader. Regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
+|---|---|---|---|---|---|---|---|:---:|
+| 🟡 Medium | <a id="f-025-t01"></a>F-025-T01 — research-v1 pack over supplied sources with cited ids | 1.25 h | 0 h | 1.25 h | Planned | — | [F-025-T02](#f-025-t02) | 🤖 |
+| 🟢 Small | <a id="f-025-t02"></a>F-025-T02 — Release research-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-025-T01](#f-025-t01) | — | ⏳ 🧑‍🔧 |
+| 🟡 Medium | **Total** | 1.25 h (1 of 2 steps) | 0 h (0 of 2 steps recorded) | 1.25 h agent + 0.25 h owner | 0 of 2 completed | | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-025.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner decision 2026-11-26, F-022-T02 ("Do you accept these as recommended? ok") |
+| Opened | 2026-11-26 |
+| Verification | Pending. |
+| Reviewed | 2026-11-26 |
 
 </details>
 
@@ -95,7 +219,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🔴 Large | 6 h agent + 0.75 h owner | — | — | 🤖 | — | — |
+| 🔴 Open | 🔹 P3 | 🔴 Large | 7.5 h agent + 0.5 h owner | — | — | 🤖 | — | — |
 
 💻 **→** Next: F-021-T01 — Draft the image-generation design decision (Implemented; verification pending).
 
@@ -109,12 +233,22 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
 |---|---|---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="f-021-t01"></a>F-021-T01 — Draft the image-generation design decision | 1 h | 0 h | 1 h | Implemented; verification pending | — | [F-021-T02](#f-021-t02) | 🤖 | PR #113 |
-| 🟢 Small | <a id="f-021-t02"></a>F-021-T02 — Decide the image-generation design | — | 0 h | 0 h agent + 0.5 h owner | Planned | [F-021-T01](#f-021-t01) | [F-021-T03](#f-021-t03) | ⏳ 🤔 | — |
-| 🟡 Medium | <a id="f-021-t03"></a>F-021-T03 — Image-generation runner | 3 h | 0 h | 3 h | Planned | [F-021-T02](#f-021-t02) | [F-021-T04](#f-021-t04) | ⏳ 🤖 | — |
-| 🟡 Medium | <a id="f-021-t04"></a>F-021-T04 — Image grader and pack | 2 h | 0 h | 2 h | Planned | [F-021-T03](#f-021-t03) | [F-021-T05](#f-021-t05) | ⏳ 🤖 | — |
-| 🟢 Small | <a id="f-021-t05"></a>F-021-T05 — Release image-generation-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T04](#f-021-t04) | — | ⏳ 🧑‍🔧 | — |
-| 🔴 Large | **Total** | 6 h (3 of 5 steps) | 0 h (0 of 5 steps recorded) | 6 h agent + 0.75 h owner | 0 of 5 completed | | | | |
+| 🟢 Small | <a id="f-021-t01"></a>F-021-T01 — Draft the image-generation design decision | 1 h | 0 h | 1 h | Implemented; verification pending | — | — | 🤖 | PR #113 |
+| 🟢 Small | <a id="f-021-t06"></a>F-021-T06 — Host check: Ollama image generation, then record runtime A or B | 0.5 h | 0 h | 0.5 h | Planned | — | [F-021-T03](#f-021-t03), [F-021-T07](#f-021-t07) | 🤖 | PR #114 planned |
+| 🟡 Medium | <a id="f-021-t03"></a>F-021-T03 — Image-generation runner | 3 h | 0 h | 3 h | Planned | [F-021-T06](#f-021-t06) | [F-021-T04](#f-021-t04) | ⏳ 🤖 | — |
+| 🟡 Medium | <a id="f-021-t04"></a>F-021-T04 — Image grader and pack | 2 h | 0 h | 2 h | Planned | [F-021-T03](#f-021-t03) | [F-021-T08](#f-021-t08) | ⏳ 🤖 | — |
+| 🟢 Small | <a id="f-021-t07"></a>F-021-T07 — Pull the image generator and the vision judge models | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T06](#f-021-t06) | [F-021-T08](#f-021-t08) | ⏳ 🧑‍🔧 | PR #114 planned |
+| 🟢 Small | <a id="f-021-t08"></a>F-021-T08 — First real run: prove the judge, measure generator variance | 1 h | 0 h | 1 h | Planned | [F-021-T04](#f-021-t04), [F-021-T07](#f-021-t07) | [F-021-T05](#f-021-t05) | ⏳ 🤖 | PR #114 planned |
+| 🟢 Small | <a id="f-021-t05"></a>F-021-T05 — Release image-generation-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T08](#f-021-t08) | — | ⏳ 🧑‍🔧 | — |
+| 🔴 Large | **Total** | 7.5 h (5 of 8 steps) | 0 h (0 of 8 steps recorded) | 7.5 h agent + 0.5 h owner | 1 of 8 completed | | | | |
+
+<details><summary>Done steps (1)</summary>
+
+| Effort | Step | Estimate | Actual | Status | PRs |
+|---|---|---|---|---|---|
+| — | <a id="f-021-t02"></a>F-021-T02 — Decide the image-generation design | — | 0 h | Completed | PR #114 decision |
+
+</details>
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -123,10 +257,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-021-T01: PR #113. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#113](https://github.com/voidbrain/gauntlet-protocol/pull/113) |
+| PR / evidence | Steps: F-021-T01: PR #113 · F-021-T02: PR #114 decision · F-021-T06: PR #114 planned · F-021-T07: PR #114 planned · F-021-T08: PR #114 planned. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#113](https://github.com/voidbrain/gauntlet-protocol/pull/113); owner decision 2026-11-26, F-021-T02 ("Do you accept these as recommended? ok") |
 | Opened | 2026-11-24 |
 | Verification | Pending. |
-| Reviewed | 2026-11-24 |
+| Reviewed | 2026-11-26 |
 
 </details>
 

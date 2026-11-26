@@ -1,6 +1,18 @@
 # Image generation: owner decision
 
-Proposal for the owner, drafted 2026-11-26 (F-021-T01). The `image-generation-v1` pack (area `audio-video`) needs a runner that drives a local image generator and a grader that turns an image into a pass or fail. This page sets out the generator runtime, the grader, determinism and host cost, with a recommendation. The owner decides in F-021-T02; nothing here is adopted yet. Sizes and timings below are estimates for the Apple M3 Pro 36 GiB host in [Mac profiles](../MAC-PROFILES.md), not measurements.
+Proposal for the owner, drafted 2026-11-26 (F-021-T01). The `image-generation-v1` pack (area `audio-video`) needs a runner that drives a local image generator and a grader that turns an image into a pass or fail. This page sets out the generator runtime, the grader, determinism and host cost, with a recommendation. The owner decided in F-021-T02 on 2026-11-26; see Decision below. Sizes and timings below are estimates for the Apple M3 Pro 36 GiB host in [Mac profiles](../MAC-PROFILES.md), not measurements.
+
+## Decision
+
+Recorded 2026-11-26 (F-021-T02). The owner accepted the recommendations as written: asked "Do you accept these as recommended?", the owner answered "ok".
+
+- **Runtime: A**, Ollama image generation, if a host check confirms it (F-021-T06, read-only, no download); otherwise **B**, ComfyUI on loopback, which adds about 1 to 2 h to F-021-T03 and F-021-T04.
+- **Grader: S+V**: structural checks as a gate, then a checklist judged by a pinned local vision model, proven on committed pass and fail fixtures.
+- Follow-up: F-021-T06 host check and A/B record, F-021-T07 owner pulls the models by digest, F-021-T03 runner, F-021-T04 grader and pack, F-021-T08 first real run, F-021-T05 release.
+
+## Pull the models
+
+Written by F-021-T06 once the runtime is chosen: the exact pull commands, the generator and judge models and their digests.
 
 What any choice must keep, as for the other packs: invented neutral prompts; regression and holdout splits; a grader proven by committed fixtures (images that must pass and images that must fail); no real model and no download in CI (a fixture generator and a fixture judge stand in); a loopback-only runtime with no credentials; real runs only on an explicit request, marked costly.
 

@@ -1,8 +1,19 @@
 # Remaining areas: pack or skip
 
-Proposal for the owner, drafted 2026-11-26 (F-022-T01). Four index areas have 0 mapped cases: estimation, research, scheduling-time and backlog-management. For each, this page gives a deterministic pack sketch or a skip reason, says what is general (this repository: runners, graders, general packs) and what belongs to a consumer's own domain cases (`evals/gauntlet/<project>-v1.json` in that project), and recommends. The owner decides in F-022-T02; nothing here is adopted yet.
+Proposal for the owner, drafted 2026-11-26 (F-022-T01). Four index areas have 0 mapped cases: estimation, research, scheduling-time and backlog-management. For each, this page gives a deterministic pack sketch or a skip reason, says what is general (this repository: runners, graders, general packs) and what belongs to a consumer's own domain cases (`evals/gauntlet/<project>-v1.json` in that project), and recommends. The owner decided in F-022-T02 on 2026-11-26; see Decision below.
 
 Common ground for every pack below: invented neutral inputs given in the prompt, a fixed reference date where time matters, regression and holdout splits, the existing exact-JSON grader (no new grader, no network, no new runner), an area already in the index taxonomy, and about 1 h agent per pack plus its share of a release, as for logic-math. None needs a new grader, so a consolidated packs and graders proposal adds nothing here beyond these packs.
+
+## Decision
+
+Recorded 2026-11-26 (F-022-T02). The owner accepted the recommendations as written: asked "Do you accept these as recommended?", the owner answered "ok".
+
+| Area | Decision | Follow-up |
+|---|---|---|
+| scheduling-time | Pack: general date and time arithmetic; project specifics stay project cases | F-023 |
+| estimation | Small pack: evidence in the prompt, declines on missing figures | F-024 |
+| research | Pack over supplied sources only, graded on the answer and the cited source ids; live web research skipped | F-025 |
+| backlog-management | Recorded skip: logic-planning and structured-output cover the general part | roadmap |
 
 ## Summary
 

@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "F-021-T07",
+  "parent": "F-021",
+  "status": "planned",
+  "title": "Pull the image generator and the vision judge models",
+  "goal": "Pull the image generator and the vision judge models",
+  "acceptance": [
+    "Owner runs the pull commands the agent wrote into the decision page for the runtime chosen in F-021-T06, pinning each model by digest; the digests are recorded in the record (a download starts only on this explicit request)"
+  ],
+  "dependsOn": [
+    "F-021-T06"
+  ],
+  "resources": [
+    "docs/**",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "owner-procedure"
+  ],
+  "privacy": "Neutral invented cases and fixtures only; no consumer data, private reports or credentials in Git.",
+  "validation": [
+    "Owner reports the pulled digests; recorded in the record"
+  ],
+  "escalation": [
+    "No knowledge of any consumer; a consumer-specific need goes to that consumer's backlog",
+    "Material scope or effort growth goes to the owner before adoption"
+  ],
+  "ownerLink": "docs/decisions/image-generation.md#pull-the-models",
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h owner",
+    "basis": "Planned 2026-11-26; owner time only, download wait not counted. The page and its commands are written by F-021-T06.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0,
+    "ownerHours": 0.25,
+    "ownerKind": "procedure"
+  },
+  "prs": [
+    {
+      "pr": 114,
+      "note": "planned"
+    }
+  ]
+}
