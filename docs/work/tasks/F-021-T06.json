@@ -46,6 +46,10 @@
     {
       "pr": 114,
       "note": "planned"
+    },
+    {
+      "pr": 115,
+      "note": "host check"
     }
   ]
 }
