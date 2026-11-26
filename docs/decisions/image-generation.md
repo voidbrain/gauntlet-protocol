@@ -6,13 +6,79 @@ Proposal for the owner, drafted 2026-11-26 (F-021-T01). The `image-generation-v1
 
 Recorded 2026-11-26 (F-021-T02). The owner accepted the recommendations as written: asked "Do you accept these as recommended?", the owner answered "ok".
 
-- **Runtime: A**, Ollama image generation, if a host check confirms it (F-021-T06, read-only, no download); otherwise **B**, ComfyUI on loopback, which adds about 1 to 2 h to F-021-T03 and F-021-T04.
+- **Runtime: A**, Ollama image generation, if a host check confirms it (F-021-T06, read-only, no download); otherwise **B**, ComfyUI on loopback, which adds about 1 to 2 h to F-021-T03 and F-021-T04. **F-021-T06 found no Ollama image generation (removed in Ollama 0.32.6): runtime B**, generator Qwen Image 2.1 Turbo, judge `gemma4:12b`; see Host check.
 - **Grader: S+V**: structural checks as a gate, then a checklist judged by a pinned local vision model, proven on committed pass and fail fixtures.
 - Follow-up: F-021-T06 host check and A/B record, F-021-T07 owner pulls the models by digest, F-021-T03 runner, F-021-T04 grader and pack, F-021-T08 first real run, F-021-T05 release.
 
+## Host check (F-021-T06)
+
+Checked 2026-11-26 on the Apple M3 Pro 36 GiB host, read-only: no model pulled, nothing installed. The owner widened the check the same day ("Qwen Image 2.1 and Ollama check ok") to Qwen Image 2.1 as generator.
+
+**Result: runtime B (ComfyUI on loopback).** Ollama offers no image generation on this host or in any current release, so the rule above ("A if a host check confirms it, otherwise B") gives B.
+
+| Checked | Found | Source |
+|---|---|---|
+| `ollama --version` | 0.40.16 (latest release 0.40.18, 2026-11-24) | host; [Ollama releases](https://github.com/ollama/ollama/releases) |
+| Ollama image generation | Removed: "Experimental image generation has been temporarily removed. Continue using 0.32.5 for image generation support" (v0.32.6, 2026-08-04); no release since brings it back. On the host, `ollama run --help` has no image flags and `POST /v1/images/generations` on loopback answers 404; the docs list no image-generation capability; the library's image category shows 0 models | [v0.32.6 notes](https://github.com/ollama/ollama/releases/tag/v0.32.6); host; [docs/capabilities](https://github.com/ollama/ollama/tree/main/docs/capabilities) |
+| Pinning Ollama 0.32.5 instead | Rejected: an old runtime beside the one every other pack uses, its image models (`x/z-image-turbo`, `x/flux2-klein`) only, and no Qwen Image | release notes |
+| `ollama list` (vision-capable, via `ollama show`) | `gemma4:12b` (8.0 GB, Q4_K_M, ID `6114515d63c1`), `gemma4:26b` (16 GB, nvfp4), `gemma4:e2b-it-q4_K_M` (7.2 GB); text-only coders `qwen3-coder:30b` (18 GB), `devstral-small-2:24b` (15 GB), `qwen2.5-coder:14b` (9.0 GB) | host |
+| Qwen Image 2.1: model card | Official `Qwen/Qwen-Image-2.1` (released 2026-09-20) and `Qwen/Qwen-Image-2.1-Turbo` (2026-10-09): a 7B diffusion transformer (32 layers) with a Qwen3-VL 8B text encoder; text-to-image and editing, RGBA output | [Qwen/Qwen-Image-2.1](https://huggingface.co/Qwen/Qwen-Image-2.1); [QwenLM/Qwen-Image-2.1](https://github.com/QwenLM/Qwen-Image-2.1) |
+| Qwen Image 2.1: licence | **Qwen Research License Agreement: non-commercial only** ("for research or evaluation purposes only"); commercial use needs a separate licence; copies keep a Notice file. Evaluation here fits; no weights and no generated image go into this repository, and fixtures stay hand-made | [LICENSE](https://huggingface.co/Qwen/Qwen-Image-2.1/blob/main/LICENSE) |
+| Qwen Image 2.1: sizes | Official repo, bf16: transformer 14.23 GB, text encoder 17.53 GB (Turbo; 17.54 GB in 4 shards on the base), VAE 0.68 GB (Turbo) / 1.35 GB (base), about 32.5 GB in all. ComfyUI repackage `Comfy-Org/Qwen-Image-2.1`: transformer bf16 14.23 GB or int8 7.26 GB; Qwen3-VL 8B text encoder bf16 17.53 GB, int8 9.35 GB or w4a8 6.31 GB; VAE 0.68 GB; optional prompt enhancer (Qwen3.5 9B) 9.47 GB int8. Community GGUF (Unsloth, transformer only): Q4_K_M 4.20 GB, Q5_K_M 5.39 GB, Q6_K 6.27 GB, Q8_0 7.64 GB, F16 14.23 GB | Hugging Face API file listings, 2026-11-26 |
+| Qwen Image 2.1: memory | The model card gives no figure; it recommends CPU offload "for GPUs with limited memory". Estimate for the chosen int8 set: about 17.3 GB of weights, about 20 GB peak with 1024 px activations; bf16 (about 32.5 GB) is out on this host by the 20 GB rule above | model card; estimate, not a measurement |
+| Qwen Image 2.1: runtimes | Diffusers, ComfyUI (native from day 0, official workflow templates), vLLM-Omni, SGLang, LightX2V (a macOS app for Turbo), OpenVINO. **Not Ollama**: no library entry (`ollama.com/library/qwen-image` 404) and no image runtime. **ComfyUI supports it** (option B) | model card README, "ComfyUI"; [workflow templates](https://github.com/Comfy-Org/workflow_templates) |
+
+### Judge
+
+The grader section above names no model, only "a vision model (about 8 GB)". On this host that is **`gemma4:12b`**, already installed: vision-capable (`ollama show`), 8.0 GB, Q4_K_M, ID `6114515d63c1`, no download. It is pinned as the judge once F-021-T04 proves it on the pass and fail fixtures. Inkling 2 Mini (about 20 GB, Apache 2.0) was considered as judge and set aside by the owner on 2026-11-26 ("no Inkling for now").
+
+### Memory plan for 36 GiB
+
+The generator (about 20 GB peak), the judge (`gemma4:12b`, about 8 GB plus a small context) and a coding model (`qwen3-coder:30b`, 18 GB) cannot all be resident together; macOS also keeps part of unified memory for itself and the desktop. Run in phases, not per case, so each model loads once:
+
+1. Before a run: `ollama ps`; stop any resident model (`ollama stop <name>`). No coding run in parallel.
+2. Generate: ComfyUI loads the text encoder, encodes, then the transformer and VAE; it generates every case and repeat, and writes the images and their SHA-256 outside the repository.
+3. Free the generator: `POST http://127.0.0.1:8188/free` with `{"unload_models": true, "free_memory": true}`; check memory has fallen before going on.
+4. Judge: Ollama loads the judge once, grades every image at temperature 0, and the last request sends `"keep_alive": 0` so it unloads.
+5. Afterwards: the coding model loads again on its next request.
+
+Peak is about 20 to 22 GB (the generator phase), one of the three at a time. This replaces the "8 to 12 GB" estimate in Host cost below, which assumed a smaller generator.
+
 ## Pull the models
 
-Written by F-021-T06 once the runtime is chosen: the exact pull commands, the generator and judge models and their digests.
+Written by F-021-T06 for F-021-T07: the owner runs these on the host. Each starts a download; nothing runs in CI. Ollama does not pull by digest, so the installed judge is checked against its manifest digest (the model ID in `ollama list` is that digest's first 12 characters); Hugging Face files are fetched at a fixed commit and checked against their SHA-256.
+
+New disk: 17.29 GB of weights (the Qwen Image 2.1 Turbo int8 set) plus a ComfyUI Python environment of a few GB; the host has about 142 GiB free. The judge `gemma4:12b` is already installed (8.0 GB, no download).
+
+```bash
+# 1. Judge: gemma4:12b, already installed (no pull); check its digest
+shasum -a 256 ~/.ollama/models/manifests/registry.ollama.ai/library/gemma4/12b
+# expect 6114515d63c17436a7c0417d82820ac65ad643e2806c5a3c89cb62846436ed0b
+
+# 2. ComfyUI v0.46.0 (commit a277b5bf213e8a44fa34817b7770b54f86ef4cea) in its own Python 3.13 environment
+#    outside this repository; the host's Python is 3.9 and ComfyUI needs 3.10 or later.
+curl -LsSf https://astral.sh/uv/0.13.10/install.sh | sh
+git clone --branch v0.46.0 --depth 1 https://github.com/Comfy-Org/ComfyUI.git ~/gauntlet-comfyui
+cd ~/gauntlet-comfyui && git rev-parse HEAD   # expect a277b5bf213e8a44fa34817b7770b54f86ef4cea
+uv venv --python 3.13 .venv && uv pip install --python .venv -r requirements.txt
+
+# 3. Generator: Qwen Image 2.1 Turbo, int8, from Comfy-Org/Qwen-Image-2.1 at commit aacf31a6d48e707f352ecba714cee0680da3479b
+#    (the files of the official turbo text-to-image workflow, without the optional prompt enhancer)
+R=https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/aacf31a6d48e707f352ecba714cee0680da3479b
+M=~/gauntlet-comfyui/models
+curl -fL -o $M/diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors $R/diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors
+curl -fL -o $M/text_encoders/qwen3vl_8b_int8_convrot.safetensors $R/text_encoders/qwen3vl_8b_int8_convrot.safetensors
+curl -fL -o $M/vae/qwen_image_2.1_vae_bf16.safetensors $R/vae/qwen_image_2.1_vae_bf16.safetensors
+cd $M && shasum -a 256 -c <<'EOF'
+8144a0182964aa8403ad6dbc011db837304167d235161b9aabaa8532e967314c  diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors
+8bfd0f6e12abf2d2d697ecc888e5e90b0d6741d6708f05799f53afa560452e8f  text_encoders/qwen3vl_8b_int8_convrot.safetensors
+bb21f7473051e1ac368515dd3f2e15cd44d7a11748ee8823e1ddca3e4876b7c9  vae/qwen_image_2.1_vae_bf16.safetensors
+EOF
+```
+
+Expected: every `shasum` line matches or prints `OK`; report the judge digest, the ComfyUI commit and the three file hashes for the F-021 record.
+
+Not verified on this host: the int8 "convrot" weights are the official workflow's choice and ComfyUI's quantised layers run without CUDA through a generic path, but a Mac run is unproven until F-021-T03 loads the workflow. If they fail on MPS, the fallback is the bf16 transformer (`qwen_image_2.1_turbo_bf16.safetensors`, 14.23 GB, sha256 `8b74237a7f505773e2c66726fa696444b4c704585c93a347cff9044937f7914a`) with the bf16 text encoder (`qwen3vl_8b_bf16.safetensors`, 17.53 GB, sha256 `68bdc82bc1b66851162ae656225e7e2068166b603db19bd5d5a3b90eb12669a9`), loaded one after the other (about 18 GB peak, 32.4 GB on disk), which F-021-T03 records before the first real run.
 
 What any choice must keep, as for the other packs: invented neutral prompts; regression and holdout splits; a grader proven by committed fixtures (images that must pass and images that must fail); no real model and no download in CI (a fixture generator and a fixture judge stand in); a loopback-only runtime with no credentials; real runs only on an explicit request, marked costly.
 

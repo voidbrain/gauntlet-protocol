@@ -6,7 +6,7 @@
   "title": "Pull the image generator and the vision judge models",
   "goal": "Pull the image generator and the vision judge models",
   "acceptance": [
-    "Owner runs the pull commands the agent wrote into the decision page for the runtime chosen in F-021-T06, pinning each model by digest; the digests are recorded in the record (a download starts only on this explicit request)"
+    "Owner runs the steps the agent wrote into the decision page's \"Pull the models\" section for runtime B (F-021-T06): checks the installed judge gemma4:12b against its manifest digest, installs ComfyUI v0.46.0 at its pinned commit, fetches the Qwen Image 2.1 Turbo files at a fixed Hugging Face commit and checks their SHA-256; the digest and hashes are recorded in the record (a download starts only on this explicit request)"
   ],
   "dependsOn": [
     "F-021-T06"
@@ -29,11 +29,11 @@
   "ownerLink": "docs/decisions/image-generation.md#pull-the-models",
   "effort": {
     "size": "small",
-    "estimate": "0.25 h owner",
-    "basis": "Planned 2026-11-26; owner time only, download wait not counted. The page and its commands are written by F-021-T06.",
+    "estimate": "0.5 h owner",
+    "basis": "Planned 2026-11-26; owner time only, download wait not counted. Raised from 0.25 h on 2026-11-26 because runtime B adds a ComfyUI install to the pulls, within the 1 to 2 h the owner accepted for B.",
     "reviewed": "2026-11-26",
     "agentHours": 0,
-    "ownerHours": 0.25,
+    "ownerHours": 0.5,
     "ownerKind": "procedure"
   },
   "prs": [

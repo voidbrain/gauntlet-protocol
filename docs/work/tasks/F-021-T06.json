@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-021-T06",
   "parent": "F-021",
-  "status": "planned",
+  "status": "implemented",
   "title": "Host check: Ollama image generation, then record runtime A or B",
   "goal": "Host check: Ollama image generation, then record runtime A or B",
   "acceptance": [
@@ -36,7 +36,7 @@
   "effort": {
     "size": "small",
     "estimate": "0.5 h agent",
-    "basis": "Planned 2026-11-26 after the owner accepted runtime A conditional on a host check. Read-only commands and one decision-page edit. Not a measurement.",
+    "basis": "Planned 2026-11-26 after the owner accepted runtime A conditional on a host check; widened the same day to Qwen Image 2.1 (owner: \"Qwen Image 2.1 and Ollama check ok\"). Not a measurement. No actual: elapsed time not tracked in this session.",
     "reviewed": "2026-11-26",
     "agentHours": 0.5,
     "baselineAgentHours": 0.5,

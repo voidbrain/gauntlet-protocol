@@ -37,11 +37,11 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "3 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement. Re-planned 2026-11-26 to the owner's decision; 3 h holds for runtime A, add 1 to 2 h for B.",
-    "reviewed": "2026-11-24",
-    "agentHours": 3,
+    "estimate": "4 h agent",
+    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request); not a measurement. Re-estimated 2026-11-26 to 4 h after F-021-T06 recorded runtime B (ComfyUI workflow, /free between phases, int8-on-MPS check), within the 1 to 2 h the owner accepted for B.",
+    "reviewed": "2026-11-26",
+    "agentHours": 4,
     "baselineAgentHours": 3,
-    "estimateAgentHours": 3
+    "estimateAgentHours": 4
   }
 }

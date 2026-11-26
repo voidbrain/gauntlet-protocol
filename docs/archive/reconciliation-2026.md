@@ -134,3 +134,7 @@ PRs #109 and #110 merged on green CI (#109: harness v10.20.0, B-004, B-005; #110
 ## 2026-11-26 — main `9a61a61`
 
 PR #111 merged on green CI (F-075: harness v10.21.4). F-075 closed and archived.
+
+## 2026-11-26 — main `f209281`
+
+PRs #112, #113 and #114 merged on green CI (#112: F-022 proposals, F-075 archived; #113: F-021 design draft; #114: F-021 and F-022 owner decisions). F-021-T06 host check recorded: runtime B.
