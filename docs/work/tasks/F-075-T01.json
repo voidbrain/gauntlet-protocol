@@ -2,13 +2,13 @@
   "version": 1,
   "id": "F-075-T01",
   "parent": "F-075",
-  "title": "Reconcile harness files v10.20.0 -> v10.21.3",
-  "goal": "The project carries every harness change released after v10.20.0 up to v10.21.3",
-  "status": "planned",
+  "title": "Reconcile harness files v10.20.0 -> v10.21.4",
+  "goal": "The project carries every harness change released after v10.20.0 up to v10.21.4",
+  "status": "implemented",
   "acceptance": [
-    "Copied files byte-identical to v10.21.3 (check-harness --strict)",
+    "Copied files byte-identical to v10.21.4 (check-harness --strict)",
     "Adapted files reconciled from the template diff, project lines kept",
-    "version 10.21.3 in .harness.json"
+    "version 10.21.4 in .harness.json"
   ],
   "dependsOn": [],
   "resources": [
