@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-022-T01",
   "parent": "F-022",
-  "status": "planned",
+  "status": "implemented",
   "title": "Propose packs or skips for the remaining areas",
   "goal": "Propose packs or skips for the remaining areas",
   "acceptance": [
@@ -38,5 +38,10 @@
     "agentHours": 1,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
-  }
+  },
+  "prs": [
+    {
+      "pr": 112
+    }
+  ]
 }
