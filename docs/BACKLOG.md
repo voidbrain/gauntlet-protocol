@@ -4,13 +4,52 @@ Current work ledger, reviewed 26 November 2026 against main `67ef7e6`. PR #127 r
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 24 h agent + 1.25 h owner across 30 open steps of 14 features and 2 other records. Generated from the task files.
+**Remaining effort:** 29 h agent + 1.5 h owner across 37 open steps of 15 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
 
 Bugs (B-) and features (F-) in one list, most urgent first.
 
+### <a id="f-032"></a>[✨ F-032](#top)
+
+**json-match grader: ignored paths, numeric tolerance, order-free arrays**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 2 h agent + 0.25 h owner | — | [F-035-T04](#f-035-t04) | 🤖 | — | — |
+
+💻 **→** Next: F-032-T01 — json-match grader with fixtures and PROTOCOL text (Planned).
+
+| | |
+|---|---|
+| **Issue** | `exact-json-v1` is a deep, order-sensitive equality (`src/index.ts:1234`, `isDeepStrictEqual`), so a correct answer whose free text or free numbers differ fails: openbando's command batches (free `reply` and positions), fpvbuddy's several batteries in one phrase, nerv's planner actions with free-text arguments such as a reminder title, and research-v1's cited source ids (a set) cannot be graded fairly. The consumers' cases are in Italian and English, so the free text is often Italian. Owner decision 2026-11-26 in chat: "ok to all" (accepts proposals 1 to 3 of the shared-asset review, solution:F-016-T09); same message: "nerv and all modules will need to work with Italian". |
+| **Reproduce** | A fixture whose answer differs from the expected only in `reply` text, or in array order, fails `exact-json-v1`. |
+| **Check** | A new expected kind (`json-match`) with declared ignored paths, per-path numeric ranges and order-free arrays; deterministic, proven by fixtures (pass and fail per rule, including Italian free text with accents under an ignored path); validated by `gauntlet validate`; documented in PROTOCOL; a tagged release. Consumers (openbando:F-057, fpvbuddy:F-022, nerv:F-120-T09) adopt through their pin. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
+|---|---|---|---|---|---|---|---|:---:|---|
+| 🟡 Medium | <a id="f-032-t01"></a>F-032-T01 — json-match grader with fixtures and PROTOCOL text | 2 h | 0 h | 2 h | Planned | — | [F-032-T02](#f-032-t02), [F-035-T04](#f-035-t04) | 🤖 | PR #126 plan |
+| 🟢 Small | <a id="f-032-t02"></a>F-032-T02 — Owner tags the release carrying json-match | 0 h | 0 h | 0 h agent + 0.25 h owner | Planned | [F-032-T01](#f-032-t01) | — | ⏳ 🧑‍🔧 | PR #126 plan |
+| 🟡 Medium | **Total** | 2 h | 0 h (0 of 2 steps recorded) | 2 h agent + 0.25 h owner | 0 of 2 completed | | | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-032.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-032-T01: PR #126 plan · F-032-T02: PR #126 plan. [#126](https://github.com/voidbrain/gauntlet-protocol/pull/126) (plan); [review page](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-shared-assets/gauntlet-protocol.md); owner decision 2026-11-26 |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
 ### <a id="b-003"></a>[🐞 B-003](#top)
 
 **Coding grader blocks at a timeout while a leftover process keeps writing**
@@ -118,45 +157,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | Steps: F-034-T01: PR #126 plan. [#126](https://github.com/voidbrain/gauntlet-protocol/pull/126) (plan); [review page](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-shared-assets/gauntlet-protocol.md); owner decision 2026-11-26 |
-| Opened | 2026-11-26 |
-| Verification | Pending |
-| Reviewed | 2026-11-26 |
-
-</details>
-
----
-### <a id="f-032"></a>[✨ F-032](#top)
-
-**json-match grader: ignored paths, numeric tolerance, order-free arrays**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 2 h agent + 0.25 h owner | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-032-T01 — json-match grader with fixtures and PROTOCOL text (Planned).
-
-| | |
-|---|---|
-| **Issue** | `exact-json-v1` is a deep, order-sensitive equality (`src/index.ts:1234`, `isDeepStrictEqual`), so a correct answer whose free text or free numbers differ fails: openbando's command batches (free `reply` and positions), fpvbuddy's several batteries in one phrase, nerv's planner actions with free-text arguments such as a reminder title, and research-v1's cited source ids (a set) cannot be graded fairly. The consumers' cases are in Italian and English, so the free text is often Italian. Owner decision 2026-11-26 in chat: "ok to all" (accepts proposals 1 to 3 of the shared-asset review, solution:F-016-T09); same message: "nerv and all modules will need to work with Italian". |
-| **Reproduce** | A fixture whose answer differs from the expected only in `reply` text, or in array order, fails `exact-json-v1`. |
-| **Check** | A new expected kind (`json-match`) with declared ignored paths, per-path numeric ranges and order-free arrays; deterministic, proven by fixtures (pass and fail per rule, including Italian free text with accents under an ignored path); validated by `gauntlet validate`; documented in PROTOCOL; a tagged release. Consumers (openbando:F-057, fpvbuddy:F-022, nerv:F-120-T09) adopt through their pin. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
-|---|---|---|---|---|---|---|---|:---:|---|
-| 🟡 Medium | <a id="f-032-t01"></a>F-032-T01 — json-match grader with fixtures and PROTOCOL text | 2 h | 0 h | 2 h | Planned | — | [F-032-T02](#f-032-t02) | 🤖 | PR #126 plan |
-| 🟢 Small | <a id="f-032-t02"></a>F-032-T02 — Owner tags the release carrying json-match | 0 h | 0 h | 0 h agent + 0.25 h owner | Planned | [F-032-T01](#f-032-t01) | — | ⏳ 🧑‍🔧 | PR #126 plan |
-| 🟡 Medium | **Total** | 2 h | 0 h (0 of 2 steps recorded) | 2 h agent + 0.25 h owner | 0 of 2 completed | | | | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-032.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-032-T01: PR #126 plan · F-032-T02: PR #126 plan. [#126](https://github.com/voidbrain/gauntlet-protocol/pull/126) (plan); [review page](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-shared-assets/gauntlet-protocol.md); owner decision 2026-11-26 |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
@@ -591,6 +591,50 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Field | Value |
 |---|---|
 | PR / evidence | Steps: F-029-T01: PR #125 plan · F-029-T02: PR #125 plan. [#125](https://github.com/voidbrain/gauntlet-protocol/pull/125) (plan); [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); owner decision 2026-11-26 |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-035"></a>[✨ F-035](#top)
+
+**Image-understanding pack (vision-v1)**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🔴 Large | 5 h agent + 0.25 h owner | [F-032-T01](#f-032-t01) | — | 🤖 | — | — |
+
+💻 **→** Next: F-035-T01 — Design: image-case format, fixtures and graders (Planned).
+
+| | |
+|---|---|
+| **Issue** | Gauntlet has no pack that tests a model's understanding of an image: only `image-generation-v1`, which uses gemma4:12b as a judge. nerv:F-142 (vision in chat, parked until the owner picks a use) needs one to qualify a local vision model, and other consumers may too. Per coordinator:F-016's shared-asset rule, gauntlet owns general packs. The owner uses NERV in Italian, so every question has an Italian and an English form. Owner decision 2026-11-26 in chat: "open the Gauntlet pack record". |
+| **Reproduce** | `ls examples` has no vision pack; `gauntlet validate` has no case with an image. |
+| **Check** | `examples/vision-v1.json` gives an image and a question per case, in Italian and English, with regression and holdout splits; answers are graded deterministically (exact or json-match, OCR text within a stated tolerance, yes/no checklists), each rule proven by pass and fail fixtures; fixture images are drawn by code or openly licensed with the licence recorded, never model-generated (no Qwen images); a local model that accepts images (gemma4:12b on Ollama) has a recorded run; the pack has an index entry and a tagged release the owner cuts. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
+|---|---|---|---|---|---|---|---|:---:|
+| 🟢 Small | <a id="f-035-t01"></a>F-035-T01 — Design: image-case format, fixtures and graders | 0.75 h | 0 h | 0.75 h | Planned | — | [F-035-T02](#f-035-t02), [F-035-T03](#f-035-t03) | 🤖 |
+| 🟢 Small | <a id="f-035-t02"></a>F-035-T02 — OCR-with-tolerance and checklist graders (failing test first) | 1 h | 0 h | 1 h | Planned | [F-035-T01](#f-035-t01) | [F-035-T04](#f-035-t04) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-035-t03"></a>F-035-T03 — Fixture images drawn by code | 1 h | 0 h | 1 h | Planned | [F-035-T01](#f-035-t01) | [F-035-T04](#f-035-t04) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-035-t04"></a>F-035-T04 — Cases: image plus question, Italian and English | 1 h | 0 h | 1 h | Planned | [F-035-T02](#f-035-t02), [F-035-T03](#f-035-t03), [F-032-T01](#f-032-t01) | [F-035-T05](#f-035-t05) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-035-t05"></a>F-035-T05 — Pack file, runner and index entry | 0.75 h | 0 h | 0.75 h | Planned | [F-035-T04](#f-035-t04) | [F-035-T06](#f-035-t06) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-035-t06"></a>F-035-T06 — Run the pack against gemma4:12b | 0.5 h | 0 h | 0.5 h | Planned | [F-035-T05](#f-035-t05) | [F-035-T07](#f-035-t07) | ⏳ 🤖 |
+| 🟢 Small | <a id="f-035-t07"></a>F-035-T07 — Owner tags the release carrying vision-v1 | 0 h | 0 h | 0 h agent + 0.25 h owner | Planned | [F-035-T06](#f-035-t06) | — | ⏳ 🧑‍🔧 |
+| 🔴 Large | **Total** | 5 h | 0 h (0 of 7 steps recorded) | 5 h agent + 0.25 h owner | 0 of 7 completed | | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-035.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Plan: PR_PLACEHOLDER; nerv:F-142 |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
