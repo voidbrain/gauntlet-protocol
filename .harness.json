@@ -3,7 +3,7 @@
     "path": "../project-harness",
     "repo": "https://github.com/voidbrain/project-harness"
   },
-  "version": "10.24.1",
+  "version": "10.24.2",
   "stacks": [
     "core"
   ],
@@ -58,7 +58,6 @@
     "docs/agents/rule-review.md": "core/docs/agents/rule-review.md",
     "docs/agents/behaviour-checks.md": "core/docs/agents/behaviour-checks.md",
     "docs/agents/mcp-commands.md": "core/docs/agents/mcp-commands.md",
-    "docs/agents/solution-refresh.md": "core/docs/agents/solution-refresh.md",
     "docs/agents/audit-findings.md": "core/docs/agents/audit-findings.md",
     "docs/agents/work-usage-sources.md": "core/docs/agents/work-usage-sources.md",
     "docs/agents/work-usage-effectiveness.md": "core/docs/agents/work-usage-effectiveness.md",
@@ -68,8 +67,7 @@
     "docs/agents/parallel-work-plans.md": "core/docs/agents/parallel-work-plans.md",
     "docs/agents/prompt-caching.md": "core/docs/agents/prompt-caching.md",
     "docs/agents/skills-discovery.md": "core/docs/agents/skills-discovery.md",
-    "docs/agents/work-usage-launch.md": "core/docs/agents/work-usage-launch.md",
-    "docs/agents/solution-gaps.md": "core/docs/agents/solution-gaps.md"
+    "docs/agents/work-usage-launch.md": "core/docs/agents/work-usage-launch.md"
   },
   "forked": {},
   "freshness": {

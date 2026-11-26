@@ -142,3 +142,7 @@ PRs #112, #113 and #114 merged on green CI (#112: F-022 proposals, F-075 archive
 ## 2026-11-26 — main `67ef7e6`
 
 PR #127 reconciles the harness to v10.24.1 (from 10.21.4); the owner authorised it in chat on 2026-11-26 ("ok to all") although the template backlog is not empty. CI pending at this entry.
+
+## 2026-11-26 — harness v10.24.2
+
+PR #129 reconciles the harness to v10.24.2 (from 10.24.1; project-harness B-129). The owner approved on 2026-11-26 ("yep") that coordinator-only harness files are not copied into ordinary projects: the copies of the solution refresh and gaps pages are deleted and dropped from `.harness.json` `copied`; the procedures table and `solution-profile.md` name them as coordinator paths; AGENTS.md's solution-profile row no longer says "(refresh inside)". CI pending at this entry.
