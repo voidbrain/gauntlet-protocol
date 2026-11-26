@@ -2,37 +2,50 @@
   "version": 1,
   "id": "B-004-T01",
   "parent": "B-004",
-  "status": "closed",
-  "title": "Toolchain check before the model call",
-  "goal": "The coding runner reports a missing container engine as an error naming the fix, before any model call",
+  "title": "Type-check test/**/*.ts in typecheck",
+  "goal": "typecheck covers the tests and passes",
+  "status": "implemented",
   "acceptance": [
-    "No container engine: an error result with the fix on stderr, complete false, and no model request"
+    "`tsconfig.test.json` includes `src/**/*.ts` and `test/**/*.ts` and is in `npm run typecheck`",
+    "The commit adding it fails; the fixes make it pass without weakening a test"
   ],
   "dependsOn": [],
   "resources": [
-    "examples/**",
+    "tsconfig.test.json",
+    "package.json",
     "test/**",
-    "docs/**",
-    "generated:backlog-views"
+    "examples/**",
+    "docs/work/records/B-004.md"
   ],
   "capabilities": [
     "bounded-edit",
+    "typescript",
     "regression-design"
   ],
-  "privacy": "No data: runner and grader control flow only.",
+  "privacy": "Neutral invented fixtures only; no personal data, credentials or private reports in Git.",
   "validation": [
-    "Regression test committed failing first; npm test; CI"
+    "npm run typecheck",
+    "npm test",
+    "CI"
   ],
   "escalation": [
-    "A change to the executor contract is an owner decision"
+    "A material scope or effort increase goes to the owner"
   ],
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Merged in PR #107 on green CI on 2026-11-25 (regression test committed failing first, a720f99); shipped in v0.11.1 (release PR #108). No actual: elapsed time not measured across sessions.",
-    "reviewed": "2026-11-25",
+    "basis": "Done 2026-11-26 in one PR: 36 errors, all types, fixed in tests and JSDoc. Not timed.",
+    "reviewed": "2026-11-26",
     "agentHours": 0,
-    "baselineAgentHours": 0.25,
-    "estimateAgentHours": 0.25
-  }
+    "ownerHours": 0,
+    "baselineAgentHours": 1,
+    "estimateAgentHours": 1,
+    "days": 0,
+    "baselineDays": 0
+  },
+  "prs": [
+    {
+      "pr": 118
+    }
+  ]
 }

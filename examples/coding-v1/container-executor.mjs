@@ -55,6 +55,9 @@ export async function sweepStale(docker = 'docker', now = Date.now()) {
 }
 
 // spawnProcess is a test seam for the engine client; it defaults to node's spawn.
+/**
+ * @param {{ docker?: string, limits?: { memory: string, pids: number, cpus: string, tmpfs: string, cpuSeconds?: number }, spawnProcess?: (command: string, args: string[], options: object) => import('node:child_process').ChildProcess }} [options]
+ */
 export function containerExecutor({ docker = 'docker', limits = defaultLimits, spawnProcess = spawn } = {}) {
   const ready = new Map();
   const imageFor = (argv) => {

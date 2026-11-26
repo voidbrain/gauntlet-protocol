@@ -135,6 +135,10 @@ const executorError = (error, tests) => ({
 });
 
 // The candidate is written to an empty workspace first; the driver and the inputs are copied in afterwards.
+/**
+ * @param {{ taskDir: string, candidate: string, execute: Function, timeoutMs?: number }} options
+ * @returns {Promise<{ status: string, reason: string, tests: number, passed: number, message?: string }>}
+ */
 export async function gradeCandidate({ taskDir, candidate, execute, timeoutMs = 10000 }) {
   if (typeof candidate !== 'string' || typeof execute !== 'function')
     throw Error('Candidate source and executor required');

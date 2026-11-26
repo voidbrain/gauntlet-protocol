@@ -221,6 +221,10 @@ function unsafeInclude(code) {
   return /\.?incbin\b|__has_include|#\s*include_next\b/.test(code);
 }
 
+/**
+ * @param {{ taskDir: string, candidate: string, cli?: string, env?: Record<string, string>, timeoutMs?: number }} options
+ * @returns {Promise<{ status: string, reason: string, checks: number, passed: number, message?: string, compile?: string, failedChecks?: string[], diagnostics?: string }>}
+ */
 export async function gradeSketch({ taskDir, candidate, cli, env = {}, timeoutMs = 300000 }) {
   if (typeof candidate !== 'string') throw Error('Candidate sketch source required');
   const task = readTask(taskDir);

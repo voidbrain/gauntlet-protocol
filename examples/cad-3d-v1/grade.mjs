@@ -163,6 +163,10 @@ const executorError = (error, checks) => ({
   measured: null,
 });
 
+/**
+ * @param {{ taskDir: string, candidate: string, execute: Function, timeoutMs?: number }} options
+ * @returns {Promise<{ status: string, reason: string, checks: number, passed: number, failedChecks: string[], message?: string, measured: Record<'sizeX' | 'sizeY' | 'sizeZ' | 'volume', number> | null }>}
+ */
 export async function gradeOpenScad({ taskDir, candidate, execute, timeoutMs = 30000 }) {
   if (typeof candidate !== 'string' || typeof execute !== 'function')
     throw Error('Candidate OpenSCAD source and executor required');

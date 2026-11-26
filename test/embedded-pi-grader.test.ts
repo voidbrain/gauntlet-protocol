@@ -91,5 +91,5 @@ test('Pi grader reports a missing Python as an error, not a failed candidate', a
     python: '/nonexistent/python3',
   });
   assert.deepEqual([missing.status, missing.reason], ['error', 'toolchain-missing']);
-  assert.match(missing.message, /GAUNTLET_PYTHON/);
+  assert.match(String(missing.message), /GAUNTLET_PYTHON/);
 });

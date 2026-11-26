@@ -97,6 +97,10 @@ function analyze(python, file, { env, timeoutMs }) {
   });
 }
 
+/**
+ * @param {{ taskDir: string, candidate: string, python?: string, env?: Record<string, string>, timeoutMs?: number }} options
+ * @returns {Promise<{ status: string, reason: string, checks: number, passed: number, message?: string, failedChecks?: string[], diagnostics?: string }>}
+ */
 export async function gradePiSolution({ taskDir, candidate, python, env = {}, timeoutMs = 20000 }) {
   if (typeof candidate !== 'string') throw Error('Candidate Python source required');
   const task = readPiTask(taskDir);
