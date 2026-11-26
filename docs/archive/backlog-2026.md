@@ -859,3 +859,39 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 </details>
 
 ---
+
+## Closed 2026-11-26
+
+### F-075
+
+**Reconcile project-harness v10.20.0 → v10.21.4**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-26: Merged in PR #111 on green CI (ci:status: success); check-harness --strict matched v10.21.4; check:freshness reports no harness update.
+
+| | |
+|---|---|
+| **Issue** | `.harness.json` names v10.20.0 while the template has released up to v10.21.4. Coordinator gap review 2026-11-26, proposal 12 ("Behind the harness"), accepted by the owner. |
+| **Reproduce** | `npm run check:freshness` on `main`: it reports the harness template v10.21.4 and the files to update or reconcile. |
+| **Check** | `.harness.json` names v10.21.4; `check:freshness` reports no harness update; `check:fast` and CI on the PR pass. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-26: Merged in PR #111 on green CI (ci:status: success); check-harness --strict matched v10.21.4; check:freshness reports no harness update. Opened 2026-11-26 from the coordinator gap review (proposal 12, owner accepted all proposals). F-075-T01 does the reconcile in a session of this repository, under APPLY.md. 2026-11-26: retargeted to v10.21.4 (released after the record opened). Copied `tools/impact-map.mjs`, `tools/work-items.mjs`, `docs/agents/solution-profile.md`, `solution-refresh.md` and `solution-gaps.md` from the tag; reconciled `docs/agents/pull-requests.md` by hand (the publish-hooks sentence); `version` 10.21.4. Skipped: `backlog-views.yml` and `tools/solution.mjs` (not adopted here: committed views, no coordinator role). Closes on this PR's green CI.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Opened in [#110](https://github.com/voidbrain/gauntlet-protocol/pull/110); [#111](https://github.com/voidbrain/gauntlet-protocol/pull/111) |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
