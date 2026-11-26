@@ -79,7 +79,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Opened in [#110](https://github.com/voidbrain/gauntlet-protocol/pull/110) |
+| PR / evidence | Opened in [#110](https://github.com/voidbrain/gauntlet-protocol/pull/110); [#111](https://github.com/voidbrain/gauntlet-protocol/pull/111) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
