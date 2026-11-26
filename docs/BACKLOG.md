@@ -272,7 +272,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|---|---|---|---|---|---|---|
 | 🟢 Small | <a id="f-027-t01"></a>F-027-T01 — Measure coverage of src/ with a committed baseline | 0.5 h | 0 h | 0 h | Implemented; verification pending | — | [F-027-T03](#f-027-t03) | PR #118 |
 | 🟢 Small | <a id="f-027-t02"></a>F-027-T02 — Set behaviour.runner | 0.25 h | 0 h | 0 h | Implemented; verification pending | — | — | PR #118 |
-| 🟢 Small | <a id="f-027-t03"></a>F-027-T03 — Turn coverage.enforce on | 0.25 h | 0 h | 0 h | Implemented; verification pending | [F-027-T01](#f-027-t01) | — | — |
+| 🟢 Small | <a id="f-027-t03"></a>F-027-T03 — Turn coverage.enforce on | 0.25 h | 0 h | 0 h | Implemented; verification pending | [F-027-T01](#f-027-t01) | — | PR #120 |
 | 🟢 Small | **Total** | 1 h | 0 h (0 of 3 steps recorded) | 0 h | 0 of 3 completed | | | |
 
 <details>
@@ -282,7 +282,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-027-T01: PR #118 · F-027-T02: PR #118. [#118](https://github.com/voidbrain/gauntlet-protocol/pull/118); [#120](https://github.com/voidbrain/gauntlet-protocol/pull/120) |
+| PR / evidence | Steps: F-027-T01: PR #118 · F-027-T02: PR #118 · F-027-T03: PR #120. [#118](https://github.com/voidbrain/gauntlet-protocol/pull/118); [#120](https://github.com/voidbrain/gauntlet-protocol/pull/120) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
