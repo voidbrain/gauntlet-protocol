@@ -42,5 +42,11 @@
     "agentHours": 2,
     "baselineAgentHours": 2,
     "estimateAgentHours": 2
-  }
+  },
+  "prs": [
+    {
+      "pr": 121,
+      "note": "grader and pack; judge proven on fixtures"
+    }
+  ]
 }
