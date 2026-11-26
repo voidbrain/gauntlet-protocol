@@ -205,7 +205,7 @@ test('the judge passes every committed pass fixture and fails every fail fixture
       assert.equal(result.imageSha256, sha256(items[i].bytes));
       if (i < results.length - 1) assert.equal(result.structural.passed, true);
     }
-    const blank = results.at(-1);
+    const blank = results.at(-1)!;
     assert.deepEqual([blank.structural.passed, blank.answers], [false, null], 'no judge call for a blank image');
 
     const chats = judge.calls.filter((call) => call.path === '/api/chat').map((call) => JSON.parse(call.body));
@@ -240,7 +240,7 @@ test('the judge is refused unless pinned by digest on a literal loopback address
   try {
     const { results } = await gradeImages([{ task, bytes }], { endpoint: rambling.endpoint });
     assert.equal(results[0].status, 'error');
-    assert.match(results[0].reason, /Judge answer/);
+    assert.match(String((results[0] as { reason?: string }).reason), /Judge answer/);
     const last = rambling.calls.filter((call) => ['/api/chat', '/api/generate'].includes(call.path)).at(-1)!;
     assert.equal(JSON.parse(last.body).keep_alive, 0, 'the judge is unloaded after an error too');
   } finally {

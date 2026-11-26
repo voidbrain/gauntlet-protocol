@@ -113,6 +113,12 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 | [code-review@1.0.0 / command-and-retry-holdout](../examples/code-review-v1.json) | code-review | defect-detection, security-review, structured-output | model / holdout | true / false | defects-v1 / local-model-runtime | Unmeasured |
 | [code-review@1.0.0 / listener-and-mutation-holdout](../examples/code-review-v1.json) | code-review | defect-detection, concurrency-review, structured-output | model / holdout | true / false | defects-v1 / local-model-runtime | Unmeasured |
 | [code-review@1.0.0 / token-and-cache-holdout](../examples/code-review-v1.json) | code-review | defect-detection, security-review, concurrency-review, structured-output | model / holdout | true / false | defects-v1 / local-model-runtime | Unmeasured |
+| [image-generation@1.0.0 / red-cube-regression](../examples/image-generation-v1.json) | audio-video | image-generation, prompt-adherence, object-colour | model / regression | true / true | registered:image-generation-reference / local-image-runtime, local-vision-judge | Unmeasured |
+| [image-generation@1.0.0 / open-sign-regression](../examples/image-generation-v1.json) | audio-video | image-generation, prompt-adherence, text-rendering | model / regression | true / true | registered:image-generation-reference / local-image-runtime, local-vision-judge | Unmeasured |
+| [image-generation@1.0.0 / checkerboard-regression](../examples/image-generation-v1.json) | audio-video | image-generation, prompt-adherence, pattern | model / regression | true / true | registered:image-generation-reference / local-image-runtime, local-vision-judge | Unmeasured |
+| [image-generation@1.0.0 / yellow-balls-holdout](../examples/image-generation-v1.json) | audio-video | image-generation, prompt-adherence, object-count | model / holdout | true / true | registered:image-generation-reference / local-image-runtime, local-vision-judge | Unmeasured |
+| [image-generation@1.0.0 / triangle-above-square-holdout](../examples/image-generation-v1.json) | audio-video | image-generation, prompt-adherence, spatial-layout | model / holdout | true / true | registered:image-generation-reference / local-image-runtime, local-vision-judge | Unmeasured |
+| [image-generation@1.0.0 / blue-circles-holdout](../examples/image-generation-v1.json) | audio-video | image-generation, prompt-adherence, object-count | model / holdout | true / true | registered:image-generation-reference / local-image-runtime, local-vision-judge | Unmeasured |
 
 ## Area coverage
 
@@ -135,5 +141,5 @@ Mapped cases are implemented coverage, not model qualification. Evidence retains
 - security-permissions: 4 mapped cases
 - documents-data: 4 mapped cases
 - language-translation: 10 mapped cases
-- audio-video: 0 mapped cases
+- audio-video: 6 mapped cases
 - scheduling-time: 0 mapped cases

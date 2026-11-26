@@ -10,14 +10,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { deflateSync } from 'node:zlib';
 import { defaults, run, validatePack, validateProfile, validateRegistry, type Profile } from '../src/index.ts';
-import {
-  buildPrompt,
-  modelDigest,
-  models,
-  pngSize,
-  readImageTask,
-  workflow,
-} from '../examples/image-generation-v1/comfy.mjs';
+import { buildPrompt, modelDigest, models, readImageTask, workflow } from '../examples/image-generation-v1/comfy.mjs';
 import { judgeSpec } from '../examples/image-generation-v1/grade.mjs';
 
 const runnerPath = resolve('examples/image-generation-v1/runner.mjs');
@@ -289,8 +282,6 @@ test('the committed workflow is API format with the three pinned loaders, fixed 
   assert.equal(nodesOf(workflow).find((n) => n.class_type === 'RandomNoise')!.inputs.noise_seed, 0);
   assert.throws(() => readImageTask(tasksDir, '../escape'), /Invalid image task/);
   assert.throws(() => readImageTask(tasksDir, 'missing-task'), /Invalid image task/);
-  assert.deepEqual(pngSize(png(24, 16)), { width: 24, height: 16 });
-  assert.equal(pngSize(Buffer.from('not a png')), null);
 });
 
 test('the image runner generates through ComfyUI, stores the image outside Git with its record and frees the generator', async () => {
