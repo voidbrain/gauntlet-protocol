@@ -634,7 +634,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Plan: PR_PLACEHOLDER; nerv:F-142 |
+| PR / evidence | Plan: pending; nerv:F-142; [#128](https://github.com/voidbrain/gauntlet-protocol/pull/128) |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
