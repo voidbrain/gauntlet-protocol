@@ -138,3 +138,7 @@ PR #111 merged on green CI (F-075: harness v10.21.4). F-075 closed and archived.
 ## 2026-11-26 — main `f209281`
 
 PRs #112, #113 and #114 merged on green CI (#112: F-022 proposals, F-075 archived; #113: F-021 design draft; #114: F-021 and F-022 owner decisions). F-021-T06 host check recorded: runtime B.
+
+## 2026-11-26 — main `67ef7e6`
+
+PR #127 reconciles the harness to v10.24.1 (from 10.21.4); the owner authorised it in chat on 2026-11-26 ("ok to all") although the template backlog is not empty. CI pending at this entry.
