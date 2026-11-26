@@ -4,7 +4,7 @@ Current work ledger, reviewed 26 November 2026 against main `f209281`. PRs #112,
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 12.75 h agent + 1.5 h owner across 16 open steps of 5 features and 1 other record. Generated from the task files.
+**Remaining effort:** 12.75 h agent + 1.5 h owner across 17 open steps of 6 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -169,6 +169,44 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | PR / evidence | Owner decision 2026-11-26, F-022-T02 ("Do you accept these as recommended? ok") |
 | Opened | 2026-11-26 |
 | Verification | Pending. |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-026"></a>[✨ F-026](#top)
+
+**Turn audit enforcement on**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-026-T01 — Turn audit.enforce on (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | Full audit baselines exist (manifest kind full, latest 2026-11-22) but `audit.enforce` was off, so a due audit only warned. The 2026-11-26 cross-project audit (coordinator, docs/audits/2026-11-26-cross-project.md, proposal 17) proposes turning it on. |
+| **Reproduce** | `.harness.json` had `"audit": {"days": 7, "enforce": false}`. |
+| **Check** | `audit.enforce` is true and `npm run check:audits` and `npm run check:freshness` pass. |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-026-t01"></a>F-026-T01 — Turn audit.enforce on | 0.25 h | 0 h | 0 h | Implemented; verification pending | PR #999 audit.enforce true |
+| 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed | |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+[Full notes & evidence](work/records/F-026.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-026-T01: PR #999 audit.enforce true. PRN |
+| Opened | 2026-11-26 |
+| Verification | Pending |
 | Reviewed | 2026-11-26 |
 
 </details>
