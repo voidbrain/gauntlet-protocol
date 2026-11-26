@@ -145,14 +145,14 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
-|---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-021-t01"></a>F-021-T01 — Draft the image-generation design decision | 1 h | 0 h | 1 h | Implemented; verification pending | — | [F-021-T02](#f-021-t02) | 🤖 |
-| 🟢 Small | <a id="f-021-t02"></a>F-021-T02 — Decide the image-generation design | — | 0 h | 0 h agent + 0.5 h owner | Planned | [F-021-T01](#f-021-t01) | [F-021-T03](#f-021-t03) | ⏳ 🤔 |
-| 🟡 Medium | <a id="f-021-t03"></a>F-021-T03 — Image-generation runner | 3 h | 0 h | 3 h | Planned | [F-021-T02](#f-021-t02) | [F-021-T04](#f-021-t04) | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-021-t04"></a>F-021-T04 — Image grader and pack | 2 h | 0 h | 2 h | Planned | [F-021-T03](#f-021-t03) | [F-021-T05](#f-021-t05) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-021-t05"></a>F-021-T05 — Release image-generation-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T04](#f-021-t04) | — | ⏳ 🧑‍🔧 |
-| 🔴 Large | **Total** | 6 h (3 of 5 steps) | 0 h (0 of 5 steps recorded) | 6 h agent + 0.75 h owner | 0 of 5 completed | | | |
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
+|---|---|---|---|---|---|---|---|:---:|---|
+| 🟢 Small | <a id="f-021-t01"></a>F-021-T01 — Draft the image-generation design decision | 1 h | 0 h | 1 h | Implemented; verification pending | — | [F-021-T02](#f-021-t02) | 🤖 | PR #113 |
+| 🟢 Small | <a id="f-021-t02"></a>F-021-T02 — Decide the image-generation design | — | 0 h | 0 h agent + 0.5 h owner | Planned | [F-021-T01](#f-021-t01) | [F-021-T03](#f-021-t03) | ⏳ 🤔 | — |
+| 🟡 Medium | <a id="f-021-t03"></a>F-021-T03 — Image-generation runner | 3 h | 0 h | 3 h | Planned | [F-021-T02](#f-021-t02) | [F-021-T04](#f-021-t04) | ⏳ 🤖 | — |
+| 🟡 Medium | <a id="f-021-t04"></a>F-021-T04 — Image grader and pack | 2 h | 0 h | 2 h | Planned | [F-021-T03](#f-021-t03) | [F-021-T05](#f-021-t05) | ⏳ 🤖 | — |
+| 🟢 Small | <a id="f-021-t05"></a>F-021-T05 — Release image-generation-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T04](#f-021-t04) | — | ⏳ 🧑‍🔧 | — |
+| 🔴 Large | **Total** | 6 h (3 of 5 steps) | 0 h (0 of 5 steps recorded) | 6 h agent + 0.75 h owner | 0 of 5 completed | | | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -161,7 +161,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#113](https://github.com/voidbrain/gauntlet-protocol/pull/113) |
+| PR / evidence | Steps: F-021-T01: PR #113. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#113](https://github.com/voidbrain/gauntlet-protocol/pull/113) |
 | Opened | 2026-11-24 |
 | Verification | Pending. |
 | Reviewed | 2026-11-24 |
