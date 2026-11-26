@@ -1,6 +1,6 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 26 November 2026 against main `f209281`. PRs #112, #113 and #114 merged on green CI (#112: F-022 proposals, F-075 archived; #113: F-021 design draft; #114: F-021 and F-022 owner decisions). F-021-T06 host check recorded: runtime B.
+Current work ledger, reviewed 26 November 2026 against main `67ef7e6`. PR #127 reconciles the harness to v10.24.1 (from 10.21.4); the owner authorised it in chat on 2026-11-26 ("ok to all") although the template backlog is not empty. CI pending at this entry.
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
