@@ -1,0 +1,26 @@
+{
+  "red-cube-regression": {
+    "pass": { "red-cube": "yes", "several-cubes": "no", "lettering": "no" },
+    "fail": { "red-cube": "yes", "several-cubes": "yes", "lettering": "no" }
+  },
+  "open-sign-regression": {
+    "pass": { "reads-open": "yes", "black-letters": "yes", "reads-closed": "no" },
+    "fail": { "reads-open": "no", "black-letters": "yes", "reads-closed": "no" }
+  },
+  "checkerboard-regression": {
+    "pass": { "checkerboard": "yes", "stripes-only": "no", "red-tiles": "no" },
+    "fail": { "checkerboard": "no", "stripes-only": "yes", "red-tiles": "no" }
+  },
+  "yellow-balls-holdout": {
+    "pass": { "three-yellow-balls": "yes", "dark-blue-background": "yes", "red-object": "no" },
+    "fail": { "three-yellow-balls": "no", "dark-blue-background": "yes", "red-object": "no" }
+  },
+  "triangle-above-square-holdout": {
+    "pass": { "green-triangle": "yes", "red-square": "yes", "triangle-above": "yes" },
+    "fail": { "green-triangle": "yes", "red-square": "yes", "triangle-above": "no" }
+  },
+  "blue-circles-holdout": {
+    "pass": { "two-circles": "yes", "blue-circles": "yes", "square": "no" },
+    "fail": { "two-circles": "no", "blue-circles": "yes", "square": "no" }
+  }
+}

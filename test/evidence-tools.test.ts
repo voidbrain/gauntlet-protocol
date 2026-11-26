@@ -142,7 +142,8 @@ test('generated catalog maps cases and evidence without claiming unmeasured area
     embedded = validatePack(JSON.parse(readFileSync('examples/embedded-v1.json', 'utf8'))),
     cad3d = validatePack(JSON.parse(readFileSync('examples/cad-3d-v1.json', 'utf8'))),
     italianQuality = validatePack(JSON.parse(readFileSync('examples/italian-quality-v1.json', 'utf8'))),
-    codeReview = validatePack(JSON.parse(readFileSync('examples/code-review-v1.json', 'utf8')));
+    codeReview = validatePack(JSON.parse(readFileSync('examples/code-review-v1.json', 'utf8'))),
+    imageGeneration = validatePack(JSON.parse(readFileSync('examples/image-generation-v1.json', 'utf8')));
   assert.equal(
     generated,
     catalogMarkdown(
@@ -161,6 +162,7 @@ test('generated catalog maps cases and evidence without claiming unmeasured area
         cad3d,
         italianQuality,
         codeReview,
+        imageGeneration,
       ]),
       {
         'neutral-smoke': '../examples/smoke-v1.json',
@@ -177,6 +179,7 @@ test('generated catalog maps cases and evidence without claiming unmeasured area
         'cad-3d': '../examples/cad-3d-v1.json',
         'italian-quality': '../examples/italian-quality-v1.json',
         'code-review': '../examples/code-review-v1.json',
+        'image-generation': '../examples/image-generation-v1.json',
       },
     ),
   );

@@ -41,10 +41,70 @@ export function readImageTask(dir, id) {
     !Number.isSafeInteger(task.seed) ||
     task.seed < 0 ||
     !size(task.width) ||
-    !size(task.height)
+    !size(task.height) ||
+    !validChecklist(task.checklist) ||
+    !(task.pixels === undefined || validPixels(task.pixels))
   )
     throw Error('Invalid image task: ' + id);
-  return { id, prompt: task.prompt, seed: task.seed, width: task.width, height: task.height, steps };
+  return {
+    id,
+    prompt: task.prompt,
+    seed: task.seed,
+    width: task.width,
+    height: task.height,
+    steps,
+    checklist: task.checklist,
+    pixels: task.pixels ?? [],
+  };
+}
+
+const plain = (value, keys) =>
+  value !== null &&
+  typeof value === 'object' &&
+  !Array.isArray(value) &&
+  Object.keys(value).every((key) => keys.includes(key));
+const fraction = (value) => typeof value === 'number' && value >= 0 && value <= 1;
+// The judge's checklist (F-021-T04): one to eight fixed yes/no questions with distinct ids.
+function validChecklist(list) {
+  return (
+    Array.isArray(list) &&
+    list.length >= 1 &&
+    list.length <= 8 &&
+    new Set(list.map((item) => item?.id)).size === list.length &&
+    list.every(
+      (item) =>
+        plain(item, ['id', 'question', 'expect']) &&
+        typeof item.id === 'string' &&
+        /^[a-z][a-z0-9-]{0,40}$/.test(item.id) &&
+        typeof item.question === 'string' &&
+        item.question.trim().length > 0 &&
+        item.question.length <= 300 &&
+        ['yes', 'no'].includes(item.expect),
+    )
+  );
+}
+// Simple pixel facts for the structural gate: at least minFraction of the pixels lie in a hue range (degrees, wrapping
+// when from > to) and saturation and value bounds (0 to 1).
+function validPixels(list) {
+  return (
+    Array.isArray(list) &&
+    list.length <= 8 &&
+    list.every(
+      (fact) =>
+        plain(fact, ['name', 'hue', 'minSaturation', 'maxSaturation', 'minValue', 'maxValue', 'minFraction']) &&
+        typeof fact.name === 'string' &&
+        /^[a-z][a-z -]{0,40}$/.test(fact.name) &&
+        fraction(fact.minFraction) &&
+        fact.minFraction > 0 &&
+        (fact.hue === undefined ||
+          (Array.isArray(fact.hue) &&
+            fact.hue.length === 2 &&
+            fact.hue.every((degree) => typeof degree === 'number' && degree >= 0 && degree < 360))) &&
+        ['minSaturation', 'maxSaturation', 'minValue', 'maxValue'].every(
+          (key) => fact[key] === undefined || fraction(fact[key]),
+        ),
+    )
+  );
 }
 
 export function buildPrompt(task) {
@@ -53,17 +113,6 @@ export function buildPrompt(task) {
   node(graph, 'RandomNoise').inputs.noise_seed = task.seed;
   Object.assign(node(graph, 'EmptyLatentImage').inputs, { width: task.width, height: task.height });
   return graph;
-}
-
-export function pngSize(bytes) {
-  const signature = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
-  if (
-    bytes.length < 24 ||
-    signature.some((byte, i) => bytes[i] !== byte) ||
-    bytes.toString('latin1', 12, 16) !== 'IHDR'
-  )
-    return null;
-  return { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) };
 }
 
 export function loopback(text, what) {

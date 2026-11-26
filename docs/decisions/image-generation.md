@@ -30,7 +30,7 @@ Checked 2026-11-26 on the Apple M3 Pro 36 GiB host, read-only: no model pulled, 
 
 ### Judge
 
-The grader section above names no model, only "a vision model (about 8 GB)". On this host that is **`gemma4:12b`**, already installed: vision-capable (`ollama show`), 8.0 GB, Q4_K_M, ID `6114515d63c1`, no download. It is pinned as the judge once F-021-T04 proves it on the pass and fail fixtures. Inkling 2 Mini (about 20 GB, Apache 2.0) was considered as judge and set aside by the owner on 2026-11-26 ("no Inkling for now").
+The grader section above names no model, only "a vision model (about 8 GB)". On this host that is **`gemma4:12b`**, already installed: vision-capable (`ollama show`), 8.0 GB, Q4_K_M, ID `6114515d63c1`, no download. It is pinned as the judge once F-021-T04 proves it on the pass and fail fixtures. Proven 2026-11-26 by F-021-T04: see Judge proof below. Inkling 2 Mini (about 20 GB, Apache 2.0) was considered as judge and set aside by the owner on 2026-11-26 ("no Inkling for now").
 
 ### Memory plan for 36 GiB
 
@@ -114,6 +114,25 @@ Memory sequence: before generating, Ollama's `/api/ps` must be empty; with `--un
 | Records | model digest `383fc5bb…34d7`, workflow `e83bfe10…3fcb`, image `ccd7bb8e…3541` (kept outside Git) |
 
 The bf16 fallback is not needed. Timings on a host without the virtual machines' load may be shorter; F-021-T08 measures them per case.
+
+## Grader and pack (F-021-T04)
+
+`examples/image-generation-v1/grade.mjs` is the S+V grader and `examples/image-generation-v1.json` the pack (six cases, three regression and three holdout; the probe task became `red-cube-regression` with the same prompt, seed and size). Structural checks first (PNG decode with CRC, size, luma standard deviation at least 4, the task's pixel facts); only an image that passes them goes to the judge. The judge, pinned in `judge.json`, is `gemma4:12b` at digest `6114515d…ed0b` (checked against `/api/tags` before any request), temperature 0, seed 0, thinking off, answering each case's fixed yes/no questions as JSON under a schema; the expectations stay in the grader. Parsing is deterministic (exact ids, `yes` or `no`); anything else is an `error`. The runner grades after `/free`; `judge.mjs` grades a batch for the phased campaign, the last request with `keep_alive: 0`. Fixture images are drawn by code (`test/fixtures/image-generation-v1/draw.mjs`), not generated: a pass and a fail image per case and a blank one.
+
+### Judge proof (2026-11-26)
+
+One real run of `judge.mjs` on the Apple M3 Pro 36 GiB host, Ollama 0.40.16, before it `ollama ps` empty and ComfyUI not running (nothing listening on 127.0.0.1:8188); after it `ollama ps` empty again (unloaded by `keep_alive: 0`).
+
+| Measured | Value |
+|---|---|
+| Images | 14: the T03 probe image (Qwen output, kept outside Git), 12 committed pass and fail fixtures, the blank fixture |
+| Verdicts | **all as expected**: probe passed; 6 of 6 pass fixtures passed; 6 of 6 fail fixtures failed on exactly the question each was drawn to break (`several-cubes`, `reads-open`, `checkerboard` and `stripes-only`, `three-yellow-balls`, `triangle-above`, `two-circles`); the blank failed structurally with no judge call |
+| Agreement | 36 of 36 answers on the fixtures equal `answers.json` |
+| Probe | answers `red-cube` yes, `several-cubes` no, `lettering` no; red pixels 6.43% (fact: at least 0.5%), luma deviation 38.2 |
+| Time | 38.3 s wall for the whole run; first judge request 10.9 s (cold load of the judge), then 1.9 to 2.7 s per image |
+| Judge identity | `gemma4:12b`, digest `6114515d63c17436a7c0417d82820ac65ad643e2806c5a3c89cb62846436ed0b` |
+
+Not measured here: repeat stability of the judge's answers and the generator's variance across cases and repeats, which are F-021-T08.
 
 ## Question 1: generator runtime
 

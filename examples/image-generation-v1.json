@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "id": "image-generation",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "red-cube-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "image-generation",
+        "prompt-adherence",
+        "object-colour"
+      ],
+      "critical": true,
+      "expensive": true,
+      "runner": "image-generation-reference",
+      "area": "audio-video",
+      "requirements": [
+        "local-image-runtime",
+        "local-vision-judge"
+      ]
+    },
+    {
+      "id": "open-sign-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "image-generation",
+        "prompt-adherence",
+        "text-rendering"
+      ],
+      "critical": true,
+      "expensive": true,
+      "runner": "image-generation-reference",
+      "area": "audio-video",
+      "requirements": [
+        "local-image-runtime",
+        "local-vision-judge"
+      ]
+    },
+    {
+      "id": "checkerboard-regression",
+      "layer": "model",
+      "split": "regression",
+      "capabilities": [
+        "image-generation",
+        "prompt-adherence",
+        "pattern"
+      ],
+      "critical": true,
+      "expensive": true,
+      "runner": "image-generation-reference",
+      "area": "audio-video",
+      "requirements": [
+        "local-image-runtime",
+        "local-vision-judge"
+      ]
+    },
+    {
+      "id": "yellow-balls-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "image-generation",
+        "prompt-adherence",
+        "object-count"
+      ],
+      "critical": true,
+      "expensive": true,
+      "runner": "image-generation-reference",
+      "area": "audio-video",
+      "requirements": [
+        "local-image-runtime",
+        "local-vision-judge"
+      ]
+    },
+    {
+      "id": "triangle-above-square-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "image-generation",
+        "prompt-adherence",
+        "spatial-layout"
+      ],
+      "critical": true,
+      "expensive": true,
+      "runner": "image-generation-reference",
+      "area": "audio-video",
+      "requirements": [
+        "local-image-runtime",
+        "local-vision-judge"
+      ]
+    },
+    {
+      "id": "blue-circles-holdout",
+      "layer": "model",
+      "split": "holdout",
+      "capabilities": [
+        "image-generation",
+        "prompt-adherence",
+        "object-count"
+      ],
+      "critical": true,
+      "expensive": true,
+      "runner": "image-generation-reference",
+      "area": "audio-video",
+      "requirements": [
+        "local-image-runtime",
+        "local-vision-judge"
+      ]
+    }
+  ]
+}

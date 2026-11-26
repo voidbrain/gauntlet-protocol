@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "prompt": "A green triangle directly above a red square, centred on a plain white background, flat vector illustration.",
+  "seed": 2718,
+  "width": 512,
+  "height": 512,
+  "pixels": [
+    {
+      "name": "green",
+      "hue": [
+        90,
+        160
+      ],
+      "minSaturation": 0.4,
+      "minValue": 0.3,
+      "minFraction": 0.005
+    },
+    {
+      "name": "red",
+      "hue": [
+        345,
+        15
+      ],
+      "minSaturation": 0.5,
+      "minValue": 0.3,
+      "minFraction": 0.005
+    }
+  ],
+  "checklist": [
+    {
+      "id": "green-triangle",
+      "question": "Is there a green triangle?",
+      "expect": "yes"
+    },
+    {
+      "id": "red-square",
+      "question": "Is there a red square?",
+      "expect": "yes"
+    },
+    {
+      "id": "triangle-above",
+      "question": "Is the green triangle above the red square?",
+      "expect": "yes"
+    }
+  ]
+}

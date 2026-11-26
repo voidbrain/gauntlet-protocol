@@ -10,14 +10,8 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { deflateSync } from 'node:zlib';
 import { defaults, run, validatePack, validateProfile, validateRegistry, type Profile } from '../src/index.ts';
-import {
-  buildPrompt,
-  modelDigest,
-  models,
-  pngSize,
-  readImageTask,
-  workflow,
-} from '../examples/image-generation-v1/comfy.mjs';
+import { buildPrompt, modelDigest, models, readImageTask, workflow } from '../examples/image-generation-v1/comfy.mjs';
+import { judgeSpec } from '../examples/image-generation-v1/grade.mjs';
 
 const runnerPath = resolve('examples/image-generation-v1/runner.mjs');
 const generatePath = resolve('examples/image-generation-v1/generate.mjs');
@@ -27,7 +21,8 @@ type GraphNode = { class_type: string; inputs: Record<string, unknown> };
 const nodesOf = (graph: unknown) => Object.values(graph as Record<string, GraphNode>);
 const tempDir = (name: string) => mkdtempSync(join(realpathSync(tmpdir()), name));
 
-// A valid PNG of the given size (solid grey), so the runner's decode check runs on real bytes.
+// A valid PNG of the given size (mid-grey with a white stripe across the middle), so the grader's decode and
+// structural checks run on real bytes.
 function png(width: number, height: number) {
   const chunk = (type: string, data: Buffer) => {
     const length = Buffer.alloc(4);
@@ -41,11 +36,12 @@ function png(width: number, height: number) {
   header.writeUInt32BE(width, 0);
   header.writeUInt32BE(height, 4);
   header.set([8, 2, 0, 0, 0], 8);
-  const row = Buffer.concat([Buffer.from([0]), Buffer.alloc(width * 3, 128)]);
+  const row = (y: number) =>
+    Buffer.concat([Buffer.from([0]), Buffer.alloc(width * 3, Math.abs(y - height / 2) < height / 8 ? 255 : 128)]);
   return Buffer.concat([
     Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
     chunk('IHDR', header),
-    chunk('IDAT', deflateSync(Buffer.concat(Array.from({ length: height }, () => row)))),
+    chunk('IDAT', deflateSync(Buffer.concat(Array.from({ length: height }, (_, y) => row(y))))),
     chunk('IEND', Buffer.alloc(0)),
   ]);
 }
@@ -65,6 +61,8 @@ interface FakeOptions {
   wrongSize?: boolean;
   redirect?: boolean;
 }
+// One sequence across both fakes, so a test can check the generator is freed before the judge loads.
+const events: string[] = [];
 async function listen(server: Server) {
   await new Promise<void>((done) => server.listen(0, '127.0.0.1', done));
   return 'http://127.0.0.1:' + (server.address() as { port: number }).port;
@@ -78,6 +76,7 @@ async function fakeComfy(options: FakeOptions = {}) {
     request.on('end', () => {
       const url = new URL(String(request.url), 'http://fake');
       calls.push({ method: String(request.method), path: url.pathname, body });
+      events.push('comfy ' + url.pathname);
       const send = (value: unknown, status = 200) => {
         response.writeHead(status, { 'content-type': 'application/json' });
         response.end(JSON.stringify(value));
@@ -136,13 +135,21 @@ async function fakeComfy(options: FakeOptions = {}) {
   });
   return { server, endpoint: await listen(server), calls };
 }
-async function fakeOllama(loaded: string[]) {
+async function fakeOllama(loaded: string[], answer: Record<string, string> = { 'white-stripe': 'yes' }) {
   const calls: { path: string; body: string }[] = [];
   const server = createServer((request, response) => {
     let body = '';
     request.on('data', (part) => (body += part));
     request.on('end', () => {
       calls.push({ path: String(request.url), body });
+      events.push('ollama ' + request.url);
+      if (request.url === '/api/version') return response.end(JSON.stringify({ version: '0.40.16' }));
+      if (request.url === '/api/tags')
+        return response.end(JSON.stringify({ models: [{ name: judgeSpec.model, digest: judgeSpec.digest }] }));
+      if (request.url === '/api/chat')
+        return response.end(
+          JSON.stringify({ message: { role: 'assistant', content: JSON.stringify(answer) }, done_reason: 'stop' }),
+        );
       if (request.url === '/api/ps') return response.end(JSON.stringify({ models: loaded.map((name) => ({ name })) }));
       if (request.url === '/api/generate') {
         const { model, keep_alive } = JSON.parse(body);
@@ -275,8 +282,6 @@ test('the committed workflow is API format with the three pinned loaders, fixed 
   assert.equal(nodesOf(workflow).find((n) => n.class_type === 'RandomNoise')!.inputs.noise_seed, 0);
   assert.throws(() => readImageTask(tasksDir, '../escape'), /Invalid image task/);
   assert.throws(() => readImageTask(tasksDir, 'missing-task'), /Invalid image task/);
-  assert.deepEqual(pngSize(png(24, 16)), { width: 24, height: 16 });
-  assert.equal(pngSize(Buffer.from('not a png')), null);
 });
 
 test('the image runner generates through ComfyUI, stores the image outside Git with its record and frees the generator', async () => {
@@ -316,9 +321,21 @@ test('the image runner generates through ComfyUI, stores the image outside Git w
         [caseId, task.seed, task.width, task.height, 8, modelDigest(), sha256(bytes)],
       );
       assert.equal(record.runtime, 'comfyui-0.46.3');
+      assert.deepEqual(
+        [record.grade.status, record.grade.structural.passed, record.grade.answers, record.grade.judge.digest],
+        ['passed', true, { 'white-stripe': 'yes' }, judgeSpec.digest],
+      );
       assert.equal(record.workflowSha256, sha256(readFileSync('examples/image-generation-v1/workflow.json')));
     }
-    // Memory sequence: Ollama checked before each case, the generator freed after it, before any judge.
+    // Memory sequence: Ollama checked before each case, the generator freed after it, then the judge, unloaded at once.
+    const phases = events.filter((event) => /\/(prompt|free)$|\/api\/(ps|chat)$/.test(event));
+    assert.deepEqual(phases, [
+      ...['ollama /api/ps', 'comfy /prompt', 'comfy /free', 'ollama /api/chat'],
+      ...['ollama /api/ps', 'comfy /prompt', 'comfy /free', 'ollama /api/chat'],
+    ]);
+    for (const call of ollama.calls.filter((c) => c.path === '/api/chat'))
+      assert.equal(JSON.parse(call.body).keep_alive, 0);
+    assert.match(String(report.runtime.provider), /judge-gemma4:12b@6114515d63c1/);
     assert.equal(ollama.calls.filter((call) => call.path === '/api/ps').length, 2);
     const order = comfy.calls.map((call) => call.path).filter((path) => ['/prompt', '/free'].includes(path));
     assert.deepEqual(order, ['/prompt', '/free', '/prompt', '/free']);

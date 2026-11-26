@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "prompt": "Two blue circles side by side on a plain white background, flat vector illustration.",
+  "seed": 1618,
+  "width": 512,
+  "height": 512,
+  "pixels": [
+    {
+      "name": "blue",
+      "hue": [
+        200,
+        250
+      ],
+      "minSaturation": 0.4,
+      "minValue": 0.3,
+      "minFraction": 0.005
+    }
+  ],
+  "checklist": [
+    {
+      "id": "two-circles",
+      "question": "Are there exactly two circles?",
+      "expect": "yes"
+    },
+    {
+      "id": "blue-circles",
+      "question": "Are the circles blue?",
+      "expect": "yes"
+    },
+    {
+      "id": "square",
+      "question": "Is there a square in the image?",
+      "expect": "no"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "prompt": "A flat black and white checkerboard pattern of square tiles filling the whole image, top view, no other objects.",
+  "seed": 7731,
+  "width": 512,
+  "height": 512,
+  "pixels": [
+    {
+      "name": "black",
+      "maxValue": 0.25,
+      "minFraction": 0.2
+    },
+    {
+      "name": "white",
+      "maxSaturation": 0.15,
+      "minValue": 0.75,
+      "minFraction": 0.2
+    }
+  ],
+  "checklist": [
+    {
+      "id": "checkerboard",
+      "question": "Is the image a checkerboard pattern of alternating black and white squares?",
+      "expect": "yes"
+    },
+    {
+      "id": "stripes-only",
+      "question": "Is the image made only of stripes?",
+      "expect": "no"
+    },
+    {
+      "id": "red-tiles",
+      "question": "Are any of the tiles red?",
+      "expect": "no"
+    }
+  ]
+}
