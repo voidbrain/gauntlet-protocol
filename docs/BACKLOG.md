@@ -1,10 +1,10 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 26 November 2026 against main `5a1e306`. PRs #109 and #110 merged on green CI (#109: harness v10.20.0, B-004, B-005; #110: F-075 opened). Reconciling `project-harness v10.21.4` (F-075).
+Current work ledger, reviewed 26 November 2026 against main `9a61a61`. PR #111 merged on green CI (F-075: harness v10.21.4). F-075 closed and archived.
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 8.75 h agent + 1 h owner across 10 open steps of 3 features and 1 other record. Generated from the task files.
+**Remaining effort:** 7.75 h agent + 1 h owner across 9 open steps of 2 features and 1 other record. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -49,44 +49,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
-### <a id="f-075"></a>[✨ F-075](#top)
-
-**Reconcile project-harness v10.20.0 → v10.21.4**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🟡 Implemented | 🔹 P3 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-075-T01 — Reconcile harness files v10.20.0 -&gt; v10.21.4 (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | `.harness.json` names v10.20.0 while the template has released up to v10.21.4. Coordinator gap review 2026-11-26, proposal 12 ("Behind the harness"), accepted by the owner. |
-| **Reproduce** | `npm run check:freshness` on `main`: it reports the harness template v10.21.4 and the files to update or reconcile. |
-| **Check** | `.harness.json` names v10.21.4; `check:freshness` reports no harness update; `check:fast` and CI on the PR pass. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
-|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-075-t01"></a>F-075-T01 — Reconcile harness files v10.20.0 -&gt; v10.21.4 | 1 h | 0 h | 1 h | Implemented; verification pending | PR #111 |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed | |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-075.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-075-T01: PR #111. Opened in [#110](https://github.com/voidbrain/gauntlet-protocol/pull/110); [#111](https://github.com/voidbrain/gauntlet-protocol/pull/111) |
-| Opened | 2026-11-26 |
-| Verification | Pending |
-| Reviewed | 2026-11-26 |
-
-</details>
-
----
 ### <a id="f-022"></a>[✨ F-022](#top)
 
 **Packs or recorded skips for estimation, research, scheduling-time and backlog-management**
@@ -95,7 +57,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|---|---|---|---|:---:|:---:|:---:|
 | 🔴 Open | 🔹 P3 | 🟡 Medium | 1.5 h agent + 0.25 h owner | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-022-T01 — Propose packs or skips for the remaining areas (Planned).
+💻 **→** Next: F-022-T01 — Propose packs or skips for the remaining areas (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -107,7 +69,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
 |---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-022-t01"></a>F-022-T01 — Propose packs or skips for the remaining areas | 1 h | 0 h | 1 h | Planned | — | [F-022-T02](#f-022-t02) | 🤖 |
+| 🟢 Small | <a id="f-022-t01"></a>F-022-T01 — Propose packs or skips for the remaining areas | 1 h | 0 h | 1 h | Implemented; verification pending | — | [F-022-T02](#f-022-t02) | 🤖 |
 | 🟢 Small | <a id="f-022-t02"></a>F-022-T02 — Decide packs or skips for the remaining areas | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-022-T01](#f-022-t01) | [F-022-T03](#f-022-t03) | ⏳ 🤔 |
 | 🟢 Small | <a id="f-022-t03"></a>F-022-T03 — Record the outcome | 0.5 h | 0 h | 0.5 h | Planned | [F-022-T02](#f-022-t02) | — | ⏳ 🤖 |
 | 🟡 Medium | **Total** | 1.5 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 1.5 h agent + 0.25 h owner | 0 of 3 completed | | | |
