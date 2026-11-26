@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "F-036-T09",
+  "parent": "F-036",
+  "title": "Owner approves a first real night plan and reviews the morning report",
+  "goal": "First real night run, owner-reviewed",
+  "status": "planned",
+  "acceptance": [
+    "Owner request 2026-11-26 in the consumer session (𖣂 nerv): \"maybe useful to suggest, planning for nights run\"; nerv runs campaigns through tools/gauntlet.mjs and is the first consumer.",
+    "The owner runs night-plan, approves the queue, lets the runner go overnight and reviews the morning summary; the agent then records the evidence and merges the reviewed reports into the ledger",
+    "Recorded: planned against actual minutes per stage, to calibrate the estimate"
+  ],
+  "dependsOn": [
+    "F-036-T08"
+  ],
+  "resources": [
+    "docs/work/records/F-036.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "evidence-review"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; reports and plans hold no personal text.",
+  "validation": [
+    "Owner review of the morning summary"
+  ],
+  "escalation": [
+    "The approval to run overnight is the owner's"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h owner",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0,
+    "baselineAgentHours": 0,
+    "estimateAgentHours": 0,
+    "ownerHours": 0.5,
+    "ownerKind": "procedure"
+  },
+  "prs": [],
+  "ownerLink": "docs/MAC-PROFILES.md"
+}

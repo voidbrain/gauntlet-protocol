@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "id": "F-036-T01",
+  "parent": "F-036",
+  "title": "Design: night-plan format, inputs and the 07:00 guard",
+  "goal": "A written design the later steps build on",
+  "status": "planned",
+  "acceptance": [
+    "Owner request 2026-11-26 in the consumer session (𖣂 nerv): \"maybe useful to suggest, planning for nights run\"; nerv runs campaigns through tools/gauntlet.mjs and is the first consumer.",
+    "docs/decisions/night-plan.md records: the plan file (ordered stages of pack x model, estimated minutes, window, reason each is queued), where limits-night.json and the profiles come from and what the planner does when one is missing from the checkout (stop and name it, never guess), the owner priority file (for example Italian coverage first), the unload step per runtime (Ollama, ComfyUI), and that a run never writes the ledger",
+    "States the consumer (nerv tools/gauntlet.mjs) and that nerv keeps its own scheduling; gauntlet supplies the plan and runner only"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "docs/decisions/night-plan.md",
+    "docs/work/records/F-036.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "decision-record"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; reports and plans hold no personal text.",
+  "validation": [
+    "npm test",
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.75 h agent",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0.75,
+    "baselineAgentHours": 0.75,
+    "estimateAgentHours": 0.75
+  },
+  "prs": []
+}

@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "F-036-T04",
+  "parent": "F-036",
+  "title": "Planner: fit an ordered queue to a time window (failing test first)",
+  "goal": "An approvable queue that ends before 07:00",
+  "status": "planned",
+  "acceptance": [
+    "Owner request 2026-11-26 in the consumer session (𖣂 nerv): \"maybe useful to suggest, planning for nights run\"; nerv runs campaigns through tools/gauntlet.mjs and is the first consumer.",
+    "A committed failing test first, then a planner: window default 01:00-07:00, stages strictly sequential (never two model runs at once), a gap for unloading and loading between stages, a stage skipped with its reason when its estimate would end after the window, the rest of the queue still considered",
+    "Fixtures: everything fits, last stage dropped, window already past, a chain where one stage depends on the previous (campaign, then planner pack, then image, then extra packs)"
+  ],
+  "dependsOn": [
+    "F-036-T02",
+    "F-036-T03"
+  ],
+  "resources": [
+    "src/**",
+    "test/**",
+    "docs/work/records/F-036.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "regression-design"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; reports and plans hold no personal text.",
+  "validation": [
+    "npm test",
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1.25 h agent",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.25,
+    "baselineAgentHours": 1.25,
+    "estimateAgentHours": 1.25
+  },
+  "prs": []
+}

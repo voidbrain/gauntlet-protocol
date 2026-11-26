@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id": "F-036-T05",
+  "parent": "F-036",
+  "title": "night-plan command: print the proposed queue for the owner to approve",
+  "goal": "One command that prints and saves a plan",
+  "status": "planned",
+  "acceptance": [
+    "Owner request 2026-11-26 in the consumer session (𖣂 nerv): \"maybe useful to suggest, planning for nights run\"; nerv runs campaigns through tools/gauntlet.mjs and is the first consumer.",
+    "gauntlet night-plan --ledger --packs --limits limits-night.json [--window 01:00-07:00] [--priorities file] prints the ordered stages with start, end, estimate basis and what was skipped, writes the plan file, runs nothing",
+    "Preflight names a missing profile, pack or limits file before the plan is shown, with the fix",
+    "A test across the CLI and the planner (the join), not one per side"
+  ],
+  "dependsOn": [
+    "F-036-T04"
+  ],
+  "resources": [
+    "bin/**",
+    "src/**",
+    "test/**",
+    "docs/guides/**",
+    "docs/work/records/F-036.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; reports and plans hold no personal text.",
+  "validation": [
+    "npm test",
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.75 h agent",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0.75,
+    "baselineAgentHours": 0.75,
+    "estimateAgentHours": 0.75
+  },
+  "prs": []
+}

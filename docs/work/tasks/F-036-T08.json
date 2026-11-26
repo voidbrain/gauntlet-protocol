@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "F-036-T08",
+  "parent": "F-036",
+  "title": "Join test and guide: plan, run and summarise on fake runtimes",
+  "goal": "Proof the three parts meet",
+  "status": "planned",
+  "acceptance": [
+    "Owner request 2026-11-26 in the consumer session (𖣂 nerv): \"maybe useful to suggest, planning for nights run\"; nerv runs campaigns through tools/gauntlet.mjs and is the first consumer.",
+    "One test runs night-plan, the runner and night-summary end to end on fake runtimes and a fake clock, checking the ledger file is byte-identical afterwards",
+    "docs/guides/night-runs.md gives the copy-paste commands for the owner and for a consumer's wrapper (nerv), with the expected output of each"
+  ],
+  "dependsOn": [
+    "F-036-T07"
+  ],
+  "resources": [
+    "test/**",
+    "docs/guides/night-runs.md",
+    "docs/work/records/F-036.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "regression-design"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; reports and plans hold no personal text.",
+  "validation": [
+    "npm test",
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1.0 h agent",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.0,
+    "baselineAgentHours": 1.0,
+    "estimateAgentHours": 1.0
+  },
+  "prs": []
+}

@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "id": "F-036-T07",
+  "parent": "F-036",
+  "title": "Morning summary: what ran, what was skipped, what to review",
+  "goal": "A short report the owner reads at 07:00",
+  "status": "planned",
+  "acceptance": [
+    "Owner request 2026-11-26 in the consumer session (𖣂 nerv): \"maybe useful to suggest, planning for nights run\"; nerv runs campaigns through tools/gauntlet.mjs and is the first consumer.",
+    "gauntlet night-summary prints per stage the status, minutes against the estimate, skipped stages with reasons, and the exact gauntlet ledger commands to merge each reviewed report; actual durations are kept so the next plan estimates better (feeds F-036-T02)",
+    "Test on fixture stage reports, including a failed and a skipped stage"
+  ],
+  "dependsOn": [
+    "F-036-T06"
+  ],
+  "resources": [
+    "bin/**",
+    "src/**",
+    "test/**",
+    "docs/work/records/F-036.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; reports and plans hold no personal text.",
+  "validation": [
+    "npm test",
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.75 h agent",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0.75,
+    "baselineAgentHours": 0.75,
+    "estimateAgentHours": 0.75
+  },
+  "prs": []
+}

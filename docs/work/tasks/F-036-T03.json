@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "F-036-T03",
+  "parent": "F-036",
+  "title": "Candidates: stale and never-run pack x model pairs with owner priorities (failing test first)",
+  "goal": "The list of what is worth running",
+  "status": "planned",
+  "acceptance": [
+    "Owner request 2026-11-26 in the consumer session (𖣂 nerv): \"maybe useful to suggest, planning for nights run\"; nerv runs campaigns through tools/gauntlet.mjs and is the first consumer.",
+    "A committed failing test first, then a function that turns the ledger's pending and stale cases (the pendingCases rules, max-age-days) into pack x model candidates, ordered by an owner priority file; Italian coverage can be ranked first",
+    "Fixtures: nothing pending, all pending, priority overrides order, unknown pack in the priority file is reported"
+  ],
+  "dependsOn": [
+    "F-036-T01"
+  ],
+  "resources": [
+    "src/**",
+    "test/**",
+    "docs/work/records/F-036.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "regression-design"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; reports and plans hold no personal text.",
+  "validation": [
+    "npm test",
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1.0 h agent",
+    "basis": "Estimated 2026-11-26 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 1.0,
+    "baselineAgentHours": 1.0,
+    "estimateAgentHours": 1.0
+  },
+  "prs": []
+}
