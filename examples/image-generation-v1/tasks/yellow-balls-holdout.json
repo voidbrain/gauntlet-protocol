@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "prompt": "Three yellow balls in a row on a plain dark blue background, flat illustration.",
+  "seed": 3141,
+  "width": 768,
+  "height": 512,
+  "pixels": [
+    {
+      "name": "yellow",
+      "hue": [
+        40,
+        70
+      ],
+      "minSaturation": 0.5,
+      "minValue": 0.5,
+      "minFraction": 0.005
+    },
+    {
+      "name": "dark blue",
+      "hue": [
+        200,
+        250
+      ],
+      "minSaturation": 0.4,
+      "maxValue": 0.6,
+      "minFraction": 0.2
+    }
+  ],
+  "checklist": [
+    {
+      "id": "three-yellow-balls",
+      "question": "Are there exactly three yellow balls?",
+      "expect": "yes"
+    },
+    {
+      "id": "dark-blue-background",
+      "question": "Is the background dark blue?",
+      "expect": "yes"
+    },
+    {
+      "id": "red-object",
+      "question": "Is there anything red in the image?",
+      "expect": "no"
+    }
+  ]
+}

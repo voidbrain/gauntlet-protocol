@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "prompt": "A white rectangular sign with the word OPEN in large black capital letters, hanging on a plain grey wall, front view.",
+  "seed": 41027,
+  "width": 512,
+  "height": 512,
+  "pixels": [
+    {
+      "name": "dark lettering",
+      "maxValue": 0.3,
+      "minFraction": 0.005
+    },
+    {
+      "name": "white sign",
+      "maxSaturation": 0.15,
+      "minValue": 0.85,
+      "minFraction": 0.05
+    }
+  ],
+  "checklist": [
+    {
+      "id": "reads-open",
+      "question": "Does the sign read OPEN?",
+      "expect": "yes"
+    },
+    {
+      "id": "black-letters",
+      "question": "Are the letters on the sign black?",
+      "expect": "yes"
+    },
+    {
+      "id": "reads-closed",
+      "question": "Does the image contain the word CLOSED?",
+      "expect": "no"
+    }
+  ]
+}

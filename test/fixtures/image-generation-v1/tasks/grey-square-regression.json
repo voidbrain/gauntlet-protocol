@@ -1,7 +1,14 @@
 {
   "schemaVersion": 1,
-  "prompt": "A plain mid-grey square canvas with nothing on it.",
+  "prompt": "A mid-grey square canvas with one white horizontal stripe across the middle.",
   "seed": 1234,
   "width": 512,
-  "height": 512
+  "height": 512,
+  "checklist": [
+    {
+      "id": "white-stripe",
+      "question": "Is there a white horizontal stripe?",
+      "expect": "yes"
+    }
+  ]
 }

@@ -544,6 +544,33 @@ test('cad-3d pack covers slicer, material and tolerance questions in both splits
   );
 });
 
+test('image-generation pack: six to eight checklist cases in both splits, each with committed pass and fail fixture images', () => {
+  const pack = load('examples/image-generation-v1.json');
+  assert.ok(pack.cases.length >= 6 && pack.cases.length <= 8);
+  assert.deepEqual(new Set(pack.cases.map((entry) => entry.split)), new Set(['regression', 'holdout']));
+  const answers = JSON.parse(readFileSync('test/fixtures/image-generation-v1/answers.json', 'utf8')) as Record<
+    string,
+    Record<'pass' | 'fail', Record<string, string>>
+  >;
+  for (const entry of pack.cases) {
+    assert.equal(entry.area, 'audio-video');
+    assert.equal(entry.layer, 'model');
+    assert.equal(entry.runner, 'image-generation-reference');
+    assert.equal(entry.expensive, true, 'real generation and judging are costly');
+    assert.ok(entry.capabilities.includes('image-generation'));
+    const task = JSON.parse(readFileSync(`examples/image-generation-v1/tasks/${entry.id}.json`, 'utf8'));
+    assert.ok(task.checklist.length >= 2, entry.id);
+    const expected = Object.fromEntries(
+      task.checklist.map((item: { id: string; expect: string }) => [item.id, item.expect]),
+    );
+    assert.deepEqual(answers[entry.id].pass, expected, entry.id);
+    assert.notDeepEqual(answers[entry.id].fail, expected, entry.id);
+    for (const kind of ['pass', 'fail'])
+      assert.ok(existsSync(`test/fixtures/image-generation-v1/images/${entry.id}.${kind}.png`), entry.id + kind);
+  }
+  assert.equal(Object.keys(answers).length, pack.cases.length);
+});
+
 test('italian-quality pack grades summary, rewrite and register cases in both splits with references and failing fixtures', async () => {
   const pack = load('examples/italian-quality-v1.json');
   const fixtures = JSON.parse(readFileSync('test/fixtures/italian-quality-v1.json', 'utf8')) as Record<

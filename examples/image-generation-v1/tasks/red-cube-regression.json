@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "prompt": "A single red cube on a plain white table, soft daylight, plain light grey background.",
+  "seed": 20261126,
+  "width": 512,
+  "height": 512,
+  "pixels": [
+    {
+      "name": "red",
+      "hue": [
+        345,
+        15
+      ],
+      "minSaturation": 0.5,
+      "minValue": 0.3,
+      "minFraction": 0.005
+    }
+  ],
+  "checklist": [
+    {
+      "id": "red-cube",
+      "question": "Is there a red cube in the image?",
+      "expect": "yes"
+    },
+    {
+      "id": "several-cubes",
+      "question": "Is there more than one cube in the image?",
+      "expect": "no"
+    },
+    {
+      "id": "lettering",
+      "question": "Is there any text or lettering in the image?",
+      "expect": "no"
+    }
+  ]
+}
