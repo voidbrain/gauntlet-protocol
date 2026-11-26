@@ -4,7 +4,7 @@ Current work ledger, reviewed 26 November 2026 against main `f209281`. PRs #112,
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 13.75 h agent + 1 h owner across 20 open steps of 7 features and 2 other records. Generated from the task files.
+**Remaining effort:** 19.75 h agent + 1 h owner across 26 open steps of 11 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -290,6 +290,82 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
+### <a id="f-030"></a>[✨ F-030](#top)
+
+**Roadmap status check**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-030-T01 — Roadmap status tool and CI check (Planned).
+
+| | |
+|---|---|
+| **Issue** | gauntlet-protocol keeps `docs/ROADMAP.md` by hand; nerv generates milestone status from the records (`tools/roadmap-status.mjs`, BACKLOG-RULES "Roadmap"), so a milestone cannot say "done" while its steps are open. Evidence: [NERV practices transfer report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md), inventory 15; class B item B3. Owner decision 2026-11-26 in chat: "NERV practices inventory accept all" (all 22 proposals of the [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); this record is proposal 21). |
+| **Reproduce** | Read `docs/ROADMAP.md` of gauntlet-protocol and compare each milestone's status with its records: nothing checks them. |
+| **Check** | A roadmap status tool generates milestone status from the records and `--check` in `check:fast` and CI fails when `docs/ROADMAP.md` is stale (F-030-T01). |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-030-t01"></a>F-030-T01 — Roadmap status tool and CI check | 1 h | 0 h | 1 h | Planned | PR #125 plan |
+| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 1 h | 0 of 1 completed | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-030.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-030-T01: PR #125 plan. [#125](https://github.com/voidbrain/gauntlet-protocol/pull/125) (plan); [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); owner decision 2026-11-26 |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-031"></a>[✨ F-031](#top)
+
+**SBOM as a CI artifact**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟢 Small | 0.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-031-T01 — SBOM step in CI (Planned).
+
+| | |
+|---|---|
+| **Issue** | Seven of the nine repositories attach a CycloneDX SBOM generated from the lock file to CI; gauntlet-protocol does not. Evidence: [NERV practices transfer report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md), class A item A8; missing practice M6. Owner decision 2026-11-26 in chat: "NERV practices inventory accept all" (all 22 proposals of the [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); this record is proposal 16). |
+| **Reproduce** | Read `.github/workflows/ci.yml`: no SBOM step. |
+| **Check** | CI generates a CycloneDX SBOM from the lock file and uploads it as an artifact (F-031-T01). |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
+|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-031-t01"></a>F-031-T01 — SBOM step in CI | 0.5 h | 0 h | 0.5 h | Planned | PR #125 plan |
+| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.5 h | 0 of 1 completed | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-031.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-031-T01: PR #125 plan. [#125](https://github.com/voidbrain/gauntlet-protocol/pull/125) (plan); [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); owner decision 2026-11-26 |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
 ### <a id="f-025"></a>[✨ F-025](#top)
 
 **research-v1: answers from supplied sources with cited ids**
@@ -324,6 +400,84 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | PR / evidence | Owner decision 2026-11-26, F-022-T02 ("Do you accept these as recommended? ok") |
 | Opened | 2026-11-26 |
 | Verification | Pending. |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-028"></a>[✨ F-028](#top)
+
+**Threat map with the NERV checker**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟡 Medium | 2.5 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-028-T01 — Threat-map checker with the closed-gap rule (Planned).
+
+| | |
+|---|---|
+| **Issue** | gauntlet-protocol: it runs agents and models in containers, so model output, task input and container boundaries are the exposed surface. NERV keeps a threat map (OWASP Agentic and LLM top 10 rows, each citing a test or a gap record) and a checker (`tools/check-threat-map.mjs`, `docs/security/agentic-threats.md`); no other repository has either. NERV's map still cites closed records as gaps (report N6), so the checker here also fails on a gap that cites a closed record. Evidence: [NERV practices transfer report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md), inventory 10; class B item B1; N6. Owner decision 2026-11-26 in chat: "NERV practices inventory accept all" (all 22 proposals of the [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); this record is proposal 18). |
+| **Reproduce** | Search gauntlet-protocol for a threat map or a security page naming prompt injection, tool or key misuse: none. |
+| **Check** | A short threat map lists each applicable Agentic and LLM top 10 risk with the test or the gap record that covers it, and a checker in CI fails on a row without either and on a gap that cites a closed record (F-028-T01, F-028-T02). |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | PRs |
+|---|---|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="f-028-t01"></a>F-028-T01 — Threat-map checker with the closed-gap rule | 1 h | 0 h | 1 h | Planned | — | [F-028-T02](#f-028-t02) | PR #125 plan |
+| 🟡 Medium | <a id="f-028-t02"></a>F-028-T02 — Write the threat map | 1.5 h | 0 h | 1.5 h | Planned | [F-028-T01](#f-028-t01) | — | PR #125 plan |
+| 🟡 Medium | **Total** | 2.5 h | 0 h (0 of 2 steps recorded) | 2.5 h | 0 of 2 completed | | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-028.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-028-T01: PR #125 plan · F-028-T02: PR #125 plan. [#125](https://github.com/voidbrain/gauntlet-protocol/pull/125) (plan); [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); owner decision 2026-11-26 |
+| Opened | 2026-11-26 |
+| Verification | Pending |
+| Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="f-029"></a>[✨ F-029](#top)
+
+**Licence allow-list check for production dependencies**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔹 P3 | 🟡 Medium | 2 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: F-029-T01 — Licence allow-list tool (Planned).
+
+| | |
+|---|---|
+| **Issue** | gauntlet-protocol (MIT, not private, `prepack`) ships to others. is published under MIT with a `prepack` step, so its dependencies travel with what it ships. None of the nine repositories checks the licences of its production dependencies, so an incompatible one could ship unseen. Evidence: [NERV practices transfer report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md), class B item B4; missing practice M5. Owner decision 2026-11-26 in chat: "NERV practices inventory accept all" (all 22 proposals of the [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); this record is proposal 19). |
+| **Reproduce** | Read the CI workflow and `package.json` scripts: no licence check. |
+| **Check** | A tool reads the production dependency tree from the lock file and fails on a licence outside an allow-list or an unknown licence, with the allow-list in the repository (F-029-T01); CI runs it on every PR (F-029-T02). |
+
+**Feature steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | PRs |
+|---|---|---|---|---|---|---|---|---|
+| 🟡 Medium | <a id="f-029-t01"></a>F-029-T01 — Licence allow-list tool | 1.5 h | 0 h | 1.5 h | Planned | — | [F-029-T02](#f-029-t02) | PR #125 plan |
+| 🟢 Small | <a id="f-029-t02"></a>F-029-T02 — Run the licence check in CI | 0.5 h | 0 h | 0.5 h | Planned | [F-029-T01](#f-029-t01) | — | PR #125 plan |
+| 🟡 Medium | **Total** | 2 h | 0 h (0 of 2 steps recorded) | 2 h | 0 of 2 completed | | | |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+[Full notes & evidence](work/records/F-029.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: F-029-T01: PR #125 plan · F-029-T02: PR #125 plan. [#125](https://github.com/voidbrain/gauntlet-protocol/pull/125) (plan); [report](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-26-nerv-practices-transfer.md); owner decision 2026-11-26 |
+| Opened | 2026-11-26 |
+| Verification | Pending |
 | Reviewed | 2026-11-26 |
 
 </details>

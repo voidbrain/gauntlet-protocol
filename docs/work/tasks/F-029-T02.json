@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "F-029-T02",
+  "parent": "F-029",
+  "title": "Run the licence check in CI",
+  "goal": "The licence check runs on every PR",
+  "status": "planned",
+  "acceptance": [
+    "The check is in `check:fast` and in `ci.yml`; the run is green on `main`"
+  ],
+  "dependsOn": [
+    "F-029-T01"
+  ],
+  "resources": [
+    ".github/workflows/ci.yml",
+    "package.json",
+    "docs/work/records/F-029.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral content only; no secrets, tokens or personal data in Git. Fixtures are invented.",
+  "validation": [
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h agent",
+    "basis": "One workflow step and a green run. Estimated 2026-11-26 at agent speed from the report's effort column. Not a measurement.",
+    "reviewed": "2026-11-26",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  },
+  "prs": [
+    {
+      "pr": 125,
+      "note": "plan"
+    }
+  ]
+}
