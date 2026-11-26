@@ -44,6 +44,10 @@
     {
       "pr": 115,
       "note": "pull commands"
+    },
+    {
+      "pr": 117,
+      "note": "models pulled; Comfy Desktop"
     }
   ]
 }
