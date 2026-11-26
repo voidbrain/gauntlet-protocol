@@ -2,7 +2,7 @@
 // committed API-format workflow. A fake ComfyUI and a fake Ollama stand in; no real model and no download in CI.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { createServer, type Server } from 'node:http';
 import { existsSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
@@ -23,6 +23,8 @@ const runnerPath = resolve('examples/image-generation-v1/runner.mjs');
 const generatePath = resolve('examples/image-generation-v1/generate.mjs');
 const tasksDir = resolve('test/fixtures/image-generation-v1/tasks');
 const sha256 = (data: Buffer) => createHash('sha256').update(data).digest('hex');
+type GraphNode = { class_type: string; inputs: Record<string, unknown> };
+const nodesOf = (graph: unknown) => Object.values(graph as Record<string, GraphNode>);
 const tempDir = (name: string) => mkdtempSync(join(realpathSync(tmpdir()), name));
 
 // A valid PNG of the given size (solid grey), so the runner's decode check runs on real bytes.
@@ -96,9 +98,9 @@ async function fakeComfy(options: FakeOptions = {}) {
         );
       if (url.pathname === '/prompt' && request.method === 'POST') {
         const graph = JSON.parse(body).prompt;
-        const latent = Object.values(graph).find((node: any) => node.class_type === 'EmptyLatentImage') as any;
+        const latent = nodesOf(graph).find((node) => node.class_type === 'EmptyLatentImage')!;
         const id = 'prompt-' + (prompts.size + 1);
-        prompts.set(id, { width: latent.inputs.width, height: latent.inputs.height, polls: 0 });
+        prompts.set(id, { width: Number(latent.inputs.width), height: Number(latent.inputs.height), polls: 0 });
         return send({ prompt_id: id, number: prompts.size, node_errors: {} });
       }
       const historyId = /^\/history\/(.+)$/.exec(url.pathname)?.[1];
@@ -199,30 +201,37 @@ const registry = (out: string, ollama: string, extra: string[] = []) =>
     },
     process.cwd(),
   );
+// Runs a script without blocking the event loop, so the fake servers in this process can answer it.
+function spawnAsync(args: string[]) {
+  return new Promise<{ status: number | null; stdout: string; stderr: string }>((done) => {
+    const child = spawn(process.execPath, args);
+    let stdout = '',
+      stderr = '';
+    child.stdout.on('data', (part) => (stdout += part));
+    child.stderr.on('data', (part) => (stderr += part));
+    child.on('close', (status) => done({ status, stdout, stderr }));
+  });
+}
 // Runs the runner once outside the engine, to read its own report and the message it writes on stderr.
-function runOnce(endpoint: string, caseId: string, flags: string[], timeoutMs = 60000) {
+async function runOnce(endpoint: string, caseId: string, flags: string[], timeoutMs = 60000) {
   const dir = tempDir('image-runner-direct-');
   const write = (name: string, value: unknown) => {
     writeFileSync(join(dir, name), JSON.stringify(value));
     return join(dir, name);
   };
-  const child = spawnSync(
-    process.execPath,
-    [
-      runnerPath,
-      join(dir, 'report.json'),
-      write('configuration.json', profile(endpoint)),
-      write('budget.json', { timeoutMs, outputTokens: 1, maxBytes: 1048576 }),
-      write(
-        'case.json',
-        pack.cases.find((c) => c.id === caseId),
-      ),
-      '--tasks=' + tasksDir,
-      '--poll-ms=20',
-      ...flags,
-    ],
-    { encoding: 'utf8' },
-  );
+  const child = await spawnAsync([
+    runnerPath,
+    join(dir, 'report.json'),
+    write('configuration.json', profile(endpoint)),
+    write('budget.json', { timeoutMs, outputTokens: 1, maxBytes: 1048576 }),
+    write(
+      'case.json',
+      pack.cases.find((c) => c.id === caseId),
+    ),
+    '--tasks=' + tasksDir,
+    '--poll-ms=20',
+    ...flags,
+  ]);
   const report = existsSync(join(dir, 'report.json'))
     ? JSON.parse(readFileSync(join(dir, 'report.json'), 'utf8'))
     : null;
@@ -231,7 +240,7 @@ function runOnce(endpoint: string, caseId: string, flags: string[], timeoutMs = 
 }
 
 test('the committed workflow is API format with the three pinned loaders, fixed sigmas and no prompt enhancer', () => {
-  const nodes = Object.values(workflow) as { class_type: string; inputs: Record<string, unknown> }[];
+  const nodes = nodesOf(workflow);
   const byType = (type: string) => nodes.filter((node) => node.class_type === type);
   assert.deepEqual(
     [
@@ -256,14 +265,14 @@ test('the committed workflow is API format with the three pinned loaders, fixed 
 
   const task = readImageTask(tasksDir, 'grey-square-regression');
   const built = buildPrompt(task);
-  const node = (type: string) => Object.values(built).find((n: any) => n.class_type === type) as any;
+  const node = (type: string) => nodesOf(built).find((n) => n.class_type === type)!;
   assert.deepEqual(
     [node('TextEncodeQwenImage21').inputs.prompt, node('RandomNoise').inputs.noise_seed],
     [task.prompt, task.seed],
   );
   assert.deepEqual([node('EmptyLatentImage').inputs.width, node('EmptyLatentImage').inputs.height], [512, 512]);
   assert.equal(task.steps, 8, 'steps follow the workflow sigmas, recorded per result');
-  assert.equal((Object.values(workflow) as any[]).find((n) => n.class_type === 'RandomNoise').inputs.noise_seed, 0);
+  assert.equal(nodesOf(workflow).find((n) => n.class_type === 'RandomNoise')!.inputs.noise_seed, 0);
   assert.throws(() => readImageTask(tasksDir, '../escape'), /Invalid image task/);
   assert.throws(() => readImageTask(tasksDir, 'missing-task'), /Invalid image task/);
   assert.deepEqual(pngSize(png(24, 16)), { width: 24, height: 16 });
@@ -278,6 +287,7 @@ test('the image runner generates through ComfyUI, stores the image outside Git w
     const report = await run(pack, profile(comfy.endpoint), defaults, {
       execute: true,
       allowModels: true,
+      allowExpensive: true,
       registry: registry(out, ollama.endpoint),
     });
     assert.deepEqual(
@@ -327,14 +337,17 @@ test('the image runner refuses while Ollama holds a model, and unloads idle mode
   const ollama = await fakeOllama(loaded);
   const out = tempDir('image-runner-out-');
   try {
-    const refused = runOnce(comfy.endpoint, 'grey-square-regression', ['--out=' + out, '--ollama=' + ollama.endpoint]);
+    const refused = await runOnce(comfy.endpoint, 'grey-square-regression', [
+      '--out=' + out,
+      '--ollama=' + ollama.endpoint,
+    ]);
     assert.equal(refused.status, 0);
     assert.deepEqual([refused.report.complete, refused.report.results[0].status], [false, 'error']);
     assert.match(refused.stderr, /Ollama has gemma4:12b loaded.*ollama stop gemma4:12b.*--unload-ollama/s);
     assert.equal(comfy.calls.filter((call) => call.path === '/prompt').length, 0);
     assert.equal(ollama.calls.filter((call) => call.path === '/api/generate').length, 0);
 
-    const unloaded = runOnce(comfy.endpoint, 'grey-square-regression', [
+    const unloaded = await runOnce(comfy.endpoint, 'grey-square-regression', [
       '--out=' + out,
       '--ollama=' + ollama.endpoint,
       '--unload-ollama',
@@ -357,7 +370,7 @@ test('the image runner reports a stopped ComfyUI, a missing model, a failed or s
   try {
     const stopped = await fakeComfy();
     stopped.server.close();
-    const down = runOnce(stopped.endpoint, 'grey-square-regression', flags);
+    const down = await runOnce(stopped.endpoint, 'grey-square-regression', flags);
     assert.equal(down.report.results[0].status, 'error');
     assert.match(down.stderr, /ComfyUI is not running at http:\/\/127\.0\.0\.1:\d+\/: start Comfy Desktop/);
 
@@ -374,7 +387,12 @@ test('the image runner reports a stopped ComfyUI, a missing model, a failed or s
     for (const [options, message, sequence] of cases) {
       const comfy = await fakeComfy(options);
       try {
-        const result = runOnce(comfy.endpoint, 'grey-square-regression', flags, options.neverFinish ? 12000 : 60000);
+        const result = await runOnce(
+          comfy.endpoint,
+          'grey-square-regression',
+          flags,
+          options.neverFinish ? 6000 : 60000,
+        );
         assert.equal(result.report.results[0].status, 'error', JSON.stringify(options));
         assert.match(result.stderr, message);
         const seen = comfy.calls.map((c) => c.path).filter((p) => ['/prompt', '/interrupt', '/free'].includes(p));
@@ -386,7 +404,7 @@ test('the image runner reports a stopped ComfyUI, a missing model, a failed or s
 
     const wrong = await fakeComfy({ wrongSize: true });
     try {
-      const result = runOnce(wrong.endpoint, 'grey-square-regression', flags);
+      const result = await runOnce(wrong.endpoint, 'grey-square-regression', flags);
       assert.deepEqual([result.report.complete, result.report.results[0].status], [true, 'failed']);
     } finally {
       wrong.server.close();
@@ -401,12 +419,12 @@ test('the image runner refuses a non-literal-loopback endpoint and an output fol
   const ollama = await fakeOllama([]);
   const comfy = await fakeComfy();
   try {
-    const named = runOnce(comfy.endpoint.replace('127.0.0.1', 'localhost'), 'grey-square-regression', [
+    const named = await runOnce(comfy.endpoint.replace('127.0.0.1', 'localhost'), 'grey-square-regression', [
       '--out=' + tempDir('image-runner-out-'),
       '--ollama=' + ollama.endpoint,
     ]);
     assert.match(named.stderr, /literal loopback/);
-    const inside = runOnce(comfy.endpoint, 'grey-square-regression', [
+    const inside = await runOnce(comfy.endpoint, 'grey-square-regression', [
       '--out=' + resolve('examples'),
       '--ollama=' + ollama.endpoint,
     ]);
@@ -436,12 +454,12 @@ test('the batch generator runs every case and repeat, then frees ComfyUI once, a
     '--poll-ms=20',
   ];
   try {
-    const unconfirmed = spawnSync(process.execPath, args, { encoding: 'utf8' });
+    const unconfirmed = await spawnAsync(args);
     assert.notEqual(unconfirmed.status, 0);
     assert.match(unconfirmed.stderr, /--confirm-costly/);
     assert.equal(comfy.calls.length, 0);
 
-    const batch = spawnSync(process.execPath, [...args, '--confirm-costly'], { encoding: 'utf8' });
+    const batch = await spawnAsync([...args, '--confirm-costly']);
     assert.equal(batch.status, 0, batch.stderr);
     const manifest = JSON.parse(readFileSync(batch.stdout.trim(), 'utf8'));
     assert.equal(manifest.results.length, 4);
