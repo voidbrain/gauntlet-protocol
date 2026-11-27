@@ -15,6 +15,7 @@ import {
   modelDigest,
   outsideRepository,
   readImageTask,
+  repeatSeed,
   store,
   workflowSha256,
 } from './comfy.mjs';
@@ -50,11 +51,20 @@ try {
 try {
   for (const task of tasks)
     for (let iteration = 1; iteration <= repeat; iteration++) {
-      const generated = await comfy.generate(task, {
+      const seeded = { ...task, seed: repeatSeed(task, iteration) };
+      const generated = await comfy.generate(seeded, {
         timeoutMs: Number(flag('timeout-ms') ?? 600000),
         pollMs: Number(flag('poll-ms') ?? 500),
       });
-      const record = store(images, task, generated, identity, iteration);
+      const record = store(images, seeded, generated, identity, iteration);
+      const first = results.find((item) => item.case === task.id && item.imageSha256 === record.imageSha256);
+      record.independent = !first;
+      if (first) {
+        record.duplicateOf = first.iteration;
+        process.stderr.write(
+          `${task.id} #${iteration}: identical image to #${first.iteration}, not an independent run\n`,
+        );
+      }
       process.stderr.write(`${task.id} #${iteration}: ${generated.durationMs} ms, ${record.image}\n`);
       results.push(record);
     }
@@ -64,6 +74,12 @@ try {
 } finally {
   await comfy.free().catch((error) => process.stderr.write('ComfyUI /free failed: ' + error.message + '\n'));
 }
+const cases = Object.fromEntries(
+  tasks.map((task) => {
+    const own = results.filter((item) => item.case === task.id);
+    return [task.id, { runs: own.length, distinctImages: new Set(own.map((item) => item.imageSha256)).size }];
+  }),
+);
 const manifest = join(images, 'manifest-' + started.toISOString().replace(/[:.]/g, '-') + '.json');
 writeFileSync(
   manifest,
@@ -78,6 +94,7 @@ writeFileSync(
       modelDigest: modelDigest(),
       workflowSha256,
       complete: results.length === tasks.length * repeat,
+      cases,
       results,
     },
     null,

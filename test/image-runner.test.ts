@@ -23,7 +23,7 @@ const tempDir = (name: string) => mkdtempSync(join(realpathSync(tmpdir()), name)
 
 // A valid PNG of the given size (mid-grey with a white stripe across the middle), so the grader's decode and
 // structural checks run on real bytes.
-function png(width: number, height: number) {
+function png(width: number, height: number, seed = 0) {
   const chunk = (type: string, data: Buffer) => {
     const length = Buffer.alloc(4);
     length.writeUInt32BE(data.length);
@@ -41,6 +41,7 @@ function png(width: number, height: number) {
   return Buffer.concat([
     Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
     chunk('IHDR', header),
+    chunk('tEXt', Buffer.from('seed\0' + seed)),
     chunk('IDAT', deflateSync(Buffer.concat(Array.from({ length: height }, (_, y) => row(y))))),
     chunk('IEND', Buffer.alloc(0)),
   ]);
@@ -59,6 +60,7 @@ interface FakeOptions {
   neverFinish?: boolean;
   executionError?: boolean;
   wrongSize?: boolean;
+  cached?: boolean;
   redirect?: boolean;
 }
 // One sequence across both fakes, so a test can check the generator is freed before the judge loads.
@@ -69,7 +71,7 @@ async function listen(server: Server) {
 }
 async function fakeComfy(options: FakeOptions = {}) {
   const calls: { method: string; path: string; body: string }[] = [];
-  const prompts = new Map<string, { width: number; height: number; polls: number }>();
+  const prompts = new Map<string, { width: number; height: number; seed: number; polls: number }>();
   const server = createServer((request, response) => {
     let body = '';
     request.on('data', (part) => (body += part));
@@ -99,7 +101,13 @@ async function fakeComfy(options: FakeOptions = {}) {
         const graph = JSON.parse(body).prompt;
         const latent = nodesOf(graph).find((node) => node.class_type === 'EmptyLatentImage')!;
         const id = 'prompt-' + (prompts.size + 1);
-        prompts.set(id, { width: Number(latent.inputs.width), height: Number(latent.inputs.height), polls: 0 });
+        const noise = nodesOf(graph).find((node) => node.class_type === 'RandomNoise')!;
+        prompts.set(id, {
+          width: Number(latent.inputs.width),
+          height: Number(latent.inputs.height),
+          seed: options.cached ? 0 : Number(noise.inputs.noise_seed),
+          polls: 0,
+        });
         return send({ prompt_id: id, number: prompts.size, node_errors: {} });
       }
       const historyId = /^\/history\/(.+)$/.exec(url.pathname)?.[1];
@@ -127,7 +135,7 @@ async function fakeComfy(options: FakeOptions = {}) {
       if (url.pathname === '/view') {
         const entry = prompts.get(String(url.searchParams.get('filename')).replace(/\.png$/, ''))!;
         response.writeHead(200, { 'content-type': 'image/png' });
-        return response.end(png(entry.width + (options.wrongSize ? 16 : 0), entry.height));
+        return response.end(png(entry.width + (options.wrongSize ? 16 : 0), entry.height, entry.seed));
       }
       if (['/free', '/interrupt', '/queue'].includes(url.pathname)) return send({});
       send({ error: 'not found' }, 404);
@@ -493,6 +501,88 @@ test('the batch generator runs every case and repeat, then frees ComfyUI once, a
     const order = comfy.calls.map((call) => call.path).filter((path) => ['/prompt', '/free'].includes(path));
     assert.deepEqual(order, ['/prompt', '/prompt', '/prompt', '/prompt', '/free']);
     assert.equal(ollama.calls.filter((call) => call.path === '/api/ps').length, 1);
+  } finally {
+    comfy.server.close();
+    ollama.server.close();
+    rmSync(out, { recursive: true, force: true });
+  }
+});
+
+test('repeats use a distinct recorded seed per iteration, so each is a different image', async () => {
+  const comfy = await fakeComfy();
+  const ollama = await fakeOllama([]);
+  const out = tempDir('image-repeat-out-');
+  const profileFile = join(out, 'profile.json');
+  writeFileSync(profileFile, JSON.stringify(profile(comfy.endpoint)));
+  const args = [
+    generatePath,
+    '--profile=' + profileFile,
+    '--tasks=' + tasksDir,
+    '--cases=grey-square-regression',
+    '--repeat=3',
+    '--out=' + join(out, 'images'),
+    '--ollama=' + ollama.endpoint,
+    '--poll-ms=20',
+    '--confirm-costly',
+  ];
+  try {
+    const batch = await spawnAsync(args);
+    assert.equal(batch.status, 0, batch.stderr);
+    const manifest = JSON.parse(readFileSync(batch.stdout.trim(), 'utf8'));
+    const submitted = comfy.calls
+      .filter((call) => call.path === '/prompt')
+      .map(
+        (call) => nodesOf(JSON.parse(call.body).prompt).find((n) => n.class_type === 'RandomNoise')!.inputs.noise_seed,
+      );
+    assert.equal(new Set(submitted).size, 3);
+    assert.deepEqual(
+      manifest.results.map((r: { seed: number }) => r.seed),
+      submitted,
+    );
+    assert.deepEqual(manifest.cases['grey-square-regression'], { runs: 3, distinctImages: 3 });
+    assert.ok(manifest.results.every((r: { independent: boolean }) => r.independent));
+    const again = await spawnAsync(args);
+    const rerun = JSON.parse(readFileSync(again.stdout.trim(), 'utf8'));
+    assert.deepEqual(
+      rerun.results.map((r: { seed: number }) => r.seed),
+      submitted,
+    );
+  } finally {
+    comfy.server.close();
+    ollama.server.close();
+    rmSync(out, { recursive: true, force: true });
+  }
+});
+
+test('a repeat that returns an identical image is flagged and not counted as independent', async () => {
+  const comfy = await fakeComfy({ cached: true });
+  const ollama = await fakeOllama([]);
+  const out = tempDir('image-cached-out-');
+  const profileFile = join(out, 'profile.json');
+  writeFileSync(profileFile, JSON.stringify(profile(comfy.endpoint)));
+  try {
+    const batch = await spawnAsync([
+      generatePath,
+      '--profile=' + profileFile,
+      '--tasks=' + tasksDir,
+      '--cases=grey-square-regression',
+      '--repeat=3',
+      '--out=' + join(out, 'images'),
+      '--ollama=' + ollama.endpoint,
+      '--poll-ms=20',
+      '--confirm-costly',
+    ]);
+    const manifest = JSON.parse(readFileSync(batch.stdout.trim(), 'utf8'));
+    assert.deepEqual(manifest.cases['grey-square-regression'], { runs: 3, distinctImages: 1 });
+    assert.deepEqual(
+      manifest.results.map((r: { independent: boolean; duplicateOf?: number }) => [r.independent, r.duplicateOf]),
+      [
+        [true, undefined],
+        [false, 1],
+        [false, 1],
+      ],
+    );
+    assert.match(batch.stderr, /identical image to #1/);
   } finally {
     comfy.server.close();
     ollama.server.close();
