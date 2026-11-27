@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "bilingual-it-en",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "cases": [
     {
       "id": "summarize-en-regression",
@@ -11,7 +11,7 @@
       "critical": true,
       "expensive": false,
       "messages": [{ "role": "user", "content": "In English, summarize: The neutral meeting moved from Monday to Tuesday. Return only JSON." }],
-      "expected": { "kind": "json", "value": { "intent": "summarize", "language": "en", "reply": "The meeting moved to Tuesday." } },
+      "expected": {"kind": "json-rubric", "value": {"exact": {"intent": "summarize", "language": "en"}, "field": "reply", "rubric": {"required": [["meeting"], ["moved", "rescheduled", "postponed", "shifted", "changed", "pushed"], ["tuesday"]], "forbidden": ["not", "never", "no", "isn", "wasn", "didn", "cannot", "cancelled", "canceled", "to monday", "from tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "riunione", "martedì", "spostata"], "maxWords": 30}}},
       "area": "language-translation",
       "requirements": ["local-model-runtime"],
       "responseFormat": "json"
@@ -24,7 +24,7 @@
       "critical": true,
       "expensive": false,
       "messages": [{ "role": "user", "content": "In italiano, riassumi: La riunione neutrale è stata spostata da lunedì a martedì. Restituisci solo JSON." }],
-      "expected": { "kind": "json", "value": { "intent": "summarize", "language": "it", "reply": "La riunione è stata spostata a martedì." } },
+      "expected": {"kind": "json-rubric", "value": {"exact": {"intent": "summarize", "language": "it"}, "field": "reply", "rubric": {"required": [["riunione", "incontro", "meeting", "appuntamento"], ["spostata", "spostato", "posticipata", "posticipato", "rinviata", "rinviato", "riprogrammata", "riprogrammato", "slittata", "slittato"], ["martedì", "martedi"]], "forbidden": ["non", "mai", "no", "nessuna", "senza", "annullata", "annullato", "cancellata", "cancellato", "a lunedì", "a lunedi", "al lunedì", "al lunedi", "da martedì", "da martedi", "mercoledì", "giovedì", "venerdì", "sabato", "domenica", "moved", "tuesday", "the", "was"], "maxWords": 30}}},
       "area": "language-translation",
       "requirements": ["local-model-runtime"],
       "responseFormat": "json"
@@ -37,7 +37,7 @@
       "critical": true,
       "expensive": false,
       "messages": [{ "role": "user", "content": "In English, ask which file I mean because I only said 'open it'. Return only JSON." }],
-      "expected": { "kind": "json", "value": { "intent": "clarify", "language": "en", "reply": "Which file should I open?" } },
+      "expected": {"kind": "json-rubric", "value": {"exact": {"intent": "clarify", "language": "en"}, "field": "reply", "rubric": {"required": [["which", "what"], ["file", "document", "one"]], "forbidden": ["quale", "quali", "cosa", "devo", "aprire", "intendi", "vuoi"], "question": true, "maxWords": 20}}},
       "area": "language-translation",
       "requirements": ["local-model-runtime"],
       "responseFormat": "json"
@@ -50,7 +50,7 @@
       "critical": true,
       "expensive": false,
       "messages": [{ "role": "user", "content": "In italiano, chiedi quale file intendo perché ho detto solo 'aprilo'. Restituisci solo JSON." }],
-      "expected": { "kind": "json", "value": { "intent": "clarify", "language": "it", "reply": "Quale file devo aprire?" } },
+      "expected": {"kind": "json-rubric", "value": {"exact": {"intent": "clarify", "language": "it"}, "field": "reply", "rubric": {"required": [["quale", "quali", "qual", "che", "cosa"], ["file", "documento", "uno", "quello"]], "forbidden": ["which", "what", "should", "you", "open", "mean", "do"], "question": true, "maxWords": 20}}},
       "area": "language-translation",
       "requirements": ["local-model-runtime"],
       "responseFormat": "json"

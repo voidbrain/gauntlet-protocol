@@ -105,7 +105,17 @@ test('bilingual pack keeps paired intents and follows the request language', asy
   const pack = load('examples/bilingual-it-en-v1.json');
   assert.deepEqual(new Set(pack.cases.map((entry) => entry.split)), new Set(['regression', 'holdout']));
   assert.equal(pack.cases.length % 2, 0);
-  const values = expected(pack) as { intent: string; language: string; reply: string }[];
+  // The reply is graded by meaning (B-006): the expectation holds the exact fields; these replies are sample answers.
+  const replies = [
+    'The meeting moved to Tuesday.',
+    'La riunione è stata spostata a martedì.',
+    'Which file should I open?',
+    'Quale file devo aprire?',
+  ];
+  const values = (expected(pack) as { exact: { intent: string; language: string } }[]).map((value, index) => ({
+    ...value.exact,
+    reply: replies[index],
+  }));
   for (let index = 0; index < values.length; index += 2) {
     assert.equal(values[index].intent, values[index + 1].intent);
     assert.deepEqual(new Set([values[index].language, values[index + 1].language]), new Set(['en', 'it']));

@@ -8,6 +8,8 @@ export interface Rubric {
   required?: string[][];
   forbidden?: string[];
   register?: 'formal' | 'informal';
+  /** The text must contain a question mark. */
+  question?: boolean;
 }
 
 const italian = new Set(
@@ -39,7 +41,7 @@ const includesTerm = (tokens: string[], term: string): boolean => {
   return false;
 };
 
-const fields = ['language', 'minWords', 'maxWords', 'required', 'forbidden', 'register'];
+const fields = ['language', 'minWords', 'maxWords', 'required', 'forbidden', 'register', 'question'];
 const terms = (value: unknown): value is string[] =>
   Array.isArray(value) &&
   value.length > 0 &&
@@ -61,7 +63,8 @@ export function validateRubric(input: unknown): Rubric {
     (v.required !== undefined &&
       (!Array.isArray(v.required) || !v.required.length || v.required.length > 64 || !v.required.every(terms))) ||
     (v.forbidden !== undefined && !terms(v.forbidden)) ||
-    (v.register !== undefined && v.register !== 'formal' && v.register !== 'informal')
+    (v.register !== undefined && v.register !== 'formal' && v.register !== 'informal') ||
+    (v.question !== undefined && v.question !== true)
   )
     throw Error('Invalid rubric');
   return v as Rubric;
@@ -85,5 +88,51 @@ export function gradeRubric(text: string, rubric: Rubric): { passed: boolean; fa
     const casual = tokens.some((word) => informal.has(word));
     if (casual !== (rubric.register === 'informal')) failures.push('register');
   }
+  if (rubric.question && !text.includes('?')) failures.push('question');
+  return { passed: failures.length === 0, failures };
+}
+
+/** Expectation of kind "json-rubric": exact JSON fields plus one free-text field graded by a rubric. */
+export interface JsonRubric {
+  exact: Record<string, string | number | boolean | null>;
+  field: string;
+  rubric: Rubric;
+}
+
+const scalar = (value: unknown): boolean => value === null || ['string', 'number', 'boolean'].includes(typeof value);
+
+export function validateJsonRubric(input: unknown): JsonRubric {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) throw Error('Invalid json rubric');
+  const v = input as Record<string, unknown>;
+  const exact = v.exact as Record<string, unknown>;
+  if (
+    Object.keys(v).length !== 3 ||
+    !exact ||
+    typeof exact !== 'object' ||
+    Array.isArray(exact) ||
+    !Object.keys(exact).length ||
+    !Object.values(exact).every(scalar) ||
+    typeof v.field !== 'string' ||
+    !v.field ||
+    Object.hasOwn(exact, v.field)
+  )
+    throw Error('Invalid json rubric');
+  validateRubric(v.rubric);
+  return v as unknown as JsonRubric;
+}
+
+/** The reply must be an object with exactly the exact keys (equal) and the text field (rubric); no reply text is named. */
+export function gradeJsonRubric(observed: unknown, expected: JsonRubric): { passed: boolean; failures: string[] } {
+  if (!observed || typeof observed !== 'object' || Array.isArray(observed))
+    return { passed: false, failures: ['not-an-object'] };
+  const object = observed as Record<string, unknown>;
+  const failures: string[] = [];
+  const keys = [...Object.keys(expected.exact), expected.field];
+  if (Object.keys(object).length !== keys.length || !keys.every((key) => Object.hasOwn(object, key)))
+    failures.push('keys');
+  for (const [key, value] of Object.entries(expected.exact)) if (object[key] !== value) failures.push('exact:' + key);
+  const text = object[expected.field];
+  if (typeof text !== 'string') failures.push(expected.field + ':not-text');
+  else failures.push(...gradeRubric(text, expected.rubric).failures.map((name) => expected.field + ':' + name));
   return { passed: failures.length === 0, failures };
 }

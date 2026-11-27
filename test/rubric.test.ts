@@ -4,11 +4,14 @@ import {
   catalog,
   defaults,
   gradeRubric,
+  validateRubric,
   run,
   validatePack,
   type Pack,
   type Profile,
   type Rubric,
+  validateJsonRubric,
+  gradeJsonRubric,
 } from '../src/index.ts';
 
 const profile: Profile = {
@@ -145,4 +148,28 @@ test('a run grades free text by rubric and keeps the reply out of the report', a
   assert.equal(failing.results[0].status, 'failed');
   assert.match(String(failing.results[0].reason), /language/);
   assert.equal(JSON.stringify(failing).includes('Dear customer'), false);
+});
+
+test('question rubric needs a question mark and a json-rubric grades exact fields plus the text field', () => {
+  assert.deepEqual(gradeRubric('Quale file?', { question: true }).failures, []);
+  assert.deepEqual(gradeRubric('Quale file.', { question: true }).failures, ['question']);
+  assert.throws(() => validateRubric({ question: false }));
+  const value = validateJsonRubric({ exact: { intent: 'ask' }, field: 'reply', rubric: { question: true } });
+  assert.deepEqual(gradeJsonRubric({ intent: 'ask', reply: 'Quale?' }, value), { passed: true, failures: [] });
+  assert.deepEqual(gradeJsonRubric({ intent: 'tell', reply: 'Quale.' }, value).failures, [
+    'exact:intent',
+    'reply:question',
+  ]);
+  assert.deepEqual(gradeJsonRubric({ intent: 'ask', reply: 1 }, value).failures, ['reply:not-text']);
+  assert.deepEqual(gradeJsonRubric('x', value).failures, ['not-an-object']);
+  for (const bad of [
+    null,
+    { exact: {}, field: 'reply', rubric: { question: true } },
+    { exact: { reply: 'x' }, field: 'reply', rubric: { question: true } },
+    { exact: { intent: ['a'] }, field: 'reply', rubric: { question: true } },
+    { exact: { intent: 'a' }, field: 'reply', rubric: {} },
+    { exact: { intent: 'a' }, field: '', rubric: { question: true } },
+    { exact: { intent: 'a' }, field: 'reply', rubric: { question: true }, extra: 1 },
+  ])
+    assert.throws(() => validateJsonRubric(bad), JSON.stringify(bad));
 });

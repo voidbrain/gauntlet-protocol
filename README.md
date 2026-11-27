@@ -10,7 +10,7 @@ The generated [pack catalog](docs/test-index.md) also lists six focused 1.0.0 pa
 
 - `structured-output-robustness` — six constrained JSON and schema cases;
 - `tool-use` — six tool-selection and argument cases;
-- `bilingual-it-en` — four Italian/English language-control cases;
+- `bilingual-it-en` — four Italian/English language-control cases (the reply text is graded by meaning, `json-rubric-v1`);
 - `multi-step-agent` — four deterministic scripted-runner cases;
 - `refusal-permission` — four refusal and permission-boundary cases;
 - `long-context` — four retrieval cases with facts at varied context depths.
