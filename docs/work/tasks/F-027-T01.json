@@ -4,7 +4,7 @@
   "parent": "F-027",
   "title": "Measure coverage of src/ with a committed baseline",
   "goal": "coverage table with a main baseline, checked in CI",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "`test:coverage` and `coverage` scripts; `coverage` setting with `drop: 2`, folder `src/`",
     "CI runs `test:coverage` and `coverage-table --check --github`",
@@ -32,8 +32,8 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Done 2026-11-26 following another repository's Node coverage scripts. Not timed.",
-    "reviewed": "2026-11-26",
+    "basis": "Done 2026-11-26 in #118 (CI 45801329552 green) and #120 following another repository's Node coverage scripts. No actual: reconciled in a later session without job timing. Closed 2026-11-27.",
+    "reviewed": "2026-11-27",
     "agentHours": 0,
     "ownerHours": 0,
     "baselineAgentHours": 0.5,

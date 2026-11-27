@@ -1,10 +1,10 @@
 # Gauntlet Protocol backlog
 
-Current work ledger, reviewed 26 November 2026 against main `67ef7e6`. PR #127 reconciles the harness to v10.24.1 (from 10.21.4); the owner authorised it in chat on 2026-11-26 ("ok to all") although the template backlog is not empty. CI pending at this entry.
+Current work ledger, reviewed 27 November 2026 against main `c131b53`. PRs #123 and #126–#131 merged on green CI (#123 deps; #127, #129 harness v10.24.2; #130 coordinator prefix; #126 F-032–F-034; #128 F-035; #131 F-036). Closed B-003 (#99), B-004 (#118), F-022 (#112, #114), F-026 (#116), F-027 (#118, #122, #124) and F-021-T01/T03/T04/T06 (#113–#121).
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 37 h agent + 2 h owner across 46 open steps of 16 features and 2 other records. Generated from the task files.
+**Remaining effort:** 27.25 h agent + 2 h owner across 34 open steps of 13 features. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -42,86 +42,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-032-T01: PR #126 plan · F-032-T02: PR #126 plan. [#126](https://github.com/voidbrain/gauntlet-protocol/pull/126) (plan); [review page](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-shared-assets/gauntlet-protocol.md); owner decision 2026-11-26 |
+| PR / evidence | Steps: F-032-T01: PR #126 plan · F-032-T02: PR #126 plan. [#126](https://github.com/voidbrain/gauntlet-protocol/pull/126) (plan); [#130](https://github.com/voidbrain/gauntlet-protocol/pull/130) (coordinator prefix); [review page](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-shared-assets/gauntlet-protocol.md); owner decision 2026-11-26 |
 | Opened | 2026-11-26 |
 | Verification | Pending |
-| Reviewed | 2026-11-26 |
-
-</details>
-
----
-### <a id="b-003"></a>[🐞 B-003](#top)
-
-**Coding grader blocks at a timeout while a leftover process keeps writing**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0.25 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-003-T01 — Timeout verdict without waiting for cleanup (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | On a timeout `gradeCandidate` removed the workspace synchronously while a process the executor had not stopped kept creating folders in it. The unlock walk and `rmSync` chased the growing tree and blocked the event loop, so the timeout verdict arrived only when the writer stopped. On CI the test "coding grader reports a timeout even while a leftover process keeps writing to the workspace" was cancelled at the 60 s limit on #99 and #101 (runs 45576499955, 45578902824). |
-| **Reproduce** | Grade with an executor that never resolves and starts an endless folder writer in the workspace, `timeoutMs: 300`: the call does not return until the writer stops. |
-| **Check** | The grader returns the timeout at once and removes the workspace when the executor resolves; until then the workspace is a leftover that `removeLeftoverWorkspaces()` retries. Regression test committed failing first. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status |
-|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-003-t01"></a>B-003-T01 — Timeout verdict without waiting for cleanup | 0.5 h | 0 h | 0.25 h | Implemented; verification pending |
-| 🟢 Small | **Total** | 0.5 h | 0 h (0 of 1 steps recorded) | 0.25 h | 0 of 1 completed |
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/B-003.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | [#99](https://github.com/voidbrain/gauntlet-protocol/pull/99) |
-| Opened | 2026-11-25 |
-| Verification | Pending. |
-| Reviewed | 2026-11-25 |
-
-</details>
-
----
-### <a id="b-004"></a>[🐞 B-004](#top)
-
-**Test files are type-checked**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-004-T01 — Type-check test/&#42;&#42;/&#42;.ts in typecheck (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The 15 `test/*.test.ts` files were in no `tsconfig`: `typecheck` and `build` checked `src/**/*.ts` only, and Node strips the types of tests without checking them, so a wrong call in a test ran unchecked. Found by the coordinator's dormant-checks sweep, 2026-11-26 (T2, proposal 3). |
-| **Reproduce** | On `main` `62a7787`: `tsc -p` a config that includes `test/**/*.ts` reports 18 errors (36 once the JavaScript graders the tests import are resolved). |
-| **Check** | `npm run typecheck` also runs `tsc -p tsconfig.test.json` (src, tests and, through `allowJs`, the JavaScript graders they import) and passes; the commit that added it failed first (`c2c85e0`). `npm test` passes. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
-|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="b-004-t01"></a>B-004-T01 — Type-check test/&#42;&#42;/&#42;.ts in typecheck | 1 h | 0 h | 0 h | Implemented; verification pending | PR #118 |
-| 🟢 Small | **Total** | 1 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed | |
-
-<details>
-<summary>Next action, estimates and PR history</summary>
-
-[Full notes & evidence](work/records/B-004.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: B-004-T01: PR #118. [#118](https://github.com/voidbrain/gauntlet-protocol/pull/118) |
-| Opened | 2026-11-26 |
-| Verification | Pending |
-| Reviewed | 2026-11-26 |
+| Reviewed | 2026-11-27 |
 
 </details>
 
@@ -156,10 +80,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-034-T01: PR #126 plan. [#126](https://github.com/voidbrain/gauntlet-protocol/pull/126) (plan); [review page](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-shared-assets/gauntlet-protocol.md); owner decision 2026-11-26 |
+| PR / evidence | Steps: F-034-T01: PR #126 plan. [#126](https://github.com/voidbrain/gauntlet-protocol/pull/126) (plan); [#130](https://github.com/voidbrain/gauntlet-protocol/pull/130) (coordinator prefix); [review page](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-shared-assets/gauntlet-protocol.md); owner decision 2026-11-26 |
 | Opened | 2026-11-26 |
 | Verification | Pending |
-| Reviewed | 2026-11-26 |
+| Reviewed | 2026-11-27 |
 
 </details>
 
@@ -194,57 +118,62 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-033-T01: PR #126 plan. [#126](https://github.com/voidbrain/gauntlet-protocol/pull/126) (plan); [review page](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-shared-assets/gauntlet-protocol.md); owner decision 2026-11-26 |
+| PR / evidence | Steps: F-033-T01: PR #126 plan. [#126](https://github.com/voidbrain/gauntlet-protocol/pull/126) (plan); [#130](https://github.com/voidbrain/gauntlet-protocol/pull/130) (coordinator prefix); [review page](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-shared-assets/gauntlet-protocol.md); owner decision 2026-11-26 |
 | Opened | 2026-11-26 |
 | Verification | Pending |
-| Reviewed | 2026-11-26 |
+| Reviewed | 2026-11-27 |
 
 </details>
 
 ---
-### <a id="f-022"></a>[✨ F-022](#top)
+### <a id="f-021"></a>[✨ F-021](#top)
 
-**Packs or recorded skips for estimation, research, scheduling-time and backlog-management**
+**image-generation-v1: runner and grader after a design decision**
 
 | Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
 |---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
+| 🔴 Open | 🔹 P3 | 🟢 Small | 1 h agent + 0.25 h owner | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-022-T01 — Propose packs or skips for the remaining areas (Implemented; verification pending).
+💻 **→** Next: F-021-T08 — First real run: prove the judge, measure generator variance (Planned).
 
 | | |
 |---|---|
-| **Issue** | Four index areas have 0 mapped cases and no agreed plan: estimation, research, scheduling-time, backlog-management. |
-| **Reproduce** | `npm run index:build` reports 0 mapped cases for each of the four areas. |
-| **Check** | Each of the four areas has either its own planned pack record or a skip recorded with its reason in the roadmap. |
+| **Issue** | The index maps 0 cases to audio-video. Image generation needs a new runner and a grader (VLM judge or similarity) whose design is not yet chosen. |
+| **Reproduce** | `npm run index:build` reports `audio-video: 0 mapped cases`. |
+| **Check** | A recorded design decision, then a runner and grader as decided, and examples/image-generation-v1.json, area audio-video; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status | Who | PRs |
-|---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="f-022-t01"></a>F-022-T01 — Propose packs or skips for the remaining areas | 1 h | 0 h | 1 h | Implemented; verification pending | 🤖 | PR #112 |
-| 🟢 Small | <a id="f-022-t03"></a>F-022-T03 — Record the outcome | 0.5 h | 0 h | 0 h | Implemented; verification pending | 🤖 | PR #114 records and roadmap skips |
-| 🟢 Small | **Total** | 1.5 h (2 of 3 steps) | 0 h (0 of 3 steps recorded) | 1 h | 1 of 3 completed | | |
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
+|---|---|---|---|---|---|---|---|:---:|---|
+| 🟢 Small | <a id="f-021-t08"></a>F-021-T08 — First real run: prove the judge, measure generator variance | 1 h | 0 h | 1 h | Planned | — | [F-021-T05](#f-021-t05) | 🤖 | PR #114 planned |
+| 🟢 Small | <a id="f-021-t05"></a>F-021-T05 — Release image-generation-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T08](#f-021-t08) | — | ⏳ 🧑‍🔧 | — |
+| 🟢 Small | **Total** | 8.5 h (5 of 8 steps) | 0 h (0 of 8 steps recorded) | 1 h agent + 0.25 h owner | 6 of 8 completed | | | | |
 
-<details><summary>Done steps (1)</summary>
+<details><summary>Done steps (6)</summary>
 
 | Effort | Step | Estimate | Actual | Status | PRs |
 |---|---|---|---|---|---|
-| — | <a id="f-022-t02"></a>F-022-T02 — Decide packs or skips for the remaining areas | — | 0 h | Completed | PR #114 decision |
+| — | <a id="f-021-t01"></a>F-021-T01 — Draft the image-generation design decision | 1 h | 0 h | Completed | PR #113 |
+| — | <a id="f-021-t02"></a>F-021-T02 — Decide the image-generation design | — | 0 h | Completed | PR #114 decision |
+| — | <a id="f-021-t03"></a>F-021-T03 — Image-generation runner | 4 h | 0 h | Completed | PR #115 re-estimate; PR #119 runner; int8 runs on MPS |
+| — | <a id="f-021-t04"></a>F-021-T04 — Image grader and pack | 2 h | 0 h | Completed | PR #121 grader and pack; judge proven on fixtures |
+| — | <a id="f-021-t06"></a>F-021-T06 — Host check: Ollama image generation, then record runtime A or B | 0.5 h | 0 h | Completed | PR #114 planned; PR #115 host check |
+| — | <a id="f-021-t07"></a>F-021-T07 — Pull the image generator and the vision judge models | — | 0 h | Completed | PR #114 planned; PR #115 pull commands; PR #117 models pulled; Comfy Desktop |
 
 </details>
 
 <details>
 <summary>Next action, estimates and evidence</summary>
 
-[Full notes & evidence](work/records/F-022.md)
+[Full notes & evidence](work/records/F-021.md)
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-022-T01: PR #112 · F-022-T02: PR #114 decision · F-022-T03: PR #114 records and roadmap skips. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#112](https://github.com/voidbrain/gauntlet-protocol/pull/112); owner decision 2026-11-26, F-022-T02 ("Do you accept these as recommended? ok") |
+| PR / evidence | Steps: F-021-T01: PR #113 · F-021-T02: PR #114 decision · F-021-T03: PR #115 re-estimate; PR #119 runner; int8 runs on MPS · F-021-T04: PR #121 grader and pack; judge proven on fixtures · F-021-T06: PR #114 planned; PR #115 host check · F-021-T07: PR #114 planned; PR #115 pull commands; PR #117 models pulled; Comfy Desktop · F-021-T08: PR #114 planned. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#113](https://github.com/voidbrain/gauntlet-protocol/pull/113); owner decision 2026-11-26, F-021-T02 ("Do you accept these as recommended? ok"); owner approval 2026-11-26 of the widened F-021-T06 check ("Qwen Image 2.1 and Ollama check ok"); [#115](https://github.com/voidbrain/gauntlet-protocol/pull/115); [#117](https://github.com/voidbrain/gauntlet-protocol/pull/117); [#119](https://github.com/voidbrain/gauntlet-protocol/pull/119); owner approval 2026-11-26 of F-021-T04 ("ok"); [#121](https://github.com/voidbrain/gauntlet-protocol/pull/121); [evidence archive](archive/evidence-2026.md#f-021) |
 | Opened | 2026-11-24 |
-| Verification | Pending. |
-| Reviewed | 2026-11-26 |
+| Verification | Unit/integration · 2026-11-27 · F-021-T01 (#113), F-021-T03 (#119 CI 45801135303), F-021-T04 (#121 CI 45804656435) and F-021-T06 (#115) green; F-021-T08 real variance run and F-021-T05 release pending |
+| Reviewed | 2026-11-27 |
 
 </details>
 
@@ -322,84 +251,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | PR / evidence | Owner decision 2026-11-26, F-022-T02 ("Do you accept these as recommended? ok") |
 | Opened | 2026-11-26 |
 | Verification | Pending. |
-| Reviewed | 2026-11-26 |
-
-</details>
-
----
-### <a id="f-026"></a>[✨ F-026](#top)
-
-**Turn audit enforcement on**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 0 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-026-T01 — Turn audit.enforce on (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | Full audit baselines exist (manifest kind full, latest 2026-11-22) but `audit.enforce` was off, so a due audit only warned. The 2026-11-26 cross-project audit (coordinator, docs/audits/2026-11-26-cross-project.md, proposal 17) proposes turning it on. |
-| **Reproduce** | `.harness.json` had `"audit": {"days": 7, "enforce": false}`. |
-| **Check** | `audit.enforce` is true and `npm run check:audits` and `npm run check:freshness` pass. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | PRs |
-|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-026-t01"></a>F-026-T01 — Turn audit.enforce on | 0.25 h | 0 h | 0 h | Implemented; verification pending | PR #116 audit.enforce true |
-| 🟢 Small | **Total** | 0.25 h | 0 h (0 of 1 steps recorded) | 0 h | 0 of 1 completed | |
-
-<details>
-<summary>Next action, estimates and PR history</summary>
-
-[Full notes & evidence](work/records/F-026.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-026-T01: PR #116 audit.enforce true. [#116](https://github.com/voidbrain/gauntlet-protocol/pull/116) |
-| Opened | 2026-11-26 |
-| Verification | Pending |
-| Reviewed | 2026-11-26 |
-
-</details>
-
----
-### <a id="f-027"></a>[✨ F-027](#top)
-
-**Coverage measured and enforced; behaviour runner set**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟢 Small | 1 h | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-027-T01 — Measure coverage of src/ with a committed baseline (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The 2026-11-26 dormant-checks sweep (coordinator `docs/audits/2026-11-26-dormant-checks.md`, rows S1 and S3) found that this repository measures no coverage (so nothing could be enforced) and sets no `behaviour.runner`. Reviews and work usage were already on. |
-| **Reproduce** | `.harness.json` on `main` `62a7787`: no `coverage`, `behaviour` `{times: 3}`. |
-| **Check** | `npm run test:coverage` writes LCOV and the summary; CI runs it and `coverage-table --check`, which fails on a drop over 2 points against `docs/agents/coverage.json` (`coverage.enforce: true`, switched on by F-027-T03 once the baseline is on `main`: under enforce the check reads the baseline from `origin/main`, so the PR that adds it cannot enforce it); `behaviour.runner` is set and no campaign was run. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | PRs |
-|---|---|---|---|---|---|---|---|---|
-| 🟢 Small | <a id="f-027-t01"></a>F-027-T01 — Measure coverage of src/ with a committed baseline | 0.5 h | 0 h | 0 h | Implemented; verification pending | — | [F-027-T03](#f-027-t03) | PR #118 |
-| 🟢 Small | <a id="f-027-t02"></a>F-027-T02 — Set behaviour.runner | 0.25 h | 0 h | 0 h | Implemented; verification pending | — | — | PR #118 |
-| 🟢 Small | <a id="f-027-t03"></a>F-027-T03 — Turn coverage.enforce on with a baseline CI can reproduce | 1 h | 0 h | 1 h | Planned | [F-027-T01](#f-027-t01) | — | — |
-| 🟢 Small | **Total** | 1.75 h | 0 h (0 of 3 steps recorded) | 1 h | 0 of 3 completed | | | |
-
-<details>
-<summary>Next action, estimates and PR history</summary>
-
-[Full notes & evidence](work/records/F-027.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-027-T01: PR #118 · F-027-T02: PR #118. [#118](https://github.com/voidbrain/gauntlet-protocol/pull/118); [#120](https://github.com/voidbrain/gauntlet-protocol/pull/120); [#122](https://github.com/voidbrain/gauntlet-protocol/pull/122); [#124](https://github.com/voidbrain/gauntlet-protocol/pull/124) |
-| Opened | 2026-11-26 |
-| Verification | Pending |
 | Reviewed | 2026-11-26 |
 
 </details>
@@ -683,58 +534,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | PR / evidence | Plan: [#131](https://github.com/voidbrain/gauntlet-protocol/pull/131); consumer nerv |
 | Opened | 2026-11-26 |
 | Verification | Pending |
-| Reviewed | 2026-11-26 |
-
-</details>
-
----
-### <a id="f-021"></a>[✨ F-021](#top)
-
-**image-generation-v1: runner and grader after a design decision**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔹 P3 | 🟣 Very large | 8.5 h agent + 0.25 h owner | — | — | 🤖 | — | — |
-
-💻 **→** Next: F-021-T01 — Draft the image-generation design decision (Implemented; verification pending).
-
-| | |
-|---|---|
-| **Issue** | The index maps 0 cases to audio-video. Image generation needs a new runner and a grader (VLM judge or similarity) whose design is not yet chosen. |
-| **Reproduce** | `npm run index:build` reports `audio-video: 0 mapped cases`. |
-| **Check** | A recorded design decision, then a runner and grader as decided, and examples/image-generation-v1.json, area audio-video; regression and holdout splits, a deterministic grader proven by fixtures, an area from the index taxonomy, an index entry and a tagged release; consumers adopt through their pin. |
-
-**Feature steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
-|---|---|---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="f-021-t01"></a>F-021-T01 — Draft the image-generation design decision | 1 h | 0 h | 1 h | Implemented; verification pending | — | — | 🤖 | PR #113 |
-| 🟢 Small | <a id="f-021-t06"></a>F-021-T06 — Host check: Ollama image generation, then record runtime A or B | 0.5 h | 0 h | 0.5 h | Implemented; verification pending | — | [F-021-T03](#f-021-t03) | 🤖 | PR #114 planned; PR #115 host check |
-| 🟡 Medium | <a id="f-021-t03"></a>F-021-T03 — Image-generation runner | 4 h | 0 h | 4 h | Implemented; verification pending | [F-021-T06](#f-021-t06) | [F-021-T04](#f-021-t04) | 🤖 | PR #115 re-estimate; PR #119 runner; int8 runs on MPS |
-| 🟡 Medium | <a id="f-021-t04"></a>F-021-T04 — Image grader and pack | 2 h | 0 h | 2 h | Implemented; verification pending | [F-021-T03](#f-021-t03) | [F-021-T08](#f-021-t08) | 🤖 | PR #121 grader and pack; judge proven on fixtures |
-| 🟢 Small | <a id="f-021-t08"></a>F-021-T08 — First real run: prove the judge, measure generator variance | 1 h | 0 h | 1 h | Planned | [F-021-T04](#f-021-t04) | [F-021-T05](#f-021-t05) | ⏳ 🤖 | PR #114 planned |
-| 🟢 Small | <a id="f-021-t05"></a>F-021-T05 — Release image-generation-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T08](#f-021-t08) | — | ⏳ 🧑‍🔧 | — |
-| 🟣 Very large | **Total** | 8.5 h (5 of 8 steps) | 0 h (0 of 8 steps recorded) | 8.5 h agent + 0.25 h owner | 2 of 8 completed | | | | |
-
-<details><summary>Done steps (2)</summary>
-
-| Effort | Step | Estimate | Actual | Status | PRs |
-|---|---|---|---|---|---|
-| — | <a id="f-021-t02"></a>F-021-T02 — Decide the image-generation design | — | 0 h | Completed | PR #114 decision |
-| — | <a id="f-021-t07"></a>F-021-T07 — Pull the image generator and the vision judge models | — | 0 h | Completed | PR #114 planned; PR #115 pull commands; PR #117 models pulled; Comfy Desktop |
-
-</details>
-
-<details>
-<summary>Next action, estimates and evidence</summary>
-
-[Full notes & evidence](work/records/F-021.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: F-021-T01: PR #113 · F-021-T02: PR #114 decision · F-021-T03: PR #115 re-estimate; PR #119 runner; int8 runs on MPS · F-021-T04: PR #121 grader and pack; judge proven on fixtures · F-021-T06: PR #114 planned; PR #115 host check · F-021-T07: PR #114 planned; PR #115 pull commands; PR #117 models pulled; Comfy Desktop · F-021-T08: PR #114 planned. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#113](https://github.com/voidbrain/gauntlet-protocol/pull/113); owner decision 2026-11-26, F-021-T02 ("Do you accept these as recommended? ok"); owner approval 2026-11-26 of the widened F-021-T06 check ("Qwen Image 2.1 and Ollama check ok"); [#115](https://github.com/voidbrain/gauntlet-protocol/pull/115); [#117](https://github.com/voidbrain/gauntlet-protocol/pull/117); [#119](https://github.com/voidbrain/gauntlet-protocol/pull/119); owner approval 2026-11-26 of F-021-T04 ("ok"); [#121](https://github.com/voidbrain/gauntlet-protocol/pull/121); [evidence archive](archive/evidence-2026.md#f-021) |
-| Opened | 2026-11-24 |
-| Verification | Pending. |
 | Reviewed | 2026-11-26 |
 
 </details>

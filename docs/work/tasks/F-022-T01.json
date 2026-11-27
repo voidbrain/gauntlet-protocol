@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-022-T01",
   "parent": "F-022",
-  "status": "implemented",
+  "status": "closed",
   "title": "Propose packs or skips for the remaining areas",
   "goal": "Propose packs or skips for the remaining areas",
   "acceptance": [
@@ -32,10 +32,11 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request) at observed agent speed for one-PR pack steps. Not a measurement.",
-    "reviewed": "2026-11-24",
-    "agentHours": 1,
+    "estimate": "0 remaining",
+    "basis": "Done 2026-11-26 in #112 (CI 45783698012 green) and reviewed by the owner in F-022-T02 (#114). No actual: reconciled in a later session without job timing.",
+    "reviewed": "2026-11-27",
+    "agentHours": 0,
+    "ownerHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   },

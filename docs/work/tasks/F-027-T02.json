@@ -4,7 +4,7 @@
   "parent": "F-027",
   "title": "Set behaviour.runner",
   "goal": "behaviour.runner is the Claude Code command",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "`behaviour.runner` is the `claude -p` command from rule-review",
     "No behaviour campaign run"
@@ -26,8 +26,8 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Done 2026-11-26, a setting. Not timed.",
-    "reviewed": "2026-11-26",
+    "basis": "Done 2026-11-26 in #118 (CI 45801329552 green), a setting. No actual: reconciled in a later session without job timing. Closed 2026-11-27.",
+    "reviewed": "2026-11-27",
     "agentHours": 0,
     "ownerHours": 0,
     "baselineAgentHours": 0.25,
