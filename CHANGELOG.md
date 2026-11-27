@@ -1,5 +1,17 @@
 # Releases
 
+## Unreleased (0.12.0) — the bilingual pack grades meaning
+
+B-006: `bilingual-it-en` expected the whole reply as exact JSON, including the free `reply` text, so almost any correct phrasing failed (gemma4:12b scored 0 of 4 on 2026-11-27 for that reason, not for language control).
+
+- New expected kind `json-rubric` (catalog grader `json-rubric-v1`): exact JSON fields (`intent`, `language`) plus one free-text field graded by the deterministic rubric. The rubric gains `question: true` (the text contains a question mark). No model judge.
+- `bilingual-it-en@2.0.0`: the same four cases and prompts; `reply` now needs the required facts in Italian or English (meeting, moved, Tuesday / martedì; a question about which file) and none of the forbidden terms (negation, `to Monday`, the other language). Results of 1.0.0 are not comparable, so the major version changes; consumers pinning 1.0.0 keep their evidence.
+- The engine hash changes, so automatic cache reuse requires 0.12.0 evidence. Grading rules: PROTOCOL, "JSON reply with a free-text field". No real-model run; the re-measure is B-006-T03.
+
+Pack case changes since 0.11.1:
+
+- `bilingual-it-en`: added none; changed the expectation of all four cases; removed none. Every other pack: unchanged.
+
 ## 0.11.1 — coding runner and executor errors
 
 Fixes found by a consumer's review of the 0.11.0 adoption (#107):

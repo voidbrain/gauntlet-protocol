@@ -4,7 +4,7 @@
   "parent": "B-006",
   "title": "Grade the reply by meaning (failing test first)",
   "goal": "The bilingual pack accepts correct paraphrases and refuses wrong ones",
-  "status": "planned",
+  "status": "implemented",
   "acceptance": [
     "A committed failing test first: with `exact-json-v1` as released, a correct paraphrase of each of the four cases (Italian and English) fails; the same test must pass after the fix, and a wrong-meaning or wrong-language reply and a wrong `intent` or `language` still fail (pass and fail fixtures per case)",
     "`examples/bilingual-it-en-v1.json` gets the new expectation and a version bump (a released pack: consumers pin the old one), `docs/test-index.md` regenerated, PROTOCOL text updated; no existing test edited to pass"
@@ -35,9 +35,9 @@
   "effort": {
     "size": "small",
     "estimate": "1.5 h agent",
-    "basis": "Estimated 2026-11-27 at agent speed. Not a measurement.",
+    "basis": "Failing test first (test/bilingual-grading.test.ts), then json-rubric grader and bilingual-it-en@2.0.0. No real-model run. Not a measurement.",
     "reviewed": "2026-11-27",
-    "agentHours": 1.5,
+    "agentHours": 0,
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   },

@@ -10,7 +10,7 @@ The direct local provider supports Ollama's loopback API, exact installed quanti
 
 ## Inputs and execution
 
-Pack: `schemaVersion`, `id`, semantic `version`, `cases`. Each case has stable `id`, `layer`, `split` (regression or holdout), named `capabilities`, `critical`, `expensive`; either `runner`, or model `messages` plus independent `expected: {kind: "text"|"json"|"rubric"|"defects", value}` ([rubric grading](#rubric-grading), [defect-finding grading](#defect-finding-grading)). No shell commands in packs. Expectations are never sent to the direct model.
+Pack: `schemaVersion`, `id`, semantic `version`, `cases`. Each case has stable `id`, `layer`, `split` (regression or holdout), named `capabilities`, `critical`, `expensive`; either `runner`, or model `messages` plus independent `expected: {kind: "text"|"json"|"json-rubric"|"rubric"|"defects", value}` ([rubric grading](#rubric-grading), [defect-finding grading](#defect-finding-grading)). No shell commands in packs. Expectations are never sent to the direct model.
 
 Model profiles can declare `weightsBytes` and `minimumMemoryBytes` together, alongside their quantization and context. Machine environments declare total memory and an owner-reviewed accelerator class. Planning with both declarations reports host fit, makes every case ineligible on a memory misfit and leaves missing sizing explicitly unknown; execution enforces the same memory gate before contacting a provider.
 
@@ -116,9 +116,22 @@ The tasks, expected values and reference solutions are committed to a public rep
 - `minWords`, `maxWords` — bounds on the number of words (runs of letters or digits);
 - `required` — groups of terms; each group needs one of its terms as whole words, in order for a multi-word term;
 - `forbidden` — terms that must not appear as whole words;
+- `question: true` — the text contains a question mark;
 - `register: "formal"` — no informal second-person forms (`tu`, `ti`, `tuo`, `puoi` and the like); `"informal"` — at least one.
 
-Matching is case-insensitive on Unicode-normalised text. A failed case's reason names the failed checks (`language`, `min-words`, `required:2`, `forbidden:<term>`, `register`) and never the reply. The word lists are fixed in `src/rubric.ts`, which is part of the engine identity. A rubric measures these observable properties only; it does not judge accuracy or style beyond them, so packs pair it with references reviewed by people.
+Matching is case-insensitive on Unicode-normalised text. A failed case's reason names the failed checks (`language`, `min-words`, `required:2`, `forbidden:<term>`, `register`, `question`) and never the reply. The word lists are fixed in `src/rubric.ts`, which is part of the engine identity. A rubric measures these observable properties only; it does not judge accuracy or style beyond them, so packs pair it with references reviewed by people.
+
+## JSON reply with a free-text field
+
+`expected: {kind: "json-rubric", value: {exact, field, rubric}}` (catalog grader `json-rubric-v1`) grades a JSON reply whose structure is fixed but whose wording is free. The reply must be a JSON object with exactly the keys of `exact` plus `field`; each `exact` value (string, number, boolean or null) must be equal, and the text in `field` must pass the `rubric` of the section above. A failed case's reason names the failed checks (`keys`, `exact:<key>`, `<field>:not-text`, `<field>:required:2`, `<field>:forbidden:<term>` and the like) and never the reply. `src/rubric.ts` is part of the engine identity.
+
+`examples/bilingual-it-en-v1.json` (version 2.0.0) uses it for its four cases, so a correct paraphrase passes and a wrong meaning does not. `intent` and `language` stay exact; `reply` must hold the required facts and none of the forbidden terms. Terms are lower-case whole words, in order for a multi-word term; every list holds Italian and English forms, and a group passes on any one of them:
+
+- summarize (Italian and English): the meeting (`meeting`, `riunione`, `incontro`), a move word (`moved`, `rescheduled`, `postponed`; `spostata`, `posticipato`, `rinviata`, ...) and `Tuesday` / `martedì`. Negation (`not`, `never`, `isn`, `wasn`, `non`, `mai`, `senza`, a cancellation) is forbidden, and so are `to Monday` / `a lunedì` (a reply may say the meeting moved from Monday), the other weekdays and `from Tuesday`; at most 30 words;
+- clarify (Italian and English): a question mark, a question word (`which`, `what`; `quale`, `che`, `cosa`) and `file`, `document` or `one` (`documento`, `uno`, `quello`); at most 20 words;
+- wrong language: each case forbids key words of the other language (`quale` in the English case, `tuesday`, `the` and `moved` in the Italian case), and its required groups need words of the case's own language, so a reply in the other language fails even when `language` is right.
+
+A rubric cannot judge every meaning. Known limits: a reply that is correct but uses a move word or question word outside the lists fails (the lists are widened by a new pack version), and a reply that states the right words in a wrong relation that no forbidden term names passes. A model judge was rejected: these four cases have a few checkable facts, and a judge is neither deterministic nor free of the model under test.
 
 ## Defect-finding grading
 

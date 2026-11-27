@@ -2,7 +2,14 @@ import { FailureCapture, failureDestination, inspectFailures } from './failures.
 import { validateExecutionEnvironment, admitEnvironment, type ExecutionEnvironment } from './environments.ts';
 import { engineIdentity } from './engine.ts';
 import { gradeDefects, validateDefects, type DefectExpectation } from './defects.ts';
-import { gradeRubric, validateRubric, type Rubric } from './rubric.ts';
+import {
+  gradeJsonRubric,
+  gradeRubric,
+  validateJsonRubric,
+  validateRubric,
+  type JsonRubric,
+  type Rubric,
+} from './rubric.ts';
 import { areas, type Area } from './catalog.ts';
 import {
   inspectRuntime,
@@ -59,7 +66,7 @@ export interface Case {
   }[];
   responseFormat?: 'json' | Record<string, unknown>;
   expected?: {
-    kind: 'text' | 'json' | 'rubric' | 'defects';
+    kind: 'text' | 'json' | 'json-rubric' | 'rubric' | 'defects';
     value: unknown;
   };
 }
@@ -387,7 +394,7 @@ export function validatePack(input: unknown): Pack {
         };
         check(schema);
       }
-      if (!['json', 'defects'].includes(String(record(c.expected).kind)))
+      if (!['json', 'json-rubric', 'defects'].includes(String(record(c.expected).kind)))
         throw Error('Response format requires JSON grading');
     }
     seen.add(c.id);
@@ -415,12 +422,13 @@ export function validatePack(input: unknown): Pack {
       const e = record(c.expected);
       fields(e, ['kind', 'value']);
       if (
-        !['text', 'json', 'rubric', 'defects'].includes(String(e.kind)) ||
+        !['text', 'json', 'json-rubric', 'rubric', 'defects'].includes(String(e.kind)) ||
         !Object.hasOwn(e, 'value') ||
         (e.kind === 'text' && typeof e.value !== 'string')
       )
         throw Error('Invalid independent expectation');
       if (e.kind === 'rubric') validateRubric(e.value);
+      if (e.kind === 'json-rubric') validateJsonRubric(e.value);
       if (e.kind === 'defects') validateDefects(e.value);
     }
   }
@@ -1203,7 +1211,7 @@ export async function run(
               throw Error('Output truncated');
             }
             let observed: unknown = message.content.trim();
-            if (c.expected!.kind === 'json' || c.expected!.kind === 'defects') {
+            if (c.expected!.kind === 'json' || c.expected!.kind === 'json-rubric' || c.expected!.kind === 'defects') {
               try {
                 observed = JSON.parse(message.content) as unknown;
               } catch {
@@ -1226,6 +1234,10 @@ export async function run(
               const graded = gradeRubric(message.content, c.expected!.value as Rubric);
               r.status = graded.passed ? 'passed' : 'failed';
               r.reason = graded.passed ? null : 'Rubric checks failed: ' + graded.failures.join(', ');
+            } else if (c.expected!.kind === 'json-rubric') {
+              const graded = gradeJsonRubric(observed, c.expected!.value as JsonRubric);
+              r.status = graded.passed ? 'passed' : 'failed';
+              r.reason = graded.passed ? null : 'JSON rubric checks failed: ' + graded.failures.join(', ');
             } else if (c.expected!.kind === 'defects') {
               const graded = gradeDefects(observed, c.expected!.value as DefectExpectation);
               r.status = graded.passed ? 'passed' : 'failed';
@@ -1702,8 +1714,8 @@ export function validateReport(input: unknown): Report {
 export { catalog, catalogMarkdown, areas } from './catalog.ts';
 export { gradeDefects, validateDefects } from './defects.ts';
 export type { DefectExpectation, DefectGradeResult, SeededDefect } from './defects.ts';
-export { gradeRubric, validateRubric } from './rubric.ts';
-export type { Rubric } from './rubric.ts';
+export { gradeJsonRubric, gradeRubric, validateJsonRubric, validateRubric } from './rubric.ts';
+export type { JsonRubric, Rubric } from './rubric.ts';
 export { inspectRuntime, verifyArtifacts, validateManifest } from './runtimes.ts';
 export { serverProcess } from './telemetry.ts';
 export { executeWithEvidence, reuseValid, readEvidence, defaultEvidenceDirectory } from './evidence.ts';

@@ -4,7 +4,7 @@ Current work ledger, reviewed 27 November 2026 against main `c131b53`. PRs #123 
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 32 h agent + 2.25 h owner across 42 open steps of 13 features and 2 other records. Generated from the task files.
+**Remaining effort:** 30 h agent + 2.25 h owner across 42 open steps of 13 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -50,6 +50,47 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
+### <a id="b-006"></a>[🐞 B-006](#top)
+
+**The bilingual pack grades free-text replies by exact wording**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟢 Small | 0.5 h agent + 0.25 h owner | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-006-T01 — Design: how a free-text reply is graded by meaning, Italian and English (Implemented; verification pending).
+
+| | |
+|---|---|
+| **Issue** | The released `bilingual-it-en` pack (4 cases: summarize and clarify, Italian and English) expects the whole reply as exact JSON under `exact-json-v1`, including the free `reply` text (for example `The meeting moved to Tuesday.`, `Quale file devo aprire?`). Almost any correct phrasing fails, so a pass measures luck with wording, not language control. On 2026-11-27 (night run, MacBook M3 Pro 36 GB) `gemma4:12b` scored 0 of 4, every case `Independent acceptance mismatch` (report `extra-night/gemma4-12b-bilingual-it-en.json`, kept outside Git). Owner approval 2026-11-27 morning ("ok") to open this record. Related: F-032 plans `json-match` (ignored paths, ranges, order-free arrays) for the same class of case; this record decides how `reply` text is graded. |
+| **Reproduce** | `gauntlet model-run --pack=bilingual-it-en` on any model that answers correctly in other words (for example `La riunione è stata spostata a martedì.`): the case fails with `Independent acceptance mismatch`. |
+| **Check** | A correct paraphrase of each of the four cases, in Italian and English, passes; a wrong-meaning, wrong-language or wrong-`intent` reply fails; each rule is proven by pass and fail fixtures committed failing first; the pack carries a new version, the index is regenerated, and a recorded gemma4:12b run no longer fails on wording alone. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
+|---|---|---|---|---|---|---|---|:---:|---|
+| 🟢 Small | <a id="b-006-t01"></a>B-006-T01 — Design: how a free-text reply is graded by meaning, Italian and English | 0.5 h | 0 h | 0 h | Implemented; verification pending | — | [B-006-T02](#b-006-t02) | 🤖 | PR #133 plan |
+| 🟢 Small | <a id="b-006-t02"></a>B-006-T02 — Grade the reply by meaning (failing test first) | 1.5 h | 0 h | 0 h | Implemented; verification pending | [B-006-T01](#b-006-t01) | [B-006-T03](#b-006-t03) | 🤖 | PR #133 plan |
+| 🟢 Small | <a id="b-006-t03"></a>B-006-T03 — Re-measure gemma4:12b on the fixed pack and record it | 0.5 h | 0 h | 0.5 h | Planned | [B-006-T02](#b-006-t02) | [B-006-T04](#b-006-t04) | ⏳ 🤖 | PR #133 plan |
+| 🟢 Small | <a id="b-006-t04"></a>B-006-T04 — Owner tags the release carrying the fixed bilingual pack | 0 h | 0 h | 0 h agent + 0.25 h owner | Planned | [B-006-T03](#b-006-t03) | — | ⏳ 🧑‍🔧 | PR #133 plan |
+| 🟢 Small | **Total** | 2.5 h | 0 h (0 of 4 steps recorded) | 0.5 h agent + 0.25 h owner | 0 of 4 completed | | | | |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+[Full notes & evidence](work/records/B-006.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: B-006-T01: PR #133 plan · B-006-T02: PR #133 plan · B-006-T03: PR #133 plan · B-006-T04: PR #133 plan. Plan: [#133](https://github.com/voidbrain/gauntlet-protocol/pull/133); owner approval 2026-11-27 ("ok") |
+| Opened | 2026-11-27 |
+| Verification | Pending |
+| Reviewed | 2026-11-27 |
+
+</details>
+
+---
 ### <a id="f-034"></a>[✨ F-034](#top)
 
 **Guide: a project's own domain pack, in English and Italian**
@@ -82,47 +123,6 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|
 | PR / evidence | Steps: F-034-T01: PR #126 plan. [#126](https://github.com/voidbrain/gauntlet-protocol/pull/126) (plan); [#130](https://github.com/voidbrain/gauntlet-protocol/pull/130) (coordinator prefix); [review page](https://github.com/voidbrain/coordinator/blob/main/docs/reviews/2026-11-shared-assets/gauntlet-protocol.md); owner decision 2026-11-26 |
 | Opened | 2026-11-26 |
-| Verification | Pending |
-| Reviewed | 2026-11-27 |
-
-</details>
-
----
-### <a id="b-006"></a>[🐞 B-006](#top)
-
-**The bilingual pack grades free-text replies by exact wording**
-
-| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
-|---|---|---|---|---|---|:---:|:---:|:---:|
-| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.5 h agent + 0.25 h owner | — | — | 🤖 | — | — |
-
-💻 **→** Next: B-006-T01 — Design: how a free-text reply is graded by meaning, Italian and English (Planned).
-
-| | |
-|---|---|
-| **Issue** | The released `bilingual-it-en` pack (4 cases: summarize and clarify, Italian and English) expects the whole reply as exact JSON under `exact-json-v1`, including the free `reply` text (for example `The meeting moved to Tuesday.`, `Quale file devo aprire?`). Almost any correct phrasing fails, so a pass measures luck with wording, not language control. On 2026-11-27 (night run, MacBook M3 Pro 36 GB) `gemma4:12b` scored 0 of 4, every case `Independent acceptance mismatch` (report `extra-night/gemma4-12b-bilingual-it-en.json`, kept outside Git). Owner approval 2026-11-27 morning ("ok") to open this record. Related: F-032 plans `json-match` (ignored paths, ranges, order-free arrays) for the same class of case; this record decides how `reply` text is graded. |
-| **Reproduce** | `gauntlet model-run --pack=bilingual-it-en` on any model that answers correctly in other words (for example `La riunione è stata spostata a martedì.`): the case fails with `Independent acceptance mismatch`. |
-| **Check** | A correct paraphrase of each of the four cases, in Italian and English, passes; a wrong-meaning, wrong-language or wrong-`intent` reply fails; each rule is proven by pass and fail fixtures committed failing first; the pack carries a new version, the index is regenerated, and a recorded gemma4:12b run no longer fails on wording alone. |
-
-**Steps**
-
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
-|---|---|---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="b-006-t01"></a>B-006-T01 — Design: how a free-text reply is graded by meaning, Italian and English | 0.5 h | 0 h | 0.5 h | Planned | — | [B-006-T02](#b-006-t02) | 🤖 | PR #133 plan |
-| 🟡 Medium | <a id="b-006-t02"></a>B-006-T02 — Grade the reply by meaning (failing test first) | 1.5 h | 0 h | 1.5 h | Planned | [B-006-T01](#b-006-t01) | [B-006-T03](#b-006-t03) | ⏳ 🤖 | PR #133 plan |
-| 🟢 Small | <a id="b-006-t03"></a>B-006-T03 — Re-measure gemma4:12b on the fixed pack and record it | 0.5 h | 0 h | 0.5 h | Planned | [B-006-T02](#b-006-t02) | [B-006-T04](#b-006-t04) | ⏳ 🤖 | PR #133 plan |
-| 🟢 Small | <a id="b-006-t04"></a>B-006-T04 — Owner tags the release carrying the fixed bilingual pack | 0 h | 0 h | 0 h agent + 0.25 h owner | Planned | [B-006-T03](#b-006-t03) | — | ⏳ 🧑‍🔧 | PR #133 plan |
-| 🟡 Medium | **Total** | 2.5 h | 0 h (0 of 4 steps recorded) | 2.5 h agent + 0.25 h owner | 0 of 4 completed | | | | |
-
-<details>
-<summary>Next action, estimates and PR history</summary>
-
-[Full notes & evidence](work/records/B-006.md)
-
-| Field | Value |
-|---|---|
-| PR / evidence | Steps: B-006-T01: PR #133 plan · B-006-T02: PR #133 plan · B-006-T03: PR #133 plan · B-006-T04: PR #133 plan. Plan: [#133](https://github.com/voidbrain/gauntlet-protocol/pull/133); owner approval 2026-11-27 ("ok") |
-| Opened | 2026-11-27 |
 | Verification | Pending |
 | Reviewed | 2026-11-27 |
 
