@@ -36,6 +36,11 @@
     "ownerHours": 0.25,
     "ownerKind": "procedure"
   },
-  "prs": [],
+  "prs": [
+    {
+      "pr": 133,
+      "note": "plan"
+    }
+  ],
   "ownerLink": "docs/guides/release.md"
 }
