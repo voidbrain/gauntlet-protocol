@@ -70,8 +70,8 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
 |---|---|---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="b-006-t01"></a>B-006-T01 — Design: how a free-text reply is graded by meaning, Italian and English | 0.5 h | 0 h | 0 h | Implemented; verification pending | — | [B-006-T02](#b-006-t02) | 🤖 | PR #133 plan |
-| 🟢 Small | <a id="b-006-t02"></a>B-006-T02 — Grade the reply by meaning (failing test first) | 1.5 h | 0 h | 0 h | Implemented; verification pending | [B-006-T01](#b-006-t01) | [B-006-T03](#b-006-t03) | 🤖 | PR #133 plan |
+| 🟢 Small | <a id="b-006-t01"></a>B-006-T01 — Design: how a free-text reply is graded by meaning, Italian and English | 0.5 h | 0 h | 0 h | Implemented; verification pending | — | [B-006-T02](#b-006-t02) | 🤖 | PR #133 plan; PR #137 fix |
+| 🟢 Small | <a id="b-006-t02"></a>B-006-T02 — Grade the reply by meaning (failing test first) | 1.5 h | 0 h | 0 h | Implemented; verification pending | [B-006-T01](#b-006-t01) | [B-006-T03](#b-006-t03) | 🤖 | PR #133 plan; PR #137 fix |
 | 🟢 Small | <a id="b-006-t03"></a>B-006-T03 — Re-measure gemma4:12b on the fixed pack and record it | 0.5 h | 0 h | 0.5 h | Planned | [B-006-T02](#b-006-t02) | [B-006-T04](#b-006-t04) | ⏳ 🤖 | PR #133 plan |
 | 🟢 Small | <a id="b-006-t04"></a>B-006-T04 — Owner tags the release carrying the fixed bilingual pack | 0 h | 0 h | 0 h agent + 0.25 h owner | Planned | [B-006-T03](#b-006-t03) | — | ⏳ 🧑‍🔧 | PR #133 plan |
 | 🟢 Small | **Total** | 2.5 h | 0 h (0 of 4 steps recorded) | 0.5 h agent + 0.25 h owner | 0 of 4 completed | | | | |
@@ -83,7 +83,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: B-006-T01: PR #133 plan · B-006-T02: PR #133 plan · B-006-T03: PR #133 plan · B-006-T04: PR #133 plan. Plan: [#133](https://github.com/voidbrain/gauntlet-protocol/pull/133); owner approval 2026-11-27 ("ok") |
+| PR / evidence | Steps: B-006-T01: PR #133 plan; PR #137 fix · B-006-T02: PR #133 plan; PR #137 fix · B-006-T03: PR #133 plan · B-006-T04: PR #133 plan. Plan: [#133](https://github.com/voidbrain/gauntlet-protocol/pull/133); owner approval 2026-11-27 ("ok") |
 | Opened | 2026-11-27 |
 | Verification | Pending |
 | Reviewed | 2026-11-27 |
