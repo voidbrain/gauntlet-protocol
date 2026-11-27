@@ -2,12 +2,12 @@
   "version": 1,
   "id": "F-021-T09",
   "parent": "F-021",
-  "status": "planned",
+  "status": "implemented",
   "title": "Make the three repeats real: ComfyUI served identical cached images",
   "goal": "Repeats of a case differ in seed or bypass the ComfyUI cache, so generator variance is measured",
   "acceptance": [
     "A committed failing test first (fake ComfyUI): iterations 2 and 3 of a case do not submit the same seed and workflow as iteration 1 (the seed is derived from the task seed and the iteration, recorded per result), or the submission defeats the cache; today `generate.mjs` repeats are cache hits (ComfyUI \"Prompt executed in 0.00 seconds\", 0.5 s wall, identical image SHA-256 for all 18 images of the 2026-11-27 night, 6 distinct)",
-    "The docs say which seeds the iterations use; re-run of the six cases x 3 on the owner's go-ahead measures real variance (judge verdict agreement across seeds) and is recorded"
+    "The docs say which seeds the iterations use (done: decision page, \"Repeat seeds\"); the re-run of the six cases x 3 is picked up by the 2026-11-28/29 night via docs/NIGHTS.md once merged: it measures real variance (judge verdict agreement across seeds) and is recorded, with no real model run in this change"
   ],
   "dependsOn": [
     "F-021-T08"

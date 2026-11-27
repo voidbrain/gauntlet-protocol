@@ -188,7 +188,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
 |---|---|---|---|---|---|---|---|:---:|---|
 | 🟢 Small | <a id="f-021-t08"></a>F-021-T08 — First real run: prove the judge, measure generator variance | 1 h | 0 h | 0 h | Implemented; verification pending | — | [F-021-T05](#f-021-t05), [F-021-T09](#f-021-t09) | 🤖 | PR #114 planned; PR #133 night run recorded |
-| 🟢 Small | <a id="f-021-t09"></a>F-021-T09 — Make the three repeats real: ComfyUI served identical cached images | 1 h | 0 h | 1 h | Planned | [F-021-T08](#f-021-t08) | [F-021-T05](#f-021-t05) | ⏳ 🤖 | PR #133 plan |
+| 🟢 Small | <a id="f-021-t09"></a>F-021-T09 — Make the three repeats real: ComfyUI served identical cached images | 1 h | 0 h | 1 h | Implemented; verification pending | [F-021-T08](#f-021-t08) | [F-021-T05](#f-021-t05) | 🤖 | PR #133 plan |
 | 🟢 Small | <a id="f-021-t05"></a>F-021-T05 — Release image-generation-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T08](#f-021-t08), [F-021-T09](#f-021-t09) | — | ⏳ 🧑‍🔧 | — |
 | 🟢 Small | **Total** | 9.5 h (6 of 9 steps) | 0 h (0 of 9 steps recorded) | 1 h agent + 0.25 h owner | 6 of 9 completed | | | | |
 

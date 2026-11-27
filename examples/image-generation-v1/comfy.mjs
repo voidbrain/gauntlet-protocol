@@ -107,6 +107,10 @@ function validPixels(list) {
   );
 }
 
+// Iteration 1 keeps the case's seed; iteration n uses seed + (n - 1) * 7919, so each repeat is a different prompt for
+// ComfyUI (an identical one is a cache hit: "Prompt executed in 0.00 seconds", the same image) and a rerun is reproducible.
+export const repeatSeed = (task, iteration) => task.seed + (iteration - 1) * 7919;
+
 export function buildPrompt(task) {
   const graph = structuredClone(workflow);
   node(graph, 'TextEncodeQwenImage21').inputs.prompt = task.prompt;

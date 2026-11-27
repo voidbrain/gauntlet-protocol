@@ -148,6 +148,8 @@ The owner's night run (F-021-T08, "all the tests you want tonite"): six cases, t
 
 **Repeat variance was not measured.** Iterations 2 and 3 of every case took about 0.5 s (ComfyUI logged "Prompt executed in 0.00 seconds") and the three images of a case are byte-identical (6 distinct SHA-256 among 18): the same seed and workflow are a cache hit. The 18 of 18 therefore proves six images, not three runs each. Fixing the repeats is F-021-T09.
 
+**Repeat seeds (F-021-T09).** `generate.mjs` runs iteration 1 at the case's seed and iteration n at seed + (n - 1) x 7919, so each repeat is a different ComfyUI prompt (no cache hit) and a rerun reproduces the same seeds; the seed used is recorded per result. The manifest adds `cases` (per case: `runs` and `distinctImages`) and, per result, `independent`; a repeat whose image SHA-256 equals an earlier one of the same case is marked `independent: false` with `duplicateOf` and reported on stderr, and is not an independent pass. Not yet re-measured: the 2026-11-28/29 night picks it up via [NIGHTS](../NIGHTS.md).
+
 **Starting ComfyUI headless.** Use the install's own virtual environment: `~/ComfyUI-Installs/ComfyUI/ComfyUI/.venv/bin/python main.py --listen 127.0.0.1 --port 8188` from the ComfyUI folder. The standalone-environment Python of the same install has no `torch` and ComfyUI does not start with it. Check that `http://127.0.0.1:8188/system_stats` answers before generating (the night script waited up to 5 minutes and skipped if it did not).
 
 ## Question 1: generator runtime
