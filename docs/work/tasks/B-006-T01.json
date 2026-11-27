@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "id": "B-006-T01",
+  "parent": "B-006",
+  "title": "Design: how a free-text reply is graded by meaning, Italian and English",
+  "goal": "A recorded choice of grading method for the bilingual pack",
+  "status": "planned",
+  "acceptance": [
+    "docs/work/records/B-006.md records, for the four bilingual-it-en cases, how the `reply` text is graded without exact wording: the existing `rubric-v1` (language, required words, forbidden words) or the planned json-match of F-032 (ignored and per-path rules) for `reply`, with `intent` and `language` still exact; a model judge is rejected unless a rubric cannot separate a correct reply from a wrong one, and the reason is recorded",
+    "Italian and English accepted paraphrases and wrong-meaning replies are listed for each case (for example `La riunione è stata spostata a martedì.` accepted, a reply naming Monday only refused)"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "docs/work/records/B-006.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "decision-record"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; no private reports or consumer data.",
+  "validation": [
+    "npm test",
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h agent",
+    "basis": "Estimated 2026-11-27 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-27",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  },
+  "prs": []
+}

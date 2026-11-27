@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "B-007-T02",
+  "parent": "B-007",
+  "title": "Make producer and validator agree on unknown usage (failing test first)",
+  "goal": "A report the engine writes is a report the engine accepts",
+  "status": "planned",
+  "acceptance": [
+    "The T01 failing test passes after the fix, which changes one side only (the producer sets usage null when any model result is an error, or the validator rule is relaxed with the reason recorded); no existing test edited to pass",
+    "A report that mixes a non-null total with errored or timed-out results is either never written or accepted, and the ledger command no longer refuses a report the same engine produced"
+  ],
+  "dependsOn": [
+    "B-007-T01"
+  ],
+  "resources": [
+    "src/index.ts",
+    "test/**",
+    "docs/PROTOCOL.md",
+    "docs/work/records/B-007.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "regression-design"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; no private reports or consumer data.",
+  "validation": [
+    "npm test",
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1.0 h agent",
+    "basis": "Estimated 2026-11-27 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-27",
+    "agentHours": 1.0,
+    "baselineAgentHours": 1.0,
+    "estimateAgentHours": 1.0
+  },
+  "prs": []
+}

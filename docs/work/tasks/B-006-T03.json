@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "id": "B-006-T03",
+  "parent": "B-006",
+  "title": "Re-measure gemma4:12b on the fixed pack and record it",
+  "goal": "A recorded run showing the pack no longer fails on wording",
+  "status": "planned",
+  "acceptance": [
+    "On the owner's go-ahead for a real model run (nothing else running on the Mac): `model-run --pack=bilingual-it-en` on gemma4:12b; the result and cost are recorded in the record; the 2026-11-27 night run (0 of 4, `Independent acceptance mismatch`) is the before",
+    "No ledger write unless the owner reviews the report"
+  ],
+  "dependsOn": [
+    "B-006-T02"
+  ],
+  "resources": [
+    "docs/work/records/B-006.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; no private reports or consumer data.",
+  "validation": [
+    "Recorded run output; npm run check:backlog; CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h agent",
+    "basis": "Estimated 2026-11-27 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-27",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  },
+  "prs": []
+}
