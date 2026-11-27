@@ -895,3 +895,177 @@ F-002/F-003/F-004 acceptance reconciliation: [PR #6](https://github.com/voidbrai
 </details>
 
 ---
+
+## Closed 2026-11-27
+
+### B-003
+
+**Coding grader blocks at a timeout while a leftover process keeps writing**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-27: #99 merged on green CI (45580998225); deferred cleanup regression test passes.
+
+| | |
+|---|---|
+| **Issue** | On a timeout `gradeCandidate` removed the workspace synchronously while a process the executor had not stopped kept creating folders in it. The unlock walk and `rmSync` chased the growing tree and blocked the event loop, so the timeout verdict arrived only when the writer stopped. On CI the test "coding grader reports a timeout even while a leftover process keeps writing to the workspace" was cancelled at the 60 s limit on #99 and #101 (runs 45576499955, 45578902824). |
+| **Reproduce** | Grade with an executor that never resolves and starts an endless folder writer in the workspace, `timeoutMs: 300`: the call does not return until the writer stops. |
+| **Check** | The grader returns the timeout at once and removes the workspace when the executor resolves; until then the workspace is a leftover that `removeLeftoverWorkspaces()` retries. Regression test committed failing first. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-27: #99 merged on green CI (45580998225); deferred cleanup regression test passes. 2026-11-25: B-003-T01 implemented in #99 (found reviewing it): test committed failing first (59887bc), fix in `examples/coding-v1/grade.mjs`, `docs/PROTOCOL.md` updated; it closes on green CI after merge.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#99](https://github.com/voidbrain/gauntlet-protocol/pull/99) |
+| Opened | 2026-11-25 |
+| Verification | Unit/integration · 2026-11-27 · #99 CI 45580998225 green |
+| Reviewed | 2026-11-27 |
+
+</details>
+
+---
+
+### B-004
+
+**Test files are type-checked**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P2 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-27: #118 merged on green CI (45801329552); tsconfig.test.json in typecheck.
+
+| | |
+|---|---|
+| **Issue** | The 15 `test/*.test.ts` files were in no `tsconfig`: `typecheck` and `build` checked `src/**/*.ts` only, and Node strips the types of tests without checking them, so a wrong call in a test ran unchecked. Found by the coordinator's dormant-checks sweep, 2026-11-26 (T2, proposal 3). |
+| **Reproduce** | On `main` `62a7787`: `tsc -p` a config that includes `test/**/*.ts` reports 18 errors (36 once the JavaScript graders the tests import are resolved). |
+| **Check** | `npm run typecheck` also runs `tsc -p tsconfig.test.json` (src, tests and, through `allowJs`, the JavaScript graders they import) and passes; the commit that added it failed first (`c2c85e0`). `npm test` passes. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Closed 2026-11-27: #118 merged on green CI (45801329552); tsconfig.test.json in typecheck. 2026-11-26: owner accepted every fix of the dormant-checks sweep in chat ("Accept all fixes"). B-004-T01 implemented: `tsconfig.test.json` in `typecheck`, committed failing first; the errors were wrong casts and loose types, no wrong behaviour: casts of `Ledger` to an unrelated shape, an `as const` rubric not assignable to `Rubric`, optional `measured`/`message` read without a check, and the JavaScript graders' inferred parameter types (now JSDoc). Closes when the PR merges on green CI.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#118](https://github.com/voidbrain/gauntlet-protocol/pull/118) |
+| Opened | 2026-11-26 |
+| Verification | Unit/integration · 2026-11-27 · #118 CI 45801329552 green |
+| Reviewed | 2026-11-27 |
+
+</details>
+
+---
+
+### F-022
+
+**Packs or recorded skips for estimation, research, scheduling-time and backlog-management**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟡 Medium |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-27: #112 (CI 45783698012) and #114 (CI 45786153649) merged on green CI; F-023, F-024, F-025 planned and roadmap skips recorded.
+
+| | |
+|---|---|
+| **Issue** | Four index areas have 0 mapped cases and no agreed plan: estimation, research, scheduling-time, backlog-management. |
+| **Reproduce** | `npm run index:build` reports 0 mapped cases for each of the four areas. |
+| **Check** | Each of the four areas has either its own planned pack record or a skip recorded with its reason in the roadmap. |
+
+<details>
+<summary>Next action, estimates and evidence</summary>
+
+**Next action / closure evidence:** Closed 2026-11-27: #112 (CI 45783698012) and #114 (CI 45786153649) merged on green CI; F-023, F-024, F-025 planned and roadmap skips recorded. 2026-11-24: F-022-T01 drafts the proposal; the owner decides in F-022-T02. 2026-11-26: F-022-T01 drafted the [proposal](../decisions/remaining-areas.md): packs for scheduling-time, estimation and research (closed corpus), a skip for backlog-management; the owner answers there (F-022-T02). **2026-11-26: decided (F-022-T02), the owner's words ("Do you accept these as recommended? ok") on the proposal as recommended: scheduling-time a pack, estimation a small pack (evidence in the prompt, declines on missing figures), research a pack over supplied sources only (graded on answer and cited source ids; live web research skipped and recorded), backlog-management a recorded skip (logic-planning and structured-output cover the general part).** F-022-T03 recorded the outcome the same day: planned records F-023 (scheduling-time-v1), F-024 (estimation-v1), F-025 (research-v1) and the two skips in the [roadmap](../ROADMAP.md); verify them with `npm run check:backlog` and close this record after the PR merges. Ordered last in the roadmap. Planned 2026-11-24 as part of the [roadmap](../ROADMAP.md) milestone "Domain packs"; every step is in its task file.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#112](https://github.com/voidbrain/gauntlet-protocol/pull/112); owner decision 2026-11-26, F-022-T02 ("Do you accept these as recommended? ok"); [#114](https://github.com/voidbrain/gauntlet-protocol/pull/114) |
+| Opened | 2026-11-24 |
+| Verification | Unit/integration · 2026-11-27 · #112 CI 45783698012 and #114 CI 45786153649 green |
+| Reviewed | 2026-11-27 |
+
+</details>
+
+---
+
+### F-026
+
+**Turn audit enforcement on**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-27: #116 merged on green CI (45793253529); audit.enforce true.
+
+| | |
+|---|---|
+| **Issue** | Full audit baselines exist (manifest kind full, latest 2026-11-22) but `audit.enforce` was off, so a due audit only warned. The 2026-11-26 cross-project audit (coordinator, docs/audits/2026-11-26-cross-project.md, proposal 17) proposes turning it on. |
+| **Reproduce** | `.harness.json` had `"audit": {"days": 7, "enforce": false}`. |
+| **Check** | `audit.enforce` is true and `npm run check:audits` and `npm run check:freshness` pass. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Closed 2026-11-27: #116 merged on green CI (45793253529); audit.enforce true. 2026-11-26: step plan adopted with the record. The owner accepted all 17 cross-project audit proposals in chat on 2026-11-26 ("accept all 17 proposals"); this is proposal 17: F-026-T01, implemented in PR [#116](https://github.com/voidbrain/gauntlet-protocol/pull/116), verification is its CI.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#116](https://github.com/voidbrain/gauntlet-protocol/pull/116) |
+| Opened | 2026-11-26 |
+| Verification | Unit/integration · 2026-11-27 · #116 CI 45793253529 green |
+| Reviewed | 2026-11-27 |
+
+</details>
+
+---
+
+### F-027
+
+**Coverage measured and enforced; behaviour runner set**
+
+| Signal | Priority | Status | Effort |
+|:---:|---|---|---|
+| 🔵 | ◻️ P3 | Closed | 🟢 Small |
+
+💻 **→ Human action required: No**<br />Closed 2026-11-27: #118 (CI 45801329552), #122 (CI 45805709997) and #124 (CI 45806559251) merged on green CI; coverage.enforce true and behaviour.runner set.
+
+| | |
+|---|---|
+| **Issue** | The 2026-11-26 dormant-checks sweep (coordinator `docs/audits/2026-11-26-dormant-checks.md`, rows S1 and S3) found that this repository measures no coverage (so nothing could be enforced) and sets no `behaviour.runner`. Reviews and work usage were already on. |
+| **Reproduce** | `.harness.json` on `main` `62a7787`: no `coverage`, `behaviour` `{times: 3}`. |
+| **Check** | `npm run test:coverage` writes LCOV and the summary; CI runs it and `coverage-table --check`, which fails on a drop over 2 points against `docs/agents/coverage.json` (`coverage.enforce: true`, switched on by F-027-T03 once the baseline is on `main`: under enforce the check reads the baseline from `origin/main`, so the PR that adds it cannot enforce it); `behaviour.runner` is set and no campaign was run. |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+**Next action / closure evidence:** Closed 2026-11-27: #118 (CI 45801329552), #122 (CI 45805709997) and #124 (CI 45806559251) merged on green CI; coverage.enforce true and behaviour.runner set. 2026-11-26: owner decisions in chat: "coverage enforcement all" and "ok" to the behaviour runner (Claude Code, `claude -p`). F-027-T01 implemented: Node test-runner coverage of `src/` (baseline 2026-11-26: lines 95.6 %, branches 84.4 %, functions 89.7 %), with the baseline committed and enforcement left off in [#120](https://github.com/voidbrain/gauntlet-protocol/pull/120) (review finding: under enforce `coverage-table` reads the baseline from `origin/main`, which has none yet); F-027-T03 turns `coverage.enforce` on in a follow-up PR. F-027-T02 implemented: `behaviour.runner`; no run (each costs agent time; on demand). `tools/behaviour.mjs` and the `behaviour` script are not in this repository yet: they arrive at the reconcile that adds the scripts a copied procedure names (project-harness, sweep proposal 11). F-027-T03 tried in #120: with enforce on, CI failed `src/: functions 89.7 % → 86.2 %` on unchanged code. A local run measures 89.7 % (all tests run), CI 86.2 % (130 tests, 1 skipped: a test needing a local tool), so a baseline written locally always fails CI. Enforcement stays off until the baseline comes from CI's environment (F-027-T03, re-estimated 1 h).
+
+**F-027-T03 decision (2026-11-26, owner: "enforce gauntlet"):** the baseline is written from CI's own coverage artifact, not from a local run and not by forcing the skip locally. Reason: CI is the only environment whose result decides the check, so taking its numbers cannot drift; a local switch that skips the arduino-cli test would have to be remembered and would stay wrong for any other difference (Linux against macOS, container engine, tools installed). CI now uploads `coverage-summary` (the summary JSON). To refresh the baseline in a PR that changes coverage on purpose: download that artifact from the PR's CI run (`gh run download <run> -n coverage-summary -D coverage`), rewrite the runner prefix to the local checkout (`sed -i '' "s#/home/runner/work/gauntlet-protocol/gauntlet-protocol#$(pwd -P)#g" coverage/coverage-summary.json`), then `node tools/coverage-table.mjs --write`; never `npm run coverage` on a Mac for the baseline. New baseline from [#122](https://github.com/voidbrain/gauntlet-protocol/pull/122): lines 94.6 %, branches 84.7 %, functions 86.2 %. Because under enforce the check reads the baseline from `origin/main`, the PR that moves the baseline cannot also enforce: #122 lands the baseline, [#124](https://github.com/voidbrain/gauntlet-protocol/pull/124) sets `coverage.enforce: true` (owner: "enforce gauntlet"); its CI is the confirmation.
+
+**Estimates:** No remaining effort.
+
+| Field | Value |
+|---|---|
+| PR / evidence | [#118](https://github.com/voidbrain/gauntlet-protocol/pull/118); [#120](https://github.com/voidbrain/gauntlet-protocol/pull/120); [#122](https://github.com/voidbrain/gauntlet-protocol/pull/122); [#124](https://github.com/voidbrain/gauntlet-protocol/pull/124) |
+| Opened | 2026-11-26 |
+| Verification | Unit/integration · 2026-11-27 · #118 CI 45801329552, #122 CI 45805709997 and #124 CI 45806559251 green |
+| Reviewed | 2026-11-27 |
+
+</details>
+
+---

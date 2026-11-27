@@ -4,7 +4,7 @@
   "parent": "F-026",
   "title": "Turn audit.enforce on",
   "goal": "audit.enforce is true in .harness.json",
-  "status": "implemented",
+  "status": "closed",
   "acceptance": [
     "`audit.enforce` is `true` in .harness.json (a project setting; full audits already exist: docs/audits/2026-11-08-initial-protocol, 2026-11-09-evidence-tools, 2026-11-22-v10-2-reconcile manifests have kind full)",
     "`npm run check:audits` and `npm run check:freshness` pass with it on"
@@ -29,8 +29,8 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Done 2026-11-26 in one PR from cross-project audit proposal 17, accepted by the owner in chat 2026-11-26 (\"accept all 17 proposals\"); verification is its CI. No actual: not timed.",
-    "reviewed": "2026-11-26",
+    "basis": "Done 2026-11-26 in #116 (CI 45793253529 green) from cross-project audit proposal 17, accepted by the owner in chat 2026-11-26 (\"accept all 17 proposals\"). No actual: not timed. Closed 2026-11-27.",
+    "reviewed": "2026-11-27",
     "agentHours": 0,
     "ownerHours": 0,
     "baselineAgentHours": 0.25,

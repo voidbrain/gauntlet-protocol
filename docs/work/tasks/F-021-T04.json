@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-021-T04",
   "parent": "F-021",
-  "status": "implemented",
+  "status": "closed",
   "title": "Image grader and pack",
   "goal": "Image grader and pack",
   "acceptance": [
@@ -36,10 +36,11 @@
   ],
   "effort": {
     "size": "medium",
-    "estimate": "2 h agent",
-    "basis": "Estimated 2026-11-24 in the domain-packs plan (owner request); not a measurement. Re-planned 2026-11-26 to the owner's decision. No actual: elapsed time not tracked in this session; the real judge proof ran 38 s.",
-    "reviewed": "2026-11-26",
-    "agentHours": 2,
+    "estimate": "0 remaining",
+    "basis": "Done 2026-11-26 in #121 (CI 45804656435 green); the real judge proof ran 38 s. No actual: elapsed time not tracked in this session.",
+    "reviewed": "2026-11-27",
+    "agentHours": 0,
+    "ownerHours": 0,
     "baselineAgentHours": 2,
     "estimateAgentHours": 2
   },

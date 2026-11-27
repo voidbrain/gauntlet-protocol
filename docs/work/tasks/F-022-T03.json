@@ -2,7 +2,7 @@
   "version": 1,
   "id": "F-022-T03",
   "parent": "F-022",
-  "status": "implemented",
+  "status": "closed",
   "title": "Record the outcome",
   "goal": "Record the outcome",
   "acceptance": [
@@ -34,9 +34,10 @@
   "effort": {
     "size": "small",
     "estimate": "0 remaining",
-    "basis": "Done 2026-11-26 in the PR that records the owner decision: three planned records and the roadmap skips. Estimated 0.5 h at observed agent speed. Not a measurement.",
-    "reviewed": "2026-11-26",
+    "basis": "Done 2026-11-26 in #114 (CI 45786153649 green): three planned records and the roadmap skips. No actual: reconciled in a later session without job timing.",
+    "reviewed": "2026-11-27",
     "agentHours": 0,
+    "ownerHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
   },

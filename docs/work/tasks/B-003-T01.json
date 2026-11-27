@@ -2,7 +2,7 @@
   "version": 1,
   "id": "B-003-T01",
   "parent": "B-003",
-  "status": "implemented",
+  "status": "closed",
   "title": "Timeout verdict without waiting for cleanup",
   "goal": "gradeCandidate returns a timeout at once and defers workspace removal until the executor resolves",
   "acceptance": [
@@ -10,18 +10,36 @@
     "The workspace is removed when the executor resolves, or by removeLeftoverWorkspaces() once the writer stops"
   ],
   "dependsOn": [],
-  "resources": ["examples/**", "test/**", "docs/**", "generated:backlog-views"],
-  "capabilities": ["bounded-edit", "regression-design"],
+  "resources": [
+    "examples/**",
+    "test/**",
+    "docs/**",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "bounded-edit",
+    "regression-design"
+  ],
   "privacy": "No data: grader control flow only.",
-  "validation": ["Regression test committed failing first; npm test; CI"],
-  "escalation": ["A change to the executor contract is an owner decision"],
+  "validation": [
+    "Regression test committed failing first; npm test; CI"
+  ],
+  "escalation": [
+    "A change to the executor contract is an owner decision"
+  ],
   "effort": {
     "size": "small",
-    "estimate": "0.25 h agent",
-    "basis": "Implemented 2026-11-25 in #99 while reviewing it: deferred cleanup in grade.mjs and a regression test with an endless writer; CI and merge remain. Not a measurement.",
-    "reviewed": "2026-11-25",
-    "agentHours": 0.25,
+    "estimate": "0 remaining",
+    "basis": "Done 2026-11-25 in #99 (CI 45580998225 green): deferred cleanup in grade.mjs and a regression test with an endless writer. No actual: reconciled in a later session without job timing. Closed 2026-11-27.",
+    "reviewed": "2026-11-27",
+    "agentHours": 0,
+    "ownerHours": 0,
     "baselineAgentHours": 0.5,
     "estimateAgentHours": 0.5
-  }
+  },
+  "prs": [
+    {
+      "pr": 99
+    }
+  ]
 }

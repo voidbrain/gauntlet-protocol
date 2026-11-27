@@ -4,7 +4,7 @@
   "parent": "F-027",
   "title": "Turn coverage.enforce on with a baseline CI can reproduce",
   "goal": "coverage.enforce true against a baseline measured in CI's environment",
-  "status": "planned",
+  "status": "closed",
   "acceptance": [
     "The committed baseline matches what CI measures (written from a CI run, or the local-only tests named and excluded)",
     "`coverage.enforce` is true and CI's coverage table passes"
@@ -28,14 +28,24 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 h agent",
-    "basis": "Re-estimated 2026-11-26 after #120 failed: CI measures functions 86.2 % where a local run measures 89.7 % on the same code (CI skips a test local runs execute), so a locally written baseline fails CI by more than 2 points. Estimate, not a measurement.",
-    "reviewed": "2026-11-26",
-    "agentHours": 1,
+    "estimate": "0 remaining",
+    "basis": "Done 2026-11-26 in #122 (CI 45805709997, baseline from CI artifact) and #124 (CI 45806559251, coverage.enforce true). No actual: reconciled in a later session without job timing.",
+    "reviewed": "2026-11-27",
+    "agentHours": 0,
     "ownerHours": 0,
     "baselineAgentHours": 0.25,
     "estimateAgentHours": 1,
     "days": 0,
     "baselineDays": 0
-  }
+  },
+  "prs": [
+    {
+      "pr": 122,
+      "note": "CI coverage baseline"
+    },
+    {
+      "pr": 124,
+      "note": "coverage.enforce on"
+    }
+  ]
 }
