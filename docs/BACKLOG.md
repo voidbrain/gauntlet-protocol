@@ -617,6 +617,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
+| Planned nights | [NIGHTS.md](NIGHTS.md), run by hand until the planner exists |
 
 </details>
 
