@@ -4,7 +4,7 @@ Current work ledger, reviewed 27 November 2026 against main `c131b53`. PRs #123 
 [Roadmap](ROADMAP.md) · [Rules](BACKLOG-RULES.md) · [Archive](archive/README.md) · [Reading the records](#how-to-use-this-file).
 
 <!-- totals:start -->
-**Remaining effort:** 27.25 h agent + 2 h owner across 34 open steps of 13 features. Generated from the task files.
+**Remaining effort:** 32 h agent + 2.25 h owner across 42 open steps of 13 features and 2 other records. Generated from the task files.
 <!-- totals:end -->
 
 ## Work items
@@ -88,6 +88,47 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 </details>
 
 ---
+### <a id="b-006"></a>[🐞 B-006](#top)
+
+**The bilingual pack grades free-text replies by exact wording**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🔴 Open | 🔶 P2 | 🟡 Medium | 2.5 h agent + 0.25 h owner | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-006-T01 — Design: how a free-text reply is graded by meaning, Italian and English (Planned).
+
+| | |
+|---|---|
+| **Issue** | The released `bilingual-it-en` pack (4 cases: summarize and clarify, Italian and English) expects the whole reply as exact JSON under `exact-json-v1`, including the free `reply` text (for example `The meeting moved to Tuesday.`, `Quale file devo aprire?`). Almost any correct phrasing fails, so a pass measures luck with wording, not language control. On 2026-11-27 (night run, MacBook M3 Pro 36 GB) `gemma4:12b` scored 0 of 4, every case `Independent acceptance mismatch` (report `extra-night/gemma4-12b-bilingual-it-en.json`, kept outside Git). Owner approval 2026-11-27 morning ("ok") to open this record. Related: F-032 plans `json-match` (ignored paths, ranges, order-free arrays) for the same class of case; this record decides how `reply` text is graded. |
+| **Reproduce** | `gauntlet model-run --pack=bilingual-it-en` on any model that answers correctly in other words (for example `La riunione è stata spostata a martedì.`): the case fails with `Independent acceptance mismatch`. |
+| **Check** | A correct paraphrase of each of the four cases, in Italian and English, passes; a wrong-meaning, wrong-language or wrong-`intent` reply fails; each rule is proven by pass and fail fixtures committed failing first; the pack carries a new version, the index is regenerated, and a recorded gemma4:12b run no longer fails on wording alone. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
+|---|---|---|---|---|---|---|---|:---:|---|
+| 🟢 Small | <a id="b-006-t01"></a>B-006-T01 — Design: how a free-text reply is graded by meaning, Italian and English | 0.5 h | 0 h | 0.5 h | Planned | — | [B-006-T02](#b-006-t02) | 🤖 | PR #133 plan |
+| 🟡 Medium | <a id="b-006-t02"></a>B-006-T02 — Grade the reply by meaning (failing test first) | 1.5 h | 0 h | 1.5 h | Planned | [B-006-T01](#b-006-t01) | [B-006-T03](#b-006-t03) | ⏳ 🤖 | PR #133 plan |
+| 🟢 Small | <a id="b-006-t03"></a>B-006-T03 — Re-measure gemma4:12b on the fixed pack and record it | 0.5 h | 0 h | 0.5 h | Planned | [B-006-T02](#b-006-t02) | [B-006-T04](#b-006-t04) | ⏳ 🤖 | PR #133 plan |
+| 🟢 Small | <a id="b-006-t04"></a>B-006-T04 — Owner tags the release carrying the fixed bilingual pack | 0 h | 0 h | 0 h agent + 0.25 h owner | Planned | [B-006-T03](#b-006-t03) | — | ⏳ 🧑‍🔧 | PR #133 plan |
+| 🟡 Medium | **Total** | 2.5 h | 0 h (0 of 4 steps recorded) | 2.5 h agent + 0.25 h owner | 0 of 4 completed | | | | |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+[Full notes & evidence](work/records/B-006.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: B-006-T01: PR #133 plan · B-006-T02: PR #133 plan · B-006-T03: PR #133 plan · B-006-T04: PR #133 plan. Plan: [#133](https://github.com/voidbrain/gauntlet-protocol/pull/133); owner approval 2026-11-27 ("ok") |
+| Opened | 2026-11-27 |
+| Verification | Pending |
+| Reviewed | 2026-11-27 |
+
+</details>
+
+---
 ### <a id="f-033"></a>[✨ F-033](#top)
 
 **Check a pack against a tool table: gauntlet validate --tools**
@@ -134,7 +175,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 |---|---|---|---|---|---|:---:|:---:|:---:|
 | 🔴 Open | 🔹 P3 | 🟢 Small | 1 h agent + 0.25 h owner | — | — | 🤖 | — | — |
 
-💻 **→** Next: F-021-T08 — First real run: prove the judge, measure generator variance (Planned).
+💻 **→** Next: F-021-T08 — First real run: prove the judge, measure generator variance (Implemented; verification pending).
 
 | | |
 |---|---|
@@ -146,9 +187,10 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
 |---|---|---|---|---|---|---|---|:---:|---|
-| 🟢 Small | <a id="f-021-t08"></a>F-021-T08 — First real run: prove the judge, measure generator variance | 1 h | 0 h | 1 h | Planned | — | [F-021-T05](#f-021-t05) | 🤖 | PR #114 planned |
-| 🟢 Small | <a id="f-021-t05"></a>F-021-T05 — Release image-generation-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T08](#f-021-t08) | — | ⏳ 🧑‍🔧 | — |
-| 🟢 Small | **Total** | 8.5 h (5 of 8 steps) | 0 h (0 of 8 steps recorded) | 1 h agent + 0.25 h owner | 6 of 8 completed | | | | |
+| 🟢 Small | <a id="f-021-t08"></a>F-021-T08 — First real run: prove the judge, measure generator variance | 1 h | 0 h | 0 h | Implemented; verification pending | — | [F-021-T05](#f-021-t05), [F-021-T09](#f-021-t09) | 🤖 | PR #114 planned; PR #133 night run recorded |
+| 🟢 Small | <a id="f-021-t09"></a>F-021-T09 — Make the three repeats real: ComfyUI served identical cached images | 1 h | 0 h | 1 h | Planned | [F-021-T08](#f-021-t08) | [F-021-T05](#f-021-t05) | ⏳ 🤖 | PR #133 plan |
+| 🟢 Small | <a id="f-021-t05"></a>F-021-T05 — Release image-generation-v1 | — | 0 h | 0 h agent + 0.25 h owner | Planned | [F-021-T08](#f-021-t08), [F-021-T09](#f-021-t09) | — | ⏳ 🧑‍🔧 | — |
+| 🟢 Small | **Total** | 9.5 h (6 of 9 steps) | 0 h (0 of 9 steps recorded) | 1 h agent + 0.25 h owner | 6 of 9 completed | | | | |
 
 <details><summary>Done steps (6)</summary>
 
@@ -170,9 +212,9 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Steps: F-021-T01: PR #113 · F-021-T02: PR #114 decision · F-021-T03: PR #115 re-estimate; PR #119 runner; int8 runs on MPS · F-021-T04: PR #121 grader and pack; judge proven on fixtures · F-021-T06: PR #114 planned; PR #115 host check · F-021-T07: PR #114 planned; PR #115 pull commands; PR #117 models pulled; Comfy Desktop · F-021-T08: PR #114 planned. Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#113](https://github.com/voidbrain/gauntlet-protocol/pull/113); owner decision 2026-11-26, F-021-T02 ("Do you accept these as recommended? ok"); owner approval 2026-11-26 of the widened F-021-T06 check ("Qwen Image 2.1 and Ollama check ok"); [#115](https://github.com/voidbrain/gauntlet-protocol/pull/115); [#117](https://github.com/voidbrain/gauntlet-protocol/pull/117); [#119](https://github.com/voidbrain/gauntlet-protocol/pull/119); owner approval 2026-11-26 of F-021-T04 ("ok"); [#121](https://github.com/voidbrain/gauntlet-protocol/pull/121); [evidence archive](archive/evidence-2026.md#f-021) |
+| PR / evidence | Steps: F-021-T01: PR #113 · F-021-T02: PR #114 decision · F-021-T03: PR #115 re-estimate; PR #119 runner; int8 runs on MPS · F-021-T04: PR #121 grader and pack; judge proven on fixtures · F-021-T06: PR #114 planned; PR #115 host check · F-021-T07: PR #114 planned; PR #115 pull commands; PR #117 models pulled; Comfy Desktop · F-021-T08: PR #114 planned; PR #133 night run recorded · F-021-T09: PR #133 plan. [#133](https://github.com/voidbrain/gauntlet-protocol/pull/133) (2026-11-27 night); Owner request 2026-11-24 (approved in the consumer session): fill the roadmap with a Domain packs milestone.; [#85](https://github.com/voidbrain/gauntlet-protocol/pull/85); [#113](https://github.com/voidbrain/gauntlet-protocol/pull/113); owner decision 2026-11-26, F-021-T02 ("Do you accept these as recommended? ok"); owner approval 2026-11-26 of the widened F-021-T06 check ("Qwen Image 2.1 and Ollama check ok"); [#115](https://github.com/voidbrain/gauntlet-protocol/pull/115); [#117](https://github.com/voidbrain/gauntlet-protocol/pull/117); [#119](https://github.com/voidbrain/gauntlet-protocol/pull/119); owner approval 2026-11-26 of F-021-T04 ("ok"); [#121](https://github.com/voidbrain/gauntlet-protocol/pull/121); [evidence archive](archive/evidence-2026.md#f-021) |
 | Opened | 2026-11-24 |
-| Verification | Unit/integration · 2026-11-27 · F-021-T01 (#113), F-021-T03 (#119 CI 45801135303), F-021-T04 (#121 CI 45804656435) and F-021-T06 (#115) green; F-021-T08 real variance run and F-021-T05 release pending |
+| Verification | Unit/integration · 2026-11-27 · F-021-T01 (#113), F-021-T03 (#119 CI 45801135303), F-021-T04 (#121 CI 45804656435) and F-021-T06 (#115) green; F-021-T08 night run recorded (18 of 18 judged passed; repeats were cache hits), F-021-T09 and F-021-T05 release pending |
 | Reviewed | 2026-11-27 |
 
 </details>
@@ -328,6 +370,46 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |
+
+</details>
+
+---
+### <a id="b-007"></a>[🐞 B-007](#top)
+
+**A report with unknown usage is refused as "Inconsistent token totals", and the not-run cascade is undocumented**
+
+| Status | Priority | Effort | Remaining | Depends on | Unlocks | Agent | Procedures | Decisions |
+|---|---|---|---|---|---|:---:|:---:|:---:|
+| 🟠 Investigate | 🔹 P3 | 🟡 Medium | 2.25 h | — | — | 🤖 | — | — |
+
+💻 **→** Next: B-007-T01 — Investigate: reproduce "Inconsistent token totals" and find the producing path (Planned).
+
+| | |
+|---|---|
+| **Issue** | On the 2026-11-27 night a follow-up cad-3d report (`cad-3d-rest-1`, four passed model cases, `usage.outputTokens` 2013) was refused by `gauntlet ledger` with `Inconsistent token totals` (src/index.ts:1666: a non-null total with an unknown or errored result, or a total that differs from the sum). The first cad-3d report of that night had one `error` result (a 52 s case with `tokens` 2048, `Adapter failed or violated identity/budget contract`) and nine `not-run` cases with `Prior model execution has unverified consumption`, usage null, `complete` false. The saved `cad-3d-rest-1.json` validates on current main (2013 = 474+321+404+814), so the cause is not yet known. Candidate: on a resumed run the producer sets `known` from `tokens !== null` only (src/index.ts:849) while the validator also treats `status: 'error'` as unknown (:1653), so an errored result with non-null tokens gives a non-null total the validator refuses. Second question: a per-case timeout sets `known = false` (:1250) and every later non-system case becomes `not-run` (:1001); this looks intended (the budget cannot be proved) but is written nowhere. Found by the coordinator in the night run; reported to the owner 2026-11-27. |
+| **Reproduce** | `node` import of `validateReport` on the saved report passes today; the refusal is not reproduced. Candidate: a resumed run whose earlier result is `error` with non-null `tokens` yields a report `validateReport` refuses (to be shown by the failing test in B-007-T01). |
+| **Check** | The cause is named; a report the engine writes is a report it accepts (or the report is never written with a total), proven by a failing test first; docs/PROTOCOL.md states the not-run cascade after an error or timeout and the record says whether it stays. |
+
+**Steps**
+
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | PRs |
+|---|---|---|---|---|---|---|---|---|
+| 🟢 Small | <a id="b-007-t01"></a>B-007-T01 — Investigate: reproduce "Inconsistent token totals" and find the producing path | 0.75 h | 0 h | 0.75 h | Planned | — | [B-007-T02](#b-007-t02) | PR #133 plan |
+| 🟢 Small | <a id="b-007-t03"></a>B-007-T03 — Document the not-run cascade after an error or timeout, and decide whether it stays | 0.5 h | 0 h | 0.5 h | Planned | — | — | PR #133 plan |
+| 🟢 Small | <a id="b-007-t02"></a>B-007-T02 — Make producer and validator agree on unknown usage (failing test first) | 1 h | 0 h | 1 h | Planned | [B-007-T01](#b-007-t01) | — | PR #133 plan |
+| 🟡 Medium | **Total** | 2.25 h | 0 h (0 of 3 steps recorded) | 2.25 h | 0 of 3 completed | | | |
+
+<details>
+<summary>Next action, estimates and PR history</summary>
+
+[Full notes & evidence](work/records/B-007.md)
+
+| Field | Value |
+|---|---|
+| PR / evidence | Steps: B-007-T01: PR #133 plan · B-007-T02: PR #133 plan · B-007-T03: PR #133 plan. Plan: [#133](https://github.com/voidbrain/gauntlet-protocol/pull/133) |
+| Opened | 2026-11-27 |
+| Verification | Pending |
+| Reviewed | 2026-11-27 |
 
 </details>
 
@@ -511,18 +593,18 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 **Feature steps**
 
-| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who |
-|---|---|---|---|---|---|---|---|:---:|
-| 🟢 Small | <a id="f-036-t01"></a>F-036-T01 — Design: night-plan format, inputs and the 07:00 guard | 0.75 h | 0 h | 0.75 h | Planned | — | [F-036-T02](#f-036-t02), [F-036-T03](#f-036-t03) | 🤖 |
-| 🟢 Small | <a id="f-036-t02"></a>F-036-T02 — Duration history: per pack and model estimates from saved reports (failing test first) | 1 h | 0 h | 1 h | Planned | [F-036-T01](#f-036-t01) | [F-036-T04](#f-036-t04) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-036-t03"></a>F-036-T03 — Candidates: stale and never-run pack x model pairs with owner priorities (failing test first) | 1 h | 0 h | 1 h | Planned | [F-036-T01](#f-036-t01) | [F-036-T04](#f-036-t04) | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-036-t04"></a>F-036-T04 — Planner: fit an ordered queue to a time window (failing test first) | 1.25 h | 0 h | 1.25 h | Planned | [F-036-T02](#f-036-t02), [F-036-T03](#f-036-t03) | [F-036-T05](#f-036-t05) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-036-t05"></a>F-036-T05 — night-plan command: print the proposed queue for the owner to approve | 0.75 h | 0 h | 0.75 h | Planned | [F-036-T04](#f-036-t04) | [F-036-T06](#f-036-t06) | ⏳ 🤖 |
-| 🟡 Medium | <a id="f-036-t06"></a>F-036-T06 — Night runner: execute an approved plan sequentially with the end-time guard (failing test first) | 1.5 h | 0 h | 1.5 h | Planned | [F-036-T05](#f-036-t05) | [F-036-T07](#f-036-t07) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-036-t07"></a>F-036-T07 — Morning summary: what ran, what was skipped, what to review | 0.75 h | 0 h | 0.75 h | Planned | [F-036-T06](#f-036-t06) | [F-036-T08](#f-036-t08) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-036-t08"></a>F-036-T08 — Join test and guide: plan, run and summarise on fake runtimes | 1 h | 0 h | 1 h | Planned | [F-036-T07](#f-036-t07) | [F-036-T09](#f-036-t09) | ⏳ 🤖 |
-| 🟢 Small | <a id="f-036-t09"></a>F-036-T09 — Owner approves a first real night plan and reviews the morning report | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | [F-036-T08](#f-036-t08) | — | ⏳ 🧑‍🔧 |
-| 🔴 Large | **Total** | 8 h | 0 h (0 of 9 steps recorded) | 8 h agent + 0.5 h owner | 0 of 9 completed | | | |
+| Effort | Step | Estimate | Actual | Remaining | Status | Depends on | Unlocks | Who | PRs |
+|---|---|---|---|---|---|---|---|:---:|---|
+| 🟢 Small | <a id="f-036-t01"></a>F-036-T01 — Design: night-plan format, inputs and the 07:00 guard | 0.75 h | 0 h | 0.75 h | Planned | — | [F-036-T02](#f-036-t02), [F-036-T03](#f-036-t03) | 🤖 | PR #133 night lessons |
+| 🟢 Small | <a id="f-036-t02"></a>F-036-T02 — Duration history: per pack and model estimates from saved reports (failing test first) | 1 h | 0 h | 1 h | Planned | [F-036-T01](#f-036-t01) | [F-036-T04](#f-036-t04) | ⏳ 🤖 | — |
+| 🟢 Small | <a id="f-036-t03"></a>F-036-T03 — Candidates: stale and never-run pack x model pairs with owner priorities (failing test first) | 1 h | 0 h | 1 h | Planned | [F-036-T01](#f-036-t01) | [F-036-T04](#f-036-t04) | ⏳ 🤖 | — |
+| 🟡 Medium | <a id="f-036-t04"></a>F-036-T04 — Planner: fit an ordered queue to a time window (failing test first) | 1.25 h | 0 h | 1.25 h | Planned | [F-036-T02](#f-036-t02), [F-036-T03](#f-036-t03) | [F-036-T05](#f-036-t05) | ⏳ 🤖 | — |
+| 🟢 Small | <a id="f-036-t05"></a>F-036-T05 — night-plan command: print the proposed queue for the owner to approve | 0.75 h | 0 h | 0.75 h | Planned | [F-036-T04](#f-036-t04) | [F-036-T06](#f-036-t06) | ⏳ 🤖 | — |
+| 🟡 Medium | <a id="f-036-t06"></a>F-036-T06 — Night runner: execute an approved plan sequentially with the end-time guard (failing test first) | 1.5 h | 0 h | 1.5 h | Planned | [F-036-T05](#f-036-t05) | [F-036-T07](#f-036-t07) | ⏳ 🤖 | PR #133 night lessons |
+| 🟢 Small | <a id="f-036-t07"></a>F-036-T07 — Morning summary: what ran, what was skipped, what to review | 0.75 h | 0 h | 0.75 h | Planned | [F-036-T06](#f-036-t06) | [F-036-T08](#f-036-t08) | ⏳ 🤖 | — |
+| 🟢 Small | <a id="f-036-t08"></a>F-036-T08 — Join test and guide: plan, run and summarise on fake runtimes | 1 h | 0 h | 1 h | Planned | [F-036-T07](#f-036-t07) | [F-036-T09](#f-036-t09) | ⏳ 🤖 | — |
+| 🟢 Small | <a id="f-036-t09"></a>F-036-T09 — Owner approves a first real night plan and reviews the morning report | 0 h | 0 h | 0 h agent + 0.5 h owner | Planned | [F-036-T08](#f-036-t08) | — | ⏳ 🧑‍🔧 | — |
+| 🔴 Large | **Total** | 8 h | 0 h (0 of 9 steps recorded) | 8 h agent + 0.5 h owner | 0 of 9 completed | | | | |
 
 <details>
 <summary>Next action, estimates and evidence</summary>
@@ -531,7 +613,7 @@ Bugs (B-) and features (F-) in one list, most urgent first.
 
 | Field | Value |
 |---|---|
-| PR / evidence | Plan: [#131](https://github.com/voidbrain/gauntlet-protocol/pull/131); consumer nerv |
+| PR / evidence | Steps: F-036-T01: PR #133 night lessons · F-036-T06: PR #133 night lessons. [#133](https://github.com/voidbrain/gauntlet-protocol/pull/133) (2026-11-27 night); Plan: [#131](https://github.com/voidbrain/gauntlet-protocol/pull/131); consumer nerv |
 | Opened | 2026-11-26 |
 | Verification | Pending |
 | Reviewed | 2026-11-26 |

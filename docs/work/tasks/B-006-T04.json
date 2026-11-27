@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id": "B-006-T04",
+  "parent": "B-006",
+  "title": "Owner tags the release carrying the fixed bilingual pack",
+  "goal": "A tagged release the consumers can pin",
+  "status": "planned",
+  "acceptance": [
+    "The owner follows docs/guides/release.md and tags the release carrying the new bilingual-it-en version"
+  ],
+  "dependsOn": [
+    "B-006-T03"
+  ],
+  "resources": [
+    "docs/guides/release.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "owner-procedure"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; no private reports or consumer data.",
+  "validation": [
+    "Release tag exists"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.25 h owner",
+    "basis": "Estimated 2026-11-27 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-27",
+    "agentHours": 0,
+    "baselineAgentHours": 0,
+    "estimateAgentHours": 0,
+    "ownerHours": 0.25,
+    "ownerKind": "procedure"
+  },
+  "prs": [
+    {
+      "pr": 133,
+      "note": "plan"
+    }
+  ],
+  "ownerLink": "docs/guides/release.md"
+}

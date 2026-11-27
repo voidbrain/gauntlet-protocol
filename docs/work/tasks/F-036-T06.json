@@ -9,7 +9,8 @@
     "Owner request 2026-11-26 in the consumer session (𖣂 nerv): \"maybe useful to suggest, planning for nights run\"; nerv runs campaigns through tools/gauntlet.mjs and is the first consumer.",
     "A committed failing test first, then a runner that takes only an approved plan file, runs stages one at a time, checks before each that the stage's estimate still ends before the window end and skips with a reason otherwise, unloads the model (Ollama) or frees the generator (ComfyUI) after each stage, and stops cleanly on a failed stage while recording it",
     "Writes one report per stage and never writes the ledger; the owner merges reports after review with gauntlet ledger",
-    "Tested with a fake clock and a fake runtime adapter: guard skip, failure stop, unload called between stages, no ledger change"
+    "Tested with a fake clock and a fake runtime adapter: guard skip, failure stop, unload called between stages, no ledger change",
+    "The runner refuses to start a stage whose runtime start check failed, waits for the previous stage by its exit status and report, gives the first case a cold-start allowance, and asks the consumer's unload hook (nerv F-144 keep-alive) before the first stage; each tested on fake runtimes"
   ],
   "dependsOn": [
     "F-036-T05"
@@ -41,5 +42,10 @@
     "baselineAgentHours": 1.5,
     "estimateAgentHours": 1.5
   },
-  "prs": []
+  "prs": [
+    {
+      "pr": 133,
+      "note": "night lessons"
+    }
+  ]
 }

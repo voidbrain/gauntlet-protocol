@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "id": "B-007-T03",
+  "parent": "B-007",
+  "title": "Document the not-run cascade after an error or timeout, and decide whether it stays",
+  "goal": "The \"unverified consumption\" cascade is written down and its keep-or-change decision recorded",
+  "status": "planned",
+  "acceptance": [
+    "docs/PROTOCOL.md states: a model, coding or end-to-end case that ends in `error` (timeout, adapter failure, budget breach) makes the suite's token use unverified (src/index.ts:1001, 1043, 1250), every later non-system case is `not-run` with `Prior model execution has unverified consumption`, the report's `usage.outputTokens` is null and the report is not `complete`; a night operator reruns the not-run cases in a new run (as the 2026-11-27 night did for cad-3d, 9 cases after one 52 s error)",
+    "The record says whether the cascade is intended (the budget cannot be proved) and names the alternative (charge the profile's `maxOutputTokens` for the failed case and go on); a behaviour change is a separate step the owner approves, not made here"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "docs/PROTOCOL.md",
+    "docs/work/records/B-007.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "documentation"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; no private reports or consumer data.",
+  "validation": [
+    "npm run check:backlog; npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.5 h agent",
+    "basis": "Estimated 2026-11-27 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-27",
+    "agentHours": 0.5,
+    "baselineAgentHours": 0.5,
+    "estimateAgentHours": 0.5
+  },
+  "prs": [
+    {
+      "pr": 133,
+      "note": "plan"
+    }
+  ]
+}

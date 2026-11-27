@@ -8,7 +8,8 @@
   "acceptance": [
     "Owner request 2026-11-26 in the consumer session (𖣂 nerv): \"maybe useful to suggest, planning for nights run\"; nerv runs campaigns through tools/gauntlet.mjs and is the first consumer.",
     "docs/decisions/night-plan.md records: the plan file (ordered stages of pack x model, estimated minutes, window, reason each is queued), where limits-night.json and the profiles come from and what the planner does when one is missing from the checkout (stop and name it, never guess), the owner priority file (for example Italian coverage first), the unload step per runtime (Ollama, ComfyUI), and that a run never writes the ledger",
-    "States the consumer (nerv tools/gauntlet.mjs) and that nerv keeps its own scheduling; gauntlet supplies the plan and runner only"
+    "States the consumer (nerv tools/gauntlet.mjs) and that nerv keeps its own scheduling; gauntlet supplies the plan and runner only",
+    "Lessons of the 2026-11-27 night are in the decision page: each runtime has a start check (ComfyUI: the install's virtual-environment Python, `/system_stats` answering) and a stage skips with a named reason when it fails; stages chain on real end markers (exit status and the written report), never on a log line; cold-start allowance for the first case of a pack and of a judge; the consumer's own model keep-alive (nerv F-144) is unloaded before the first stage"
   ],
   "dependsOn": [],
   "resources": [
@@ -36,5 +37,10 @@
     "baselineAgentHours": 0.75,
     "estimateAgentHours": 0.75
   },
-  "prs": []
+  "prs": [
+    {
+      "pr": 133,
+      "note": "night lessons"
+    }
+  ]
 }

@@ -132,7 +132,23 @@ One real run of `judge.mjs` on the Apple M3 Pro 36 GiB host, Ollama 0.40.16, bef
 | Time | 38.3 s wall for the whole run; first judge request 10.9 s (cold load of the judge), then 1.9 to 2.7 s per image |
 | Judge identity | `gemma4:12b`, digest `6114515d63c17436a7c0417d82820ac65ad643e2806c5a3c89cb62846436ed0b` |
 
-Not measured here: repeat stability of the judge's answers and the generator's variance across cases and repeats, which are F-021-T08.
+Repeat stability of the judge's answers and the generator's variance: see [First full campaign](#first-full-campaign-2026-11-27) (the repeats were cache hits; F-021-T09).
+
+### First full campaign (2026-11-27)
+
+The owner's night run (F-021-T08, "all the tests you want tonite"): six cases, three iterations each, 18 images, on the Apple M3 Pro 36 GiB host, ComfyUI 0.46.3 on `mps`, Qwen Image 2.1 Turbo int8 (model digest `383fc5bb…34d7`, workflow `e83bfe10…3fcb`, 512 x 512, 8 steps), judge `gemma4:12b` (digest `6114515d…ed0b`, Ollama 0.40.16). Ollama was empty before generation (`--unload-ollama`) and ComfyUI stopped before the judge.
+
+| Measured | Value |
+|---|---|
+| Verdicts | **18 of 18 passed** (structural checks, then the judge's yes/no checklist; no mismatch) |
+| Generation | 01:35 to 01:43, 8 min for the batch; first iteration of each case 72 to 89 s (cold only for the first case) |
+| Judge | 35 s wall for 18 images; 9.2 s for the first request (cold load), 0.8 to 3.0 s after |
+| Eyes | the coordinator looked at two images: the OPEN sign is crisp and reads OPEN; the green triangle sits above the red square. Both match the judge's answers (a spot check of 2 of 18, not a second judge) |
+| Records | `generate.mjs` manifest (seed, size, steps, model digest, workflow, image SHA-256 per result) and `judge.mjs` verdicts, kept outside Git; no ledger write: `judge.mjs` writes verdicts, not a gauntlet report |
+
+**Repeat variance was not measured.** Iterations 2 and 3 of every case took about 0.5 s (ComfyUI logged "Prompt executed in 0.00 seconds") and the three images of a case are byte-identical (6 distinct SHA-256 among 18): the same seed and workflow are a cache hit. The 18 of 18 therefore proves six images, not three runs each. Fixing the repeats is F-021-T09.
+
+**Starting ComfyUI headless.** Use the install's own virtual environment: `~/ComfyUI-Installs/ComfyUI/ComfyUI/.venv/bin/python main.py --listen 127.0.0.1 --port 8188` from the ComfyUI folder. The standalone-environment Python of the same install has no `torch` and ComfyUI does not start with it. Check that `http://127.0.0.1:8188/system_stats` answers before generating (the night script waited up to 5 minutes and skipped if it did not).
 
 ## Question 1: generator runtime
 

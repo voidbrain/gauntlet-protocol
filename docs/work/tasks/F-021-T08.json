@@ -2,11 +2,11 @@
   "version": 1,
   "id": "F-021-T08",
   "parent": "F-021",
-  "status": "planned",
+  "status": "implemented",
   "title": "First real run: prove the judge, measure generator variance",
   "goal": "First real run: prove the judge, measure generator variance",
   "acceptance": [
-    "On the owner's request after F-021-T07: the pinned vision judge answers the committed pass and fail fixture images as expected (verdicts recorded with the judge digest), and the generator runs each case three times with its digest, seed, size, steps and image SHA-256 recorded",
+    "On the owner's request after F-021-T07: the pinned vision judge answers the committed pass and fail fixture images as expected (verdicts recorded with the judge digest), and the generator runs each case three times with its digest, seed, size, steps and image SHA-256 recorded Done 2026-11-27 (night run, owner request \"all the tests you want tonite\"): see the decision page, \"First full campaign\".",
     "Results and cost recorded in the record; no generated image committed except small invented fixtures; a judge that misses a fixture blocks the release"
   ],
   "dependsOn": [
@@ -35,10 +35,10 @@
   ],
   "effort": {
     "size": "small",
-    "estimate": "1 h agent",
-    "basis": "Planned 2026-11-26; six to eight cases times three repeats plus model loads is a few minutes of run time, the rest is recording. Not a measurement.",
-    "reviewed": "2026-11-26",
-    "agentHours": 1,
+    "estimate": "0 remaining",
+    "basis": "Run 2026-11-27 01:35 to 01:44 on the owner's Mac (generation 8 min, judge 35 s); recording in this change. Not a measurement of the remaining work; the repeat finding is F-021-T09.",
+    "reviewed": "2026-11-27",
+    "agentHours": 0,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
   },
@@ -46,6 +46,10 @@
     {
       "pr": 114,
       "note": "planned"
+    },
+    {
+      "pr": 133,
+      "note": "night run recorded"
     }
   ]
 }

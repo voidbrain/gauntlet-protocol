@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "B-007-T01",
+  "parent": "B-007",
+  "title": "Investigate: reproduce \"Inconsistent token totals\" and find the producing path",
+  "goal": "The cause of the refusal is known and a failing test exists",
+  "status": "planned",
+  "acceptance": [
+    "The report named in the record (2026-11-27 night, a cad-3d follow-up with four passed model cases, usage 2013) is re-checked on current main: `validateReport` accepts it today (2013 = 474+321+404+814), so the refusal came from a state that no longer exists; the record names which (the report as written then, the checkout the night used, or a resumed or checkpoint report)",
+    "The candidate path is tested: a resumed run where an earlier result is `error` with non-null `tokens` (the producer's `known` at src/index.ts:849 looks only at `tokens !== null`, the validator at :1653-1656 also counts `status: 'error'` as unknown) gives usage non-null and is refused; a committed failing test shows it or the record says it cannot happen"
+  ],
+  "dependsOn": [],
+  "resources": [
+    "src/index.ts",
+    "test/**",
+    "docs/work/records/B-007.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "regression-design"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; no private reports or consumer data.",
+  "validation": [
+    "npm test",
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "0.75 h agent",
+    "basis": "Estimated 2026-11-27 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-27",
+    "agentHours": 0.75,
+    "baselineAgentHours": 0.75,
+    "estimateAgentHours": 0.75
+  },
+  "prs": [
+    {
+      "pr": 133,
+      "note": "plan"
+    }
+  ]
+}

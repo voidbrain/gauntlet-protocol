@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "id": "B-006-T02",
+  "parent": "B-006",
+  "title": "Grade the reply by meaning (failing test first)",
+  "goal": "The bilingual pack accepts correct paraphrases and refuses wrong ones",
+  "status": "planned",
+  "acceptance": [
+    "A committed failing test first: with `exact-json-v1` as released, a correct paraphrase of each of the four cases (Italian and English) fails; the same test must pass after the fix, and a wrong-meaning or wrong-language reply and a wrong `intent` or `language` still fail (pass and fail fixtures per case)",
+    "`examples/bilingual-it-en-v1.json` gets the new expectation and a version bump (a released pack: consumers pin the old one), `docs/test-index.md` regenerated, PROTOCOL text updated; no existing test edited to pass"
+  ],
+  "dependsOn": [
+    "B-006-T01"
+  ],
+  "resources": [
+    "src/**",
+    "test/**",
+    "examples/bilingual-it-en-v1.json",
+    "docs/PROTOCOL.md",
+    "docs/test-index.md",
+    "docs/work/records/B-006.md",
+    "generated:backlog-views"
+  ],
+  "capabilities": [
+    "regression-design"
+  ],
+  "privacy": "Neutral invented data only; no secrets, tokens or personal data in Git; no private reports or consumer data.",
+  "validation": [
+    "npm test",
+    "npm run check:fast; final applicable CI"
+  ],
+  "escalation": [
+    "Material scope growth or effort increase goes to the owner before adoption"
+  ],
+  "effort": {
+    "size": "small",
+    "estimate": "1.5 h agent",
+    "basis": "Estimated 2026-11-27 at agent speed. Not a measurement.",
+    "reviewed": "2026-11-27",
+    "agentHours": 1.5,
+    "baselineAgentHours": 1.5,
+    "estimateAgentHours": 1.5
+  },
+  "prs": [
+    {
+      "pr": 133,
+      "note": "plan"
+    }
+  ]
+}
