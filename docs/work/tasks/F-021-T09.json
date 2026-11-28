@@ -34,8 +34,8 @@
   "effort": {
     "size": "small",
     "estimate": "1 h agent",
-    "basis": "Estimated 2026-11-27 at agent speed. Not a measurement.",
-    "reviewed": "2026-11-27",
+    "basis": "Estimated 2026-11-27 at agent speed. Not a measurement. Re-measured 2026-11-28 night (owner-approved queue, Qwen Image 2.1 Turbo int8 via ComfyUI, judge gemma4:12b): 6 cases x 3 repeats, every case 3 distinct images (no cache reuse), judge 17 of 18 passed.",
+    "reviewed": "2026-11-28",
     "agentHours": 1,
     "baselineAgentHours": 1,
     "estimateAgentHours": 1
